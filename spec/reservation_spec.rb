@@ -2,11 +2,11 @@ require_relative "spec_helper"
 
 describe "Reservation" do
   let (:my_rez) {
-    Reservation.new(room_num: 19, reservation_id: 3, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
+    Reservation.new(reservation_id: 3, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
   }
   it "initializes a reservation when no keyword arguments are given" do
     test_rez = Reservation.new
-    expect(test_rez.room_num).must_be_kind_of NilClass
+    # expect(test_rez.room_num).must_be_kind_of NilClass
     expect(test_rez.reservation_id).must_equal 0
     expect(test_rez.check_in_time).must_be_kind_of NilClass
     expect(test_rez.check_out_time).must_be_kind_of NilClass

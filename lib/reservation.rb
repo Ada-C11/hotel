@@ -1,8 +1,7 @@
 class Reservation
-  attr_reader :room_num, :reservation_id, :check_in_time, :check_out_time, :duration_of_stay
+  attr_reader :room_num, :reservation_id, :check_in_time, :check_out_time, :duration_of_stay, :total_cost
 
-  def initialize(room_num: nil, reservation_id: 0, check_in_time: nil, check_out_time: nil)
-    @room_num = room_num
+  def initialize(reservation_id: 0, check_in_time: nil, check_out_time: nil)
     @reservation_id = reservation_id
     @check_in_time = check_in_time
     @check_out_time = check_out_time
