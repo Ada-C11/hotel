@@ -3,7 +3,7 @@ require_relative "room"
 module HotelSystem
   class Reservation
     attr_reader :room, :room_number
-    
+
     def initialize(room: nil, room_number: nil)
       if room
         @room = valid_room(room)
