@@ -20,4 +20,26 @@ describe "Room class" do
       expect(@room.reservations.length).must_equal 0
     end
   end
+
+  describe "adds reservation" do
+    before do
+      @room = Hotel::Room.new(
+        id: 1,
+      )
+      @reservation = Hotel::Reservation.new(
+        id: 1,
+        start_date: Date.new(2001, 2, 3),
+        end_date: Date.new(2001, 2, 5),
+        room: @room,
+      )
+      @room.add_reservation(@reservation)
+    end
+    it "adds a new reservation to list of reservations" do
+      expect(@room.reservations.length).must_equal 1
+    end
+
+    it "is of object Hotel::Reservation" do
+      expect(@room.reservations[0]).must_be_kind_of Hotel::Reservation
+    end
+  end
 end
