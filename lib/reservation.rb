@@ -19,8 +19,8 @@ class Reservation
     end
   end
 
-  #   def total_cost
-  #     cost = duration * 200
-  #     return cost
-  #   end
+  def total_cost
+    cost = duration * 200
+    return cost
+  end
 end

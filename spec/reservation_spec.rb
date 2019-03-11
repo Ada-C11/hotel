@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe "Reservation class" do
-  describe "Initialize" do
+  describe "initialize" do
     it "Creates an instance of reservation" do
       reservation = Reservation.new
       expect(reservation).must_be_instance_of Reservation
@@ -19,7 +19,7 @@ describe "Reservation class" do
       expect(reservation.reservation_id).must_equal 0
     end
   end
-  describe "Duration method" do
+  describe "duration method" do
     it "Duration returns the length of time between 2 dates" do
       reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "8th Mar 2019")
       expect(reservation.duration).must_equal 7
@@ -31,6 +31,12 @@ describe "Reservation class" do
     it "Can calulate duration between 2 months" do
       reservation = Reservation.new(start_date: "28th Feb 2019", end_date: "7th Mar 2019")
       expect(reservation.duration).must_equal 7
+    end
+  end
+  describe "total_cost method" do
+    it "Can calcute cost of stay" do
+      reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "8th Mar 2019")
+      expect(reservation.total_cost).must_equal 1400
     end
   end
 end
