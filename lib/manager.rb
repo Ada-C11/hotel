@@ -1,4 +1,5 @@
 # Require gems
+require "date"
 
 # Require relatives
 require_relative "room.rb"
@@ -26,6 +27,23 @@ module Hotel
       available_room.reservations << reservation
 
       return reservation
+    end
+
+    def list_reservations(date)
+      list = []
+      date = Date.parse(date)
+
+      @rooms.each do |room|
+        room.reservations.each do |reservation|
+          check_in = reservation.check_in
+          check_out = reservation.check_out
+
+          if (check_in..check_out).include?(date)
+            list << reservation
+          end
+        end
+      end
+      return list
     end
   end
 end
