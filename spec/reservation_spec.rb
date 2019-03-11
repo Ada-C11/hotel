@@ -27,5 +27,11 @@ describe "Reservation class " do
     it "calculates cost of reservation" do
       expect(reservation.cost).must_equal 400
     end
+
+    it "assigns available room" do
+      expect(reservation.room).must_be_kind_of Room
+      expect(reservation.room.available?).must_equal true
+      expect(reservation.room.status).must_equal :AVAILABLE
+    end
   end
 end
