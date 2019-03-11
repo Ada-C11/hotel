@@ -17,4 +17,16 @@ describe "Room initalization" do
     it "has a cost of 200 per night" do
         expect(@room.cost_per_night).must_equal 200
     end
+
+    it "raises an ArgumentError for non-integer arguments" do
+        expect{
+            room = HotelSystem::Room.new(1.5)
+        }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError for arguments less than or equal to 0" do
+        expect{
+            room = HotelSystem::Room.new(0)
+        }.must_raise ArgumentError
+    end
 end
