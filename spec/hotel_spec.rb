@@ -38,4 +38,23 @@ describe "Hotel" do
       expect(room_list[0]).must_equal 1
     end
   end
+  describe "hotel#make_reservation" do
+    before do
+      @room = HotelSystem::Room.new(id: 1)
+      arrive_day = Date.new(2019, 2, 10)
+      depart_day = Date.new(2019, 2, 14)
+      @hotel.make_reservation(@room, arrive_day, depart_day)
+      # @reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
+    end
+
+    it "Adds reservation to reservations array" do
+      expect(@hotel.reservations.length).must_equal 1
+      expect(@hotel.reservations[0]).must_be_kind_of HotelSystem::Reservation
+    end
+
+    it "Adds reservation to the rooms reservation array" do
+      expect(@room.reservations.length).must_equal 1
+      expect(@room.reservations[0]).must_be_kind_of HotelSystem::Reservation
+    end
+  end
 end

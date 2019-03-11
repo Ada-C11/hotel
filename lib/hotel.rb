@@ -15,5 +15,15 @@ module HotelSystem
       return nil if rooms.length == 0
       return room_list
     end
+
+    def add_reservation(reservation)
+      @reservations << reservation
+    end
+
+    def make_reservation(room, arrive_day, depart_day)
+      reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
+      add_reservation(reservation)
+      room.add_reservation(reservation)
+    end
   end
 end
