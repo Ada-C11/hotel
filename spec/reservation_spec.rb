@@ -19,5 +19,13 @@ describe "Reservation class " do
       expect(start_date).must_equal reservation.first_night
       expect(reservation.last_night).must_equal Date.new(2001, 2, 4)
     end
+
+    it "calculates length of stay" do
+      expect(reservation.length_of_stay).must_equal 2
+    end
+
+    it "calculates cost of reservation" do
+      expect(reservation.cost).must_equal 400
+    end
   end
 end
