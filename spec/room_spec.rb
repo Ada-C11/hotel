@@ -15,7 +15,7 @@ describe "Room initalization" do
     end
 
     it "has a cost of 200 per night" do
-        expect(@room.cost_per_night).must_equal 200
+        expect(@room.price_per_night).must_equal 200
     end
 
     it "raises an ArgumentError for non-integer arguments" do
