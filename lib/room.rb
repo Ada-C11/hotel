@@ -3,9 +3,8 @@ module Hotel
     attr_accessor :status
     attr_reader :room_number, :rate, :reservations
     
-      def initialize(room_number:, rate: 200, status: :AVAILABLE, reservations: [])
+      def initialize(room_number:, status: :AVAILABLE, reservations: [])
         @room_number = room_number
-        @rate = rate
         @status = status
         @reservations = reservations || []
         
@@ -14,9 +13,19 @@ module Hotel
           end
       end
       
-      def is_available?(room_number, date_range)
-        
+      
+      def create_hotel
+        @all_rooms = []
+        i = 0
+        20.times do |i|
+          @all_rooms << Hotel::Room.new(room_number: i+1)
+        end
+        return all_rooms
       end
+      
+      # def is_available?(room_number, date_range)
+        
+      # end
       
   end
 end

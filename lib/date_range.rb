@@ -12,6 +12,11 @@ class DateRange
     end 
   end
   
+  def duration
+    return @end_date - @start_date
+  end
+  
 end
-new = DateRange.new(start_date: "2019-3-10", end_date: "2019-2-10")
+# new = DateRange.new(start_date: "2019-3-10", end_date: "2019-2-10")
+# puts new.duration
   
