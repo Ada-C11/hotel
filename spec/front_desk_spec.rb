@@ -2,6 +2,8 @@ require_relative "spec_helper"
 
 describe "FrontDesk class" do
   let(:frontdesk) { FrontDesk.new }
+  let(:start_date) { Date.new(2001, 2, 3) }
+  let(:end_date) { Date.new(2001, 2, 5) }
 
   it "is able to instantiate" do
     expect(frontdesk).must_be_kind_of FrontDesk
@@ -17,6 +19,6 @@ describe "FrontDesk class" do
   end
 
   it "can create a reservation" do
-    expect(frontdesk.reserve).must_be_kind_of Reservation
+    expect(frontdesk.reserve(start_date, end_date)).must_be_kind_of Reservation
   end
 end

@@ -15,7 +15,7 @@ class FrontDesk
     return rooms_array
   end
 
-  def reserve
-    Reservation.new
+  def reserve(start_date, end_date)
+    Reservation.new(start_date, end_date)
   end
 end
