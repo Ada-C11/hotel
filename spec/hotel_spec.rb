@@ -26,3 +26,15 @@ describe "list rooms and reservations" do
     expect(@hotel.list_rooms).must_equal "Room 3: $900.00 per night"
   end
 end
+
+describe "creates new reservation" do
+  before do
+    @hotel = Hotel.new
+    @start_time = Date.new(2019, 3, 9)
+    @end_time = Date.new(2019, 3, 11)
+  end
+
+  it "generates an id for the new reservation" do
+    expect(@hotel.create_res_id).must_equal 1
+  end
+end

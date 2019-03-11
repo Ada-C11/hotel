@@ -20,4 +20,11 @@ class Hotel
       return room.print_nicely
     end
   end
+
+  def create_res_id
+    return reservations.count + 1
+  end
+
+  def add_reservation
+  end
 end
