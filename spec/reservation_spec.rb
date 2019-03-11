@@ -10,4 +10,8 @@ describe "Reservation class" do
   it "creates an instance of Reservation" do
     expect(@reservation).must_be_kind_of Hotel::Reservation
   end
+
+  it "throws an argument error when an invalid date range is provided" do
+    expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-29", room_number: 1) }.must_raise ArgumentError
+  end
 end
