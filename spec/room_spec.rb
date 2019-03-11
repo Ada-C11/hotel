@@ -26,10 +26,15 @@ describe "Room class" do
     end
   end
   describe "all" do 
-    it "returns an array of all rooms" do 
+    before do 
       @rooms = Hotel::Room.all
-
+    end
+    it "returns an array of all rooms" do 
       expect(@rooms).must_be_kind_of Array
+    end
+
+    it "returns all twenty rooms" do 
+      @rooms.length.must_equal 20
     end
   end
 end
