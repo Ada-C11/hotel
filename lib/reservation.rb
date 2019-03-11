@@ -22,4 +22,8 @@ class Reservation
   def find_room
     return Room.new(21, 200)
   end
+
+  def includes_date?(date)
+    return start_time <= date && end_time >= date ? true : false
+  end
 end
