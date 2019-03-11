@@ -32,9 +32,28 @@ describe "creates new reservation" do
     @hotel = Hotel.new
     @start_time = Date.new(2019, 3, 9)
     @end_time = Date.new(2019, 3, 11)
+
+    @start_time2 = Date.new(2019, 4, 9)
+    @end_time2 = Date.new(2019, 4, 11)
   end
 
   it "generates an id for the new reservation" do
     expect(@hotel.create_res_id).must_equal 1
+  end
+
+  it "creates new Reservation objects and adds them to reservations array" do
+    @hotel.add_reservation(@start_time, @end_time)
+
+    @hotel.add_reservation(@start_time2, @end_time2)
+
+    expect(@hotel.reservations.count).must_equal 2
+    expect(@hotel.reservations[0]).must_be_kind_of Reservation
+    expect(@hotel.reservations[1].id).must_equal 2
+  end
+
+  it "raises an exception when invalid date range is entered" do
+    @end_time_bad = Date.new(2018, 3, 9)
+
+    expect { @hotel.add_reservation(@start_time, @end_time_bad) }.must_raise ArgumentError
   end
 end

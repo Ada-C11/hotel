@@ -25,6 +25,12 @@ class Hotel
     return reservations.count + 1
   end
 
-  def add_reservation
+  def add_reservation(start_time, end_time)
+    if (start_time <=> end_time) == 1
+      raise ArgumentError, "End time must be later than start time"
+    end
+    reservation = Reservation.new(create_res_id, start_time, end_time)
+
+    reservations << reservation
   end
 end
