@@ -9,7 +9,12 @@ module Hotel
       @reservations = []
     end
 
-    # make a request reservation method
-
+    def request_reservation(name, checkin_date, num_of_nights)
+      pending_reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
+      pending_reservation.room_num = rand(1..20)
+      @reservations << pending_reservation
+      #Hotel::Room.add_reservation()
+      return pending_reservation
+    end
   end
 end
