@@ -22,7 +22,12 @@ describe "Manager class" do
     expect(room).must_be_kind_of Hotel::Room
   end
 
-  it "has 20 rooms" do
+  it "has 20 Rooms" do
     expect(@manager.rooms.length).must_equal 20
+  end
+
+  it "can make a reservation" do
+    reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
+    expect(reservation).must_be_kind_of Hotel::Reservation
   end
 end
