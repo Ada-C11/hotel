@@ -2,7 +2,7 @@ require "simplecov"
 SimpleCov.start
 
 require_relative "spec_helper"
-require_relative "../lib/room.rb"
+#require_relative "../lib/room.rb"
 
 describe "Room class" do
   it "creates an instance of Room" do
