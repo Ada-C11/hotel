@@ -34,5 +34,14 @@ describe "Reservation class " do
       expect(reservation.room.available?).must_equal true
       expect(reservation.room.status).must_equal :AVAILABLE
     end
+
+    it "creates an array of booked dates" do
+      expect(reservation.dates).must_be_kind_of Array
+      expect(reservation.dates.length).must_equal 2
+      reservation2 = Hotel::Reservation.new(Date.new(2018, 7, 10), Date.new(2018, 7, 20))
+      expect(reservation2.dates.length).must_equal 10
+      expect(reservation2.dates.first).must_equal Date.new(2018, 7, 10)
+      expect(reservation2.dates.last).must_equal Date.new(2018, 7, 19)
+    end
   end
 end
