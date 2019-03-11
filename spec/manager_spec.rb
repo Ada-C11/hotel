@@ -30,4 +30,11 @@ describe "Manager class" do
     reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
     expect(reservation).must_be_kind_of Hotel::Reservation
   end
+
+  it "can reserve an available room" do
+    reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
+
+    expect(reservation.room_number).must_be_kind_of Integer
+    expect(@manager.rooms[0].reservations.length).must_equal 1
+  end
 end
