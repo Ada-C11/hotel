@@ -29,4 +29,8 @@ describe "Room initalization" do
             room = HotelSystem::Room.new(0)
         }.must_raise ArgumentError
     end
+
+    it "has an array of reservations" do
+        expect(@room.reservations).must_be_kind_of Array
+    end
 end

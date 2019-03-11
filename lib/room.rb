@@ -6,6 +6,7 @@ module HotelSystem
     def initialize(number)
       @room_number = self.class.valid_room_number(number)
       @price_per_night = 200
+      @reservations = []
     end
 
     def self.valid_room_number(number)
