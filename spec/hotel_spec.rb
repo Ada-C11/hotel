@@ -52,4 +52,29 @@ describe "Hotel class" do
       expect(@hotel.find_room(0).id).must_equal 0
     end
   end
+
+  describe "Access the list of reservations by date" do
+    # reserve_room(reservation_id,start_date, end_date,room_ID)
+    # before do
+    #   @rooms = []
+    #   20.times do |k|
+    #     @rooms << Hotel::Room.new(id: k)
+    #   end
+    #   @hotel = Hotel::Hotel.new(
+    #     id: 1,
+    #     rooms: @rooms,
+    #     reservations: [],
+    #   )
+    it "checks the date range ok" do
+      new_reservation = @hotel.reserve_room(333, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 0)
+      new_reservation2 = @hotel.reserve_room(334, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 1)
+      @hotel.add_reservation(new_reservation)
+      @hotel.add_reservation(new_reservation2)
+      new_reservation.room.add_reservation(new_reservation)
+      new_reservation2.room.add_reservation(new_reservation2)
+      #   p @hotel.reservations
+      #   p @hotel.rooms[0].reservations
+      p @hotel.access_reservations(Date.new(2001, 3, 6))
+    end
+  end
 end

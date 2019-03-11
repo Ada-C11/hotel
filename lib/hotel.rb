@@ -21,5 +21,10 @@ module Hotel
     def add_reservation(reservation)
       reservations << reservation
     end
+
+    def access_reservations(date)
+      list_reservations = @reservations.select { |reservation| (Range.new(reservation.start_date, reservation.end_date)).include?(date) }
+      return list_reservations.map { |reservation| reservation.id }
+    end
   end
 end
