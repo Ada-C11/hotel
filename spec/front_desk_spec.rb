@@ -28,15 +28,30 @@ describe "FrontDesk class" do
     let(:frontdesk) { Hotel::FrontDesk.new }
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
-    it "adds a new reservation to the list of reservations" do
+    # let(:reservation) { frontdesk.reserve(start_date, end_date) }
+    # let(:reservation2) { frontdesk.reserve(start_date + 1, end_date + 1) }
+
+    it "adds each new reservation to the list of reservations" do
       expect(frontdesk.reservations).must_be_kind_of Array
       expect(frontdesk.reservations.length).must_equal 0
 
-      reservation1 = frontdesk.reserve(start_date, end_date)
+      frontdesk.reserve(start_date, end_date)
       expect(frontdesk.reservations.length).must_equal 1
 
-      reservation2 = frontdesk.reserve(start_date + 1, end_date + 1)
+      frontdesk.reserve(start_date + 1, end_date + 1)
       expect(frontdesk.reservations.length).must_equal 2
+    end
+
+    it "can find a reservation by date" do
+      res1 = frontdesk.reserve(start_date, end_date)
+      res2 = frontdesk.reserve(start_date + 1, end_date + 1)
+      res3 = frontdesk.reserve(start_date + 2, end_date + 2)
+
+      expect(frontdesk.find_by_date("February 3 2001")).must_be_kind_of Array
+      expect(frontdesk.find_by_date("February 3 2001").length).must_equal 1
+      expect(frontdesk.find_by_date("February 5 2001").length).must_equal 2
+      expect(frontdesk.find_by_date("February 3 2001")[0]).must_be_kind_of Hotel::Reservation
+      expect(frontdesk.find_by_date("February 5 2001")[0]).must_equal res2
     end
   end
 end

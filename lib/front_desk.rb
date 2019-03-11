@@ -22,5 +22,17 @@ module Hotel
       @reservations << new_reservation
       return new_reservation
     end
+
+    def find_by_date(date)
+      date = Date.parse(date)
+      on_this_date = []
+      reservations.each do |reservation|
+        if reservation.dates.include?(date)
+          on_this_date << reservation
+        end
+      end
+
+      return on_this_date
+    end
   end
 end
