@@ -1,9 +1,7 @@
 require_relative "spec_helper"
 
 describe "FrontDesk class" do
-  let(:frontdesk) {
-    FrontDesk.new
-  }
+  let(:frontdesk) { FrontDesk.new }
 
   it "is able to instantiate" do
     expect(frontdesk).must_be_kind_of FrontDesk
@@ -16,5 +14,9 @@ describe "FrontDesk class" do
     expect(frontdesk.rooms.length).must_equal 20
 
     expect(frontdesk.rooms[0]).must_be_kind_of Room
+  end
+
+  it "can create a reservation" do
+    # expect frontdesk.reserve
   end
 end

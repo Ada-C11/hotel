@@ -14,4 +14,8 @@ class FrontDesk
     end
     return rooms_array
   end
+
+  def reserve
+    Reservation.new
+  end
 end
