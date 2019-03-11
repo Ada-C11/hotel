@@ -12,3 +12,4 @@ require "date"
 
 # Require_relative your lib files here!
 require_relative "../lib/reservation.rb"
+require_relative "../lib/custom_exceptions.rb"

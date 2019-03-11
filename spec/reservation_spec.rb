@@ -20,17 +20,20 @@ describe "Reservation class" do
       expect(valid_reservation.end_date).must_be_instance_of Date
       expect(valid_reservation.end_date).must_equal Date.new(2020, 03, 27)
     end
+
+    it "will raise exception if invalid date range used" do
+      date1 = (Time.new + 172800).to_date.to_s
+      date2 = (Time.new + 172800 * 4).to_date.to_s
+      past = "march 2, 2019"
+      expect { Hotel::Reservation.new(start_date: date2, end_date: date1) }.must_raise InvalidDateRangeError
+      expect { Hotel::Reservation.new(start_date: past, end_date: date1) }.must_raise InvalidDateRangeError
+      expect { Hotel::Reservation.new(start_date: date2, end_date: date2) }.must_raise InvalidDateRangeError
+    end
   end
 
-  let(:date1) {
-    Date.new(2020, 03, 20)
-  }
-  let(:date2) {
-    Date.new(2020, 03, 24)
-  }
-  let(:past) {
-    Date.new(2019, 02, 13)
-  }
+  let(:date1) { (Time.new + 172800).to_date }
+  let(:date2) { (Time.new + 172800 * 4).to_date }
+  let(:past) { Date.new(2019, 02, 13) }
   describe "Reservation#valid_date_range?" do
     it "start_date is before end_date" do
       expect(valid_reservation.valid_date_range?(date1, date2)).must_equal true

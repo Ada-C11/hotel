@@ -7,6 +7,9 @@ module Hotel
     def initialize(start_date:, end_date:)
       @start_date = Date.parse(start_date)
       @end_date = Date.parse(end_date)
+      unless valid_date_range?(@start_date, @end_date)
+        raise InvalidDateRangeError.new()
+      end
     end
 
     def valid_date_range?(start_date, end_date)
