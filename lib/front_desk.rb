@@ -4,7 +4,6 @@ class FrontDesk
   attr_reader :rooms_array
 
   def initialize
-    # @rooms = Room.list
   end
 
   def rooms
