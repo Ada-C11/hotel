@@ -75,4 +75,12 @@ describe "hotel class" do
       expect(@dates.last).must_equal november_20_2019
     end
   end
+
+  describe "room_reserved method" do
+    it "will return false if the room is not reserved" do
+      status = @hotel.room_reserved?(room_number: 19, dates: [[19,12,05], [19,12,06]])
+
+      expect(status).must_equal false
+    end
+  end
 end
