@@ -14,4 +14,8 @@ describe "Room class" do
   it "includes an array when initialized" do
     expect(@room.reservations).must_be_kind_of Array
   end
+
+  it "includes a cost per night" do
+    expect(@room.cost_per_night).must_equal 200.00
+  end
 end
