@@ -3,6 +3,7 @@ module HotelSystem
     attr_reader :room, :date_range, :total_cost
 
     def initialize(room:, arrive_day:, depart_day:)
+      raise ArgumentError if depart_day <= arrive_day
       @room = room
       @arrive_day = arrive_day
       @depart_day = depart_day
