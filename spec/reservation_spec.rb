@@ -31,4 +31,8 @@ describe "reservation initalization" do
             room = HotelSystem::Reservation.new(room: "cat")
         }.must_raise ArgumentError
     end
+
+    it "has an array for the dates" do
+        expect(@reservation.dates).must_be_kind_of Array
+    end
 end

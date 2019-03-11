@@ -3,8 +3,9 @@ require_relative "room"
 module HotelSystem
   class Reservation
     attr_reader :room, :room_number
+    attr_accessor :dates
 
-    def initialize(room: nil, room_number: nil)
+    def initialize(room: nil, room_number: nil, dates: nil)
       if room
         @room = valid_room(room)
         @room_number = room.room_number
@@ -13,6 +14,7 @@ module HotelSystem
       else
         raise ArgumentError, "Please enter either a Room or a room number."
       end
+      @dates = []
     end
 
     def valid_room(room)
