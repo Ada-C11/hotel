@@ -60,7 +60,7 @@ describe "Hotel" do
       end
     end
 
-    describe "#list_reservations" do
+    describe "#reservations_by_date" do
       it "returns an array of reservations" do
         reservation_list = @hotel.reservations_by_date(Date.new(2019, 2, 10))
         expect(reservation_list).must_be_kind_of Array
