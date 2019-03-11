@@ -5,17 +5,18 @@ module Hotel
     end
 
     def reservations
-      reservations << reservation # Where does reservation come from
+      reservations << new_reservation # Where does reservation come from
     end
 
     def rooms
-      rooms = [1..20]
+      rooms = (1..20).to_a
       return rooms
     end
 
-    def self.create_reservation(start_date, end_date)
-      return rooms.sample #Method
+    def create_reservation(start_date, end_date)
+      room = rooms.sample
+      new_reservation = Reservation.new(start_date, end_date, room)
+      return new_reservation
     end
-    
   end
 end
