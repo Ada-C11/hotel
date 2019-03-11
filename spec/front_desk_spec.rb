@@ -17,6 +17,6 @@ describe "FrontDesk class" do
   end
 
   it "can create a reservation" do
-    # expect frontdesk.reserve
+    expect(frontdesk.reserve).must_be_kind_of Reservation
   end
 end
