@@ -5,7 +5,7 @@ class Reservation
   attr_reader :reservation_id
   attr_accessor :check_in, :check_out
 
-  def initialize(reservation_id, check_in: nil, check_out: nil)
+  def initialize(reservation_id, check_in: nil, check_out: nil, room: nil)
     @reservation_id = reservation_id
     @check_in = check_in
     @check_out = check_out
