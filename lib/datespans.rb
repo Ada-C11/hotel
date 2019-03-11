@@ -3,11 +3,6 @@ module Hotel
 
   class DateSpan
 
-    module Error
-      class DatePast < StandardError; end
-      class RangeInvalid < Standard; end
-    end
-
   attr_reader :check_in, :check_out
 
   def initialize(check_in, check_out)
@@ -15,9 +10,8 @@ module Hotel
     @check_in = Date.parse(check_in)
     @check_out = Date.parse(check_out)
 
-    raise Error::DatePast unless @check_in > Date.today
-    raise Error::RangeInvalid if @check_in > @check_out
-    end
+    raise ArgumentError, 'Check-in must be after today.' unless @check_in > Date.today
+    raise ArgumentError, 'Check-out must be after check-in.' if @check_in < @check_out
   end
-end
+  end
 end
