@@ -47,10 +47,9 @@ describe "Reservation class" do
   end
   describe "assign_room method" do
     it "assigns a room from @rooms array" do
-      rooms = ("1".."20").to_a
       reservation = Reservation.new
       room = reservation.assign_room
-      expect(rooms.include?(room)).must_equal true
+      expect(reservation.rooms.include?(room)).must_equal true
     end
   end
 end

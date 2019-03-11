@@ -10,11 +10,12 @@ describe "ReservationManager class" do
   describe "make_reservation method" do
     it "make_reservation method can make an instance of reservation" do
       my_reservation = ReservationManager.new
-      expect(my_reservation.make_reservation(start_date: "3rd April 2020", end_date: "4th April 2020", reservation_id: 5)).must_be_instance_of Reservation
+      expect(my_reservation.make_reservation).must_be_instance_of Reservation
     end
-    # it "make_reservation adds a reservation to an array of reservations" do
-    #     my_reservation = ReservationManager.new(start_date: "3rd April 2020", end_date: "4th April 2020", reservation_id: 5)
-    #     expect(@reservations_array.include?(my_reservation)
-    # end
+    it "make_reservation adds a reservation to an array of reservations" do
+      reservation_manager = ReservationManager.new
+      my_reservation = reservation_manager.make_reservation
+      expect(reservation_manager.reservations_array.include?(my_reservation)).must_equal true
+    end
   end
 end

@@ -1,7 +1,7 @@
 require "date"
 
 class Reservation
-  attr_reader :reservation_id, :start_date, :end_date, :duration, :total_cost
+  attr_reader :reservation_id, :start_date, :end_date, :duration, :total_cost, :rooms
 
   def initialize(reservation_id: 0, start_date: nil, end_date: nil)
     @reservation_id = reservation_id
