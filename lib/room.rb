@@ -4,31 +4,29 @@ require_relative 'reservation'
 
 module HotelManagementSystem
     class Room
-        attr_accessor :room_number, :status, :guest, :cost
+        attr_reader :cost
+        attr_accessor :guest, :status, :room_number
         
-        COST = 200
-        ROOM_NUMBERS = (1..20).to_a
+        ROOM_NUMBER = (1..20).to_a
         STATUS = [:AVAILABLE, :UNAVAILABLE]
+        COST = 200
 
-        def initialize(room_number:, status: :AVAILABLE, guest: nil, cost:)
-        @room_number = room_number
-        @status = 
-
-
-        if !STATUS.include?(@status)
-            raise ArgumentError, "Invalid status #{@status}."
-        end
-
-        if room_number > 20
-            raise
+        def initialize(room_number:, status: :AVAILABLE, guest: nil, cost: COST)
+            @room_number = room_number
+            @status = status.to_sym
+            @guest = guest
+            @cost = COST
 
 
+            if !STATUS.include?(@status)
+                raise ArgumentError, "Invalid status #{@status}."
+            end
 
+            if @room_number > 20 || @room_number < 1
+                raise ArgumentError, "Invalid room number #{@room_number}."
+            end
+        end 
 
-
-
-
-
-        -
     end
+
 end
