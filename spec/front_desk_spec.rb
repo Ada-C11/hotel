@@ -18,7 +18,7 @@ describe "FrontDesk class" do
     expect(frontdesk.rooms[0]).must_be_kind_of Room
   end
 
-  it "can create a reservation" do
+  it "can reserve a room for given date range" do
     expect(frontdesk.reserve(start_date, end_date)).must_be_kind_of Reservation
   end
 end
