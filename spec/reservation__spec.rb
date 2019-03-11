@@ -28,14 +28,14 @@ describe "calculate duration of total days spent in reservation" do
     test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-15")
     other_test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-20")
 
-    expect { test_reserve.duration }.must_raise ArgumentError
+    expect { other_test_reserve.duration }.must_raise ArgumentError
   end
 end
 
-# describe "calculate total cost of reservation" do
-#   it "will return accurate total cost of reservation given number of days" do
-#     check_in =
-#     check_out =
-#     test_reserve = Reservation.new()
-#   end
-# end
+describe "calculate total cost of reservation" do
+  it "will return accurate total cost of reservation given number of days" do
+    test_reserve = Reservation.new(1, check_in: "2019-3-15", check_out: "2019-3-20")
+
+    expect(test_reserve.cost(test_reserve.duration)).must_equal 1000
+  end
+end
