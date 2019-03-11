@@ -8,5 +8,9 @@ module Hotel
       @start_date = Date.parse(start_date)
       @end_date = Date.parse(end_date)
     end
+
+    def valid_date_range?(start_date, end_date)
+      return start_date < end_date && start_date >= Time.new.to_date
+    end
   end
 end

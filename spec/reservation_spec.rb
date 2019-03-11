@@ -22,15 +22,26 @@ describe "Reservation class" do
     end
   end
 
-  let(:valid_start_date) {
-    valid_reservation.start_date
+  let(:date1) {
+    Date.new(2020, 03, 20)
   }
-  let(:valid_end_date) {
-    valid_reservation.end_date
+  let(:date2) {
+    Date.new(2020, 03, 24)
   }
-  describe "dates are valid" do
+  let(:past) {
+    Date.new(2019, 02, 13)
+  }
+  describe "Reservation#valid_date_range?" do
     it "start_date is before end_date" do
-      expect(valid_date_range?(valid_start_date, valid_end_date)).must_equal true
+      expect(valid_reservation.valid_date_range?(date1, date2)).must_equal true
+    end
+
+    it "start_date is same as end" do
+      expect(valid_reservation.valid_date_range?(date2, date2)).must_equal false
+    end
+
+    it "start_date is before today" do
+      expect(valid_reservation.valid_date_range?(past, date1)).must_equal false
     end
   end
 end
