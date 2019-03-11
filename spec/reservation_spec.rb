@@ -18,5 +18,9 @@ describe "Reservation class" do
     it "is an instance of Reservation" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
+
+    it "includes a room object as its room attribute" do
+      expect(@reservation.room).must_be_kind_of Hotel::Room
+    end
   end
 end
