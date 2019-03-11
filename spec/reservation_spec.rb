@@ -28,7 +28,13 @@ describe "Reservation class" do
       reservation = Reservation.new(start_date: "7th Mar 2019", end_date: "6th Mar 2019")
       expect { reservation.duration }.must_raise ArgumentError
     end
-    it "Can calulate duration between 2 months" do
+    # add this argument one I add code to duration method to raise arg error if date is in past
+    # it "Raises an ArgumentError if the start date is in the past" do
+    #   reservation = Reservation.new(start_date: "7th Feb 2019", end_date: "8th Feb 2019")
+    #   expect { reservation.duration }.must_raise ArgumentError
+    # end
+
+    it "Can calulate duration that spans multiple months" do
       reservation = Reservation.new(start_date: "28th Feb 2019", end_date: "7th Mar 2019")
       expect(reservation.duration).must_equal 7
     end

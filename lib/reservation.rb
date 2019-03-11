@@ -1,8 +1,7 @@
-# require_relative "spec_helper"
 require "date"
 
 class Reservation
-  attr_reader :reservation_id, :start_date, :end_date
+  attr_reader :reservation_id, :start_date, :end_date, :duration, :total_cost
 
   def initialize(reservation_id: 0, start_date: nil, end_date: nil)
     @reservation_id = reservation_id
@@ -12,6 +11,7 @@ class Reservation
   end
 
   def duration
+    # add something to make sure date is not in past
     duration = (Date.parse(@end_date) - Date.parse(@start_date))
     if duration < 1
       raise ArgumentError, "The duration must be at least one day"
