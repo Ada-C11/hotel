@@ -13,7 +13,6 @@ module Hotel
           end
       end
       
-      
       def create_hotel
         @all_rooms = []
         i = 0
@@ -22,6 +21,7 @@ module Hotel
         end
         return all_rooms
       end
+    
       
       # def is_available?(room_number, date_range)
         

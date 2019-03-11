@@ -16,13 +16,13 @@ module Hotel
       @total_cost = (200 * length_of_stay)
     end
     
-    def store_reservation(id)
-      @reservations << id
+    def total_cost(reservation)
+      return self.total_cost
     end
     
     
   end
 end
 
-reservation = Hotel::Reservation.new(id: 1, room: 5, check_in_date:"2019-1-1", check_out_date:"2019-1-4")
+# reservation = Hotel::Reservation.new(id: 1, room: 5, check_in_date:"2019-1-1", check_out_date:"2019-1-4")
 

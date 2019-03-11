@@ -17,6 +17,4 @@ class DateRange
   end
   
 end
-# new = DateRange.new(start_date: "2019-3-10", end_date: "2019-2-10")
-# puts new.duration
   

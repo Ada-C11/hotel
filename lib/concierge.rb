@@ -10,7 +10,7 @@ module Hotel
     
     def initialize(rooms:, reservations:)
       @rooms = room.create_hotel
-      @reservations = 
+      @reservations = []
     end
         
     
@@ -18,6 +18,10 @@ module Hotel
       return @rooms  
     end
   
+    def reserve_room(check_in_date, check_out_date)
+      
+      reserved_room = @rooms.select { |room| room.status == :AVAILABLE}
+    end
     
   end
 end
