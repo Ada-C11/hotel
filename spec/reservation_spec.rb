@@ -5,10 +5,11 @@ describe "Reservation class " do
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
     let(:reservation) {
-      reservation = Reservation.new(start_date, end_date)
+      reservation = Hotel::Reservation.new(start_date, end_date)
     }
+
     it "is able to instantiate" do
-      expect(reservation).must_be_kind_of Reservation
+      expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "correctly extracts nights needed from days given" do
@@ -29,7 +30,7 @@ describe "Reservation class " do
     end
 
     it "assigns available room" do
-      expect(reservation.room).must_be_kind_of Room
+      expect(reservation.room).must_be_kind_of Hotel::Room
       expect(reservation.room.available?).must_equal true
       expect(reservation.room.status).must_equal :AVAILABLE
     end
