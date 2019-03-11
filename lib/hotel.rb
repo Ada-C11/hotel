@@ -6,5 +6,9 @@ class Hotel
     @hotel_name = hotel_name
     @rooms = []
   end
-  
+
+  def add_room (room)
+    @rooms.push(room)
+  end
+
 end
