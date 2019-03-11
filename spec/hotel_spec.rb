@@ -83,4 +83,12 @@ describe "hotel class" do
       expect(status).must_equal false
     end
   end
+
+  describe "find_available_rooms method" do
+    it "will return a room if a room is available" do
+      room = @hotel.find_available_room([[19,12,05], [19,12,06]])
+
+      expect(room).must_be_kind_of HotelSystem::Room
+    end
+  end
 end
