@@ -32,4 +32,10 @@ describe "Reservation" do
       expect(my_rez.total_cost).must_equal 1200
     end
   end
+
+  describe "assign a room" do
+    it "assigns a random room number when called" do
+      expect(my_rez.assign_room).must_be_instance_of Integer
+    end
+  end
 end

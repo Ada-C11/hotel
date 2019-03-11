@@ -5,6 +5,7 @@ class Reservation
     @reservation_id = reservation_id
     @check_in_time = check_in_time
     @check_out_time = check_out_time
+    @all_rooms = (1..20).to_a
   end
 
   def duration_of_stay
@@ -27,5 +28,9 @@ class Reservation
 
   def total_cost
     200 * (duration_of_stay - 1)
+  end
+
+  def assign_room
+    room_number = @all_rooms.sample
   end
 end
