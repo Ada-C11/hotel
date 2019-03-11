@@ -12,7 +12,7 @@ module HotelSystem
 
     def list_rooms
       room_list = @rooms.map { |room| room.id }
-      return nil if rooms.length == 0
+      # return nil if rooms.length == 0
       return room_list
     end
 
@@ -24,6 +24,11 @@ module HotelSystem
       reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
       add_reservation(reservation)
       room.add_reservation(reservation)
+    end
+
+    def reservations_by_date(date)
+      reservations = @reservations.select { |res| res.date_range.include?(date) }
+      return reservations
     end
   end
 end
