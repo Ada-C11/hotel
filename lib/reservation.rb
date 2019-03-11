@@ -5,7 +5,7 @@ require_relative "room.rb"
 
 module Hotel
   class Reservation
-    attr_reader
+    attr_reader :check_in, :check_out, :room_number, :total_cost, :id
 
     def initialize(check_in:, check_out:, room_number:, total_cost: nil, id: nil)
       @check_in = check_in
