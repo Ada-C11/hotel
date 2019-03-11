@@ -21,4 +21,8 @@ describe "Manager class" do
 
     expect(room).must_be_kind_of Hotel::Room
   end
+
+  it "has 20 rooms" do
+    expect(@manager.rooms.length).must_equal 20
+  end
 end
