@@ -9,6 +9,7 @@ class Reservation
     @reservation_id = reservation_id
     @check_in = check_in
     @check_out = check_out
+    @room = room
   end
 
   def duration
