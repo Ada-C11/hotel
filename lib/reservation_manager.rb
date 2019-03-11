@@ -2,6 +2,7 @@ require_relative "reservation"
 
 class Reservation_manager
   attr_accessor :make_reservation
+  attr_reader :reservations
 
   def initialize
     @reservations = []
@@ -15,4 +16,9 @@ class Reservation_manager
     @reservations << new_reservation
     return new_reservation
   end
+
+  #   def find_reservations(date)
+  #     # given date, return reservations who have date somewhere in between
+  #     # reservation's check in or out times
+  #   end
 end
