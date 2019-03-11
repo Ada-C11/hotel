@@ -8,6 +8,7 @@ class Reservation
     @reservation_id = reservation_id
     @start_date = start_date
     @end_date = end_date
+    @rooms = ("1".."20").to_a
   end
 
   def duration
@@ -22,5 +23,10 @@ class Reservation
   def total_cost
     cost = duration * 200
     return cost
+  end
+
+  def assign_room
+    room = @rooms.sample
+    return room
   end
 end
