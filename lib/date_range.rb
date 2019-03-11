@@ -7,5 +7,9 @@ module Hotel
       @end_date = Date.parse(end_date)
       raise ArgumentError, "invalid date" if @end_date < @start_date
     end
+
+    def overlap?(date)
+      return (start_date..end_date).include?(date)
+    end
   end
 end

@@ -1,10 +1,10 @@
-module Hotel
-  class Room
-    attr_reader :id, :reservations
+# module Hotel
+#   class Room
+#     attr_reader :id, :reservations
 
-    def initialize(id)
-      @room_id = id
-      @reservations = []
-    end
-  end
-end
+#     def initialize(id)
+#       @room_id = id
+#       @reservations = []
+#     end
+#   end
+# end
