@@ -34,7 +34,15 @@ describe "Manager class" do
   it "can reserve an available room" do
     reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
 
+    selected_room = ""
+    @manager.rooms.each do |room|
+      if room.room_number == reservation.room_number
+        selected_room = room
+        break
+      end
+    end
+
     expect(reservation.room_number).must_be_kind_of Integer
-    expect(@manager.rooms[0].reservations.length).must_equal 1
+    expect(selected_room.reservations.length).must_equal 1
   end
 end

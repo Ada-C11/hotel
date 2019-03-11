@@ -15,13 +15,8 @@ module Hotel
     end
 
     def make_reservation(check_in, check_out)
-      available_room = ""
-      @rooms.each do |room|
-        if room.reservations.length == 0
-          available_room = room
-          break
-        end
-      end
+      available_room = @rooms.sample
+
       reservation = Hotel::Reservation.new(
         check_in: check_in,
         check_out: check_out,
