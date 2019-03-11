@@ -1,17 +1,17 @@
-require 'spec_helper'
+require_relative "spec_helper"
 require_relative "../lib/hotel.rb"
 
 describe "hotel instantiation" do
-    before do 
-        @hotel = HotelSystem::Hotel.new
-    end
+  before do
+    @hotel = HotelSystem::Hotel.new
+  end
 
   it "will create a new hotel" do
     expect(@hotel).must_be_kind_of HotelSystem::Hotel
   end
 
   it "hotel will have an array of rooms and reservations" do
-    expect(@hotel.rooms).must_be_kind_of Array 
+    expect(@hotel.rooms).must_be_kind_of Array
     expect(@hotel.reservations).must_be_kind_of Array
   end
 
@@ -23,3 +23,26 @@ describe "hotel instantiation" do
   end
 end
 
+describe "find_room method" do
+  before do
+    @hotel = HotelSystem::Hotel.new
+  end
+
+  it "returns an instance of a room" do
+    room = @hotel.find_room(19)
+
+    expect(room).must_be_kind_of HotelSystem::Room
+  end
+
+  it "returns nil if a matching room isn't found" do
+    room = @hotel.find_room(25)
+
+    expect(room).must_be_nil
+  end
+
+  it "raises an ArgumentError if a bad room number is given" do
+    expect {
+      @hotel.find_room("cat")
+    }.must_raise ArgumentError
+  end
+end
