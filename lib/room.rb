@@ -6,6 +6,7 @@ module Hotel
     def initialize(room_number, status: :AVAILABLE)
       @cost = 200
       @status = status
+      @number = room_number
     end
 
     def available?
