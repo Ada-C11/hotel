@@ -11,14 +11,13 @@ describe "created Reservation class" do
     expect(reservation).must_be_kind_of Booking::Reservation
   end
 
-  # it "raises an error if checkout date is before checkin date" do 
-  #   room_id = 2
-  #   checkin_date = Date.new(2019,1,4)
-  #   checkout_date = Date.new(2019,1,3)
-  #   reservation = Booking::Reservation.new(room_id, checkin_date, checkout_date)
+  it "raises an error if checkout date is before checkin date" do 
+    room_id = 2
+    checkin_date = Date.new(2019,1,4)
+    checkout_date = Date.new(2019,1,3)
 
-  #   expect(booking = Booking::Reservation.new(2, checkin_date, checkout_date)).must_raise ArgumentError
-  # end
+    expect{booking = Booking::Reservation.new(2, checkin_date, checkout_date)}.must_raise ArgumentError
+  end
 end
 
 describe "total_cost method" do

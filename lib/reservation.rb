@@ -9,11 +9,14 @@ module Booking
         @avail_statuses = [:AVAILABLE, :BOOKED]
         @room_number = room_number
         @checkin_date = checkin_date
-        @checkout_date = checkout_date
 
-        # if @checkout_date != nil && (@checkin_date > @checkout_date)
-        #   raise ArgumentError, "Check-out can't be before check-in."
-        # end
+        if checkout_date < checkin_date
+          raise ArgumentError, "Check-out can't be before check-in."
+        else
+          @checkout_date = checkout_date
+        end
+
+          
 
         @total_cost = self.total_cost
       end
