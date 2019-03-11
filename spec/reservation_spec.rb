@@ -4,8 +4,9 @@ describe "Reservation class " do
   describe "Initalizer" do
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
+    let(:room) { Hotel::Room.new(1) }
     let(:reservation) {
-      reservation = Hotel::Reservation.new(start_date, end_date)
+      reservation = Hotel::Reservation.new(start_date, end_date, room)
     }
 
     it "is able to instantiate" do
@@ -38,7 +39,7 @@ describe "Reservation class " do
     it "creates an array of booked dates" do
       expect(reservation.dates).must_be_kind_of Array
       expect(reservation.dates.length).must_equal 2
-      reservation2 = Hotel::Reservation.new(Date.new(2018, 7, 10), Date.new(2018, 7, 20))
+      reservation2 = Hotel::Reservation.new(Date.new(2018, 7, 10), Date.new(2018, 7, 20), room)
       expect(reservation2.dates.length).must_equal 10
       expect(reservation2.dates.first).must_equal Date.new(2018, 7, 10)
       expect(reservation2.dates.last).must_equal Date.new(2018, 7, 19)
