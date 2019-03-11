@@ -4,7 +4,7 @@ module Hotel
     attr_accessor :status
 
     def initialize(room_number, status: :AVAILABLE)
-      @cost = 20
+      @cost = 200
       @status = status
     end
 
