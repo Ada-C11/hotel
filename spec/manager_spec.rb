@@ -26,14 +26,16 @@ describe "Manager class" do
     expect(@manager.rooms.length).must_equal 20
   end
 
-  describe "make_reservation method" do
+  describe "reserve_room method" do
+    before do
+      @reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
+    end
     it "can make a reservation" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
-      expect(reservation).must_be_kind_of Hotel::Reservation
+      expect(@reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "can reserve an available room" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
+      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
 
       selected_room = ""
       @manager.rooms.each do |room|
@@ -48,8 +50,8 @@ describe "Manager class" do
     end
 
     it "can calculate the total cost of the reservation" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
-      reservation2 = @manager.make_reservation("2019-3-20", "2019-3-22")
+      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
+      reservation2 = @manager.reserve_room("2019-3-20", "2019-3-22")
 
       expect(reservation.total_cost).must_equal 200.00
       expect(reservation2.total_cost).must_equal 400.00
@@ -58,7 +60,7 @@ describe "Manager class" do
 
   describe "list_reservation method" do
     it "can list reservations for a specific date" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
+      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
       list = @manager.list_reservations("2019-3-20")
 
       expect(list.length).must_equal 1
@@ -68,10 +70,10 @@ describe "Manager class" do
 
   describe "fetch_total_cost" do
     it "can access the total cost for a given reservation" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
+      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
       total_cost = @manager.fetch_total_cost(reservation.id)
 
-      reservation2 = @manager.make_reservation("2019-3-20", "2019-3-22")
+      reservation2 = @manager.reserve_room("2019-3-20", "2019-3-22")
       total_cost2 = @manager.fetch_total_cost(reservation2.id)
 
       expect(total_cost).must_equal 200.00
