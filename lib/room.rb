@@ -1,9 +1,6 @@
-require_relative 'hotel'
-
 class Room
 
-  attr_reader :number
-
+  attr_accessor :number
   # is initialized with a room number as a parameter
   def initialize(number)
     @number = number
