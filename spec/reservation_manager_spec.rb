@@ -29,12 +29,11 @@ describe "Reservation_manager" do
       reservation_one = new_rez_man.make_reservation(reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
       reservation_two = new_rez_man.make_reservation(reservation_id: 2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
       reservation_three = new_rez_man.make_reservation(reservation_id: 7, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
-      p new_rez_man.find_reservations("4th April 2019")
 
       expect(new_rez_man.find_reservations("4th April 2019")).must_be_instance_of Array
     end
 
-    it "includes reservations that have the specified date" do
+    it "includes array of reservations that only include the specified date" do
       reservation_one = new_rez_man.make_reservation(reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
       reservation_two = new_rez_man.make_reservation(reservation_id: 2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
       reservation_three = new_rez_man.make_reservation(reservation_id: 7, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")

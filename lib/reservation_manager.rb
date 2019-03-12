@@ -1,15 +1,15 @@
 require_relative "reservation"
+require "pry"
 
 class Reservation_manager
-  attr_accessor :make_reservation
-  attr_reader :reservations, :all_rooms
+  attr_reader :reservations, :all_rooms, :make_reservation
 
   def initialize
     @all_rooms = (1..20).to_a
     @reservations = []
   end
 
-  def make_reservation(reservation_id: 0, check_in_time: nil, check_out_time: nil)
+  def make_reservation(reservation_id: 0, check_in_time: Date.today, check_out_time: (Date.today + 1))
     @reservation_id = reservation_id
     @check_in_time = check_in_time
     @check_out_time = check_out_time
@@ -19,14 +19,12 @@ class Reservation_manager
   end
 
   def find_reservations(date)
-    # given date, return reservations who have date somewhere in between
-    # reservation's check in or out times
-    reservations_with_date = []
-    if date.between?(@check_in_time, @check_out_time)
-      reservations_with_date << @new_reservation
-      # OR pull the instances from the reservations array
+    date = Date.parse(date)
+    reservations_with_date = @reservations.select do |reservation|
+      if date.between?(reservation.check_in_time, reservation.check_out_time)
+        @new_reservation
+      end
     end
     return reservations_with_date
-    # this only returns last instance of reservation though :/
   end
 end

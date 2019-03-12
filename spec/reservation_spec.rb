@@ -8,8 +8,8 @@ describe "Reservation" do
     test_rez = Reservation.new
     # expect(test_rez.room_num).must_be_kind_of NilClass
     expect(test_rez.reservation_id).must_equal 0
-    expect(test_rez.check_in_time).must_be_kind_of NilClass
-    expect(test_rez.check_out_time).must_be_kind_of NilClass
+    expect(test_rez.check_in_time).must_equal Date.today
+    expect(test_rez.check_out_time).must_equal (Date.today + 1)
   end
 
   describe "duration_of_time" do
@@ -21,7 +21,7 @@ describe "Reservation" do
       expect(my_rez.duration_of_stay).must_equal 7
     end
 
-    it "must throw an error if integer is negative" do
+    it "must throw an error if date range is invalid" do
       bad_rez = Reservation.new(reservation_id: 4, check_in_time: "10th April 2019", check_out_time: "3rd April 2019")
       expect { bad_rez.duration_of_stay }.must_raise ArgumentError
     end
@@ -38,4 +38,5 @@ describe "Reservation" do
   #       expect(my_rez.assign_room).must_be_instance_of Integer
   #     end
   #   end
+
 end
