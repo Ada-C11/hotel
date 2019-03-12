@@ -18,8 +18,8 @@ describe "Booker" do
       room_id = manifest.find_room(11)
       room_11 = booker.book_room((Date.new(2020, 11, 11)...Date.new(2020, 11, 14)), room_id)
       expect(room_11.unavailable).must_be_instance_of Array
-      expect(room_11.unavailable[0]).must_be_instance_of Date
-      expect(room_11.unavailable.include?(Date.new(2020, 11, 12))).must_equal true
+      expect(room_11.unavailable[0][123000][0]).must_be_instance_of Date
+      expect(room_11.unavailable[0][123000].include?(Date.new(2020, 11, 12))).must_equal true
     end
   end
 end

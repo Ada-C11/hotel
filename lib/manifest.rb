@@ -16,7 +16,7 @@ module Hotel
     end
 
     def list_rooms(rooms_to_list: rooms)
-      raise ArgumentError.new("Must pass param as Array") if rooms.class != Array
+      raise ArgumentError.new("Must pass param as Array") if rooms_to_list.class != Array
       list = ""
       rooms_to_list.length.times do |i|
         list += "Room number #{rooms_to_list[i].id}\n"

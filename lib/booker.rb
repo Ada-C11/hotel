@@ -9,8 +9,7 @@ module Hotel
     end
 
     def book_room(range_of_dates, room)
-      room.unavailable << range_of_dates.to_a
-      room.unavailable.flatten!
+      room.unavailable << {ReservationDate.confirmation_number => range_of_dates.to_a}
       return room
     end
   end

@@ -35,6 +35,12 @@ describe "Manifest" do
       expect(manifest.list_rooms(rooms_to_list: [])).must_equal ""
     end
 
+    it "raises ArgumentError if passed non array object" do
+      expect {
+        manifest.list_rooms(rooms_to_list: nil)
+      }.must_raise ArgumentError
+    end
+
     it "formats string" do
       expect(manifest.list_rooms).must_equal "Room number 1
 Room number 2
@@ -62,16 +68,16 @@ Room number 20
   describe "Manifest#list_reservations_by_date" do
     before do
       @manifest_unavailable = Hotel::Manifest.new
-      @manifest_unavailable.rooms[1].unavailable << Date.new(2020, 04, 02)
+      @manifest_unavailable.rooms[1].unavailable << [Date.new(2020, 04, 02)]
       @manifest_unavailable.rooms[4].unavailable << Date.new(2020, 04, 02)
-      @manifest_unavailable.rooms[10].unavailable << Date.new(2020, 04, 02)
+      @manifest_unavailable.rooms[11].unavailable << Date.new(2020, 04, 02)
     end
     it "returns a string" do
       expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_be_instance_of String
     end
 
     it "formats string and correctly selects unavailable rooms" do
-      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_equal "Room number 2\nRoom number 5\nRoom number 11\n"
+      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_equal "Room number 2\nRoom number 5\nRoom number 12\n"
     end
 
     it "returns an empty string if no rooms reserved for given date" do
