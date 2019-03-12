@@ -18,6 +18,19 @@ describe "Block class" do
         expect(room).must_be_instance_of HotelSystem::Room
       end
     end
+    it "will raise an exception if block size is greater than 5 or less than 1" do
+      expect {
+        HotelSystem::Block.new(date_range: @date_range,
+                               rooms: @hotel.rooms[0...7],
+                               discount_rate: 180)
+      }.must_raise BlockError
+
+      expect {
+        HotelSystem::Block.new(date_range: @date_range,
+                               rooms: [],
+                               discount_rate: 180)
+      }.must_raise BlockError
+    end
     it "will contain a date range " do
       expect(@block.date_range).must_be_instance_of HotelSystem::DateRange
     end
