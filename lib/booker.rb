@@ -8,8 +8,8 @@ module Hotel
       @manifest = manifest
     end
 
-    def book_room(range_of_dates, room)
-      room.unavailable << {ReservationDate.confirmation_number => range_of_dates.to_a}
+    def book_room(reservation, room)
+      room.unavailable << reservation
       return room
     end
   end

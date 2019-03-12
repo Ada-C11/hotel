@@ -1,12 +1,12 @@
 require_relative "spec_helper"
 
-describe "ReservationDate class" do
+describe "Reservation class" do
   let(:valid_reservation) {
-    Hotel::ReservationDate.new(check_in: "March 20, 2020", check_out: "March 27, 2020")
+    Hotel::Reservation.new(check_in: "March 20, 2020", check_out: "March 27, 2020")
   }
-  describe "ReservationDate#initialize" do
-    it "is an instance of ReservationDate" do
-      expect(valid_reservation).must_be_instance_of Hotel::ReservationDate
+  describe "Reservation#initialize" do
+    it "is an instance of Reservation" do
+      expect(valid_reservation).must_be_instance_of Hotel::Reservation
     end
 
     it "instance variable check_in is correct" do
@@ -25,15 +25,15 @@ describe "ReservationDate class" do
       date1 = (Time.new + 172800).to_date.to_s
       date2 = (Time.new + 172800 * 4).to_date.to_s
       past = "march 2, 2019"
-      expect { Hotel::ReservationDate.new(check_in: date2, check_out: date1) }.must_raise InvalidDateRangeError
-      expect { Hotel::ReservationDate.new(check_in: past, check_out: date1) }.must_raise InvalidDateRangeError
+      expect { Hotel::Reservation.new(check_in: date2, check_out: date1) }.must_raise InvalidDateRangeError
+      expect { Hotel::Reservation.new(check_in: past, check_out: date1) }.must_raise InvalidDateRangeError
     end
   end
 
   let(:date1) { (Time.new + 172800).to_date }
   let(:date2) { (Time.new + 172800 * 4).to_date }
   let(:past) { Date.new(2019, 02, 13) }
-  describe "ReservationDate#valid_date_range?" do
+  describe "Reservation#valid_date_range?" do
     it "check_in is before check_out" do
       expect(valid_reservation.valid_date_range?(date1, date2)).must_equal true
     end

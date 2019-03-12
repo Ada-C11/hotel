@@ -14,12 +14,16 @@ describe "Booker" do
   end
 
   describe "Booker#book_room" do
-    it "adds range of dates to unavailable array to manifest by room id" do
-      room_id = manifest.find_room(11)
-      room_11 = booker.book_room((Date.new(2020, 11, 11)...Date.new(2020, 11, 14)), room_id)
-      expect(room_11.unavailable).must_be_instance_of Array
-      expect(room_11.unavailable[0][123000][0]).must_be_instance_of Date
-      expect(room_11.unavailable[0][123000].include?(Date.new(2020, 11, 12))).must_equal true
+    it "adds check_in and check_out dates to unavailable array to manifest by room id" do
+      room_id = 1
+      day1 = "march 20, 2020"
+      day2 = "march 28, 2020"
+      reservation1 = Hotel::Reservation.new(check_in: day1, check_out: day2)
+      room = manifest.find_room(room_id)
+      booker.book_room(reservation1, room)
+      expect(room.unavailable).must_be_instance_of Array
+      expect(room.unavailable.last.check_in).must_be_instance_of Date
+      expect(room.unavailable.last.check_in).must_equal Date.new(2020, 03, 20)
     end
   end
 end
