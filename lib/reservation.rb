@@ -1,12 +1,12 @@
 require 'date'
+# require_relative 'hotel.rb'
 
 module Booking
-  class Reservation
+  class Reservation < Hotel
       ROOM_COST = 200
-      attr_reader :room_number, :checkin_date, :checkout_date, :total_cost, :status
+      attr_reader :room_number, :checkin_date, :checkout_date, :total_cost
   
-      def initialize(room_number, checkin_date, checkout_date, status: :AVAILABLE)
-        @avail_statuses = [:AVAILABLE, :BOOKED]
+      def initialize(room_number, checkin_date, checkout_date)
         @room_number = room_number
         @checkin_date = checkin_date
 
@@ -15,8 +15,6 @@ module Booking
         else
           @checkout_date = checkout_date
         end
-
-          
 
         @total_cost = self.total_cost
       end
@@ -27,8 +25,31 @@ module Booking
         return total
       end
 
-      def add_reservation(reservation)
-        @reservations << reservation
+
+      def self.make_reservation(room_number)
+
+        # available_room = rooms.find { |room| room.status == :AVAILABLE}
+        # if current_driver == nil
+        #   raise ArgumentError, "There are no available rooms."
+        # end
+  
+        # # passenger = find_passenger(passenger_id)
+  
+        new_reservation = Booking::Reservation.new(room_number, checkin_date, checkout_date)
+
+        @reservations << new_reservation
+  
+        # # hotel.add_reservation(new_reservation)
+  
+        # current_driver.change_status(new_trip)
+  
+        # @all_reservations << new_reservation
+  
+        return new_reservation
       end
+
+      # def add_reservation(reservation)
+      #   @reservations << reservation
+      # end
   end
 end
