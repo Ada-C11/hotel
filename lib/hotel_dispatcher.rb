@@ -7,14 +7,14 @@ require_relative 'date_range'
 
 module Hotel
   class HotelDispatcher
-    attr_reader :rooms, :reservations
+    attr_accessor :rooms, :reservations
     def initialize
-      @rooms = Hotel::HotelDispatcher.list_all_rooms
+      @rooms = self.list_all_rooms
       @reservations = []
       # @blocks = blocks || []
     end
 
-    def self.list_all_rooms
+    def list_all_rooms
       rooms = []
       20.times do |i|
         room = Hotel::Room.new(room_num: i+1)
@@ -46,15 +46,17 @@ module Hotel
       new_reservation
     end
 
-    def self.list_all_reservations
-      reservations = []
-      reservations << reservation
-    end
-
 
     def find_reservation(date)
       #returns reservations for a specified date
-    end
+      reservation_by_date = []
+      @reservations.each do |r|
+        if r.date_range.is_overlapped?(date)
+          reservation_by_date << r
+        end
+      end
+      return reservation_by_date
+    end 
 
   end
 end
