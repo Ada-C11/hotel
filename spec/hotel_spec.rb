@@ -45,7 +45,7 @@ describe "hotel class" do
 
   describe "reservation_dates method" do
     before do
-      @dates = @hotel.reservation_dates(19, 11, 15, 5)
+      @dates = @hotel.reservation_dates(start_year: 19, start_month: 11, start_day: 15, num_nights: 5)
     end
 
     it "returns an array" do
@@ -104,6 +104,12 @@ describe "hotel class" do
 
     it "will add a reservation to the hotel's list of reservations" do
       expect(@hotel.reservations.length).must_equal 1
+    end
+
+    it "will correctly assign a reservation id" do
+      @hotel.reserve_room(start_year: 19, start_month: 5, start_day: 5, num_nights: 4)
+
+      expect(@hotel.reservations[1].id).must_equal 1
     end
   end
 end
