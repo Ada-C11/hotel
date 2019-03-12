@@ -8,7 +8,7 @@ describe "Hotel::Reservation" do
   #   }
   describe "initialize" do
     it "is an instance of Reservation" do
-      reservation = Hotel::Reservation.new(1, room, "2019-03-12", "2019-03-15")
+      reservation = Hotel::Reservation.new(reservation_id: 1, room: room, check_in_date: "2019-03-12", check_out_date: "2019-03-15")
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
@@ -17,7 +17,7 @@ describe "Hotel::Reservation" do
     end
 
     it "check-in-date and check-out-date are instances of Date" do
-      reservation = Hotel::Reservation.new(1, room, "2019-03-12", "2019-03-15")
+      reservation = Hotel::Reservation.new(reservation_id: 1, room: room, check_in_date: "2019-03-12", check_out_date: "2019-03-15")
       expect(reservation.check_in_date).must_be_kind_of Date
       expect(reservation.check_out_date).must_be_kind_of Date
     end

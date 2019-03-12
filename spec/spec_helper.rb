@@ -3,7 +3,7 @@ require "simplecov"
 SimpleCov.start do
   add_filter %r{^/specs?/}
 end
-require "time"
+require "date"
 require "minitest"
 require "minitest/autorun"
 require "minitest/reporters"
@@ -11,4 +11,6 @@ require "minitest/reporters"
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 # Require_relative your lib files here!
+require_relative "../lib/record"
 require_relative "../lib/room_manager"
+require_relative "../lib/room"
