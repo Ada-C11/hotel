@@ -26,13 +26,13 @@ describe "ReservationManager class" do
       manager = Hotel::ReservationManager.new
     end
 
-    it "loads reservations into reservations array" do
+    it "adds a reservation to the reservations array" do
       before_res = manager.reservations.length
       new_reservation = manager.request_reservation("2018-03-12", "2018-03-15")
       expect(manager.reservations.length).must_equal before_res + 1
     end
 
-    it "accurately loads reservations into reservations array" do
+    it "accurately loads a reservation into the reservations array" do
       new_reservation = manager.request_reservation("2018-03-12", "2018-03-15")
       first_reservation = manager.reservations.first
       expect(first_reservation.check_in_date).must_equal Date.strptime("2018-03-12")
@@ -40,6 +40,13 @@ describe "ReservationManager class" do
       expect(first_reservation.all_dates).must_equal Date.strptime("2018-03-12")..Date.strptime("2018-03-15")
       expect(first_reservation.room_number).must_be :<=, 20
       expect(first_reservation.room_number).must_be :>, 0
+    end
+
+    # will break when reserve an available room, using room 1 as a reference for if working or not
+    it "adds the reservation to the room" do
+      new_reservation = manager.request_reservation("2018-03-12", "2018-03-12")
+
+      expect(manager.rooms.first.reservations.length).must_equal 1
     end
   end
 
