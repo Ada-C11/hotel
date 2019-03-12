@@ -16,9 +16,6 @@ describe "Reservation class" do
     it "Reservation class initialized with tomorrow as end date if no date is given" do
       expect(reservation.end_date).must_equal Date.today + 1
     end
-    it "Reservation id initialized as 0 if no reservation id is entered" do
-      expect(reservation.reservation_id).must_equal 0
-    end
   end
   describe "duration_length method" do
     it "Duration returns the length of time between 2 dates" do
@@ -54,7 +51,7 @@ describe "Reservation class" do
     end
   end
   describe "assign_room method" do
-    it "assigns a room from @rooms array" do
+    it "assigns a room from rooms array" do
       room = reservation.assign_room
       expect(reservation.rooms.include?(room)).must_equal true
     end
