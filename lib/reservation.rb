@@ -10,10 +10,14 @@ module HotelSystem
       @date_range = (arrive_day...depart_day)
     end
 
+    def price_per_night
+      return room.price_per_night
+    end
+
     def calc_total_cost
       nights_stayed = 0
-      @date_range.each { nights_stayed += 1 }
-      @total_cost = nights_stayed * @room.price_per_night
+      date_range.each { nights_stayed += 1 }
+      @total_cost = nights_stayed * price_per_night
       return total_cost
     end
   end

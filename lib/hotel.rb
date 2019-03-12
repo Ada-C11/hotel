@@ -20,15 +20,36 @@ module HotelSystem
       @reservations << reservation
     end
 
-    def make_reservation(room, arrive_day, depart_day)
+    def create_date_object(date)
+      date_object = Date.parse(date)
+      return date_object
+    end
+
+    def make_reservation(room, first_day, last_day)
+      arrive_day = create_date_object(first_day)
+      depart_day = create_date_object(last_day)
+      # arrive_day = first_day
+      # depart_day = last_day
+
       reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
       add_reservation(reservation)
       room.add_reservation(reservation)
     end
 
+    # def create_date_object(date)
+    #   date_object = Date.parse(date)
+    # end
+
     def reservations_by_date(date)
-      reservations = @reservations.select { |res| res.date_range.include?(date) }
+      date_object = create_date_object(date)
+      reservations = @reservations.select { |res| res.date_range.include?(date_object) }
       return reservations
+    end
+
+    def available_rooms_by_date_range(first_day, last_day)
+      arrive_day = create_date_object(first_day)
+      depart_day = create_date_object(last_day)
+      return @rooms
     end
   end
 end
