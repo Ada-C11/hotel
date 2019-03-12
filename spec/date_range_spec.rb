@@ -28,8 +28,8 @@ describe "DateRange class" do
     it "creates an array of dates within the range" do
       expect(@new_range.dates).must_be_instance_of Array
 
-      expected_start = Date.parse (@start_date)
-      expected_end = Date.parse (@end_date)
+      expected_start = Date.parse(@start_date)
+      expected_end = Date.parse(@end_date)
       range = (expected_start...expected_end)
 
       @new_range.dates.each do |date|
