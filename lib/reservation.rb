@@ -1,6 +1,6 @@
 module HotelSystem
   class Reservation
-    attr_reader :room, :date_range, :total_cost
+    attr_reader :room, :date_range, :total_cost, :arrive_day, :depart_day
 
     def initialize(room:, arrive_day:, depart_day:)
       raise ArgumentError if depart_day <= arrive_day
