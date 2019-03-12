@@ -65,4 +65,17 @@ describe "Manager class" do
       expect(list[0]).must_be_kind_of Hotel::Reservation
     end
   end
+
+  describe "fetch_total_cost" do
+    it "can access the total cost for a given reservation" do
+      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
+      total_cost = @manager.fetch_total_cost(reservation.id)
+
+      reservation2 = @manager.make_reservation("2019-3-20", "2019-3-22")
+      total_cost2 = @manager.fetch_total_cost(reservation2.id)
+
+      expect(total_cost).must_equal 200.00
+      expect(total_cost2).must_equal 400.00
+    end
+  end
 end

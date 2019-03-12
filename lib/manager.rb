@@ -52,5 +52,16 @@ module Hotel
       end
       return list
     end
+
+    def fetch_total_cost(reservation_id)
+      @rooms.each do |room|
+        room.reservations.each do |reservation|
+          if reservation.id == reservation_id
+            return reservation.total_cost
+            break
+          end
+        end
+      end
+    end
   end
 end
