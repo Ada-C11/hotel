@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe "Room class" do
-  let(:room) { Hotel::Room.new(1) }
+  let(:room) { Hotel::Room.new(room_number: 1) }
 
   it "is able to instantiate" do
     expect(room).must_be_kind_of Hotel::Room

@@ -1,5 +1,4 @@
-require "date"
-require_relative "front_desk"
+# require "date"
 
 module Hotel
   class Reservation
@@ -7,7 +6,7 @@ module Hotel
 
     attr_reader :first_night, :last_night, :length_of_stay, :cost, :room, :dates
 
-    def initialize(start_date, end_date, room)
+    def initialize(start_date:, end_date:, room:)
       @first_night = start_date
       @last_night = end_date - 1
       @length_of_stay = end_date - start_date

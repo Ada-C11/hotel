@@ -1,4 +1,4 @@
-require "date"
+# require "date"
 
 require_relative "room"
 require_relative "reservation"
@@ -14,12 +14,12 @@ module Hotel
 
       rooms_array = []
       NUMBER_OF_ROOMS.times do |i|
-        rooms_array << Hotel::Room.new(i + 1)
+        rooms_array << Hotel::Room.new(room_number: i + 1)
       end
       @rooms = rooms_array
     end
 
-    def reserve(start_date, end_date, room = nil)
+    def reserve(start_date:, end_date:)
       start_date = Date.parse(start_date)
       end_date = Date.parse(end_date)
 
@@ -28,7 +28,7 @@ module Hotel
       end
 
       room = find_open_room
-      new_reservation = Hotel::Reservation.new(start_date, end_date, room)
+      new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: room) # Is there a way to reduce this dependency?
       @reservations << new_reservation
       return new_reservation
     end
