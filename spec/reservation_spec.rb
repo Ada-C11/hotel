@@ -5,8 +5,10 @@ require_relative "spec_helper"
 
 describe "Reservation class" do
   before do
+    @check_in = Date.today.to_s
+    @check_out = (Date.today + 2).to_s
     @room = Hotel::Room.new(room_number: 1)
-    @reservation = Hotel::Reservation.new(check_in: "2019/3/10", check_out: "2019/3/12", room: @room)
+    @reservation = Hotel::Reservation.new(check_in: @check_in, check_out: @check_out, room: @room)
   end
   it "creates an instance of Reservation" do
     expect(@reservation).must_be_kind_of Hotel::Reservation
@@ -32,7 +34,7 @@ describe "Reservation class" do
 
   describe "number_of_nights method" do
     before do
-      @reservation = Hotel::Reservation.new(check_in: "2019-3-10", check_out: "2019-3-12", room: @room)
+      @reservation = Hotel::Reservation.new(check_in: @check_in, check_out: @check_out, room: @room)
       @number_of_nights = @reservation.number_of_nights(@reservation.check_in, @reservation.check_out)
     end
     it "calculates the number of nights a reservation lasts for" do
@@ -43,7 +45,7 @@ describe "Reservation class" do
   describe "total_cost method" do
     before do
       @room = Hotel::Room.new(room_number: 1)
-      @reservation = Hotel::Reservation.new(check_in: "2019-3-10", check_out: "2019-3-12", room: @room)
+      @reservation = Hotel::Reservation.new(check_in: @check_in, check_out: @check_out, room: @room)
     end
 
     it "calculates the total cost of a reservation" do

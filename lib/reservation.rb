@@ -39,6 +39,8 @@ module Hotel
         raise ArgumentError, "Invalid date range #{@check_in}, #{@check_out}"
       elsif !(@check_in.to_s =~ format) || !(@check_out.to_s =~ format)
         raise ArgumentError, "Invalid date format #{check_in}, #{check_out}.  Must be YYYY-MM-DD"
+      elsif @check_in < Date.today
+        raise ArgumentError, "Can't make a reservation for the past, homie. #{check_in}"
       end
     end
   end
