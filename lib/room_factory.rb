@@ -6,7 +6,7 @@ module Hotel
     attr_reader :rm_id, :cost
 
     def initialize(input)
-      rm_id = input[:room_id]
+      rm_id = input[:rm_id]
       cost = input[:cost]
     end
   end
@@ -14,14 +14,19 @@ module Hotel
   private
 
   class Hotel
+
     def room_template
-      blueprint = 
+      blueprint = {
+        rm_id: "Room #" + "#{i}"
+        cost: COST
+      }
     end
 
-    def build_new_hotel(blueprint)
-      HOTEL_SIZE.times do |blueprint|
-      room = Room.new(blueprint)
-      rooms << room
+    def build_new_rooms(input)
+      input.times do |i|
+      new_room = Room.new(Hotel.room_template)
+      rooms << new_room
+      i += 1
     end
   end
 end
