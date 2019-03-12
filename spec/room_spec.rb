@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
 
 describe 'Room class' do
-  describe 'initalize' do
+  describe 'initialize' do
     before do
-      @room = HotelSystem::Room.new
+      @room = HotelSystem::Room.new(number: 1)
     end
 
     it "is an instance of a room" do
