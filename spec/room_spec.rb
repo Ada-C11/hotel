@@ -18,10 +18,10 @@ describe "Room class" do
 
     it "sets reservations to an empty array if not provided" do
       expect(@room.reservations.length).must_equal 0
-    end
+    end # needed?
   end
 
-  describe "adds reservation" do
+  describe "#add_reservation" do
     before do
       @room = Hotel::Room.new(
         id: 1,
@@ -34,6 +34,7 @@ describe "Room class" do
       )
       @room.add_reservation(@reservation)
     end
+
     it "adds a new reservation to list of reservations" do
       expect(@room.reservations.length).must_equal 1
     end
