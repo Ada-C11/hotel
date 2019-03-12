@@ -17,8 +17,6 @@ class Reservation
     duration = (Date.parse(@end_date) - Date.parse(@start_date))
     if duration < 1
       raise ArgumentError, "The duration must be at least one day"
-    elsif @start.date.past?
-      raise ArgumentError, "The start date cannot be in the past"
     else
       return duration
     end
