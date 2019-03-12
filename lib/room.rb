@@ -3,7 +3,7 @@ class Room
 
   def initialize(number, room_reservations:)
     @number = number,
-    @rate = rate,
+    #@rate = rate,
     @room_reservations = []
   end
 end
