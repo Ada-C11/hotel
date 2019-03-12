@@ -50,10 +50,10 @@ describe "Reservation class" do
       expect(reservation.total_cost).must_equal 1400
     end
   end
-  describe "assign_room method" do
-    it "assigns a room from rooms array" do
-      room = reservation.assign_room
-      expect(reservation.rooms.include?(room)).must_equal true
-    end
-  end
+  # describe "assign_room method" do
+  #   it "assigns a room from rooms array" do
+  #     room = reservation.assign_room
+  #     expect(reservation.rooms.include?(room)).must_equal true
+  #   end
+  # end
 end

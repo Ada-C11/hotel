@@ -31,4 +31,20 @@ class ReservationManager
     end
     return reservations_matching_date
   end
+
+  #   def view_available_rooms(start_date: Date.today, end_date: Date.today + 1)
+  #     start_date = Date.parse(start_date)
+  #     end_date = Date.parse(end_date)
+  #     date_range = (start_date..end_date).to_a
+  #     booked_rooms = []
+
+  #     @reservation_array.each do |reservation|
+  #       if reservation.reservation_dates.include?(date_range[0]
+  #         booked_rooms <<reservation.room
+  #       end
+  #     end
+  #     return rooms - booked_rooms # these rooms are avail to book because at least one day is booked
+
+  #     #   binding.pry
+  #   end
 end
