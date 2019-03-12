@@ -2,11 +2,11 @@ require_relative 'hotel'
 
 class Room
 
-  attr_reader :number, :price
+  attr_reader :number
 
-  def initialize(number:, price: 200)
+  # is initialized with a room number and default price set to 200
+  def initialize(number)
     @number = number
-    @price = 200
   end
   
 end 
