@@ -46,10 +46,20 @@ module HotelSystem
       return reservations
     end
 
+    # def select_avalible_rooms(rooms, date)
+    #   available_rooms = rooms.select { |room| room.available?(date) == true }
+    #   return available_rooms
+    # end
+
     def available_rooms_by_date_range(first_day, last_day)
       arrive_day = create_date_object(first_day)
       depart_day = create_date_object(last_day)
-      return @rooms
+      available_rooms = @rooms.clone
+      (first_day...last_day).each do |day|
+        date = create_date_object(day)
+        available_rooms = available_rooms.select { |room| room.available?(date) == true }
+      end
+      return available_rooms
     end
   end
 end

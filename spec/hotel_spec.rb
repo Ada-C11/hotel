@@ -99,7 +99,12 @@ describe "Hotel" do
         expect(available_rooms.length).must_equal 3
       end
 
+      it "Returns rooms that are avaiable, but were occupied the previous night" do
+      end
+
       it "Doesn't return rooms that have conflicting reservations" do
+        available_rooms = @hotel.available_rooms_by_date_range("2019-2-12", "2019-2-17")
+        expect(available_rooms.length).must_equal 1
       end
     end
   end
