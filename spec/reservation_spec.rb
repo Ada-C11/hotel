@@ -33,9 +33,9 @@ describe "Reservation" do
     end
   end
 
-  describe "assign a room" do
-    it "assigns a random room number when called" do
-      expect(my_rez.assign_room).must_be_instance_of Integer
-    end
-  end
+  #   describe "assign a room" do
+  #     it "assigns a random room number when called" do
+  #       expect(my_rez.assign_room).must_be_instance_of Integer
+  #     end
+  #   end
 end
