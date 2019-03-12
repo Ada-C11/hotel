@@ -27,7 +27,6 @@ describe "BlockReservation" do
 
     it "Creates an instance of BlockReservation" do
       expect(@block_reservation).must_be_kind_of HotelSystem::BlockReservation
-      # expect(@block_reservation.room).must_equal @room
     end
 
     it "Inherits from Reservation" do

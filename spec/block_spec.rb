@@ -70,9 +70,9 @@ describe "Block" do
     before do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
-      @roome_three = HotelSystem::Room.new(id: 3)
+      @room_three = HotelSystem::Room.new(id: 3)
       @block = HotelSystem::Block.new(
-        rooms: [@room, @room_two, @roome_three],
+        rooms: [@room, @room_two, @room_three],
         first_day: Date.parse("2017-05-03"),
         last_day: Date.parse("2017-05-06"),
         discount: 0,

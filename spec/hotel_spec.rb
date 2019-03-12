@@ -48,10 +48,6 @@ describe "Hotel" do
       @hotel.rooms << @room_two
       @hotel.rooms << @room_three
 
-      # arrive_day = Date.new(2019, 2, 10)
-      # depart_day = Date.new(2019, 2, 14)
-      # arrive_day = Date.parse("2019-02-10")
-      # depart_day = Date.parse("2019-02-14")
       @arrive_day = "2019-02-10"
       @depart_day = "2019-02-14"
 
@@ -123,6 +119,34 @@ describe "Hotel" do
       it "Doesn't return rooms that have conflicting reservations" do
         available_rooms = @hotel.get_available_rooms("2019-2-12", "2019-2-17")
         expect(available_rooms.length).must_equal 1
+      end
+    end
+  end
+  describe "Managing Blocks" do
+    before do
+      @room = HotelSystem::Room.new(id: 1)
+      @room_two = HotelSystem::Room.new(id: 2)
+      @room_three = HotelSystem::Room.new(id: 3)
+
+      @arrive_day = "2019-02-10"
+      @depart_day = "2019-02-14"
+
+      @discount = 0.2
+    end
+    describe "create_block" do
+      it "Can be called on a hotel" do
+        expect(@hotel).must_respond_to :create_block
+      end
+      it "creates an instance of a Block" do
+        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        expect(block).must_be_kind_of HotelSystem::Block
+      end
+
+      it "Adds the created block to the hotels blocks array" do
+        expect(@hotel.blocks.length).must_equal 0
+        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        expect(@hotel.blocks.length).must_equal 1
+        expect(@hotel.blocks.first).must_equal block
       end
     end
   end

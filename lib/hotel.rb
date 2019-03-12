@@ -61,5 +61,11 @@ module HotelSystem
       end
       return available_rooms
     end
+
+    def create_block(rooms, first_day, last_day, discount)
+      new_block = HotelSystem::Block.new(rooms: rooms, first_day: first_day, last_day: last_day, discount: discount)
+      @blocks << new_block
+      return new_block
+    end
   end
 end
