@@ -20,10 +20,12 @@ module Hotel
       end_date = Date.parse(end_date)
 
       if start_date >= end_date
-        raise ArgumentError, "Reservation must be at least one day long."
+        raise ArgumentError, "Reservation must be at least one day long"
       end
 
-      reservations << Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: find_open_room)
+      reservations << Hotel::Reservation.new(start_date: start_date,
+                                             end_date: end_date,
+                                             room: find_open_room)
 
       return reservations.last
     end
@@ -31,13 +33,8 @@ module Hotel
     def find_by_date(date:)
       date = Date.parse(date)
       on_this_date = []
-      reservations.each do |reservation|
-        if reservation.dates.include?(date)
-          on_this_date << reservation
-        end
-      end
 
-      return on_this_date
+      reservations.select { |reservation| reservation.dates.include?(date) }
     end
 
     def find_open_room
@@ -53,11 +50,9 @@ module Hotel
     private
 
     def rooms_array
-      rooms_array = []
-      NUMBER_OF_ROOMS.times do |i|
-        rooms_array << Hotel::Room.new(room_number: i + 1)
-      end
-      return rooms_array
+      rooms = []
+      NUMBER_OF_ROOMS.times { |i| rooms << Hotel::Room.new(room_number: i + 1) }
+      return rooms
     end
   end
 end

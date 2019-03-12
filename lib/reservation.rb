@@ -11,16 +11,16 @@ module Hotel
 
       dates = []
       night = start_date
-      until night == end_date # (not including end date)
+      until night == end_date # not including end date
         dates << night
-        night += 1
+        night += 1 # go to the next day
       end
 
       @dates = dates
 
       @room = room
 
-      @cost = @length_of_stay * room.rate
+      @cost = length_of_stay * room.rate
     end
   end
 end
