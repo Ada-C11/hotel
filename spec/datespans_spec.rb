@@ -29,7 +29,7 @@ describe "initialize" do
     expect(@dates.check_out).must_be_kind_of Date
   end
 
-  describe "tests the includes_date? method" do
+describe "tests the includes_date? method" do
   before do
     @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
   end
@@ -40,7 +40,7 @@ describe "initialize" do
     expect(date_match).must_equal true
   end
 
-  describe "testing for date overlap method" do
+describe "testing for date overlap method" do
     it "finds if date ranges overlap" do
       dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
       dates2 = Hotel::DateSpan.new("2019-07-22", "2019-07-24")
@@ -48,5 +48,4 @@ describe "initialize" do
       expect(overlaps).must_equal false
     end
   end
-end
 end
