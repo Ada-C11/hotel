@@ -1,14 +1,21 @@
-require_relative 'room'
-require_relative 'reservation'
+require_relative "room"
+require_relative "reservation"
 
 module HotelSystem
   class Hotel
-    attr_reader :rooms
-    attr_accessor :reservations
+    attr_reader :all_rooms
+    attr_accessor :all_reservations
 
     def initialize
-      @rooms = Array(1..20)
-      @reservations = []
+      @all_reservations = []
+      @all_rooms = []
+      generate_rooms(20)
+    end
+
+    def generate_rooms(number_of_rooms)
+      number_of_rooms.times do |i|
+        @all_rooms << Room.new(i + 1)
+      end
     end
 
     def make_reservation
