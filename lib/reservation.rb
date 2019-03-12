@@ -6,15 +6,18 @@ module HotelSystem
     attr_accessor :dates
 
     def initialize(id:, room: nil, room_number: nil, dates: nil)
-      if room != nil
-        @room = valid_room(room)
+      @id = id
+      if room
+        valid_room(room)
+        @room = room
         @room_number = room.room_number
-      elsif room_number != nil
-        @room_number = valid_room_number(room_number)
+      elsif room_number
+        valid_room_number(room_number)
+        @room_number = room_number
       else
         raise ArgumentError, "Please enter either a Room or a room number."
       end
-      @dates = []
+      @dates = dates || []
     end
 
     def valid_room(room)
