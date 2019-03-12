@@ -3,21 +3,31 @@ require "pry"
 
 class Reservation
   attr_reader :reservation_id
-  attr_accessor :check_in, :check_out
+  attr_accessor :check_in, :check_out, :room
 
   def initialize(reservation_id, check_in: nil, check_out: nil, room: nil)
     @reservation_id = reservation_id
-    @check_in = check_in
-    @check_out = check_out
+
+    if check_in == nil
+      @check_in = nil
+    else
+      @check_in = Date.parse(check_in)
+    end
+
+    if check_out == nil
+      @check_out = nil
+    else
+      @check_out = Date.parse(check_out)
+    end
     @room = room
   end
 
   def duration
     if self.check_in != nil && self.check_out != nil
-      duration = (Date.parse(check_out) - Date.parse(check_in)).to_i
+      duration = (check_out - check_in).to_i
 
       if duration <= 0
-        raise ArgumentError, "Check out time is not after check in time. Duration is currently #{duration} days."
+        raise ArgumentError, "Check out time is not after check in time. Inputted check in date was #{check_in} and check out date was #{check_out}"
       end
     else
       return nil

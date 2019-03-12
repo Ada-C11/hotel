@@ -6,11 +6,11 @@ describe "Reservation Manager class initialization & set up" do
     expect(test_manager).must_be_kind_of Reservation_Manager
   end
 
-  it "contains a room instance variable that contains 20 rooms with correstponding ID and availability" do
-    test_manager = Reservation_Manager.new
-    expect(test_manager.rooms).must_be_kind_of Array
-    expect(test_manager.rooms.length).must_equal 20
-  end
+  # it "contains a room instance variable that contains 20 rooms with correstponding ID and availability" do
+  #   test_manager = Reservation_Manager.new
+  #   expect(test_manager.rooms).must_be_kind_of Array
+  #   expect(test_manager.rooms.length).must_equal 20
+  # end
 end
 
 describe "#make_reservation in Reservation Manager" do
@@ -32,6 +32,16 @@ describe "#make_reservation in Reservation Manager" do
     test_manager.make_reservation(test_reserve1)
     test_manager.make_reservation(test_reserve2)
     test_manager.make_reservation(test_reserve3)
+
     expect(test_manager.all_reservations.length).must_equal 3
+  end
+
+  it "adds a random room to the reservation instance" do
+    test_manager = Reservation_Manager.new
+    test_reserve1 = Reservation.new(1, check_in: "2019-3-15", check_out: "2019-3-20")
+    test_manager.make_reservation(test_reserve1)
+
+    expect(test_reserve1.room).must_be_kind_of Hash
+    expect(test_reserve1.room["room_id"]).must_be_kind_of Integer
   end
 end

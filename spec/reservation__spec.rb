@@ -24,7 +24,7 @@ describe "calculate duration of total days spent in reservation" do
     expect(test_reserve.duration).must_equal 5
   end
 
-  it "throws an Argument Error if check out time is equal to or before check in time" do
+  it "throws an Argument Error if check out time is = or before check in time" do
     test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-15")
     other_test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-20")
 
