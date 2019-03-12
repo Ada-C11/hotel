@@ -13,8 +13,13 @@ class DateRange
     end
   end
 
+  def self.dates_ovelap?(date1, date2)
+    
+  end
+
   def valid_date?(date_str)
     format = "%Y-%m-%d"
+    date_str = Date.parse(date_str).to_s
     date_str = Date.strptime(date_str,format).to_s
     begin
       Date.parse(date_str)

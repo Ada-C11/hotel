@@ -20,15 +20,13 @@ describe "DateRange" do
   describe "valid_date?" do 
     it "raises an exception for an invalid check-in day" do 
      expect{ DateRange.new(
-        check_in: "March 100th 2019", 
-        check_out: "03-05-2019")
+        check_in: "March 100th 2019")
      }.must_raise ArgumentError
     end
 
     it "raises an exceptions for an invalid check-out day" do 
       expect{ DateRange.new(
-         check_in: "March 10th 2019", 
-         check_out: "03-205-2019")
+         check_in: "March 10th 2019")
       }.must_raise ArgumentError
     end
   end
