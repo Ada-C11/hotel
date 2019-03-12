@@ -38,13 +38,9 @@ module Hotel
     end
 
     def find_open_room
-      rooms.each do |room|
-        if room.available?
-          return room
-          break
-        end
-      end
-      raise ArgumentError, "No rooms available"
+      open_room = rooms.find { |room| room.available? }
+      raise ArgumentError, "No rooms available" unless open_room
+      return open_room
     end
 
     private
