@@ -43,6 +43,25 @@ describe "ReservationManager class" do
     end
   end
 
+  describe "#find_room" do
+    let (:manager) do
+      manager = Hotel::ReservationManager.new
+    end
+
+    it "returns an instance of a room" do
+      expect(manager.find_room(5)).must_be_kind_of Hotel::Room
+    end
+
+    it "returns the correct instance of a room" do
+      room_one = manager.find_room(4)
+      room_two = manager.find_room(20)
+      expect(room_one.number).must_equal 4
+      expect(room_two.number).must_equal 20
+      expect(room_one.rate).must_equal 200
+      expect(room_two.rate).must_equal 200
+    end
+  end
+
   describe "#reservations_by_date" do
     before do
       @manager = Hotel::ReservationManager.new
