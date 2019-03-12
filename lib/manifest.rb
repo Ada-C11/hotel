@@ -17,7 +17,7 @@ module Hotel
 
     def list_rooms
       list = ""
-      rooms.each do |room, value|
+      rooms.each do |room, v|
         list += "Room number #{room.id} \n"
       end
       return list
