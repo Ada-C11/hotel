@@ -13,10 +13,11 @@ module Hotel
     def request_reservation(check_in_date, check_out_date)
       reservation = Hotel::Reservation.new(check_in_date: check_in_date,
                                            check_out_date: check_out_date,
-                                           room_number: rand(1..20))
+                                           room_number: 1)
 
       reservations << reservation
       find_room(reservation.room_number).add_reservation(reservation)
+      return reservation
     end
 
     def find_room(room_number)
