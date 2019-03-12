@@ -54,7 +54,7 @@ describe "Booking" do
 
   describe "method for making a reservation" do 
     it "can reserve a room" do 
-      reservation = Booker.reservation()
+      reservation = Booking.reservation()
       #returns an instance of a reservation
     end
     it "can reserve multiple rooms" do

@@ -5,6 +5,7 @@ require 'date'
 
 require_relative "room"
 require_relative "reserve"
+require_relative 'date_range'
 
 class Booking
   attr_reader :check_in, :check_out
