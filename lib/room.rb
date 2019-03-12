@@ -1,10 +1,10 @@
 module Hotel
   class Room
-    attr_reader :cost
+    attr_reader :rate
     attr_accessor :status
 
     def initialize(room_number:, status: :AVAILABLE)
-      @cost = 200
+      @rate = 200
       @status = status
       @number = room_number
     end

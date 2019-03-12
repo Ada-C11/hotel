@@ -2,8 +2,8 @@ require_relative "spec_helper"
 
 describe "FrontDesk class" do
   let(:frontdesk) { Hotel::FrontDesk.new }
-  let(:start_date) { "February 3, 2011" }
-  let(:end_date) { "February 5, 2011" }
+  let(:date1) { "February 3, 2011" }
+  let(:date2) { "February 5, 2011" }
   let(:room) { Hotel::Room.new(room_number: 2) }
 
   describe "Initialization and more" do
@@ -23,11 +23,11 @@ describe "FrontDesk class" do
 
   describe "Reserve" do
     it "can reserve a room for given date range" do
-      expect(frontdesk.reserve(start_date: start_date, end_date: end_date)).must_be_kind_of Hotel::Reservation
+      expect(frontdesk.reserve(start_date: date1, end_date: date2)).must_be_kind_of Hotel::Reservation
     end
 
     it "raises an ArgumentError if date range is invalid" do
-      expect { frontdesk.reserve(start_date: end_date, end_date: start_date, room: room) }.must_raise ArgumentError
+      expect { frontdesk.reserve(start_date: date2, end_date: date1, room: room) }.must_raise ArgumentError
     end
   end
 
@@ -44,15 +44,15 @@ describe "FrontDesk class" do
     end
 
     it "can find a reservation by date" do
-      res1 = frontdesk.reserve(start_date: start_date, end_date: end_date)
+      res1 = frontdesk.reserve(start_date: "February 3, 2011", end_date: "February 5, 2011")
       res2 = frontdesk.reserve(start_date: "February 4, 2011", end_date: "February 6, 2011")
       res3 = frontdesk.reserve(start_date: "February 5, 2011", end_date: "February 7, 2011")
 
-      expect(frontdesk.find_by_date("February 3 2011")).must_be_kind_of Array
-      expect(frontdesk.find_by_date("February 3 2011").length).must_equal 1
-      expect(frontdesk.find_by_date("February 5 2011").length).must_equal 2
-      expect(frontdesk.find_by_date("February 3 2011")[0]).must_be_kind_of Hotel::Reservation
-      expect(frontdesk.find_by_date("February 5 2011")[0]).must_equal res2
+      expect(frontdesk.find_by_date(date: "February 3 2011")).must_be_kind_of Array
+      expect(frontdesk.find_by_date(date: "February 3 2011").length).must_equal 1
+      expect(frontdesk.find_by_date(date: "February 5 2011").length).must_equal 2
+      expect(frontdesk.find_by_date(date: "February 3 2011")[0]).must_be_kind_of Hotel::Reservation
+      expect(frontdesk.find_by_date(date: "February 5 2011")[0]).must_equal res2
     end
 
     it "can find open room" do

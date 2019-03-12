@@ -1,4 +1,4 @@
-# require "date"
+require "date"
 
 require_relative "room"
 require_relative "reservation"
@@ -12,10 +12,6 @@ module Hotel
     def initialize
       @reservations = []
 
-      rooms_array = []
-      NUMBER_OF_ROOMS.times do |i|
-        rooms_array << Hotel::Room.new(room_number: i + 1)
-      end
       @rooms = rooms_array
     end
 
@@ -27,13 +23,12 @@ module Hotel
         raise ArgumentError, "Reservation must be at least one day long."
       end
 
-      room = find_open_room
-      new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: room) # Is there a way to reduce this dependency?
+      new_reservation = reservation(start_date: start_date, end_date: end_date, room: find_open_room)
       @reservations << new_reservation
       return new_reservation
     end
 
-    def find_by_date(date)
+    def find_by_date(date:)
       date = Date.parse(date)
       on_this_date = []
       reservations.each do |reservation|
@@ -50,10 +45,24 @@ module Hotel
         if room.available?
           return room
           break
-        else
-          raise ArgumentError, "No rooms available"
         end
       end
+      raise ArgumentError, "No rooms available"
+    end
+
+    private
+
+    def rooms_array
+      rooms_array = []
+      NUMBER_OF_ROOMS.times do |i|
+        rooms_array << Hotel::Room.new(room_number: i + 1)
+      end
+      return rooms_array
+    end
+
+    # Seems like too much extra work to isolate, but trying to reduce (or at least illuminate) dependency.
+    def reservation(start_date:, end_date:, room:)
+      Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: room)
     end
   end
 end
