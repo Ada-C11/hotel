@@ -1,4 +1,4 @@
-require "time"
+
 require_relative "room"
 require_relative "reservation"
 
@@ -55,5 +55,7 @@ class Hotel
         available_rooms << room
       end
     end
+
+    return available_rooms
   end
 end

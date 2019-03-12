@@ -11,7 +11,7 @@ describe "reservation class" do
 
   it "finds total price based on number of days in reservation" do
     @res.room = Room.new(21, 200)
-    expect(@res.find_total_price).must_equal 400
+    expect(@res.find_total_price).must_equal "400.00"
   end
 end
 
@@ -31,5 +31,9 @@ describe "finds a reservation by date" do
     date = Date.new(2019, 3, 7)
 
     expect(@res.includes_date?(date)).must_equal false
+  end
+
+  it "prints itself nicely" do
+    expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total cost: $600.00"
   end
 end

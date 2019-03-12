@@ -22,6 +22,7 @@ describe "it knows about its own reservations" do
 
     @res = Reservation.new(1, Date.new(2019, 3, 10), Date.new(2019, 3, 12), @room)
     @res2 = Reservation.new(1, Date.new(2019, 4, 10), Date.new(2019, 4, 12), @room)
+    @res3 = Reservation.new(2, Date.new(2019, 3, 12), Date.new(2019, 3, 15), @room)
 
     @date = Date.new(2019, 3, 11)
   end
@@ -45,9 +46,19 @@ describe "it knows about its own reservations" do
   it "returns false if it is not available for a given date range" do
     @room.add_reservation(@res)
     @room.add_reservation(@res2)
-    start_to_check = Date.new(2019, 3, 9)
-    end_to_check = Date.new(2019, 3, 11)
+    start_to_check = Date.new(2019, 3, 10)
+    end_to_check = Date.new(2019, 3, 12)
 
     expect(@room.is_available?(start_to_check, end_to_check)).must_equal false
+  end
+
+  it "raises an error if room is reserved for unavailable dates" do
+    @room.add_reservation(@res)
+    expect { @room.add_reservation(@res) }.must_raise ArgumentError
+  end
+
+  it "allows a reservation to begin on the same day another ends" do
+    @room.add_reservation(@res)
+    @room.add_reservation(@res3)
   end
 end

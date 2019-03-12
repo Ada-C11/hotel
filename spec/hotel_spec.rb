@@ -81,11 +81,12 @@ describe "finds reservations by date" do
     expect(@hotel.find_by_date(date).count).must_equal 2
   end
 
-  it "matches a reservation to an available room" do
+  it "finds available rooms for a start and end time" do
+    expect(@hotel.find_available_rooms(@start_time2, @end_time2).count).must_equal 19
   end
+end
 
-  it "shows which rooms are available for a given date range" do
-    start_to_check = Date.new(2019, 4, 10)
-    end_to_check = Date.new(2019, 4, 12)
+describe "hotel blocks" do
+  before do
   end
 end

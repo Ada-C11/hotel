@@ -1,4 +1,4 @@
-require "time"
+require_relative "reservation"
 
 class Room
   attr_reader :number, :price, :reservations
@@ -11,6 +11,9 @@ class Room
   end
 
   def add_reservation(res)
+    if !is_available?(res.start_time, res.end_time)
+      raise ArgumentError, "Room is already reserved for this date range"
+    end
     reservations << res
   end
 
@@ -19,8 +22,8 @@ class Room
       if !(res.start_time >= end_time || res.end_time <= start_time)
         return false
       end
-      return true
     end
+    return true
   end
 
   def print_nicely

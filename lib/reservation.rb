@@ -1,4 +1,4 @@
-require "time"
+
 require "date"
 
 require_relative "room"
@@ -16,10 +16,14 @@ class Reservation
 
   def find_total_price
     number_of_days = end_time - start_time
-    return room.price * number_of_days
+    return format("%.2f", room.price * number_of_days)
   end
 
   def includes_date?(date)
     return start_time <= date && end_time >= date ? true : false
+  end
+
+  def print_nicely
+    return "Reservation #{id}: Room #{room.number} from #{start_time} to #{end_time}. Total cost: $#{find_total_price}"
   end
 end
