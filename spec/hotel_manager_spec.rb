@@ -55,4 +55,22 @@ describe "Hotel_manager class" do
       expect(avail_rooms.length).must_equal 0
     end
   end
+
+  describe "make reservation" do
+    it "makes a reservation and adds to Reservations array if given valid args" do
+      before_reservation = @hotel_manager.reservations.length
+      @hotel_manager.make_reservation(3, "2019-3-15", "2019-3-20")
+      after_reservation = @hotel_manager.reservations.length
+
+      expect(after_reservation - 1).must_equal before_reservation
+    end
+
+    it "raises an argument if the room is unavailable during given dates" do
+      expect { @hotel_manager.make_reservation(2, "2019-3-15", "2019-3-18") }.must_raise ArgumentError
+    end
+
+    it "raises an argument if the dates are not valid" do
+      expect { @hotel_manager.make_reservation(3, "2019-3-15", "2019-3-15") }
+    end
+  end
 end
