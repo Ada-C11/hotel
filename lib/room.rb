@@ -1,17 +1,18 @@
 module Hotel
 
   class Room 
+    ROOM_RATE = 200.00
     attr_reader :id, :price
 
-    def initialize id: nil, price: nil
+    def initialize id: nil
       valid_id(id)
       @id = id
-      @price = price
+      @price = ROOM_RATE
     end
 
     def self.all
       CSV.read('support/rooms.csv', headers: true, header_converters: :symbol, converters: :numeric).map do |line| 
-        Room.new(id: line[0].to_i, price: line[1].to_f)
+        Room.new(id: line[0].to_i)
       end
     end
 
@@ -20,15 +21,8 @@ module Hotel
         raise ArgumentError, "ID must be a positive number, given #{id}..."
       end
     end
+
     private 
-
-    # def self.from_csv(record)
-    #   return new(
-    #            id: record[:id],
-    #            price: record[:price]
-    #          )
-    # end
-
-
+    #incase i need anything to be private
   end
 end

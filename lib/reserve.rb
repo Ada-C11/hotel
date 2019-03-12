@@ -1,13 +1,13 @@
 require 'date'
 module Hotel
   class Reservation
-    attr_reader :id, :check_in, :check_out, :number_of_rooms
+    attr_reader :id, :start_date, :end_date, :room_booked
 
-    def initialize id:nil, check_in:, check_out:, number_of_rooms: nil
+    def initialize id:nil, start_date:, end_date:
       @id = id
-      @check_in = check_in
-      @check_out = check_out
-      number_of_rooms = number_of_rooms
+      @start_date = check_in
+      @end_date = end_date
+      @room_booked = room_booked
       @reservations = []
     end
 

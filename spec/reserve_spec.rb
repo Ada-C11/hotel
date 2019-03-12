@@ -4,9 +4,9 @@ describe "Reserve" do
   before do 
     @reserve = Hotel::Reservation.new(
                       id: 1, 
-                      check_in: "March 10 2019",
-                      check_out: "March 15th 2019", 
-                      number_of_rooms: 3)
+                      start_date: "March 10 2019",
+                      end_date: "March 15th 2019", 
+                      room_booked: 1)
   end
   describe "initialize" do
     it "knows reserve is an instance of Reservation" do 
