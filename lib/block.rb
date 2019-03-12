@@ -23,9 +23,10 @@ module HotelSystem
     def create_reservations
       all_reservations = []
       rooms.each do |room|
-        reservation = HotelSystem::Reservation.new(room: room, arrive_day: @first_day, depart_day: @last_day)
+        reservation = HotelSystem::BlockReservation.new(room: room, arrive_day: @first_day, depart_day: @last_day, block: self)
         all_reservations << reservation
         room.reservations << reservation
+        @reservations << reservation
       end
       return all_reservations
     end

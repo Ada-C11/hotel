@@ -82,9 +82,25 @@ describe "Block" do
       expect(@block).must_respond_to :create_reservations
     end
 
-    it "Creates a reservation for each room in the block" do
+    it "Creates a reservation Array containing a reservation for each room in the block, of type BlockReservation" do
       reservations = @block.create_reservations
       expect(reservations.length).must_equal 3
+      expect(reservations).must_be_kind_of Array
+      expect(reservations.first).must_be_kind_of HotelSystem::BlockReservation
+    end
+
+    it "adds reservation to the blocks reservation array" do
+      expect(@block.reservations.length).must_equal 0
+      reservations = @block.create_reservations
+      expect(@block.reservations.length).must_equal 3
+    end
+
+    it "adds each reservation to the corrosponding rooms reservation array" do
+      expect(@room.reservations.length).must_equal 0
+      reservations = @block.create_reservations
+      expect(@room.reservations.length).must_equal 1
+      expect(reservations).must_include @room.reservations.first
+      expect(@room.reservations.first.room.id).must_equal @room.id
     end
   end
 end
