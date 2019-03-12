@@ -3,7 +3,7 @@ require_relative "../lib/reservation.rb"
 
 describe "reservation initalization" do
     before do
-        @reservation = HotelSystem::Reservation.new(room_number: 1)
+        @reservation = HotelSystem::Reservation.new(id: 1, room_number: 1)
     end
 
     it "creates an instance of Room" do
