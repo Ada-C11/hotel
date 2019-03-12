@@ -3,9 +3,7 @@ require 'date'
 
 describe "DateRange" do 
   before do
-    @date_range = DateRange.new(
-      check_in: "2019-03-03", 
-      check_out: "2019-03-05")
+    @date_range = DateRange.new(date: "2019-03-03")
   end
   
   describe "initialize" do 
@@ -14,13 +12,8 @@ describe "DateRange" do
     end
 
     it "must accurately record check-in date" do 
-      expect(@date_range).must_respond_to :check_in
-      expect(@date_range.check_in).must_equal  Date.parse("2019-03-03")
-    end
-
-    it "must accurately record check-out date" do 
-      expect(@date_range).must_respond_to :check_out
-      expect(@date_range.check_out).must_equal Date.parse("2019-03-05")
+      expect(@date_range).must_respond_to :date
+      expect(@date_range.date).must_equal  Date.parse("2019-03-03")
     end
   end
 
@@ -28,16 +21,14 @@ describe "DateRange" do
     it "raises an exception for an invalid check-in day" do 
      expect{ DateRange.new(
         check_in: "March 100th 2019", 
-        check_out: "03-05-2019",
-        number_of_rooms: 1)
+        check_out: "03-05-2019")
      }.must_raise ArgumentError
     end
 
     it "raises an exceptions for an invalid check-out day" do 
       expect{ DateRange.new(
          check_in: "March 10th 2019", 
-         check_out: "03-205-2019",
-         number_of_rooms: 1)
+         check_out: "03-205-2019")
       }.must_raise ArgumentError
     end
   end

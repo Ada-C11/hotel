@@ -1,13 +1,10 @@
 class DateRange
-  attr_reader :check_in, :check_out
+  attr_reader :date
 
-  def initialize(check_in: nil, check_out: nil)
-    check_in = valid_date?(check_in)
-    check_out = valid_date?(check_out)
-    date_range_valid?(check_in, check_out)
+  def initialize(date: nil)
+    date = valid_date?(date)
 
-    @check_in = check_in
-    @check_out = check_out
+    @date = date
   end
 
   def date_range_valid?(check_in, check_out) 
