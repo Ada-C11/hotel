@@ -16,15 +16,15 @@ module HotelSystem
     def make_reservation(room_id, date1, date2)
       room = find_room_by_id(room_id)
       request_range = date_range(date1, date2)
-      if room.is_available?(request_range)
-        new_reservation = HotelSystem::Reservation.new(date_range: request_range,
-                                                       room: room,
-                                                       id: (reservations.length + 1))
-        room.add_reservation(new_reservation)
-        reservations << new_reservation
-        return new_reservation
+      if !room.is_available?(request_range)
+        raise ArgumentError, "The room you requested is not available on the given dates!"
       end
-      return nil
+      new_reservation = HotelSystem::Reservation.new(date_range: request_range,
+                                                     room: room,
+                                                     id: (reservations.length + 1))
+      room.add_reservation(new_reservation)
+      reservations << new_reservation
+      return new_reservation
     end
 
     def list_reservations_by_date(date)
