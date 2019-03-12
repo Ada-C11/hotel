@@ -24,32 +24,5 @@ module Booking
         total = (days_spent)*ROOM_COST
         return total
       end
-
-
-      def self.make_reservation(room_number)
-
-        # available_room = rooms.find { |room| room.status == :AVAILABLE}
-        # if current_driver == nil
-        #   raise ArgumentError, "There are no available rooms."
-        # end
-  
-        # # passenger = find_passenger(passenger_id)
-  
-        new_reservation = Booking::Reservation.new(room_number, checkin_date, checkout_date)
-
-        @reservations << new_reservation
-  
-        # # hotel.add_reservation(new_reservation)
-  
-        # current_driver.change_status(new_trip)
-  
-        # @all_reservations << new_reservation
-  
-        return new_reservation
-      end
-
-      # def add_reservation(reservation)
-      #   @reservations << reservation
-      # end
   end
 end
