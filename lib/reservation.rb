@@ -1,3 +1,5 @@
+require "date"
+
 module Hotel
   class Reservation
     attr_reader :room, :start_date, :end_date
