@@ -21,4 +21,11 @@ class ReservationManager
     reservation = Reservation.new
     return reservation.rooms
   end
+
+  #   def access_reservations_by_date(date)
+  #     parsed_start_date = Date.parse(@start_date)
+  #     parsed_end_date = Date.parse(@end_date)
+  #     date_reservation_array = parsed_start_date..parsed_end_date
+
+  #   end
 end

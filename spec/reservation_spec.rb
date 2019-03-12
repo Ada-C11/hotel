@@ -1,4 +1,5 @@
 require_relative "spec_helper"
+require "date"
 
 describe "Reservation class" do
   describe "initialize" do
@@ -19,7 +20,7 @@ describe "Reservation class" do
       expect(reservation.reservation_id).must_equal 0
     end
   end
-  describe "duration method" do
+  describe "duration_length method" do
     it "Duration returns the length of time between 2 dates" do
       reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "8th Mar 2019")
       expect(reservation.duration).must_equal 7
@@ -39,6 +40,13 @@ describe "Reservation class" do
       expect(reservation.duration).must_equal 7
     end
   end
+  describe "reservation_dates method" do
+    it "creates an array of arrays of the dates included in a reservation" do
+      reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "3rd Mar 2019")
+      expect(reservation.reservation_dates.first.include?(Date.parse("2nd Mar 2019"))).must_equal true
+    end
+  end
+
   describe "total_cost method" do
     it "Can calcute cost of stay" do
       reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "8th Mar 2019")
