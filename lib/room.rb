@@ -4,10 +4,9 @@ class Room
 
   attr_reader :number, :price
 
-  def initialize
+  def initialize(number)
     @number = number
     @price = 200
   end
-
   
 end 
