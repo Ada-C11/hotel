@@ -69,6 +69,11 @@ describe "FrontDesk class" do
       expect(frontdesk.find_open_room).must_be_kind_of Hotel::Room
       expect(frontdesk.find_open_room.available?).must_equal true
       expect(frontdesk.find_open_room.status).must_equal :AVAILABLE
+
+      frontdesk.rooms.each do |room|
+        room.status = :UNAVAILABLE
+      end
+      expect { frontdesk.find_open_room }.must_raise ArgumentError
     end
   end
 end
