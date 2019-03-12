@@ -42,4 +42,28 @@ describe "ReservationManager class" do
       expect(first_reservation.room_number).must_be :>, 0
     end
   end
+
+  describe "#reservations_by_date" do
+    before do
+      @manager = Hotel::ReservationManager.new
+      @first_reservation = @manager.request_reservation("2018-03-12", "2018-03-15")
+      @second_reservation = @manager.request_reservation("2018-03-12", "2018-03-12")
+      @third_reservation = @manager.request_reservation("2018-03-14", "2018-03-15")
+      @fourth_reservation = @manager.request_reservation("2018-03-13", "2018-03-14")
+    end
+
+    it "returns an array" do
+      expect(@manager.reservations_by_date("2018-03-12")).must_be_kind_of Array
+    end
+
+    it "returns an array that contains instances of reservations" do
+      expect(@manager.reservations_by_date("2018-03-12")[0]).must_be_kind_of Hotel::Reservation
+    end
+
+    it "returns a list of all reservations for a given date" do
+      expect(@manager.reservations_by_date("2018-03-14").length).must_equal 3
+      expect(@manager.reservations_by_date("2018-03-12").length).must_equal 2
+      expect(@manager.reservations_by_date("2018-03-10").length).must_equal 0
+    end
+  end
 end
