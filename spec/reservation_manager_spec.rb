@@ -28,7 +28,7 @@ describe "ReservationManager class" do
     it "access_reservations_by_date method must return an array" do
       first_reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
       second_reservation = reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019")
-      #   reservation_manager_2 = ReservationManager.new
+      reservation_manager_2 = ReservationManager.new
       expect(reservation_manager.access_reservations_by_date("4th Jul 2019")).must_be_instance_of Array
     end
     it "access_reservations_by_date method must return an array that holds an object (instance of reservation)" do

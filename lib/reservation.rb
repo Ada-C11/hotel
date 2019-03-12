@@ -33,7 +33,6 @@ class Reservation
 
   def assign_room
     @rooms = ("1".."20").to_a
-    room = @rooms.sample
-    return room
+    return @rooms.sample
   end
 end

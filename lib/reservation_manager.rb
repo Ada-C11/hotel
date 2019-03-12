@@ -14,13 +14,13 @@ class ReservationManager
     @end_date = end_date
     new_reservation = Reservation.new(reservation_id: @reservation_id, start_date: @start_date, end_date: @end_date)
     @reservation_array << new_reservation
-    binding.pry
+    # binding.pry
     return new_reservation
   end
 
   def view_all_rooms
-    reservation = Reservation.new
-    return reservation.rooms
+    rooms = ("1".."20").to_a
+    return rooms
   end
 
   def access_reservations_by_date(date)
