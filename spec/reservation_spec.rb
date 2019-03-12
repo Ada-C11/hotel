@@ -1,24 +1,54 @@
-# require_relative "spec_helper"
+require_relative "spec_helper"
 
-# describe "Reservation" do
-#   before do
-#     @reservation = Hotel::Reservation.new(
-#       reservation_id: 1,
-#       date_range: Hotel::DateRange.new(),
-#       room_id: 1,
-#     )
-#   end
+describe "Reservation" do
+  describe "instantiation" do
+    before do
+      @reservation = Hotel::Reservation.new(
+        id: 1,
+        date_range: Hotel::DateRange.new("03-04-2019", "06-04-2019"),
+        room_id: 1,
+        room: Hotel::Room.new(id: 1),
+      )
+    end
 
-#   it "is an instance of Reservation" do
-#     expect(@reservation).must_be_instance_of Hotel::Reservation
-#   end
+    it "is an instance of Reservation" do
+      expect(@reservation).must_be_instance_of Hotel::Reservation
+    end
 
-#   it "reservation id is an integer" do
-#     expect(@reservation.reservation_id).must_equal 1
-#   end
+    it "is set up for specific attributes and data types" do
+      [:id, :date_range, :room,
+       :room_id, :price].each do |prop|
+        expect(@reservation).must_respond_to prop
+      end
 
-#   it "sets reservations to an empty array if not provided" do
-#     expect(@reservation.reservations).must_be_kind_of Array
-#     expect(@reservation.reservations.length).must_equal 0
-#   end
-# end
+      expect(@reservation.id).must_be_kind_of Integer
+      expect(@reservation.date_range).must_be_instance_of Hotel::DateRange
+      expect(@reservation.room).must_be_instance_of Hotel::Room
+      expect(@reservation.room_id).must_be_kind_of Integer
+      expect(@reservation.price).must_be_kind_of Integer
+    end
+
+    it "raises an ArgumentError if room or room id not provided" do
+      expect {
+        Hotel::Reservation.new(
+          id: 1,
+          date_range: Hotel::DateRange.new("03-04-2019", "06-04-2019"),
+        )
+      }.must_raise ArgumentError
+    end
+
+    it "accepts room id without room" do
+      reservation = Hotel::Reservation.new(
+        id: 1,
+        date_range: Hotel::DateRange.new("03-04-2019", "06-04-2019"),
+        room_id: 1,
+      )
+      expect(reservation.room).must_equal nil
+    end
+  end
+
+  describe "total_price method" do
+    it "" do
+    end
+  end
+end

@@ -39,6 +39,10 @@ describe "DateRange class" do
       expect(@date_range.range).must_equal (@start_date..@end_date)
     end
 
+    it "calculates the duration in date range" do
+      expect(@date_range.duration).must_equal 3
+    end
+
     it "detects an overlapping date" do
       date = Date.parse("05-04-2019")
       expect(@date_range.overlap?(date)).must_equal true

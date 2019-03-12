@@ -12,6 +12,10 @@ module Hotel
       return (start_date..end_date)
     end
 
+    def duration
+      return (end_date - start_date).ceil
+    end
+
     def overlap?(date)
       return range.include?(date)
     end
