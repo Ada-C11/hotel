@@ -3,7 +3,7 @@ require_relative "spec_helper"
 describe "Reservation Class" do
   describe "Initialize" do
     let (:reservation) {
-      Reservation.new(
+      Hotel::Reservation.new(
         check_in_date: "2018-03-09",
         check_out_date: "2018-03-12",
         room_number: 2,
@@ -11,7 +11,7 @@ describe "Reservation Class" do
     }
 
     it "Is an instance of Reservation" do
-      expect(reservation).must_be_kind_of Reservation
+      expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "Stores a room number" do
@@ -32,7 +32,7 @@ describe "Reservation Class" do
       }
 
       expect {
-        Reservation.new(reservation)
+        Hotel::Reservation.new(reservation)
       }.must_raise ArgumentError
     end
   end

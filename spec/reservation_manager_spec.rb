@@ -3,16 +3,16 @@ require_relative "spec_helper"
 describe "ReservationManager class" do
   describe "#initialize" do
     let (:manager) do
-      manager = ReservationManager.new
+      manager = Hotel::ReservationManager.new
     end
 
     it "must be an instance of ReservationManager" do
-      expect(manager).must_be_kind_of ReservationManager
+      expect(manager).must_be_kind_of Hotel::ReservationManager
     end
 
     it "must create an array of all rooms in the hotel" do
       expect(manager.rooms).must_be_kind_of Array
-      (0..19).each { |num| expect(manager.rooms[num]).must_be_kind_of Room }
+      (0..19).each { |num| expect(manager.rooms[num]).must_be_kind_of Hotel::Room }
       assert_nil(manager.rooms[20], msg = nil)
     end
 
@@ -23,7 +23,7 @@ describe "ReservationManager class" do
 
   describe "#request_reservation" do
     let (:manager) do
-      manager = ReservationManager.new
+      manager = Hotel::ReservationManager.new
     end
 
     it "loads reservations into reservations array" do
