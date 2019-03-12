@@ -16,7 +16,7 @@ describe "ReservationManager class" do
     end
     it "make_reservation adds a reservation to an array of reservations" do
       my_reservation = reservation_manager.make_reservation
-      expect(reservation_manager.reservation_dates_array.include?(my_reservation)).must_equal true
+      expect(reservation_manager.reservation_array.include?(my_reservation)).must_equal true
     end
   end
   describe "view_all_rooms method" do
@@ -25,11 +25,16 @@ describe "ReservationManager class" do
     end
   end
   describe "access_reservations_by_date method" do
-    it "list reservations for a specific date" do
-      my_reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
-      my_other_reservation = reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019")
+    it "access_reservations_by_date method must return an array" do
+      first_reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
+      second_reservation = reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019")
       #   reservation_manager_2 = ReservationManager.new
-      expect(reservation_manager.access_reservations_by_date("4th Jul 2019")).must_equal "it's included!"
+      expect(reservation_manager.access_reservations_by_date("4th Jul 2019")).must_be_instance_of Array
+    end
+    it "access_reservations_by_date method must return an array that holds an object (instance of reservation)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
+      second_reservation = reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019")
+      expect(reservation_manager.access_reservations_by_date("4th Jul 2019").length).must_equal 1
     end
   end
 end

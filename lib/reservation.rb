@@ -5,7 +5,7 @@ class Reservation
   attr_reader :reservation_id, :start_date, :end_date, :rooms, :reservation_dates
   # removed from attr_reader: :duration, :total_cost, :reservation_durations_array
 
-  def initialize(reservation_id: 0, start_date: nil, end_date: nil)
+  def initialize(reservation_id: 0, start_date: Date.today, end_date: Date.today + 1)
     @reservation_id = reservation_id
     @start_date = start_date
     @end_date = end_date
@@ -25,12 +25,8 @@ class Reservation
   end
 
   def reservation_dates
-    date_range = (Date.parse(@start_date)..Date.parse(@end_date)).to_a
-    if @start_date != nil && @end_date != nil
-      @reservation_dates_array << date_range
-      # binding.pry
-    end
-    return @reservation_dates_array
+    date_range = Date.parse(@start_date)..Date.parse(@end_date)
+    return date_range
   end
 
   def total_cost
