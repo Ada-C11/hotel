@@ -14,15 +14,15 @@ module Hotel
 
     def stay_length
       stay_length = (@check_out - @check_in).to_i
-      return duration_of_stay
+      return stay_length
     end
 
     def includes_date?(date)
       return date.between?(check_in, check_out)
     end
 
-    def overlaps?(date_range)
-      overlap = @check_in < date_range.check_out && date_range.check_in < @check_out
+    def overlaps?(range)
+      overlap = @check_in < range.check_out && range.check_in < @check_out
       return overlap
     end
   end
