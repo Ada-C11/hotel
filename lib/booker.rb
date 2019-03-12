@@ -16,16 +16,6 @@ class Booking
     
   end
 
-  def valid_date?(date_str)
-    format = "%Y-%m-%d"
-    date_str = Date.strptime(date_str,format).to_s
-    begin
-      Date.parse(date_str)
-    rescue ArgumentError => exception
-      puts "Invalid date given #{date_str} need: YYYY-MM-DD"
-    end
-  end
-
   def make_reservation
     #Using the date range given it creates a reservation and books a room, appends an instance of Reserve to reservation array. 
     #What happens if no rooms are available?

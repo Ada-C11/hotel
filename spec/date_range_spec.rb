@@ -1,3 +1,6 @@
+require_relative 'spec_helper'
+require 'date'
+
 describe "DateRange" do 
   before do
     @date_range = DateRange.new(

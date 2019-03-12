@@ -15,5 +15,15 @@ class DateRange
       raise ArgumentError, "Check out date cannot occur before check in date"
     end
   end
-  
+
+  def valid_date?(date_str)
+    format = "%Y-%m-%d"
+    date_str = Date.strptime(date_str,format).to_s
+    begin
+      Date.parse(date_str)
+    rescue ArgumentError => exception
+      puts "Invalid date given #{date_str} need: YYYY-MM-DD"
+    end
+  end
+
 end
