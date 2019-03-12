@@ -17,14 +17,13 @@ describe "Reservation class" do
   it "throws an argument error when an invalid date range is provided" do
     expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-29", room: @room) }.must_raise ArgumentError
     expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-30", room: @room) }.must_raise ArgumentError
+    expect { Hotel::Reservation.new(check_in: "1919-5-20", check_out: "2019-5-30", room: @room) }.must_raise ArgumentError
+    expect { Hotel::Reservation.new(check_in: (Date.today - 1).to_s, check_out: (Date.today + 1).to_s, room: @room) }.must_raise ArgumentError
   end
 
   it "throws an argument error when an invalid date format is provided" do
     expect { Hotel::Reservation.new(check_in: "03-20-2019", check_out: "03-22-2019", room: @room) }.must_raise ArgumentError
     expect { Hotel::Reservation.new(check_in: "2019-20-3", check_out: "2019-20-3", room: @room) }.must_raise ArgumentError
-  end
-
-  it "uniformly formats dates" do
   end
 
   it "calculates the total cost for each reservation" do
