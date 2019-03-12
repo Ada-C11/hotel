@@ -24,7 +24,6 @@ describe "hotel class" do
   end
 
   describe "find_room method" do
-
     it "returns an instance of a room" do
       room = @hotel.find_room(19)
 
@@ -64,31 +63,47 @@ describe "hotel class" do
     end
 
     it "first date in array is start date" do
-      november_15_2019 = Date.new(19,11,15)
-      
+      november_15_2019 = Date.new(19, 11, 15)
+
       expect(@dates.first).must_equal november_15_2019
     end
 
     it "last date in array is correct date" do
-      november_20_2019 = Date.new(19,11,20)
+      november_20_2019 = Date.new(19, 11, 20)
 
       expect(@dates.last).must_equal november_20_2019
     end
   end
 
-  describe "room_reserved method" do
+  describe "room_reserved? method" do
     it "will return false if the room is not reserved" do
-      status = @hotel.room_reserved?(room_number: 19, dates: [[19,12,05], [19,12,06]])
+      status = @hotel.room_reserved?(room_number: 19, dates: [[19, 12, 05], [19, 12, 06]])
 
       expect(status).must_equal false
     end
   end
 
-  describe "find_available_rooms method" do
+  describe "find_available_room method" do
     it "will return a room if a room is available" do
-      room = @hotel.find_available_room([[19,12,05], [19,12,06]])
+      room = @hotel.find_available_room([[19, 12, 05], [19, 12, 06]])
 
       expect(room).must_be_kind_of HotelSystem::Room
+     
+    end
+
+    it "will return the first available room" do
+      room = @hotel.find_available_room([[19, 12, 05], [19, 12, 06]])
+      expect(room.room_number).must_equal 1
+    end
+  end
+
+  describe "reserve_room method" do
+    before do
+      @hotel.reserve_room(start_year: 19, start_month: 12, start_day: 5, num_nights: 4)
+    end
+
+    it "will add a reservation to the hotel's list of reservations" do
+      expect(@hotel.reservations.length).must_equal 1
     end
   end
 end

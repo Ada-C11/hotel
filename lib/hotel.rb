@@ -1,4 +1,5 @@
 require_relative "room"
+require_relative "reservation"
 
 module HotelSystem
   class Hotel
@@ -18,9 +19,12 @@ module HotelSystem
       return @rooms.find { |room| room.room_number == number }
     end
 
-    def reserve_room(start_month:, start_day:, start_year:, num_nights:)
-      dates = reservation_dates(:start_month, :start_day, :start_year, :num_nights)
-      reservation = HotelSystem::Reservation.new(dates: dates)
+    def reserve_room(start_year:, start_month:, start_day:, num_nights:)
+      dates = reservation_dates(start_year, start_month, start_day, num_nights)
+      room = find_available_room(dates)
+      reservation = HotelSystem::Reservation.new(room: room, dates: dates)
+      @reservations << reservation
+      room.reservations << reservation
     end
 
     def reservation_dates(start_year, start_month, start_day, num_nights)
@@ -57,3 +61,4 @@ module HotelSystem
     end
   end
 end
+
