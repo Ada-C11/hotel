@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 
 describe "Date Range Class" do
-    let (:dates) {Hotel::Date_Range.new(start_date: 19940904, end_date: 19960716)}
+    let (:dates) {Hotel::Date_Range.new(start_date: 19940901, end_date: 19940904)}
     
     it "is an instance of Date Range" do
         expect(dates).must_be_kind_of Hotel::Date_Range
@@ -28,7 +28,7 @@ describe "Date Range Class" do
     it "fills in the range array with instances of Dates" do
         expect(dates.range).must_be_kind_of Array
         expect(dates.range[0]).must_be_kind_of Date
-        expect(dates.range.length).must_equal 681
+        expect(dates.range.length).must_equal 4
     end
 
   
