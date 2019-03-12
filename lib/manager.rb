@@ -7,12 +7,14 @@ require_relative "reservation.rb"
 
 module Hotel
   class Manager
-    attr_reader :rooms
+    attr_reader :rooms, :reservations
 
     def initialize
       @rooms = (1..20).map do |room_number|
         Hotel::Room.new(room_number: room_number)
       end
+
+      @reservations = []
     end
 
     def reserve_room(check_in, check_out)
@@ -25,6 +27,7 @@ module Hotel
       )
 
       available_room.add_reservation(reservation)
+      @reservations << reservation
 
       return reservation
     end
@@ -33,14 +36,12 @@ module Hotel
       list = []
       date = Date.parse(date)
 
-      @rooms.each do |room|
-        room.reservations.each do |reservation|
-          check_in = reservation.check_in
-          check_out = reservation.check_out
+      @reservations.each do |reservation|
+        check_in = reservation.check_in
+        check_out = reservation.check_out
 
-          if (check_in..check_out).include?(date)
-            list << reservation
-          end
+        if (check_in..check_out).include?(date)
+          list << reservation
         end
       end
       return list

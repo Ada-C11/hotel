@@ -12,7 +12,7 @@ describe "Manager class" do
     expect(@manager).must_be_kind_of Hotel::Manager
   end
 
-  it "includes an array of rooms" do
+  it "includes an array of Rooms" do
     expect(@manager.rooms).must_be_kind_of Array
   end
 
@@ -26,6 +26,14 @@ describe "Manager class" do
     expect(@manager.rooms.length).must_equal 20
   end
 
+  it "has an array of Reservations" do
+    expect(@manager.reservations).must_be_kind_of Array
+  end
+
+  it "starts with an empty array of Reservations" do
+    expect(@manager.reservations.length).must_equal 0
+  end
+
   describe "reserve_room method" do
     before do
       @reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
@@ -35,8 +43,6 @@ describe "Manager class" do
     end
 
     it "can reserve an available room" do
-      #reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
-
       selected_room = ""
       @manager.rooms.each do |room|
         if room.room_number == @reservation.room.room_number

@@ -17,6 +17,16 @@ describe "Reservation class" do
     expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-30", room: @room) }.must_raise ArgumentError
   end
 
+  describe "number_of_nights method" do
+    before do
+      @reservation = Hotel::Reservation.new(check_in: "2019-3-10", check_out: "2019-3-12", room: @room)
+      @number_of_nights = @reservation.number_of_nights(@reservation.check_in, @reservation.check_out)
+    end
+    it "calculates the number of nights a reservation lasts for" do
+      expect(@number_of_nights).must_equal 2
+    end
+  end
+
   describe "total_cost method" do
     before do
       @room = Hotel::Room.new(room_number: 1)
