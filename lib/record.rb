@@ -1,3 +1,5 @@
+require_relative "room"
+
 module Hotel
   class Record
     attr_reader :id
@@ -7,18 +9,8 @@ module Hotel
       @id = id
     end
 
-    def self.all_rooms
-      @all_rooms = []
-      20.times do |id|
-        room = {
-          :id => id + 1,
-          :cost => 200.0,
-          :status => :AVAILABLE,
-          :reservation => [],
-        }
-        @all_rooms << room
-      end
-      return @all_rooms
+    def self.load_all
+      raise NotImplementedError, "Implement me in a class"
     end
 
     def self.validate_id(id)

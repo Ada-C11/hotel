@@ -1,31 +1,43 @@
 require "csv"
+require_relative "record"
+require_relative "reservation"
+require_relative "room"
 
 module Hotel
-  class RoomManager
-    attr_reader :id
+  class RoomManager < Record
+    attr_reader :rooms, :reservations
 
     def initialize
-      @id = id
-      create_rooms
+      @rooms = Room.load_all
+      @reservations = Reservation.load_all
+      connect_reservations
     end
 
-    def list_rooms
-      @all_rooms
+    def self.reserve(room, check_in_date, check_out_date)
+      reservation_id = @reservations.length + 1
+      new_reservation = Reservation.new(
+        reservation_id: reservation_id,
+        room: room,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date,
+      )
     end
 
-    private
+    # def get_list_reservations(check_in_date, check_out_date)
+    #   current_reservations = self.reservations.map do |reservation|
+    #     reservation.check_in_date >
+    #   end
+    # end
 
-    def create_rooms
-      @all_rooms = []
-      20.times do |id|
-        room = {
-          "id" => id + 1,
-          "status" => :AVAILABLE,
-          "cost" => 200,
-        }
-        @all_rooms << room
+    def find_room(room_id)
+      Room.validate_id(room_id)
+    end
+
+    def connect_reservations
+      @reservations.each do |reservation|
+        room = find_room(reservation.room_id)
+        reservation.connect(room)
       end
-      return @all_rooms
     end
   end
 end

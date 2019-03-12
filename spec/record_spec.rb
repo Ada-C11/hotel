@@ -5,10 +5,6 @@ describe "Record class" do
       expect(Hotel::Record.new(1)).must_be_instance_of Hotel::Record
     end
 
-    it "has 20 rooms" do
-      expect(Hotel::Record.all_rooms.length).must_equal 20
-    end
-
     it "validates id" do
       expect { Hotel::Record.new(0) }.must_raise ArgumentError
       expect { Hotel::Record.new(-1) }.must_raise ArgumentError
