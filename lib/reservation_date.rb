@@ -5,6 +5,7 @@ module Hotel
     attr_reader :check_in, :check_out
 
     def initialize(check_in:, check_out:)
+      # add regex to confirm strings passed are correct format;
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       unless valid_date_range?(@check_in, @check_out)

@@ -26,9 +26,18 @@ describe "Manifest" do
       end
     end
   end
-  describe "Manifest#list" do
+  describe "Manifest#list_rooms" do
     it "returns a string" do
       expect(manifest.list_rooms).must_be_instance_of String
+    end
+
+    it "formats string" do
+      expect(manifest.list_rooms(2)).must_equal "Room number 1 \nRoom number 2 \n"
+    end
+  end
+  describe "Manifest#list_reservations_by_date" do
+    it "returns a string" do
+      expect(manifest.list_reservations_by_date).must_be_instance_of String
     end
   end
 end
