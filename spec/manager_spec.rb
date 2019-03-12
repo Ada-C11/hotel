@@ -35,17 +35,17 @@ describe "Manager class" do
     end
 
     it "can reserve an available room" do
-      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
+      #reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
 
       selected_room = ""
       @manager.rooms.each do |room|
-        if room.room_number == reservation.room_number
+        if room.room_number == @reservation.room.room_number
           selected_room = room
           break
         end
       end
 
-      expect(reservation.room_number).must_be_kind_of Integer
+      expect(@reservation.room.room_number).must_be_kind_of Integer
       expect(selected_room.reservations.length).must_equal 1
     end
 
@@ -65,19 +65,6 @@ describe "Manager class" do
 
       expect(list.length).must_equal 1
       expect(list[0]).must_be_kind_of Hotel::Reservation
-    end
-  end
-
-  describe "fetch_total_cost" do
-    it "can access the total cost for a given reservation" do
-      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
-      total_cost = @manager.fetch_total_cost(reservation.id)
-
-      reservation2 = @manager.reserve_room("2019-3-20", "2019-3-22")
-      total_cost2 = @manager.fetch_total_cost(reservation2.id)
-
-      expect(total_cost).must_equal 200.00
-      expect(total_cost2).must_equal 400.00
     end
   end
 end
