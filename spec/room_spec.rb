@@ -10,7 +10,11 @@ describe "Room class" do
 
         it "throws an argument error with an invalid room number" do
             expect { HotelManagementSystem::Room.new(room_number: 21, status: :AVAILABLE) }.must_raise ArgumentError
-            expect { HotelManagementSystem::Room.new(room_number: 0, status: :AVAILABLE) }.must_raise ArgumentError
+            expect { HotelManagementSystem::Room.new(room_number: 0) }.must_raise ArgumentError
+        end
+
+        it "throws an argument error with an invalid status" do
+            expect { HotelManagementSystem::Room.new(room_number: 8, status: :NO) }.must_raise ArgumentError
         end
 
         # it "has a default status of :AVAILABLE" do
