@@ -1,27 +1,35 @@
 require_relative "spec_helper"
 
 describe "ReservationManager class" do
-  let (:reservation) do
+  let (:reservation_manager) do
     ReservationManager.new
   end
 
   describe "initialize" do
     it "Creates an instance of ReservationManager" do
-      expect(reservation).must_be_instance_of ReservationManager
+      expect(reservation_manager).must_be_instance_of ReservationManager
     end
   end
   describe "make_reservation method" do
     it "make_reservation method can make an instance of reservation" do
-      expect(reservation.make_reservation).must_be_instance_of Reservation
+      expect(reservation_manager.make_reservation).must_be_instance_of Reservation
     end
     it "make_reservation adds a reservation to an array of reservations" do
-      my_reservation = reservation.make_reservation
-      expect(reservation.reservations_array.include?(my_reservation)).must_equal true
+      my_reservation = reservation_manager.make_reservation
+      expect(reservation_manager.reservation_dates_array.include?(my_reservation)).must_equal true
     end
   end
   describe "view_all_rooms method" do
     it "rooms array includes 20 rooms" do
-      expect(reservation.view_all_rooms.length).must_equal 20
+      expect(reservation_manager.view_all_rooms.length).must_equal 20
+    end
+  end
+  describe "access_reservations_by_date method" do
+    it "list reservations for a specific date" do
+      my_reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
+      my_other_reservation = reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019")
+      #   reservation_manager_2 = ReservationManager.new
+      expect(reservation_manager.access_reservations_by_date("4th Jul 2019")).must_equal "it's included!"
     end
   end
 end
