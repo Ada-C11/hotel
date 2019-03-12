@@ -7,6 +7,7 @@ module HotelSystem
       @date_range = date_range
       @discount_rate = discount_rate
       @rooms.each { |room| block_room(room) }
+      @reservations = []
     end
 
     def block_room(room)
