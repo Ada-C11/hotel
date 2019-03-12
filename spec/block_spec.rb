@@ -12,5 +12,24 @@ describe "Block class" do
     it "will create an instance of block" do
       expect(@block).must_be_instance_of HotelSystem::Block
     end
+    it "will contain an array of rooms" do
+      expect(@block.rooms).must_be_instance_of Array
+      @block.rooms.each do |room|
+        expect(room).must_be_instance_of HotelSystem::Room
+      end
+    end
+    it "will contain a date range " do
+      expect(@block.date_range).must_be_instance_of HotelSystem::DateRange
+    end
+    it "will adjust the rates of each of its rooms" do
+      @block.rooms.each do |room|
+        expect(room.rate).must_equal(@block.discount_rate)
+      end
+    end
+    it "will adjust the block instance variable of each of its rooms" do
+      @block.rooms.each do |room|
+        expect(room.block).must_equal(@block)
+      end
+    end
   end
 end

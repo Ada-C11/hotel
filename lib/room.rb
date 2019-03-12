@@ -1,11 +1,13 @@
 module HotelSystem
   class Room
-    attr_reader :id, :rate, :reservations
+    attr_reader :id, :reservations
+    attr_accessor :rate, :block
 
-    def initialize(id:, rate:)
+    def initialize(id:, rate:, block: nil)
       @id = id
       @rate = rate
       @reservations = []
+      @block = block
     end
 
     def add_reservation(reservation)
