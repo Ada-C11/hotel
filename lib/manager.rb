@@ -24,6 +24,7 @@ module Hotel
         check_in: check_in,
         check_out: check_out,
         room: available_room,
+        id: @reservations.length + 1,
       )
 
       available_room.add_reservation(reservation)

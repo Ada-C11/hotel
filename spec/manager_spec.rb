@@ -36,6 +36,7 @@ describe "Manager class" do
 
   describe "reserve_room method" do
     before do
+      @previous = @manager.reservations.length
       @reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
     end
     it "can make a reservation" do
@@ -53,6 +54,10 @@ describe "Manager class" do
 
       expect(@reservation.room.room_number).must_be_kind_of Integer
       expect(selected_room.reservations.length).must_equal 1
+    end
+
+    it "can assign a unique id to the new reservation" do
+      expect(@reservation.id).must_equal(@previous + 1)
     end
   end
 
