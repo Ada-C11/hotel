@@ -16,5 +16,14 @@ module Hotel
       #Hotel::Room.add_reservation()
       return pending_reservation
     end
+
+    def find_driver(id)
+      Driver.validate_id(id)
+      return @drivers.find { |driver| driver.id == id }
+    end
+
+    def find_reservation_by_date(date)
+      return @reservations.find { |reservation| reservation.checkin_date.to_s == date }
+    end
   end
 end

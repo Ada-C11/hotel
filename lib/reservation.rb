@@ -9,7 +9,7 @@ require "date"
 module Hotel
   class Reservation
     attr_reader :name, :checkin_date, :num_of_nights
-    attr_accessor :room_num, :cost, :number, :checkout_date
+    attr_accessor :room_num, :cost, :checkout_date #, :number
 
     def initialize(name, checkin_date, num_of_nights)
       #@number = number #how do i get this to increment 1 each time?
@@ -25,13 +25,13 @@ module Hotel
       @cost = num_of_nights * 200
       #@block = nil
     end
-
-    # def connect(reservation, room)
-    # @passenger = passenger
-    # passenger.add_trip(self)
-    # @driver = driver
-    # driver.add_trip(self)
-    #   end
-
   end
+
+  # def connect(reservation, room)
+  # @passenger = passenger
+  # passenger.add_trip(self)
+  # @driver = driver
+  # driver.add_trip(self)
+  #   end
+
 end
