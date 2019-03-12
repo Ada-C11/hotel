@@ -1,8 +1,12 @@
 require 'spec_helper.rb'
 
-describe "initialize" do
-  it "is required" do 
-    test_room = Room.new(15)
-    expect(test_room).must_be_kind_of Room
+describe "Room class" do
+  describe "initialize" do
+    it "returns an instance of room object" do
+      ids = [3, 4, 5]
+      ids.each do |id|
+        expect(Room.new(id)).must_be_kind_of Room
+      end
+    end
   end
 end
