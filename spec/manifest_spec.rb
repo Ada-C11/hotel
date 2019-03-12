@@ -71,14 +71,14 @@ Room number 20
       @manifest_unavailable = booker.manifest
       @day1 = Time.now.to_date + 3
       @day2 = @day1 + 4
-      @room_ids = [2, 10, 12]
-      @room_ids.each do |id|
+      room_ids = [2, 10, 12]
+      room_ids.each do |id|
         room = @manifest_unavailable.find_room(id)
         booker.book_room(Hotel::Reservation.new(check_in: @day1.to_s, check_out: @day2.to_s), room)
       end
     end
     it "returns a string" do
-      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_be_instance_of String
+      expect(@manifest_unavailable.list_reservations_by_date(@day1)).must_be_instance_of String
     end
 
     it "formats string and correctly selects unavailable rooms" do
@@ -86,7 +86,7 @@ Room number 20
     end
 
     it "returns an empty string if no rooms reserved for given date" do
-      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 06))).must_equal ""
+      expect(@manifest_unavailable.list_reservations_by_date(@day2 + 5)).must_equal ""
     end
   end
 end

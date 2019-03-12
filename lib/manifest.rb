@@ -31,8 +31,13 @@ module Hotel
     end
 
     def list_reservations_by_date(date)
-      reserved = rooms.select do |room|
-        room.unavailable.include?(date)
+      reserved = []
+      rooms.each do |room|
+        room.unavailable.each do |reservation|
+          if reservation.id[0] == "R" && reservation.check_in <= date && date < reservation.check_out
+            reserved << room
+          end
+        end
       end
       return list_rooms(rooms_to_list: reserved)
     end
