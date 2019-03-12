@@ -4,9 +4,9 @@ class Room
 
   attr_reader :number
 
-  # is initialized with a room number and default price set to 200
+  # is initialized with a room number as a parameter
   def initialize(number)
     @number = number
   end
   
-end 
+end

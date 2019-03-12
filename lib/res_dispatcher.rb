@@ -44,3 +44,17 @@ class ResDispatcher
 #   end
 # end
 end
+
+require 'date'
+
+class Calendar
+
+  def self.is_available?
+    duration = @end_date - @start_date
+    duration.to_i 
+  end
+
+  def self.make_reservation
+    create instance of booking and return it
+  end
+end
