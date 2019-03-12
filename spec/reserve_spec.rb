@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe "Reserve" do 
   before do 
-    @reserve = Hotel::Reservation.new(
+    @reserve = Reservation.new(
                       id: 1, 
                       start_date: "March 10 2019",
                       end_date: "March 15th 2019", 
@@ -10,7 +10,7 @@ describe "Reserve" do
   end
   describe "initialize" do
     it "knows reserve is an instance of Reservation" do 
-      expect(@reserve).must_be_kind_of Hotel::Reservation
+      expect(@reserve).must_be_kind_of Reservation
     end
 
     it "knows the reservation id" do
@@ -21,7 +21,7 @@ describe "Reserve" do
 
   describe "add_reservation" do 
     before do 
-      @reservations = Hotel::Reservation.add_reservation
+      @reservations = Reservation.add_reservation
     end
     it "returns and array of reservations" do 
       expect(@reservations).must_be_kind_of Array
@@ -29,7 +29,7 @@ describe "Reserve" do
 
     it "verifies each reservation in the array is an instance of Reservation" do 
       @reservations.each do |res|
-        res.must_be_kind_of Hotel::Reservation
+        res.must_be_kind_of Reservation
       end
     end
 

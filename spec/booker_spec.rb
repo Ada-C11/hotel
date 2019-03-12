@@ -3,14 +3,14 @@ require 'date'
 
 describe "Booking" do 
   before do 
-    @booking = Hotel::Booking.new(
+    @booking = Booking.new(
       check_in: "2019-03-03", 
       check_out: "2019-03-05")
   end
   describe "initialize" do 
     it "is an instance of a booking" do 
       
-      expect(@booking).must_be_kind_of Hotel::Booking
+      expect(@booking).must_be_kind_of Booking
     end
 
     it "must accurately record check-in date" do 
@@ -26,7 +26,7 @@ describe "Booking" do
 
   describe "valid_date?" do 
     it "raises an exception for an invalid check-in day" do 
-     expect{ Hotel::Booking.new(
+     expect{ Booking.new(
         check_in: "March 100th 2019", 
         check_out: "03-05-2019",
         number_of_rooms: 1)
@@ -34,7 +34,7 @@ describe "Booking" do
     end
 
     it "raises an exceptions for an invalid check-out day" do 
-      expect{ Hotel::Booking.new(
+      expect{ Booking.new(
          check_in: "March 10th 2019", 
          check_out: "03-205-2019",
          number_of_rooms: 1)
@@ -47,14 +47,14 @@ describe "Booking" do
       check_in = "03-05-2019"
       check_out = "02-05-2019"
       expect {
-        Hotel::Booking.new(check_in, check_out)
+        Booking.new(check_in, check_out)
         }.must_raise ArgumentError
     end
   end
 
   describe "method for making a reservation" do 
     it "can reserve a room" do 
-      reservation = Hotel::Booker.reservation()
+      reservation = Booker.reservation()
       #returns an instance of a reservation
     end
     it "can reserve multiple rooms" do

@@ -2,11 +2,11 @@ require_relative 'spec_helper'
 
 describe "Room class" do 
     before do 
-      @room = Hotel::Room.new(id: 1)
+      @room = Room.new(id: 1)
     end
   describe "Room instantiation" do 
     it "is an instance of a room" do 
-      expect(@room).must_be_kind_of Hotel::Room
+      expect(@room).must_be_kind_of Room
     end
   
     it "keeps track of a room id" do 
@@ -16,7 +16,7 @@ describe "Room class" do
 
     it "returns nil for a room that does not exist" do 
       expect {
-        Hotel::Room.new(id: 1337)
+        Room.new(id: 1337)
       }.must_raise ArgumentError
     end
 
@@ -27,7 +27,7 @@ describe "Room class" do
   end
   describe "all" do 
     before do 
-      @rooms = Hotel::Room.all
+      @rooms = Room.all
     end
     it "returns an array of all rooms" do 
       expect(@rooms).must_be_kind_of Array
