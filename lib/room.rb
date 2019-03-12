@@ -14,15 +14,11 @@ module HotelSystem
 
     def is_available?(new_date_range)
       reservations.each do |reservation|
-        return false if get_date_range(reservation).overlap?(new_date_range)
+        return false if reservation.overlap?(new_date_range)
       end
       return true
     end
 
     private
-
-    def get_date_range(reservation)
-      return reservation.date_range
-    end
   end
 end

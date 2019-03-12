@@ -1,5 +1,3 @@
-require_relative "date_range"
-
 module HotelSystem
   class Reservation
     attr_reader :date_range, :room
@@ -14,6 +12,14 @@ module HotelSystem
       return rate * number_of_nights
     end
 
+    def includes_date?(date)
+      return date_range.includes_date?(date)
+    end
+
+    def overlap?(new_date_range)
+      return date_range.overlap?(new_date_range)
+    end
+
     private
 
     def rate
@@ -21,7 +27,7 @@ module HotelSystem
     end
 
     def number_of_nights
-      return date_range.dates.length
+      return date_range.length
     end
   end
 end

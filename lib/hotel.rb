@@ -11,29 +11,29 @@ module HotelSystem
     def initialize
       @rooms = []
       (1..NUMBER_OF_ROOMS).each do |num|
-        rooms << HotelSystem::Room.new(id: num, rate: RATE_PER_NIGHT)
+        rooms << room(id: num, rate: RATE_PER_NIGHT)
       end
       @reservations = []
     end
 
     def make_reservation(room_id, date1, date2)
-      room = find_room_by_id(room_id)
-      (raise ArgumentError, "Room with id #{room_id} does not exist!") if !room
+      room_being_reserved = find_room_by_id(room_id)
+      (raise ArgumentError, "Room with id #{room_id} does not exist!") if !room_being_reserved
       request_range = date_range(date1, date2)
-      if !room.is_available?(request_range)
+      if !room_being_reserved.is_available?(request_range)
         raise ArgumentError, "The room you requested is not available on the given dates!"
       end
-      new_reservation = HotelSystem::Reservation.new(date_range: request_range,
-                                                     room: room,
-                                                     id: (reservations.length + 1))
-      room.add_reservation(new_reservation)
+      new_reservation = reservation(date_range: request_range,
+                                    room: room_being_reserved,
+                                    id: (reservations.length + 1))
+      room_being_reserved.add_reservation(new_reservation)
       reservations << new_reservation
       return new_reservation
     end
 
     def list_reservations_by_date(date)
       date = parse_date(date)
-      reservations_on_date = reservations.select { |reservation| reservation.date_range.includes_date?(date) }
+      reservations_on_date = reservations.select { |reservation| reservation.includes_date?(date) }
       return reservations_on_date
     end
 
@@ -56,6 +56,14 @@ module HotelSystem
 
     def date_range(date1, date2)
       return HotelSystem::DateRange.new(date1, date2)
+    end
+
+    def room(id: id, rate: rate)
+      return HotelSystem::Room.new(id: id, rate: rate)
+    end
+
+    def reservation(date_range: date_range, room: room, id: id)
+      HotelSystem::Reservation.new(date_range: date_range, room: room, id: id)
     end
   end
 end

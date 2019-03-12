@@ -20,5 +20,9 @@ module HotelSystem
     def overlap?(other)
       return self.dates & other.dates != []
     end
+
+    def length
+      return dates.length
+    end
   end
 end
