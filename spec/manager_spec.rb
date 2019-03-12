@@ -48,14 +48,6 @@ describe "Manager class" do
       expect(@reservation.room.room_number).must_be_kind_of Integer
       expect(selected_room.reservations.length).must_equal 1
     end
-
-    it "can calculate the total cost of the reservation" do
-      reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
-      reservation2 = @manager.reserve_room("2019-3-20", "2019-3-22")
-
-      expect(reservation.total_cost).must_equal 200.00
-      expect(reservation2.total_cost).must_equal 400.00
-    end
   end
 
   describe "list_reservation method" do
