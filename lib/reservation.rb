@@ -15,10 +15,17 @@ module BookingSystem
       @date_range = (checkin_date...checkout_date)
     end
 
-    def total_cost(date_range)
-      # cost, num_of_nights = 0, 0
-      # cost = (+1 num_of_nights for each in date_range) * STANDARD_RATE
-      return cost # Or @cost?
+    def total_cost
+      cost, num_of_nights = 0, 0
+      num_of_nights = date_range.count
+      cost = num_of_nights * STANDARD_RATE
+      return cost 
     end
   end
 end
+
+# reservation = BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
+#                                               checkin_date: Date.new(2019, 1, 1),
+#                                               checkout_date: Date.new(2019, 1, 3))
+
+# puts "Checking total_cost #{reservation.total_cost}"

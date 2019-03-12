@@ -4,7 +4,7 @@ describe "Reservation" do
   before do
     @reservation = BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
                                                   checkin_date: Date.new(2019, 1, 1),
-                                                  checkout_date: Date.new(2019, 1, 3))
+                                                  checkout_date: Date.new(2019, 1, 11))
   end
 
   describe "#initialize" do
@@ -33,9 +33,9 @@ describe "Reservation" do
     end
   end
 
-  # describe "#total_cost" do
-  #   it "calculates total cost of a reservation" do
-  #     expect(@cost).must_equal 400
-  #   end
-  # end
+  describe "#total_cost" do
+    it "calculates total cost of a reservation" do
+      expect(@reservation.total_cost).must_equal 2000
+    end
+  end
 end
