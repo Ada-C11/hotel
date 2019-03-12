@@ -5,8 +5,8 @@ module Hotel
     attr_reader :check_in_date, :check_out_date, :room_number, :all_dates
 
     def initialize(check_in_date:, check_out_date:, room_number:)
-      @check_in_date = Date.strptime(check_in_date)
-      @check_out_date = Date.strptime(check_out_date)
+      @check_in_date = Date.parse(check_in_date)
+      @check_out_date = Date.parse(check_out_date)
       @all_dates = @check_in_date..@check_out_date
       @room_number = room_number
 
@@ -14,7 +14,7 @@ module Hotel
     end
 
     def total_cost
-      (@check_in_date - @check_out_date - 1) * 200
+      return @check_in_date == check_out_date ? 200.0 : (@check_out_date - @check_in_date) * 200.0
     end
   end
 end
