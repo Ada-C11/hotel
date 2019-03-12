@@ -28,12 +28,12 @@ describe "Manager class" do
 
   describe "make_reservation method" do
     it "can make a reservation" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
+      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "can reserve an available room" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
+      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
 
       selected_room = ""
       @manager.rooms.each do |room|
@@ -46,11 +46,19 @@ describe "Manager class" do
       expect(reservation.room_number).must_be_kind_of Integer
       expect(selected_room.reservations.length).must_equal 1
     end
+
+    it "can calculate the total cost of the reservation" do
+      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
+      reservation2 = @manager.make_reservation("2019-3-20", "2019-3-22")
+
+      expect(reservation.total_cost).must_equal 200.00
+      expect(reservation2.total_cost).must_equal 400.00
+    end
   end
 
   describe "list_reservation method" do
     it "can list reservations for a specific date" do
-      reservation = @manager.make_reservation("2019-3-20", "2019-3-20")
+      reservation = @manager.make_reservation("2019-3-20", "2019-3-21")
       list = @manager.list_reservations("2019-3-20")
 
       expect(list.length).must_equal 1

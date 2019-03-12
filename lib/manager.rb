@@ -18,10 +18,17 @@ module Hotel
     def make_reservation(check_in, check_out)
       available_room = @rooms.sample
 
+      number_of_nights = 0
+
+      (check_in...check_out).each do
+        number_of_nights += 1
+      end
+      total_cost = available_room.cost_per_night * number_of_nights
       reservation = Hotel::Reservation.new(
         check_in: check_in,
         check_out: check_out,
         room_number: available_room.room_number,
+        total_cost: total_cost,
       )
 
       available_room.reservations << reservation
