@@ -9,7 +9,7 @@ module Hotel
       @check_out = Date.parse(check_out)
 
       raise ArgumentError, "Check-in must be after today." unless @check_in > Date.today
-      raise ArgumentError, "Check-out must be after check-in." if @check_in < @check_out
+      raise ArgumentError, "Check-out must be after check-in." unless @check_in < @check_out
     end
 
     def stay_length
@@ -17,7 +17,7 @@ module Hotel
       return duration_of_stay
     end
 
-    def date_included(date)
+    def includes_date?(date)
       return date.between?(check_in, check_out)
     end
 

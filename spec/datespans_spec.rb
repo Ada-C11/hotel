@@ -8,14 +8,14 @@ require_relative "../lib/reservations.rb"
 
 describe "initialize" do
   before do
-    @dates = Hotel::DateSpan.new("2019-07-19", "2018-07-21")
+    @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
   end
 
   it "is an instance of datespan" do
     expect(@dates).must_be_kind_of Hotel::DateSpan
   end
 
-  it "takes check_in, check_out" do
+  it "takes check_in, check_out args" do
     expect(@dates).must_respond_to :check_in
     expect(@dates).must_respond_to :check_out
   end
@@ -25,11 +25,28 @@ describe "initialize" do
   end
 
   it "makes sure dates are instances of Date" do
-    %i[check_in check_out].each do |check|
-      expect(@dates).must_respond_to check
-    end
-
     expect(@dates.check_in).must_be_kind_of Date
     expect(@dates.check_out).must_be_kind_of Date
   end
+
+  describe "tests the includes_date? method" do
+  before do
+    @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
+  end
+
+  it "finds if date is included in date span" do
+    date_query = Date.parse("2019-07-20")
+    date_match = @dates.includes_date?(date_query)
+    expect(date_match).must_equal true
+  end
+
+  describe "testing for date overlap method" do
+    it "finds if date ranges overlap" do
+      dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
+      dates2 = Hotel::DateSpan.new("2019-07-22", "2019-07-24")
+      overlaps = dates2.overlaps?(dates)
+      expect(overlaps).must_equal false
+    end
+  end
+end
 end
