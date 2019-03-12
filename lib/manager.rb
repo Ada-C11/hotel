@@ -27,11 +27,12 @@ module Hotel
       reservation = Hotel::Reservation.new(
         check_in: check_in,
         check_out: check_out,
-        room_number: available_room.room_number,
+        room: available_room,
         total_cost: total_cost,
       )
 
-      available_room.reservations << reservation
+      available_room.add_reservation
+      #available_room.reservations << reservation
 
       return reservation
     end
