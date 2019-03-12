@@ -52,17 +52,35 @@ describe "Hotel" do
       # depart_day = Date.new(2019, 2, 14)
       # arrive_day = Date.parse("2019-02-10")
       # depart_day = Date.parse("2019-02-14")
-      arrive_day = "2019-02-10"
-      depart_day = "2019-02-14"
+      @arrive_day = "2019-02-10"
+      @depart_day = "2019-02-14"
 
-      @hotel.make_reservation(@room, arrive_day, depart_day)
-      @hotel.make_reservation(@room_two, arrive_day, depart_day)
+      @hotel.book_reservation(@room, @arrive_day, @depart_day)
+      @hotel.book_reservation(@room_two, @arrive_day, @depart_day)
       # @reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
     end
-    describe "hotel#make_reservation" do
+    describe "hotel#book_reservation" do
       it "Adds reservation to reservations array" do
         expect(@hotel.reservations.length).must_equal 2
         expect(@hotel.reservations.first).must_be_kind_of HotelSystem::Reservation
+      end
+
+      it "Raises an ArgumentError if trying to book a room that is unavailable" do
+        expect {
+          @hotel.book_reservation(@room, @arrive_day, @depart_day)
+        }.must_raise ArgumentError
+      end
+
+      it "Accepts booking a room with a reservation that starts on the day another ends " do
+        hotel_reservation = @hotel.book_reservation(@room, @depart_day, "2019-02-18")
+        expect(@hotel.reservations).must_include hotel_reservation
+        expect(@room.reservations).must_include hotel_reservation
+      end
+
+      it "Accepts booking a room with a reservation that ends on the day another starts" do
+        hotel_reservation = @hotel.book_reservation(@room, "2019-02-01", @arrive_day)
+        expect(@hotel.reservations).must_include hotel_reservation
+        expect(@room.reservations).must_include hotel_reservation
       end
 
       it "Adds reservation to the rooms reservation array" do
@@ -86,16 +104,16 @@ describe "Hotel" do
         expect(reservation_list).must_equal []
       end
     end
-    describe "available_rooms_by_date_range" do
+    describe "get_available_rooms" do
       it "Returns an array of Rooms" do
-        available_rooms = @hotel.available_rooms_by_date_range("2017-3-15", "2017-3-18")
+        available_rooms = @hotel.get_available_rooms("2017-3-15", "2017-3-18")
         expect(available_rooms).must_be_kind_of Array
         expect(available_rooms.first).must_be_kind_of HotelSystem::Room
         expect(available_rooms.length).must_equal 3
       end
 
       it "Returns rooms that have no conflicting reservations" do
-        available_rooms = @hotel.available_rooms_by_date_range("2017-3-15", "2017-3-18")
+        available_rooms = @hotel.get_available_rooms("2017-3-15", "2017-3-18")
         expect(available_rooms.length).must_equal 3
       end
 
@@ -103,7 +121,7 @@ describe "Hotel" do
       end
 
       it "Doesn't return rooms that have conflicting reservations" do
-        available_rooms = @hotel.available_rooms_by_date_range("2019-2-12", "2019-2-17")
+        available_rooms = @hotel.get_available_rooms("2019-2-12", "2019-2-17")
         expect(available_rooms.length).must_equal 1
       end
     end
