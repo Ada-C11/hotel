@@ -1,10 +1,12 @@
 module Hotel
     class Room
-        attr_reader :id, :reservations
+        attr_reader :id
+
+        attr_accessor :reservations
 
         def initialize(id)
             @id = id
-            reservations = []
+            @reservations = []
         end
 
         def available?(date)
