@@ -15,9 +15,7 @@ module Hotel
       @total_cost = total_cost(check_in, check_out, room.cost_per_night)
       @id = id
 
-      if @check_in >= @check_out
-        raise ArgumentError, "Invalid date range #{@check_in}, #{@check_out}"
-      end
+      validate_date
     end
 
     def total_cost(check_in, check_out, cost_per_night)
@@ -33,6 +31,15 @@ module Hotel
         number_of_nights += 1
       end
       return number_of_nights
+    end
+
+    def validate_date
+      format = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
+      if @check_in >= @check_out
+        raise ArgumentError, "Invalid date range #{@check_in}, #{@check_out}"
+      elsif !(@check_in.to_s =~ format) || !(@check_out.to_s =~ format)
+        raise ArgumentError, "Invalid date format #{check_in}, #{check_out}.  Must be YYYY-MM-DD"
+      end
     end
   end
 end
