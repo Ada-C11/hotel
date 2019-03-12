@@ -6,10 +6,10 @@ require_relative "room"
 class Reservation
   attr_accessor :id, :room, :start_time, :end_time, :total_price
 
-  def initialize(id, start_time, end_time)
+  def initialize(id, start_time, end_time, room)
     @start_time = start_time
     @end_time = end_time
-    @room = find_room
+    @room = room
     @id = id
     @total_price = find_total_price
   end
@@ -17,10 +17,6 @@ class Reservation
   def find_total_price
     number_of_days = end_time - start_time
     return room.price * number_of_days
-  end
-
-  def find_room
-    return Room.new(21, 200)
   end
 
   def includes_date?(date)

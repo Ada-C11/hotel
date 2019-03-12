@@ -57,3 +57,35 @@ describe "creates new reservation" do
     expect { @hotel.add_reservation(@start_time, @end_time_bad) }.must_raise ArgumentError
   end
 end
+
+describe "finds reservations by date" do
+  before do
+    @hotel = Hotel.new
+    @start_time = Date.new(2019, 3, 9)
+    @end_time = Date.new(2019, 3, 11)
+
+    @start_time2 = Date.new(2019, 4, 9)
+    @end_time2 = Date.new(2019, 4, 11)
+
+    @start_time3 = Date.new(2019, 3, 10)
+    @end_time3 = Date.new(2019, 3, 15)
+
+    @hotel.add_reservation(@start_time, @end_time)
+    @hotel.add_reservation(@start_time2, @end_time2)
+    @hotel.add_reservation(@start_time3, @end_time3)
+  end
+
+  it "adds reservations to an array if they match given date" do
+    date = Date.new(2019, 3, 10)
+    expect(@hotel.find_by_date(date)).must_be_kind_of Array
+    expect(@hotel.find_by_date(date).count).must_equal 2
+  end
+
+  it "matches a reservation to an available room" do
+  end
+
+  it "shows which rooms are available for a given date range" do
+    start_to_check = Date.new(2019, 4, 10)
+    end_to_check = Date.new(2019, 4, 12)
+  end
+end

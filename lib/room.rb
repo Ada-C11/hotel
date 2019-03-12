@@ -1,15 +1,25 @@
 require "time"
 
 class Room
-  attr_reader :number, :price, :availability
+  attr_reader :number, :price, :reservations
 
-  def initialize(number, price, availability: :AVAILABLE)
+  def initialize(number, price)
     @number = number
     @price = price
-    unless [:UNAVAILABLE, :AVAILABLE].include?(availability.to_sym)
-      raise ArgumentError, "Invalid status"
-    else
-      @availability = availability.to_sym
+
+    @reservations = []
+  end
+
+  def add_reservation(res)
+    reservations << res
+  end
+
+  def is_available?(start_time, end_time)
+    reservations.each do |res|
+      if !(res.start_time >= end_time || res.end_time <= start_time)
+        return false
+      end
+      return true
     end
   end
 
