@@ -11,5 +11,9 @@ module Hotel
       @reservations = reservations || []
       @cost_per_night = cost_per_night
     end
+
+    def add_reservation(reservation) ##########
+      @reservations << reservation
+    end
   end
 end
