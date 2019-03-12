@@ -2,15 +2,12 @@ require "date"
 require "pry"
 
 class Reservation
-  attr_reader :reservation_id, :start_date, :end_date, :rooms, :reservation_dates
-  # removed from attr_reader: :duration, :total_cost, :reservation_durations_array
+  attr_reader :reservation_id, :start_date, :end_date, :rooms, :reservation_dates, :duration, :total_cost, :reservation_durations_array
 
   def initialize(reservation_id: 0, start_date: Date.today, end_date: Date.today + 1)
     @reservation_id = reservation_id
     @start_date = start_date
     @end_date = end_date
-    @rooms = ("1".."20").to_a
-    @reservation_dates_array = []
   end
 
   def duration
@@ -35,6 +32,7 @@ class Reservation
   end
 
   def assign_room
+    @rooms = ("1".."20").to_a
     room = @rooms.sample
     return room
   end
