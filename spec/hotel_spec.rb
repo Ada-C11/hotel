@@ -63,7 +63,11 @@ describe "Hotel class" do
       expect { @new_hotel.make_reservation(1, "04 Feb 2020", "08 Feb 2020") }.must_raise ArgumentError
       expect { @new_hotel.make_reservation(1, "04 Feb 2020", "12 Feb 2020") }.must_raise ArgumentError
     end
-
+    it "raises an exception if an invalid room id is given" do
+      expect { @new_hotel.make_reservation(10000000, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(0, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(-5, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
+    end
     it "raises an ArgumentError if the dates given are invalid" do
       expect {
         @new_hotel.make_reservation(1, "08 Feb 2020", "01 Feb 2020")

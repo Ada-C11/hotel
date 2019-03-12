@@ -18,6 +18,7 @@ module HotelSystem
 
     def make_reservation(room_id, date1, date2)
       room = find_room_by_id(room_id)
+      (raise ArgumentError, "Room with id #{room_id} does not exist!") if !room
       request_range = date_range(date1, date2)
       if !room.is_available?(request_range)
         raise ArgumentError, "The room you requested is not available on the given dates!"
