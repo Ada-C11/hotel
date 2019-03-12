@@ -15,7 +15,7 @@ class ResDispatcher
       end
   end
 
-  def request_a_booking(date)
+  def request_booking(date)
     room = find_available_room
     date = date
 
