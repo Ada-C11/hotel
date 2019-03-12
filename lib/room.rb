@@ -2,17 +2,21 @@ module Hotel
   class Room
 
     STATUS = [:AVAILABLE, :UNAVAILABLE]
+    COST = 200.00
 
-    attr_reader :id, :room_num, :cost
+    attr_reader :room_number, :cost
     attr_accessor :status, :available_rooms, :unavailable_rooms
 
-    def initialize(id:, room_num:, status: :AVAILABLE, cost: 200)
-      @id = id
-      @room_num = room_num
+    def initialize(room_number:, status: :AVAILABLE)
+      @room_number = room_number
       @status = :AVAILABLE.to_sym
-      @cost = cost
-      @available_rooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-      @unavailable_rooms = []
+      @cost = COST
+      
     end
-  end
-end
+
+    def is_available?(data_range)
+
+
+    end
+  end # Class end
+end # Module end

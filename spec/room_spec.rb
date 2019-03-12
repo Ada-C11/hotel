@@ -3,11 +3,9 @@ require_relative 'spec_helper'
 describe "the class named Room" do
   describe "initialize" do
     before do 
-      @room = Hotel::Room.new(
-      id: 1,
-      room_num: "1",
+      @room = Hotel::Room.new (
+      room_number: 1,
       status: :AVAILABLE,
-      cost: 200.00,
     )
     end
 
