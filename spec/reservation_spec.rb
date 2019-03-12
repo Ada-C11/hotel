@@ -6,14 +6,17 @@ describe "Reservation" do
   }
   it "initializes a reservation when no keyword arguments are given" do
     test_rez = Reservation.new
-    # expect(test_rez.room_num).must_be_kind_of NilClass
     expect(test_rez.reservation_id).must_equal 0
     expect(test_rez.check_in_time).must_equal Date.today
     expect(test_rez.check_out_time).must_equal (Date.today + 1)
   end
 
-  describe "duration_of_time" do
-    it "must return an integer for duration of time" do
+  it "has a room number" do
+    expect(my_rez.room_number).must_be_instance_of Hash
+  end
+
+  describe "duration_of_stay" do
+    it "must return an integer for duration of stay" do
       expect(my_rez.duration_of_stay).must_be_instance_of Integer
     end
 
@@ -28,15 +31,11 @@ describe "Reservation" do
   end
 
   describe "total_cost" do
+    it "returns an integer" do
+      expect(my_rez.total_cost).must_be_instance_of Integer
+    end
     it "returns a valid cost that does not include last day of stay" do
       expect(my_rez.total_cost).must_equal 1200
     end
   end
-
-  #   describe "assign a room" do
-  #     it "assigns a random room number when called" do
-  #       expect(my_rez.assign_room).must_be_instance_of Integer
-  #     end
-  #   end
-
 end
