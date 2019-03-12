@@ -9,7 +9,10 @@ module Hotel
     end
 
     def book_room(range_of_dates, room_id)
-      manifest.find_room(id).unavailable << range_of_dates
+      room = manifest.find_room(room_id)
+      room.unavailable << range_of_dates.to_a
+      room.unavailable.flatten!
+      return room
     end
   end
 end
