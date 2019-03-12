@@ -11,20 +11,8 @@ module Hotel
             #     raise ArgumentError, "Please enter a valid date!" 
             # end
             raise ArgumentError, "Please enter a valid date!" if @start_date > @end_date
-            @range = fill_range
-        end
-
-        private
-
-        def fill_range
-            difference = (@end_date - @start_date).to_i
-            range = []
-            i = 0
-            while i < difference
-                range.push(@start_date + i)
-                i += 1
-            end
-            return range
+            
+            @range = (@start_date .. @end_date).to_a
         end
 
     end
