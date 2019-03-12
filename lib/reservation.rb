@@ -3,7 +3,9 @@
 module Hotel
 
     class Reservation
-        attr_reader :date_range, :cost, :room, :id
+        attr_reader :date_range, :cost, :id
+
+        attr_accessor :room
 
         def initialize(id: , date_range: , room: nil)
             @id = id
