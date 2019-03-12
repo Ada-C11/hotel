@@ -4,7 +4,7 @@ require_relative "datespans.rb"
 module Hotel
   NUM_ROOMS = 20
   ROOM_RATE = 200.00
-  class BookingManager
+  class Registry
     attr_reader :rooms, :reservations
 
     def initialize
