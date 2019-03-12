@@ -35,3 +35,4 @@ describe "Registry class" do
       expect(@report.rooms.length).must_equal 20
     end
   end
+end

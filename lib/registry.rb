@@ -8,34 +8,33 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = []
+      @rooms = (1..NUM_ROOMS).to_a
       @reservations = []
     end
 
-    def make_reservation(check_in, check_out)
-      available_rooms = list_available_rooms(Hotel::DateSpan.new(check_in, check_out))
-      if available_rooms.empty?
-        raise StandardError, "No rooms are available in that range"
-      end
-      room_number = available_rooms.shift
-      reservation = Hotel::Reservation.new(room_number, ROOM_RATE, check_in, check_out)
-      @reservations << reservation
-      return reservation
-    end
-
-    def reservations_by_date(date)
+    def find_by_date(date)
       date = Date.parse(date)
-      res_by_date = @reservations.select do |res|
-        res.date_range.included_in_date_range(date)
+      by_date = @reservations.select do |entry|
+        entry.date.find_in_range(date)
       end
-      return res_by_date
+      by_date
     end
 
-    def reservations_by_date_range(date_range)
-      res_by_date_range = @reservations.select do |res|
-        res.date_range.overlaps?(date_range)
+    def find_in_range(span)
+      in_range = @reservations.select do |entry|
+        entry.span.overlaps?(span)
       end
-      return res_by_date_range
+      in_range
+    end
+
+    def available_rooms(span)
+      conflicts = find_in_range(span)
+      available_rooms = @rooms.reject do |room|
+        conflicts.find do |entry|
+          entry.room_number == room[:room_number]
+        end
+      end
+      return available_rooms
     end
   end
 end
