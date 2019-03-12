@@ -18,4 +18,10 @@ describe "ReservationManager class" do
       expect(reservation_manager.reservations_array.include?(my_reservation)).must_equal true
     end
   end
+  describe "view_all_rooms method" do
+    it "can access an element from rooms array" do
+      reservation_manager = ReservationManager.new
+      expect(reservation_manager.view_all_rooms.length).must_equal 20
+    end
+  end
 end
