@@ -22,7 +22,7 @@ describe "Room class" do
   describe "add_reservation method" do
     before do
       @room = Hotel::Room.new(room_number: 1)
-      @reservation = Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-4-1", room_number: 1)
+      @reservation = Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-4-1", room: @room)
     end
 
     it "adds the reservation" do
