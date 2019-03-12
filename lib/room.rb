@@ -1,7 +1,7 @@
 module Hotel
   class Room
     attr_accessor :status
-    attr_reader :room_number, :rate, :reservations
+    attr_reader :room_number, :reservations
     
       def initialize(room_number:, status: :AVAILABLE, reservations: [])
         @room_number = room_number
@@ -12,20 +12,13 @@ module Hotel
             raise ArgumentError, "Room number must be between 1 & 20"
           end
       end
-      
-      def create_hotel
-        @all_rooms = []
-        i = 0
-        20.times do |i|
-          @all_rooms << Hotel::Room.new(room_number: i+1)
-        end
-        return all_rooms
-      end
     
       
-      # def is_available?(room_number, date_range)
-        
-      # end
+      def self.is_available?(date_range)
+        self.reservations.each do |reservation|
+          reservation.date_range
+        end
+      end
       
   end
 end

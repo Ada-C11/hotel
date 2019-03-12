@@ -6,17 +6,19 @@ class DateRange
   def initialize(start_date:, end_date:)
     @start_date = Date.parse(start_date)
     @end_date = Date.parse(end_date)
-      
-    if end_date < start_date
-      raise ArgumentError, "End date cannot be before start date"
-    end 
-    
-    
   end
   
-  def duration
+  def include_date_range?(date_range)
+    start_date <= date_range.start_date && end_date >= date_range.end_date
+  end
+
+  def overlap_date_range?(date_range)
+    start_date <= date_range.end_date && end_date >= date_range.start_date
+  end
+  
+  def duration(start_date, end_date)
     return @end_date - @start_date
   end
   
-end
+end # class DateRange
   

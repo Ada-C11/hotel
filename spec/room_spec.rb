@@ -6,7 +6,6 @@ describe "Room class" do
     before do
       @room = Hotel::Room.new(
         room_number: 1, 
-        rate: 200,
         status: :AVAILABLE,
         reservations: nil
       )
@@ -17,12 +16,11 @@ describe "Room class" do
     end
     
     it "has a default status of Available" do
-      expect(Hotel::Room.new(room_number: 2, rate: 200).status).must_equal :AVAILABLE
+      expect(Hotel::Room.new(room_number: 2).status).must_equal :AVAILABLE
     end
     
-      
     it "throws an argument error with an invalid room number" do
-      expect { Hotel::Room.new(id: 0, rate: 200, status: :AVAILABLE) }.must_raise ArgumentError
+      expect { Hotel::Room.new(id: 0, status: :AVAILABLE) }.must_raise ArgumentError
     end
       
     it "sets reservations to an empty array if no reservations have occurred" do
