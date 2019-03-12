@@ -8,6 +8,18 @@ module Hotel
   class Reservation
     attr_reader :check_in, :check_out, :room_number, :total_cost, :id
 
+    def total_cost(check_in, check_out, cost_per_night)
+      number_of_nights = 0
+      total_cost = 0
+
+      (check_in...check_out).each do
+        number_of_nights += 1
+      end
+
+      total_cost = cost_per_night * number_of_nights
+      return total_cost
+    end
+
     def initialize(check_in:, check_out:, room_number: nil, total_cost: nil, id: rand(10 ** 3))
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
