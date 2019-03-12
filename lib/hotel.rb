@@ -22,11 +22,7 @@ module HotelSystem
       room_being_reserved = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room_being_reserved
       request_range = date_range(date1, date2)
-      if !room_being_reserved.is_available?(request_range)
-        raise ReservationError, "The room you requested is not available on the given dates!"
-      elsif room_being_reserved.is_blocked?(request_range)
-        raise BlockError, "The room you requested is blocked on the given dates!"
-      end
+      check_room(room: room_being_reserved, date_range: request_range)
       new_res = reservation(date_range: request_range,
                             room: room_being_reserved,
                             id: (reservations.length + 1))
@@ -53,9 +49,7 @@ module HotelSystem
 
     def reserve_from_block(block, room)
       (raise BlockError, "The given block does not contain the given room") if (!room.blocks.include?(block))
-      if !room.is_available?(block.date_range)
-        raise ReservationError, "The room you requested is not available on the given dates!"
-      end
+      check_room(room: room, date_range: block.date_range, from_block: true)
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
                             room: room)
@@ -69,6 +63,15 @@ module HotelSystem
       self.reservations << reservation
       block.add_reservation(reservation) if block
       room.add_reservation(reservation) if room
+    end
+
+    def check_room(room:, date_range:, from_block: false)
+      if !room.is_available?(date_range)
+        raise ReservationError, "The room you requested is not available on the given dates!"
+      end
+      if room.is_blocked?(date_range) && !from_block
+        raise BlockError, "The room you requested is blocked on the given dates!"
+      end
     end
 
     def parse_date(date_string)
