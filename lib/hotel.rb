@@ -27,12 +27,11 @@ module HotelSystem
       elsif room_being_reserved.is_blocked?(request_range)
         raise BlockError, "The room you requested is blocked on the given dates!"
       end
-      new_reservation = reservation(date_range: request_range,
-                                    room: room_being_reserved,
-                                    id: (reservations.length + 1))
-      room_being_reserved.add_reservation(new_reservation)
-      reservations << new_reservation
-      return new_reservation
+      new_res = reservation(date_range: request_range,
+                            room: room_being_reserved,
+                            id: (reservations.length + 1))
+      update_reservations(room: room_being_reserved, reservation: new_res)
+      return new_res
     end
 
     def list_reservations_by_date(date)
@@ -60,13 +59,17 @@ module HotelSystem
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
                             room: room)
-      reservations << new_res
-      block.add_reservation(new_res)
-      room.add_reservation(new_res)
+      update_reservations(block: block, room: room, reservation: new_res)
       return new_res
     end
 
     private
+
+    def update_reservations(block: nil, room: nil, reservation:)
+      self.reservations << reservation
+      block.add_reservation(reservation) if block
+      room.add_reservation(reservation) if room
+    end
 
     def parse_date(date_string)
       return Date.parse(date_string)
@@ -84,7 +87,7 @@ module HotelSystem
       HotelSystem::Reservation.new(date_range: date_range, room: room, id: id)
     end
 
-    def block(rooms:, date_range:, discount_rate:)
+    def block(rooms:, date_range:, discount_rate:, id:)
       HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate)
     end
   end
