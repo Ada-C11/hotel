@@ -29,10 +29,8 @@ class ReservationManager
     @reservation_array.each do |reservation|
       if reservation.reservation_dates.include?(parsed_date)
         reservations_matching_date << reservation
-        return reservations_matching_date
-      else
-        return "There are no reservations matching this date."
       end
     end
+    return reservations_matching_date
   end
 end
