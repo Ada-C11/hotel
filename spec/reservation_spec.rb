@@ -48,7 +48,17 @@ describe "Reservation" do
   end
 
   describe "total_price method" do
-    it "" do
+    before do
+      @reservation = Hotel::Reservation.new(
+        id: 1,
+        date_range: Hotel::DateRange.new("03-04-2019", "06-04-2019"),
+        room_id: 1,
+        room: Hotel::Room.new(id: 1),
+      )
+    end
+
+    it "calculates the correct price" do
+      expect(@reservation.total_price).must_equal 600
     end
   end
 end

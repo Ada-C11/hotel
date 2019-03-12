@@ -21,5 +21,14 @@ module Hotel
         raise ArgumentError, "Room or room id is required"
       end
     end
+
+    def total_price
+      price * date_range.duration
+    end
+
+    # def add_room(self)
+    #     room.reservations.push(self)
+    # end
+
   end
 end

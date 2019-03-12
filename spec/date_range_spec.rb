@@ -36,7 +36,7 @@ describe "DateRange class" do
     end
 
     it "returns the correct date range" do
-      expect(@date_range.range).must_equal (@start_date..@end_date)
+      expect(@date_range.range).must_equal (@start_date...@end_date)
     end
 
     it "calculates the duration in date range" do
