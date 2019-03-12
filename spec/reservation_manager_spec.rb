@@ -18,6 +18,10 @@ describe "ReservationManager class" do
       my_reservation = reservation_manager.make_reservation
       expect(reservation_manager.reservation_array.include?(my_reservation)).must_equal true
     end
+    it "Reserves a room for a given date range" do
+      my_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
+      expect(reservation_manager.reservation_array[0].room).must_equal "1"
+    end
   end
   describe "view_all_rooms method" do
     it "rooms array includes 20 rooms" do

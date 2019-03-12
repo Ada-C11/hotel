@@ -8,10 +8,11 @@ class ReservationManager
     @reservation_array = []
   end
 
-  def make_reservation(start_date: Date.today, end_date: Date.today + 1)
+  def make_reservation(start_date: Date.today, end_date: Date.today + 1, room: "0")
     @start_date = start_date
     @end_date = end_date
-    new_reservation = Reservation.new(start_date: @start_date, end_date: @end_date)
+    @room = room
+    new_reservation = Reservation.new(start_date: @start_date, end_date: @end_date, room: @room)
     @reservation_array << new_reservation
     return new_reservation
   end
