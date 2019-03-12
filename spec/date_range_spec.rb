@@ -1,5 +1,5 @@
 require_relative "spec_helper"
-require "pry"
+
 describe "DateRange class" do
   before do
     def make_date_range(start_date:, end_date:)
