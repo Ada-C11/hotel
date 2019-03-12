@@ -13,6 +13,9 @@ module Hotel
           end
       end
     
+      def add_reservation(reservation)
+        reservations << reservation
+      end
       
       def self.is_available?(date_range)
         self.reservations.each do |reservation|

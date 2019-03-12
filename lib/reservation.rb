@@ -25,16 +25,16 @@ module Hotel
     end
 
     def date_range=(date_range)
-      self.check_in_date = date_range.start_date
-      self.check_out_date = date_range.end_date
+      check_in_date = date_range.start_date
+      check_out_date = date_range.end_date
     end
     
-    def self.length_of_stay(reservation_id)
-      return (self.check_out_date - self.check_in_date).to_i
+    def length_of_stay(reservation_id)
+      return (check_out_date - check_in_date).to_i
     end
     
-    def self.total_cost(reservation_id)
-      return (200 * self.length_of_stay).to_f
+    def total_cost(reservation_id)
+      return (200 * length_of_stay).to_f
     end
     
     
