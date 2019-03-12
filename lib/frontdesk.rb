@@ -5,7 +5,7 @@ module Hotel
     attr_accessor :rooms, :reservations
 
     def initialize
-      @rooms = Hotel::Room.all_rooms
+      @rooms = Frontdesk.all_rooms
       @reservations = []
     end
 
@@ -17,11 +17,6 @@ module Hotel
       return pending_reservation
     end
 
-    def find_driver(id)
-      Driver.validate_id(id)
-      return @drivers.find { |driver| driver.id == id }
-    end
-
     def find_reservation_by_date(date)
       reservations_by_date = @reservations.find_all { |reservation| reservation.reserved_nights.include?(Date.parse(date)) }
       if reservations_by_date.length == 0
@@ -29,6 +24,19 @@ module Hotel
       else
         return reservations_by_date
       end
+    end
+
+    private
+
+    def self.all_rooms
+      room_list = []
+      counter = 0
+      20.times do
+        room = Room.new(counter + 1)
+        counter += 1
+        room_list << room
+      end
+      return room_list
     end
   end
 end

@@ -44,7 +44,7 @@ describe "Frontdesk find_reservation_by_date()" do
     @no_reservation = @frontdesk.find_reservation_by_date("2017-05-20")
     expect(@reservation).must_be_instance_of Array
     expect(@reservation[0]).must_be_instance_of Hotel::Reservation
-    expect(@reservation[0].name).must_equal "Agatha Christie"
+    expect(@reservation[1].name).must_equal "Nnedi Okorafor"
     expect(@no_reservation).must_be_nil
   end
 end
