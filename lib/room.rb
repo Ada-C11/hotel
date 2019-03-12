@@ -1,7 +1,7 @@
 require_relative "reservation"
 
 class Room
-  attr_reader :number, :price, :reservations
+  attr_accessor :number, :price, :reservations
 
   def initialize(number, price)
     @number = number

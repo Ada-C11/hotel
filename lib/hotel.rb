@@ -1,13 +1,15 @@
 
 require_relative "room"
 require_relative "reservation"
+require_relative "hotelblock"
 
 class Hotel
-  attr_accessor :rooms, :reservations
+  attr_accessor :rooms, :reservations, :blocks
 
   def initialize
     @rooms = []
     @reservations = []
+    @blocks = []
 
     20.times do |i|
       room = Room.new(i + 1, 200)
@@ -23,6 +25,10 @@ class Hotel
 
   def create_res_id
     return reservations.count + 1
+  end
+
+  def create_block_id
+    return blocks.count + 1
   end
 
   def add_reservation(start_time, end_time)
