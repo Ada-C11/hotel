@@ -1,2 +1,2 @@
-require 'date'
-require 'datespans.rb'
+require "date"
+require "datespans.rb"

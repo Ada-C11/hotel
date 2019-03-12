@@ -1,1 +1,1 @@
-require_relative 'availability.rb'
+require_relative "availability.rb"
