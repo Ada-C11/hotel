@@ -149,13 +149,13 @@ describe "Hotel class" do
       my_room = HotelSystem::Room.new(id: 21, rate: 200)
       expect {
         @hotel.reserve_from_block(@block, my_room)
-      }.mustRaise BlockError
+      }.must_raise BlockError
     end
 
     it "will raise an exception if reserving a room that is reserved for the date" do
       expect {
         @hotel.reserve_from_block(@block, @room)
-      }.mustRaise ReservationError
+      }.must_raise ReservationError
     end
   end
 end

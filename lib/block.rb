@@ -1,8 +1,8 @@
-require_relative "errors"
+require_relative "err/errors"
 
 module HotelSystem
   class Block
-    attr_reader :rooms, :date_range, :discount_rate
+    attr_reader :rooms, :date_range, :discount_rate, :reservations
 
     def initialize(rooms:, date_range:, discount_rate:)
       @rooms = rooms
@@ -12,8 +12,16 @@ module HotelSystem
       @reservations = []
     end
 
+    def overlap?(new_date_range)
+      return date_range.overlap?(new_date_range)
+    end
+
+    def add_reservation(reservation)
+      reservations << reservation
+    end
+
     def block_room(room)
-      room.block = self
+      room.blocks << self
       room.rate = discount_rate
     end
   end

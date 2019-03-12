@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "spec_helper"
 
 describe "Block class" do
   describe "initialize method" do
@@ -26,9 +26,9 @@ describe "Block class" do
         expect(room.rate).must_equal(@block.discount_rate)
       end
     end
-    it "will adjust the block instance variable of each of its rooms" do
+    it "will add the block to each room's list of blocks" do
       @block.rooms.each do |room|
-        expect(room.block).must_equal(@block)
+        expect(room.blocks).must_include(@block)
       end
     end
   end

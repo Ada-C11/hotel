@@ -1,6 +1,7 @@
 require_relative "room"
 require_relative "reservation"
 require_relative "block"
+require_relative "err/errors"
 
 module HotelSystem
   RATE_PER_NIGHT = 200
@@ -23,6 +24,8 @@ module HotelSystem
       request_range = date_range(date1, date2)
       if !room_being_reserved.is_available?(request_range)
         raise ReservationError, "The room you requested is not available on the given dates!"
+      elsif room_being_reserved.is_blocked?(request_range)
+        raise BlockError, "The room you requested is blocked on the given dates!"
       end
       new_reservation = reservation(date_range: request_range,
                                     room: room_being_reserved,
@@ -49,6 +52,20 @@ module HotelSystem
       return rooms.find { |room| room.id == room_id }
     end
 
+    def reserve_from_block(block, room)
+      (raise BlockError, "The given block does not contain the given room") if (!room.blocks.include?(block))
+      if !room.is_available?(block.date_range)
+        raise ReservationError, "The room you requested is not available on the given dates!"
+      end
+      new_res = reservation(date_range: block.date_range,
+                            id: (reservations.length + 1),
+                            room: room)
+      reservations << new_res
+      block.add_reservation(new_res)
+      room.add_reservation(new_res)
+      return new_res
+    end
+
     private
 
     def parse_date(date_string)
@@ -59,12 +76,16 @@ module HotelSystem
       return HotelSystem::DateRange.new(date1, date2)
     end
 
-    def room(id: id, rate: rate)
+    def room(id:, rate:)
       return HotelSystem::Room.new(id: id, rate: rate)
     end
 
-    def reservation(date_range: date_range, room: room, id: id)
+    def reservation(date_range:, room:, id:)
       HotelSystem::Reservation.new(date_range: date_range, room: room, id: id)
+    end
+
+    def block(rooms:, date_range:, discount_rate:)
+      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate)
     end
   end
 end
