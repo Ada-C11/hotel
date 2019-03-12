@@ -13,6 +13,10 @@ module HotelSystem
       @dates = (@start_date...@end_date).to_a
     end
 
+    def includes_date?(date)
+      return dates.include?(date)
+    end
+
     def overlap?(other)
       return self.dates & other.dates != []
     end

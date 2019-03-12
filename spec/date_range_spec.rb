@@ -44,6 +44,16 @@ describe "DateRange class" do
       expect { make_date_range(start_date: "01 Feb 2020", end_date: "01 Jan 2019") }.must_raise ArgumentError
     end
   end
+  describe "includes date" do
+    it "checks if it includes a date" do
+      date_range = make_date_range(start_date: "01 Feb 2020", end_date: "08 Feb 2020")
+      test_date_1 = Date.parse("04 Feb 2020")
+      test_date_2 = Date.parse("04 Mar 2020")
+
+      expect(date_range.includes_date?(test_date_1)).must_equal true
+      expect(date_range.includes_date?(test_date_2)).must_equal false
+    end
+  end
   describe "overlap method" do
     it "checks if its dates overlap with the dates of another DateRange" do
       date_range = make_date_range(start_date: "01 Feb 2020", end_date: "08 Feb 2020")

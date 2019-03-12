@@ -21,9 +21,18 @@ module HotelSystem
                                                        room: room,
                                                        id: (reservations.length + 1))
         room.add_reservation(new_reservation)
+        reservations << new_reservation
         return new_reservation
       end
       return nil
+    end
+
+    def list_available_rooms(date)
+      date = Date.parse(date)
+      reserved = reservations.select { |reservation| reservation.date_range.includes_date?(date) }
+      reserved.map! { |reservation| reservation.room }
+      available_rooms = rooms - reserved
+      return available_rooms
     end
 
     def find_room_by_id(room_id)
