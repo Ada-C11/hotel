@@ -25,9 +25,9 @@ module HotelSystem
       res_dates = reservation_dates(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       res_room = find_available_room(res_dates)
       id = create_reservation_id
-      reservation = HotelSystem::Reservation.new(id: id, room: res_room, dates: res_dates)
-      @reservations << reservation
-      res_room.add_reservation(reservation)
+      res = HotelSystem::Reservation.new(id: id, room: res_room, dates: res_dates)
+      @reservations << res
+      res_room.add_reservation(res)
     end
 
     def create_reservation_id
@@ -54,28 +54,27 @@ module HotelSystem
 
     def room_reserved?(room_number:, dates:)
       res_room = find_room(room_number)
+      if res_room.reservations == []
+        return false
+      end
       dates.each do |date|
-        if res_room.reservations == []
-          return false
-        else res_room.reservations.each do |res|
+        res_room.reservations.each do |res|
           if res.dates.include?(date)
           return true
           end
         end
       end
-    end
       return false
     end
 
     def find_available_room(dates_list)
-      @rooms.each do |res_room|
-        reserved = room_reserved?(room_number: res_room.room_number, dates: dates_list)
-        if !reserved
-          return res_room
+      @rooms.each do |hotel_room|
+        reserved = room_reserved?(room_number: hotel_room.room_number, dates: dates_list)
+        if reserved == false
+          return hotel_room
         end
-      else
-        return "Sorry, no available rooms for that date."
       end
+        return "Sorry, no available rooms for that date."
     end
 
     def reservations_by_date(year:, month:, day:)
