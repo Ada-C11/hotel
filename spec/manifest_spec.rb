@@ -31,13 +31,51 @@ describe "Manifest" do
       expect(manifest.list_rooms).must_be_instance_of String
     end
 
+    it "returns an empty string if rooms to list is empty array" do
+      expect(manifest.list_rooms(rooms_to_list: [])).must_equal ""
+    end
+
     it "formats string" do
-      expect(manifest.list_rooms(2)).must_equal "Room number 1 \nRoom number 2 \n"
+      expect(manifest.list_rooms).must_equal "Room number 1
+Room number 2
+Room number 3
+Room number 4
+Room number 5
+Room number 6
+Room number 7
+Room number 8
+Room number 9
+Room number 10
+Room number 11
+Room number 12
+Room number 13
+Room number 14
+Room number 15
+Room number 16
+Room number 17
+Room number 18
+Room number 19
+Room number 20
+"
     end
   end
   describe "Manifest#list_reservations_by_date" do
+    before do
+      @manifest_unavailable = Hotel::Manifest.new
+      @manifest_unavailable.rooms[1].unavailable << Date.new(2020, 04, 02)
+      @manifest_unavailable.rooms[4].unavailable << Date.new(2020, 04, 02)
+      @manifest_unavailable.rooms[10].unavailable << Date.new(2020, 04, 02)
+    end
     it "returns a string" do
-      expect(manifest.list_reservations_by_date).must_be_instance_of String
+      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_be_instance_of String
+    end
+
+    it "formats string and correctly selects unavailable rooms" do
+      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 02))).must_equal "Room number 2\nRoom number 5\nRoom number 11\n"
+    end
+
+    it "returns an empty string if no rooms reserved for given date" do
+      expect(@manifest_unavailable.list_reservations_by_date(Date.new(2020, 04, 06))).must_equal ""
     end
   end
 end

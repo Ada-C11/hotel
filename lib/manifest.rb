@@ -15,10 +15,11 @@ module Hotel
       end
     end
 
-    def list_rooms(number_of_rooms = NUMBER_OF_ROOMS)
+    def list_rooms(rooms_to_list: rooms)
+      raise ArgumentError.new("Must pass param as Array") if rooms.class != Array
       list = ""
-      number_of_rooms.times do |i|
-        list += "Room number #{rooms[i].id} \n"
+      rooms_to_list.length.times do |i|
+        list += "Room number #{rooms_to_list[i].id}\n"
       end
       return list
     end
@@ -27,6 +28,13 @@ module Hotel
       return rooms.find do |room|
                room.id == id
              end
+    end
+
+    def list_reservations_by_date(date)
+      reserved = rooms.select do |room|
+        room.unavailable.include?(date)
+      end
+      return list_rooms(rooms_to_list: reserved)
     end
   end
 end
