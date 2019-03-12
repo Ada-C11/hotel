@@ -5,7 +5,7 @@ describe "Reservation Class" do
     let (:reservation) {
       Reservation.new(
         check_in_date: "2018-03-09",
-        check_out_date: "2018-03-10",
+        check_out_date: "2018-03-12",
         room_number: 2,
       )
     }
@@ -16,6 +16,12 @@ describe "Reservation Class" do
 
     it "Stores a room number" do
       expect(reservation.room_number).must_equal 2
+    end
+
+    it "Stores a range of dates" do
+      ["2018-03-09", "2018-03-10", "2018-03-11", "2018-03-12"].each do |date|
+        expect(reservation.all_dates).must_include Date.strptime(date)
+      end
     end
 
     it "Raises an ArgumentError for invalid check-out date" do
