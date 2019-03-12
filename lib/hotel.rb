@@ -10,6 +10,7 @@ module HotelSystem
       @blocks = blocks
     end
 
+    #### NOT SURE IF I NEED THIS
     def list_rooms
       room_list = @rooms.map { |room| room.id }
       return room_list
@@ -64,6 +65,7 @@ module HotelSystem
 
     def create_block(rooms, first_day, last_day, discount)
       new_block = HotelSystem::Block.new(rooms: rooms, first_day: first_day, last_day: last_day, discount: discount)
+      new_block.create_reservations
       @blocks << new_block
       return new_block
     end

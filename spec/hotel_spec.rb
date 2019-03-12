@@ -148,6 +148,22 @@ describe "Hotel" do
         expect(@hotel.blocks.length).must_equal 1
         expect(@hotel.blocks.first).must_equal block
       end
+
+      ### MAYBE MORE TESTS
+      it "reserves all rooms in the block for the time frame, so they cannot get booked through normal means" do
+        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        expect {
+          @hotel.book_reservation(@room, @arrive_day, @depart_day)
+        }.must_raise ArgumentError
+      end
+
+      #### MAYBE MORE TESTS
+      it "cannot book another block that includes any rooms that are included in another block for the same night" do
+        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        expect {
+          @hotel.create_block([@room_two, @room_three], "2019-02-12", "2019-02-17", 0.2)
+        }.must_raise ArgumentError
+      end
     end
   end
 end
