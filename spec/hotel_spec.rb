@@ -59,19 +59,19 @@ describe "Hotel class" do
     end
 
     it "raises an exception if the room is not available during the given dates" do
-      expect { @new_hotel.make_reservation(1, "01 Feb 2020", "08 Feb 2020") }.must_raise ArgumentError
-      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "08 Feb 2020") }.must_raise ArgumentError
-      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "12 Feb 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(1, "01 Feb 2020", "08 Feb 2020") }.must_raise ReservationError
+      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "08 Feb 2020") }.must_raise ReservationError
+      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "12 Feb 2020") }.must_raise ReservationError
     end
     it "raises an exception if an invalid room id is given" do
-      expect { @new_hotel.make_reservation(10000000, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
-      expect { @new_hotel.make_reservation(0, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
-      expect { @new_hotel.make_reservation(-5, "01 Mar 2020", "08 Mar 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(10000000, "01 Mar 2020", "08 Mar 2020") }.must_raise RoomError
+      expect { @new_hotel.make_reservation(0, "01 Mar 2020", "08 Mar 2020") }.must_raise RoomError
+      expect { @new_hotel.make_reservation(-5, "01 Mar 2020", "08 Mar 2020") }.must_raise RoomError
     end
     it "raises an ArgumentError if the dates given are invalid" do
       expect {
         @new_hotel.make_reservation(1, "08 Feb 2020", "01 Feb 2020")
-      }.must_raise ArgumentError
+      }.must_raise DateRangeError
     end
   end
   describe "list reservations by date" do
@@ -148,14 +148,14 @@ describe "Hotel class" do
     it "will raise an exception if reserving a room that is not within the block" do
       my_room = HotelSystem::Room.new(id: 21, rate: 200)
       expect {
-        @block.reserve(my_room)
-      }.mustRaise ArgumentError
+        @hotel.reserve_from_block(@block, my_room)
+      }.mustRaise BlockError
     end
 
     it "will raise an exception if reserving a room that is reserved for the date" do
       expect {
-        @block.reserve(my_room)
-      }.mustRaise ArgumentError
+        @hotel.reserve_from_block(@block, @room)
+      }.mustRaise ReservationError
     end
   end
 end

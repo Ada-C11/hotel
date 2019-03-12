@@ -1,3 +1,5 @@
+require_relative "errors"
+
 module HotelSystem
   class Block
     attr_reader :rooms, :date_range, :discount_rate

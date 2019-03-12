@@ -40,8 +40,8 @@ describe "DateRange class" do
     it "excludes the last day in its dates array" do
       expect(@new_range.dates).wont_include @new_range.end_date
     end
-    it "raises an ArgumentError if end date is before or the same as start date" do
-      expect { make_date_range(start_date: "01 Feb 2020", end_date: "01 Jan 2019") }.must_raise ArgumentError
+    it "raises an exception if end date is before or the same as start date" do
+      expect { make_date_range(start_date: "01 Feb 2020", end_date: "01 Jan 2019") }.must_raise DateRangeError
     end
   end
   describe "includes date" do

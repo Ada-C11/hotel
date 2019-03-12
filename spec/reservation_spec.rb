@@ -10,14 +10,14 @@ describe "Reservation class" do
     it "creates an instance of Reservation" do
       expect(@new_res).must_be_instance_of HotelSystem::Reservation
     end
-    it "raises an ArgumentError if dates are invalid" do
+    it "raises an exception if dates are invalid" do
       expect {
         HotelSystem::Reservation.new(
           date_range: HotelSystem::DateRange.new("08 Feb 2020", "01 Feb 2020"),
           room: @new_room,
           id: 1,
         )
-      }.must_raise ArgumentError
+      }.must_raise DateRangeError
     end
   end
   describe "reader_methods" do

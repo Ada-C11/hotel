@@ -1,5 +1,6 @@
 require_relative "room"
 require_relative "reservation"
+require_relative "block"
 
 module HotelSystem
   RATE_PER_NIGHT = 200
@@ -18,10 +19,10 @@ module HotelSystem
 
     def make_reservation(room_id, date1, date2)
       room_being_reserved = find_room_by_id(room_id)
-      (raise ArgumentError, "Room with id #{room_id} does not exist!") if !room_being_reserved
+      (raise RoomError, "Room with id #{room_id} does not exist!") if !room_being_reserved
       request_range = date_range(date1, date2)
       if !room_being_reserved.is_available?(request_range)
-        raise ArgumentError, "The room you requested is not available on the given dates!"
+        raise ReservationError, "The room you requested is not available on the given dates!"
       end
       new_reservation = reservation(date_range: request_range,
                                     room: room_being_reserved,
