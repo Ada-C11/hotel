@@ -13,13 +13,17 @@ module Hotel
     end
 
     def stay_length
-      stay_length = (@check_out - @check_in).to_i
+      stay_length = (check_out - check_in).to_i
       return stay_length
     end
 
     def includes_date?(date)
       return date.between?(check_in, check_out)
     end
+
+    def reservations_overlaps?(dates_query)
+      matching_reservations = @reservations.find_all do |reservation|
+        reservation.in_out.overlaps?(dates_query)
 
     def overlaps?(range)
       overlap = @check_in < range.check_out && range.check_in < @check_out
