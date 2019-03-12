@@ -1,17 +1,17 @@
-# require_relative "../spec/spec_helper"
+require_relative "../spec/spec_helper"
 
 module Hotel
   class Manifest
     attr_reader :rooms
     NUMBER_OF_ROOMS = 20
     COST_OF_ROOM = 200
-    Room = Struct.new(:cost_per_day, :id)
+    Room = Struct.new(:id, :cost_per_day, :unavailable)
 
     def initialize
-      @rooms = {}
+      @rooms = []
       NUMBER_OF_ROOMS.times do |i|
         id = i + 1
-        rooms[Room.new(COST_OF_ROOM, id)] = { dates_booked: [] }
+        rooms << Room.new(id, COST_OF_ROOM, [])
       end
     end
 
@@ -21,6 +21,12 @@ module Hotel
         list += "Room number #{room.id} \n"
       end
       return list
+    end
+
+    def find_room(id)
+      return rooms.find do |room|
+               room.id == id
+             end
     end
   end
 end

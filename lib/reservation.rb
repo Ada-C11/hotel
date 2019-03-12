@@ -1,19 +1,23 @@
 require_relative "../spec/spec_helper"
 
 module Hotel
-  class Reservation
-    attr_reader :start_date, :end_date
+  class ReservationDates
+    attr_reader :check_in, :check_out
 
-    def initialize(start_date:, end_date:)
-      @start_date = Date.parse(start_date)
-      @end_date = Date.parse(end_date)
-      unless valid_date_range?(@start_date, @end_date)
+    def initialize(check_in:, check_out:)
+      @check_in = Date.parse(check_in)
+      @check_out = Date.parse(check_out)
+      unless valid_date_range?(@check_in, @check_out)
         raise InvalidDateRangeError.new()
       end
     end
 
-    def valid_date_range?(start_date, end_date)
-      return start_date < end_date && start_date >= Time.new.to_date
+    def valid_date_range?(check_in, check_out)
+      return check_in < check_out && check_in >= Time.new.to_date
+    end
+
+    def range_of_dates
+      return (check_in...check_out)
     end
   end
 end

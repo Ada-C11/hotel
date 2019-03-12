@@ -10,7 +10,7 @@ describe "Manifest" do
     let(:rooms) { manifest.rooms }
     describe "Check attributes of Manifest" do
       it "instance variable rooms is an array" do
-        expect(rooms).must_be_instance_of Hash
+        expect(rooms).must_be_instance_of Array
       end
 
       it "rooms contains 20 elements" do
@@ -18,9 +18,10 @@ describe "Manifest" do
       end
 
       it "each element is a struct with :cost_per_day and :id" do
-        rooms.each do |room, v|
+        rooms.each do |room|
           expect(room).must_respond_to :cost_per_day
           expect(room).must_respond_to :id
+          expect(room).must_respond_to :unavailable
         end
       end
     end
