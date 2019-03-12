@@ -10,6 +10,8 @@ class DateRange
     if end_date < start_date
       raise ArgumentError, "End date cannot be before start date"
     end 
+    
+    
   end
   
   def duration

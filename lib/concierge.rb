@@ -19,7 +19,7 @@ module Hotel
     end
   
     def reserve_room(check_in_date, check_out_date)
-      
+      date_range = DateRange.new(start_date: check_in_date, end_date: check_out_date)
       reserved_room = @rooms.select { |room| room.status == :AVAILABLE}
     end
     
