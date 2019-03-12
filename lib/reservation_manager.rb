@@ -20,6 +20,10 @@ module Hotel
       @reservations << reservation
     end
 
+    def reservations_by_date(date)
+      @reservations.find_all { |reservation| reservation.all_dates.include?(Date.parse(date)) }
+    end
+
     # def add_reservation(reservation)
     #   @reservations << reservation
     # end
