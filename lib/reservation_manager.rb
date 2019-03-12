@@ -14,7 +14,6 @@ class ReservationManager
     @end_date = end_date
     new_reservation = Reservation.new(reservation_id: @reservation_id, start_date: @start_date, end_date: @end_date)
     @reservation_array << new_reservation
-    # binding.pry
     return new_reservation
   end
 
