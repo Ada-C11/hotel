@@ -19,7 +19,8 @@ class Reservation
     else
       @check_out = Date.parse(check_out)
     end
-    @room = room
+    #assign random room for sample 1
+    @room = all_rooms.sample
   end
 
   def duration
@@ -39,5 +40,13 @@ class Reservation
     cost_per_room = 200
     reservation_cost = cost_per_room * duration
     return reservation_cost
+  end
+
+  def all_rooms
+    all_rooms = []
+    20.times do |i|
+      all_rooms << i + 1
+    end
+    return all_rooms
   end
 end
