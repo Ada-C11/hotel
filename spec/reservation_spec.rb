@@ -26,6 +26,14 @@ describe "Reservation class" do
     expect { Hotel::Reservation.new(check_in: "2019-20-3", check_out: "2019-20-3", room: @room) }.must_raise ArgumentError
   end
 
+  it "uniformly formats dates" do
+    check_in = "2100/08/07"
+    check_out = "2100/08/08"
+
+    reservation = Hotel::Reservation.new(check_in: "2100/08/07", check_out: "2100/08/08", room: @room)
+    expect(reservation.check_in.to_s).must_equal "2100-08-07"
+  end
+
   it "calculates the total cost for each reservation" do
     total_cost = @reservation.total_cost(@reservation.check_in, @reservation.check_out, @room.cost_per_night)
     expect(total_cost).must_equal 400.00
