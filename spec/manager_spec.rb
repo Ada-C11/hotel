@@ -61,13 +61,13 @@ describe "Manager class" do
     end
   end
 
-  describe "list_reservation method" do
+  describe "list_reservations_on method" do
     it "can list reservations associated with a specific date" do
       5.times do
         reservation = @manager.reserve_room("2019-3-20", "2019-3-25")
       end
 
-      list = @manager.list_reservations("2019-3-23")
+      list = @manager.list_reservations_on("2019-3-23")
 
       expect(list.length).must_equal 5
       expect(list[0]).must_be_kind_of Hotel::Reservation

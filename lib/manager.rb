@@ -33,7 +33,7 @@ module Hotel
       return reservation
     end
 
-    def list_reservations(date)
+    def list_reservations_on(date)
       list = []
       date = Date.parse(date)
 
