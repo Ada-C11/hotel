@@ -14,6 +14,7 @@ describe "Block" do
 
     it "has readable instance variables" do
       expect(@new_block.rooms).must_equal []
+      expect(@new_block.reservations).must_equal []
       expect(@new_block.last_day).must_equal @last_day
       expect(@new_block.first_day).must_equal @first_day
       expect(@new_block.discount).must_equal @discount

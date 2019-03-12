@@ -1,12 +1,13 @@
 module HotelSystem
   class Block
-    attr_reader :rooms, :first_day, :last_day, :discount
+    attr_reader :rooms, :first_day, :last_day, :discount, :reservations
 
     def initialize(rooms:, first_day:, last_day:, discount: 0)
       @rooms = rooms
       @first_day = first_day
       @last_day = last_day
       @discount = discount
+      @reservations = []
       raise ArgumentError, "Not all rooms are available in this Block" unless all_rooms_available?
     end
 
