@@ -4,17 +4,17 @@ require_relative 'room'
 
 module HotelManagementSystem
     class Reservation
-        attr_reader :guest_name, :start_time, :end_time
+        attr_reader :guest_name, :start_date, :end_date
         attr_accessor :room_number, :status, :cost
         
         ROOM_NUMBER = (1..20).to_a
         STATUS = [:AVAILABLE, :UNAVAILABLE]
         COST = 200
 
-        def initialize(guest_name:, start_time:, end_time:, room_number:, status: :AVAILABLE, cost: COST)
+        def initialize(guest_name:, start_date:, end_date:, room_number:, status: :AVAILABLE, cost: COST)
             @guest_name = guest_name
-            @start_time = start_time
-            @end_time = end_time
+            @start_date = start_date
+            @end_date = end_date
             @room_number = room_number
             @status = status
 
@@ -22,16 +22,16 @@ module HotelManagementSystem
                 raise ArgumentError, "Guest name is required for reservation."
             end
 
-            if !@end_time.nil? && @end_time < @start_time
-                raise ArgumentError.new("End time before start time.")
+            if !@end_date.nil? && @end_date < @start_date
+                raise ArgumentError.new("End date before start date.")
             end
 
-            if @start_time.nil?
-                raise ArgumentError, "Reservation start time required."
+            if @start_date.nil?
+                raise ArgumentError, "Reservation start date required."
             end
             
-            if @end_time.nil?
-                raise ArgumentError, "Reservation end time required."
+            if @end_date.nil?
+                raise ArgumentError, "Reservation end date required."
             end
               
         end
@@ -50,8 +50,8 @@ module HotelManagementSystem
         end
 
         def duration
-            duration = (@end_time - @start_time).to_i
-            
+            duration = (@end_date - @start_date).to_i
+
           return duration
         end
     end
