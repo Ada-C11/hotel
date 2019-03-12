@@ -27,7 +27,7 @@ describe "FrontDesk class" do
     end
 
     it "raises an ArgumentError if date range is invalid" do
-      expect { frontdesk.reserve(start_date: date2, end_date: date1, room: room) }.must_raise ArgumentError
+      expect { frontdesk.reserve(start_date: date2, end_date: date1) }.must_raise ArgumentError
     end
   end
 
