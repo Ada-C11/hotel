@@ -48,8 +48,20 @@ describe "Hotel class" do
       expect(@test_room.reservations).must_include @new_res
     end
 
+    it "allows reservations where the start date is on an existing reservation's end date" do
+      test_reservation = @new_hotel.make_reservation(1, "08 Feb 2020", "15 Feb 2020")
+      expect(test_reservation).must_be_instance_of HotelSystem::Reservation
+    end
+
+    it "allows reservations where the end date is on an existing reservation's start date" do
+      test_reservation = @new_hotel.make_reservation(1, "08 Jan 2020", "01 Feb 2020")
+      expect(test_reservation).must_be_instance_of HotelSystem::Reservation
+    end
+
     it "raises an exception if the room is not available during the given dates" do
       expect { @new_hotel.make_reservation(1, "01 Feb 2020", "08 Feb 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "08 Feb 2020") }.must_raise ArgumentError
+      expect { @new_hotel.make_reservation(1, "04 Feb 2020", "12 Feb 2020") }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if the dates given are invalid" do

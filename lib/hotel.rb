@@ -1,3 +1,6 @@
+require_relative "room"
+require_relative "reservation"
+
 module HotelSystem
   RATE_PER_NIGHT = 200
   NUMBER_OF_ROOMS = 20
