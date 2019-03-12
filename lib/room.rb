@@ -1,7 +1,7 @@
 module HotelSystem
   class Room
     attr_reader :room_number
-    attr_accessor :price_per_night
+    attr_accessor :price_per_night, :reservations
 
     def initialize(number)
       @room_number = self.class.valid_room_number(number)
@@ -15,6 +15,10 @@ module HotelSystem
       else
         return number
       end
+    end
+
+    def add_reservation(reservation)
+        @reservations << reservation
     end
   end
 end
