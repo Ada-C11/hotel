@@ -10,5 +10,4 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 require "date"
 require_relative '../lib/datespans.rb'
 require_relative '../lib/reservations.rb'
-require_relative '../lib/availability.rb'
 require_relative '../lib/registry.rb'

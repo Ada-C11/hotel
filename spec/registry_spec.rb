@@ -31,8 +31,5 @@ describe "Registry class" do
       expect(@report.rooms.length).must_equal 20
     end
 
-    it "returns a list of available rooms for a given date range" do
-      expect(@report.rooms.length).must_equal 20
-    end
   end
 end

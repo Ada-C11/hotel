@@ -1,6 +1,5 @@
-require_relative "availability.rb"
-require "date"
-require_relative "datespans.rb"
+require 'date'
+require_relative 'datespans.rb'
 module Hotel
   NUM_ROOMS = 20
   ROOM_RATE = 200.00
