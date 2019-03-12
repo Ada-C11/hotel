@@ -8,7 +8,7 @@ module BookingSystem
     def initialize(room:, checkin_date: nil, checkout_date: nil)
       @room = room
       unless checkin_date.instance_of?(Date) && checkout_date.instance_of?(Date) && checkout_date >= checkin_date
-        raise Argument.Error.new("Check out date must be later than check in date, got check out: #{checkout_date} and check in: #{checkin_date}")
+        raise ArgumentError.new("Check out date must be later than check in date, got check out: #{checkout_date} and check in: #{checkin_date}")
       end
       @checkin_date = checkin_date
       @checkout_date = checkout_date
