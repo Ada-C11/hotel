@@ -4,10 +4,10 @@ module HotelSystem
   class Reservation
     attr_reader :date_range, :room
 
-    def initialize(start_date:, end_date:, room:, id:)
+    def initialize(date_range:, room:, id:)
       @id = id
       @room = room
-      @date_range = HotelSystem::DateRange.new(start_date, end_date)
+      @date_range = date_range
     end
 
     def total_cost
