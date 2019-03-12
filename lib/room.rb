@@ -8,6 +8,10 @@ module Hotel
       @reservations = reservations
     end
 
+    def add_reservation(reservation)
+      @reservations << reservation
+    end
+
     # def add_reservation(reservation)
     #   @reservations << reservation
     # end
