@@ -15,7 +15,7 @@ module Hotel
       @total_cost = total_cost
       @id = id
 
-      if @check_in > @check_out
+      if @check_in >= @check_out
         raise ArgumentError, "Invalid date range #{@check_in}, #{@check_out}"
       end
     end

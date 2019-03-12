@@ -13,5 +13,6 @@ describe "Reservation class" do
 
   it "throws an argument error when an invalid date range is provided" do
     expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-29", room_number: 1) }.must_raise ArgumentError
+    expect { Hotel::Reservation.new(check_in: "2019-3-30", check_out: "2019-3-30", room_number: 1) }.must_raise ArgumentError
   end
 end
