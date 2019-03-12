@@ -23,9 +23,9 @@ module Hotel
         raise ArgumentError, "Reservation must be at least one day long."
       end
 
-      new_reservation = reservation(start_date: start_date, end_date: end_date, room: find_open_room)
-      @reservations << new_reservation
-      return new_reservation
+      reservations << Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: find_open_room)
+
+      return reservations.last
     end
 
     def find_by_date(date:)
@@ -58,11 +58,6 @@ module Hotel
         rooms_array << Hotel::Room.new(room_number: i + 1)
       end
       return rooms_array
-    end
-
-    # Seems like too much extra work to isolate, but trying to reduce (or at least illuminate) dependency.
-    def reservation(start_date:, end_date:, room:)
-      Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: room)
     end
   end
 end
