@@ -58,13 +58,32 @@ describe "Hotel class" do
       }.must_raise ArgumentError
     end
   end
+  describe "list reservations by date" do
+    before do
+      @new_hotel = HotelSystem::Hotel.new
+      @new_res = @new_hotel.make_reservation(1, "01 Feb 2020", "08 Feb 2020")
+      @date = Date.parse("04 Feb 2020")
+      @reservations_on_date = @new_hotel.list_reservations_by_date("04 Feb 2020")
+    end
+    it "will return an array of Reservation objects" do
+      expect(@reservations_on_date).must_be_instance_of Array
+      @reservations_on_date.each do |reservation|
+        expect(reservation).must_be_instance_of HotelSystem::Reservation
+      end
+    end
+    it "will return reservations where the DateRange includes the given date" do
+      @reservations_on_date.each do |reservation|
+        expect(reservation.date_range.dates).must_include @date
+      end
+    end
+  end
   describe "list available rooms" do
     before do
       @new_hotel = HotelSystem::Hotel.new
       @total_rooms = @new_hotel.rooms.length
       @new_res = @new_hotel.make_reservation(1, "01 Feb 2020", "08 Feb 2020")
       @reserved_room = @new_hotel.find_room_by_id(1)
-      @avail_rooms = @new_hotel.list_available_rooms("01 Feb 2020")
+      @avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
     end
     it "returns an array of rooms" do
       expect(@avail_rooms).must_be_instance_of Array

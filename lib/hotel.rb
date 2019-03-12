@@ -27,9 +27,14 @@ module HotelSystem
       return nil
     end
 
+    def list_reservations_by_date(date)
+      date = parse_date(date)
+      reservations_on_date = reservations.select { |reservation| reservation.date_range.includes_date?(date) }
+      return reservations_on_date
+    end
+
     def list_available_rooms(date)
-      date = Date.parse(date)
-      reserved = reservations.select { |reservation| reservation.date_range.includes_date?(date) }
+      reserved = list_reservations_by_date(date)
       reserved.map! { |reservation| reservation.room }
       available_rooms = rooms - reserved
       return available_rooms
@@ -40,6 +45,10 @@ module HotelSystem
     end
 
     private
+
+    def parse_date(date_string)
+      return Date.parse(date_string)
+    end
 
     def date_range(date1, date2)
       return HotelSystem::DateRange.new(date1, date2)
