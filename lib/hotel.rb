@@ -1,9 +1,11 @@
 require_relative "room"
 require_relative "reservation"
+require "date"
 
 module HotelSystem
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms
+    attr_accessor :reservations
 
     def initialize
       @rooms = []
@@ -20,15 +22,21 @@ module HotelSystem
     end
 
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
-      dates = reservation_dates(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
-      room = find_available_room(dates)
-      reservation = HotelSystem::Reservation.new(id: create_reservation_id, room: room, dates: dates)
+      res_dates = reservation_dates(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
+      res_room = find_available_room(res_dates)
+      id = create_reservation_id
+      reservation = HotelSystem::Reservation.new(id: id, room: res_room, dates: res_dates)
       @reservations << reservation
-      room.reservations << reservation
+      res_room.add_reservation(reservation)
     end
 
     def create_reservation_id
-      return @reservations.length + 1
+      if @reservations.length == nil
+        return 1
+      else
+        id = @reservations.length + 1
+        return id
+      end
     end
 
     def reservation_dates(start_year:, start_month:, start_day:, num_nights:)
@@ -45,38 +53,52 @@ module HotelSystem
     end
 
     def room_reserved?(room_number:, dates:)
-      room = find_room(room_number)
+      res_room = find_room(room_number)
       dates.each do |date|
-        if room.reservations.include?(date)
+        if res_room.reservations == []
+          return false
+        else res_room.reservations.each do |res|
+          if res.dates.include?(date)
           return true
+          end
         end
       end
+    end
       return false
     end
 
-    def find_available_room(dates)
-      @rooms.each do |room|
-        if !room_reserved?(room_number: room.room_number, dates: dates)
-          return room
+    def find_available_room(dates_list)
+      @rooms.each do |res_room|
+        reserved = room_reserved?(room_number: res_room.room_number, dates: dates_list)
+        if !reserved
+          return res_room
         end
       else
         return "Sorry, no available rooms for that date."
       end
     end
 
-    def reservations_by_date(start_year:, start_month:, start_day:)
-      date = Date.new(start_year, start_month, start_day)
+    def reservations_by_date(year:, month:, day:)
+      date = Date.new(year, month, day)
       date_reservations = []
       @reservations.each do |reservation|
         if reservation.dates.include?(date)
-          date_reservations << reservation
+          found_res = {}
+          found_res[:reservation_id] = reservation.id
+          found_res[:room_number] = reservation.room_number
+          date_reservations << found_res
         end
       end
-      if date_reservations.length == 1
-        puts "There's one reservation "
+      if date_reservations.length == 0
+        puts "There are no dates for that reservation."
+        return 0
+      elsif date_reservations.length == 1
+        puts "There's one reservation for that date. The reservation id is #{date_reservations[0][:reservation_id]} and the room number is #{date_reservations[0][:room_number]}."
+        return date_reservations
+      else
+        puts "Here's a list of the reservations for that date: #{date_reservations}."
+        return date_reservations
       end
     end
-      
   end
 end
-

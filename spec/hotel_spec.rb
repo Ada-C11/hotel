@@ -104,12 +104,14 @@ describe "hotel class" do
 
     it "will add a reservation to the hotel's list of reservations" do
       expect(@hotel.reservations.length).must_equal 1
+      expect(@hotel.reservations[0]).must_be_kind_of HotelSystem::Reservation
     end
 
     it "will correctly assign a reservation id" do
       @hotel.reserve_room(start_year: 19, start_month: 5, start_day: 5, num_nights: 4)
 
-      expect(@hotel.reservations[1].id).must_equal 1
+      expect(@hotel.reservations[0].id).must_equal 1
+      expect(@hotel.reservations[1].id).must_equal 2
     end
   end
 end
