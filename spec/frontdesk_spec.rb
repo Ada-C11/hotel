@@ -1,5 +1,4 @@
 require "date"
-
 require_relative "spec_helper"
 
 describe "Frontdesk.new" do
@@ -36,15 +35,16 @@ end
 
 describe "Frontdesk find_reservation_by_date()" do
   before do
-    checkin_date = Date.parse("2019-05-20")
     @frontdesk = Hotel::Frontdesk.new
-    @frontdesk.request_reservation("Agatha Christie", checkin_date.to_s, 2)
+    @frontdesk.request_reservation("Agatha Christie", "2019-05-20", 2)
+    @frontdesk.request_reservation("Nnedi Okorafor", "2019-5-19", 2)
   end
   it "returns reservations by date" do
-    reservation = @frontdesk.find_reservation_by_date("2019-05-20")
-    no_reservation = @frontdesk.find_reservation_by_date("2017-05-20")
-    expect(reservation).must_be_instance_of Hotel::Reservation
-    expect(reservation.name).must_equal "Agatha Christie"
-    expect(no_reservation).must_be_nil
+    @reservation = @frontdesk.find_reservation_by_date("2019-05-20")
+    @no_reservation = @frontdesk.find_reservation_by_date("2017-05-20")
+    expect(@reservation).must_be_instance_of Array
+    expect(@reservation[0]).must_be_instance_of Hotel::Reservation
+    expect(@reservation[0].name).must_equal "Agatha Christie"
+    expect(@no_reservation).must_be_nil
   end
 end

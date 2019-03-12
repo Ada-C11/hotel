@@ -14,6 +14,7 @@ describe "Reservation.new" do
   end
   it "calculates the correct checkout date" do
     expect(@reservation.checkout_date.to_s).must_equal "2015-05-23"
+    expect(@reservation.reserved_nights[1].to_s).must_equal "2015-05-21"
   end
 
   it "checks raises an ArgumentError for invalid dates" do

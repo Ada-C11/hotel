@@ -23,7 +23,12 @@ module Hotel
     end
 
     def find_reservation_by_date(date)
-      return @reservations.find { |reservation| reservation.checkin_date.to_s == date }
+      reservations_by_date = @reservations.find_all { |reservation| reservation.reserved_nights.include?(Date.parse(date)) }
+      if reservations_by_date.length == 0
+        return nil
+      else
+        return reservations_by_date
+      end
     end
   end
 end
