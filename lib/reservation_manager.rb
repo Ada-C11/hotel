@@ -1,3 +1,4 @@
+require "pry"
 
 class Reservation_Manager
   attr_reader :rooms, :all_reservations
@@ -7,14 +8,23 @@ class Reservation_Manager
     @all_rooms = all_rooms
   end
 
-  def make_reservation(reservation)
-    #create a new instance of Reservation class here?
-    # reservation = Reservation.new(1, "2019-03-24", "2019-03-26")
+  ##TODO: break up method into mini methods (SRP)
+  def make_reservation(check_in, check_out)
+    check_in = Date.parse(check_in)
+    check_out = Date.parse(check_out)
+    if check_out - check_in <= 0
+      raise ArguementError, "Check out time is not after check in time. Inputted check in date was #{check_in} and check out date was #{check_out}"
+    end
 
-    reservation_date_range = (reservation.check_in..reservation.check_out).to_a
+    ## TO DO: think about changing id
+    reservation = Reservation.new(1)
+    reservation.check_in = check_in
+    reservation.check_out = check_out
+    reservation_date_range = (reservation.check_in...reservation.check_out).to_a
 
     # create array of available rooms
     ### FINISH THIS LOOP
+    ### think about using .include? to scan booking_dates array
     # available_rooms = []
     # rooms.each do |room_dates|
     #    if room_dates.length == 0
@@ -25,11 +35,36 @@ class Reservation_Manager
     #    end
     # end
 
-    # assign first room to reservation
+    # assign random room to reservation - WAVE 1
     reservation.room = all_rooms.sample
-    require "pry"
 
+    # update booking date in all_rooms array
+    update_room_index = (reservation.room["room_id"]) - 1
+    @all_rooms[update_room_index]["booked_date"] << reservation_date_range
+    reservation.room["booked_date"] << reservation_date_range
     all_reservations << reservation
+    #TODO: make booking date not an array in an array
+  end
+
+  def find_reservation_date(check_in, check_out)
+    date1 = Date.parse(check_in)
+    date2 = Date.parse(check_out)
+    given_date_range = (date1...date2).to_a
+
+    #TODO: find enumerable method that works
+    found_reservations = []
+    all_reservations.each do |reservation|
+      reservation_booked_dates = reservation.room["booked_date"].flatten
+      if reservation_booked_dates == given_date_range
+        found_reservations << reservation
+      end
+    end
+    return found_reservations
+  end
+
+  def find_available_rooms(check_in, check_out)
+    date1 = Date.parse(check_in)
+    date2 = Date.parse(check_out)
   end
 
   def all_rooms
@@ -44,13 +79,15 @@ class Reservation_Manager
 
     #  [
     #     {room_id: 1,
-    #     booking_dates: []},
+    #     booking_dates: [
+    #                     [firstdates],
+    #                     [seconddates]]
+    #        },
     #     {room_id: 2,
-    #      booking_dates: []}
+    #      booking_dates: [
+    #                     [firstdates],
+    #                     [seconddates]]
+    #      }
     #   ]
   end
-
-  #   def self.show_all_reservations
-  #     @@all_reservations
-  #   end
 end
