@@ -20,4 +20,16 @@ describe 'Hotel class' do
       expect(@hotel.rooms.length).must_equal 0
     end
   end
+
+  describe 'add rooms' do
+    before do
+      @rooms = []
+      room1 = Room.new()
+      @rooms.push(room1)
+    end
+
+    it "stores and instance of room" do
+      expect(@rooms).must_be_kind_of Room
+    end
+  end
 end
