@@ -7,6 +7,11 @@ describe 'BookingCentral' do
     expect(bookings.rooms.length).must_equal 20
   end
 
+  it 'assigns a vacant room' do
+    bookings = BookingCentral.new
+    expect(bookings.assign_room).wont_be_nil
+  end
+
   it 'creates a new reservation' do
     bookings = BookingCentral.new
     new_booking = bookings.reserve_room(check_in: '2019-01-01', check_out: '2019-01-02')
@@ -21,8 +26,6 @@ describe 'BookingCentral' do
     # puts "TTTTTTTTTT"
     # puts bookings.all_reservations.select { |k, v| k.date_range.include?('2019-01-03') }.map(&:firs)
     # puts "TTTTTTTTTT"
-
-    
     expect(bookings.all_reservations.length).must_equal 3
   end
 
