@@ -5,6 +5,8 @@ require_relative 'date_range'
 
 module HotelManagementSystem
     class HotelManager
+        # attr_reader :reservations # need to access for tests 
+
         def initialize
             @reservations = []
             @rooms = []
@@ -24,6 +26,7 @@ module HotelManagementSystem
                 raise ArgumentError, "You have entered an invalid date range."
             end
             
+            # assign a room that is available, this just assigns any room
             room = @rooms.sample
             reservation = HotelManagementSystem::Reservation.new(start_date, end_date, room)
             @reservations << reservation
