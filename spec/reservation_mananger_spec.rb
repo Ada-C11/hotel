@@ -55,15 +55,28 @@ describe "RESERVATION MANAGER TESTS" do
   end
 
   describe "#find_available_rooms" do
-    it "returns list of available rooms - not booked for given dates" do
+    it "returns list of available rooms - dates don't coincide" do
       test_manager = Reservation_Manager.new
       check_in = "2019-4-5"
       check_out = "2019-4-7"
       test_manager.make_reservation("2019-3-15", "2019-3-20")
-      available_rooms = test_manager.find_available_rooms(check_in, check_out)
+      check_rooms = test_manager.find_available_rooms(check_in, check_out)
+      available_rooms = (1..20).map { |i| i }
 
-      expect(available_rooms).must_be_kind_of Array
-      expect(available_rooms).must_equal test_manager.all_rooms
+      expect(check_rooms).must_be_kind_of Array
+      expect(check_rooms).must_equal available_rooms
+    end
+
+    it "returns list of available rooms - dates coincide" do
+      test_manager = Reservation_Manager.new
+      check_in = "2019-3-18"
+      check_out = "2019-3-21"
+      test_manager.make_reservation("2019-3-15", "2019-3-20")
+      test_manager.make_reservation("2019-3-13", "2019-3-19")
+      check_rooms = test_manager.find_available_rooms(check_in, check_out)
+      available_rooms = (1..20).map { |i| i }
+
+      expect(check_rooms.length).must_equal 18
     end
   end
 end

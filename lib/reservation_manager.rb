@@ -8,8 +8,14 @@ class Reservation_Manager
     # @all_rooms = all_rooms
   end
 
+  def parse_dates(date_1, date_2)
+    date_1 = Date.parse(date_1)
+    date_2 = Date.parse(date_2)
+  end
+
   ##TODO: break up method into mini methods (SRP)
   def make_reservation(check_in, check_out)
+    # parse_dates(check_in, check_out)
     check_in = Date.parse(check_in)
     check_out = Date.parse(check_out)
     if check_out - check_in <= 0
@@ -20,19 +26,13 @@ class Reservation_Manager
     reservation = Reservation.new(1)
     reservation.check_in = check_in
     reservation.check_out = check_out
+    if find_available_rooms.length > 0
+      reservation.room = find_available_rooms[0]
+    else
+      raise ArgumentError, "There are no available rooms at the moment. Please try again later!"
+    end
     reservation_date_range = (reservation.check_in...reservation.check_out).to_a
     all_reservations << reservation
-
-    # assign random room to reservation - WAVE 1
-    # reservation.room = @all_rooms.sample
-
-    # update booking date in all_rooms array
-    # update_room_index = (reservation.room["room_id"]) - 1
-    # @all_rooms[update_room_index]["booked_date"] << reservation_date_range
-    # reservation.room["booked_date"] << reservation_date_range
-    # all_reservations << reservation
-    # binding.pry
-    #TODO: make booking date not an array in an array
   end
 
   def find_reservation_date(check_in, check_out)
@@ -53,31 +53,32 @@ class Reservation_Manager
     return found_reservations
   end
 
-  # all_reservations.each do |reservation|
-  #   reservation_booked_dates = reservation.room["booked_date"].flatten
-  #   if reservation_booked_dates == given_date_range
-  #     found_reservations << reservation
-  #   end
-  # end
-  # return found_reservations
+  def find_available_rooms(check_in, check_out)
+    available_rooms = (1..20).map { |i| i }
+    date1 = Date.parse(check_in)
+    date2 = Date.parse(check_out)
+    given_date_range = (date1...date2).to_a
 
-  # def find_available_rooms(check_in, check_out)
-  #   date1 = Date.parse(check_in)
-  #   date2 = Date.parse(check_out)
-  #   given_date_range = (date1...date2).to_a
+    unavailable_rooms = []
+    all_reservations.each do |reservation|
+      day_in = reservation.check_in
+      day_out = reservation.check_out
+      reserve_date_range = (day_in...day_out).to_a
+      combined_ranges = (given_date_range + reserve_date_range).flatten
 
-  #   available_rooms = []
+      if combined_ranges.length != combined_ranges.uniq.length
+        unavailable_rooms << reservation
+      end
+    end
 
-  #   @all_rooms.each do |room|
-  #     booked_dates = room["booked_date"].flatten
-  #     if booked_dates.include? { |date| date }
+    if unavailable_rooms.length > 0
+      unavailable_rooms.each do |reservation|
+        available_rooms.delete_if { |room_num| room_num == reservation.room }
+      end
+    end
 
-  #       # binding.pry
-  #     end
-
-  #     #return all available rooms in an array
-  #   end
-  # end
+    return available_rooms
+  end
 
   # def all_rooms
   #   all_rooms = []
@@ -117,3 +118,11 @@ end
 #         if reserve_date != room_date[]
 #    end
 # end
+
+# all_reservations.each do |reservation|
+#   reservation_booked_dates = reservation.room["booked_date"].flatten
+#   if reservation_booked_dates == given_date_range
+#     found_reservations << reservation
+#   end
+# end
+# return found_reservations
