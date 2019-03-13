@@ -6,6 +6,7 @@ class Reservation
   COST = 200
 
   def initialize(check_in:, check_out:)
+    #guess I best be pairing rooms
     #maybe save id if we need to pair something later on, probably should delete
     @check_in = check_in
     @check_out = check_out
