@@ -17,7 +17,12 @@ module Hotel
 
       @check_in_date = Date.parse(check_in_date)
       @check_out_date = Date.parse(check_out_date)
-      raise ArgumentError, "Check_out_date must be after check_in_date" if @check_out_date < @check_in_date
+      raise ArgumentError, "Check_out_date must be after check_in_date" if @check_out_date < @check_in_date || @check_in_date == nil || @check_out_date == nil
+    end
+
+    def cost
+      num_nights = @check_out_date - @check_in_date
+      return 200.0 * num_nights
     end
 
     def self.load_all
