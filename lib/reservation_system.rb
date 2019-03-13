@@ -19,21 +19,17 @@ module HotelBooking
 
     # Can find specific bookings for a date when provided date
     def find_booking_by_date(date)
-      date_object = Date.parse(date)
-      
       bookings = @hotel.bookings.select do |booking|
-        booking.start_date <= date_object && booking.end_date >= date_object
+        booking.start_date <= date && booking.end_date >= date
       end
       return bookings
     end
 
     # Can find available rooms if given a start and end date
     def get_available_rooms(start_date, end_date)
-      start_date_object = Date.parse(start_date)
-      end_date_object = Date.parse(end_date)
 
-      all_bookings = find_booking_by_date(start_date_object)
-      unavailable_bookings = all_bookings.select { |booking| booking.end_date <= end_date_object}
+      all_bookings = find_booking_by_date(start_date)
+      unavailable_bookings = all_bookings.select { |booking| booking.end_date <= end_date}
 
       occpuied_rooms = []
       unavailable_bookings.each do |booking|
@@ -42,7 +38,7 @@ module HotelBooking
 
       available_rooms = []
       @hotel.rooms.each do |room|
-        while occpuied_rooms.include?(room)
+        unless occpuied_rooms.include?(room)
           available_rooms.push(room)
         end
       end
@@ -51,12 +47,11 @@ module HotelBooking
 
     # Returns true or false if specific room is available for given date
     def available?(start_date, end_date, room_number)
-      start_date_object = Date.parse(start_date)
-      end_date_object = Date.parse(end_date)
 
       rooms_available = get_available_rooms(start_date, end_date)
-      room_numbers = rooms_available.number
-      if room_number.include?(room_numbers)
+      room_numbers = rooms_available
+
+      if room_numbers.include?(room_number)
         return true
       else
         return false

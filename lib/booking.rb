@@ -1,5 +1,5 @@
 module HotelBooking
-  class Booking 
+  class Booking
     
   attr_reader :reference_number, :room, :start_date, :end_date, :price
 
