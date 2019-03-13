@@ -15,11 +15,17 @@ module Hotel
       @rooms = rooms_array
     end
 
-    def reserve(check_in:, check_out:)
+    def reserve(check_in:, check_out:, room_number: nil)
       nights = generate_nights(check_in: check_in, check_out: check_out)
 
+      room = find_room_by_number(room_number: room_number) if room_number
+
+      room ||= assign_room(array_of_nights: nights)
+
+      raise ArgumentError, "Room not available" unless room.available?(range: nights)
+
       reservation = Hotel::Reservation.new(nights: nights,
-                                           room: assign_room(array_of_nights: nights))
+                                           room: room)
 
       reservation.room.booked_nights.concat(nights)
 
