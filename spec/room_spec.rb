@@ -27,8 +27,25 @@ describe "Room class" do
       expect(@room.reservations).must_be_kind_of Array
       expect(@room.reservations.length).must_equal 0
     end
-    
-    
-      
   end
-end    
+  
+  
+  describe "Add Reservation method" do
+    before do
+      @concierge = Hotel::Concierge.new
+      @room = @concierge.all_rooms[2]
+      @count = @room.reservations.length
+      @reservation = Hotel::Reservation.new(id: 20, room: 3, start_date:"2019-04-01", end_date: "2019-04-05")
+      @room.add_reservation(@reservation)
+    end  
+    
+    it "updates the room's list of reservations" do   
+      expect(@room.reservations.length).must_equal @count + 1
+      expect(@room.reservations).must_be_kind_of Array
+      expect(@room.reservations[0]).must_be_instance_of Hotel::Reservation
+      expect(@room.reservations[0].id).must_equal 20
+    end
+    
+  end
+  
+end # Room class

@@ -18,8 +18,7 @@ describe "Reservation class" do
         expect(@reservation.id).must_be_kind_of Integer
         expect(@reservation.room).must_be_kind_of Integer
         expect(@reservation.start_date).must_be_kind_of String
-    end
-    
+    end    
   end 
   
   
@@ -68,8 +67,7 @@ describe "Reservation class" do
           start_date:"20190101", 
           end_date: "02-11-2019"
       )
-        expect(@reservation.date_range.start_date).must_equal 
-          @reservation2.date_range.start_date
+        expect(@reservation.date_range.start_date).must_equal @reservation2.date_range.start_date
     end
   end
   

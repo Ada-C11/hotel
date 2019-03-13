@@ -13,6 +13,7 @@ module Hotel
           end
       end
     
+    
       def add_reservation(reservation)
         reservations << reservation
       end

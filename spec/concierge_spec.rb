@@ -33,7 +33,10 @@ describe "Concierge class" do
       it "contains 20 rooms" do
         expect(@concierge.all_rooms.count).must_equal 20
       end
-
+      
+      it "correctly numbers each room" do
+        expect(@concierge.all_rooms[1].room_number).must_equal 2
+      end
   end
   
   
@@ -43,16 +46,21 @@ describe "Concierge class" do
     end
     
     it "selects an available room" do
-     reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
-      expect(reservation.first.room.status).must_equal :AVAILABLE
+     @reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
+      expect(@reservation.first.room.status).must_equal :AVAILABLE
     end
     
     it "updates the Concierge Reservations array" do
-      res_count = @concierge.reservations.length
-      reservation1 = @concierge.reserve_room("2019-01-01", "2019-01-03")
+      @res_count = @concierge.reservations.length
+      @reservation1 = @concierge.reserve_room("2019-01-01", "2019-01-03")
       expect{(@concierge.reservations.length).must_equal (res_count + 1)}
     end
-  end 
+    
+    it "updates the Room's list of reservations" do
+      @reservation2 = @concierge.reserve_room("2019-05-01", "2019-05-03")
+    end  
+  end
+ 
     
   describe "view Reservations by date method" do
     before do
