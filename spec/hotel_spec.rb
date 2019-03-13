@@ -50,7 +50,7 @@ describe "Hotel class" do
     end
 
     it "adds the new reservation to the room's collection of reservations" do
-      expect(@test_room.reservations).must_include @new_res
+      expect(@test_room.reservations[@new_res.name]).must_equal @new_res
     end
 
     it "allows reservations where the start date is on an existing reservation's end date" do
@@ -125,7 +125,8 @@ describe "Hotel class" do
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = HotelSystem::Block.new(date_range: @date_range,
                                       rooms: @hotel.rooms[0...5],
-                                      discount_rate: 180)
+                                      discount_rate: 180,
+                                      group_name: "ComicCon")
       @room = @block.rooms[0]
       @block_reservation = @hotel.reserve_from_block(@block, @room, "Ada")
     end
@@ -136,10 +137,10 @@ describe "Hotel class" do
       expect(@hotel.reservations[@block_reservation.name]).must_equal @block_reservation
     end
     it "will add the reservation to the room's list of reservations" do
-      expect(@room.reservations).must_include @block_reservation
+      expect(@room.reservations[@block_reservation.name]).must_equal @block_reservation
     end
     it "will add the reservation to the block's list of reservations" do
-      expect(@room.reservations).must_include @block_reservation
+      expect(@block.reservations[@block_reservation.name]).must_equal @block_reservation
     end
     it "will set the reservation's date range equal to the block's date range" do
       expect(@block_reservation.date_range).must_equal @block.date_range
@@ -163,43 +164,43 @@ describe "Hotel class" do
       }.must_raise ReservationError
     end
   end
-  #   describe "make block" do
-  #     before do
-  #       @hotel = HotelSystem::Hotel.new
-  #       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
-  #       @rooms = @hotel.rooms[0...5]
-  #       @new_block = make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
-  #                                              end_date: "10 Feb 2020",
-  #                                              group_name: "Ada Academy")
-  #     end
-  #     it "returns a new block if all rooms are available during the given date range" do
-  #       expect(@new_block).must_be_instance_of HotelSystem::Block
-  #     end
-  #     it "raises an exception if one or more rooms have overlapping reservations" do
-  #       @hotel.make_reservation(6, "01 Feb 2020", "08 Feb 2020")
-  #       expect {
-  #         make_block(6, 7, 8, 9, 10, start_date: "01 Feb 2020",
-  #                                    end_date: "10 Feb 2020",
-  #                                    group_name: "Ada Academy")
-  #       }.must_raise ReservationError
-  #     end
-  #     it "raises an exception if one or more rooms have overlapping blocks" do
-  #       expect {
-  #         make_block(3, 4, 5, 6, 7, start_date: "01 Feb 2020",
-  #                                   end_date: "10 Feb 2020",
-  #                                   group_name: "Ada Academy")
-  #       }.must_raise BlockError
-  #     end
-  #     it "adds the block to the room's collection of blocks" do
-  #       expect(@room.blocks).must_include @new_block
-  #     end
-  #     it "adds the block to the hotel's collection of blocks" do
-  #       expect(@hotel.blocks["Ada Academy"]).must_equal @new_block
-  #     end
-  #     it "raises an exception if invalid dates are given" do
-  #       make_block(8, 9, 10, start_date: "10 Feb 2020",
-  #                            end_date: "01 Feb 2020",
-  #                            group_name: "Ada Academy").must_raise DateRangeError
-  #     end
-  #   end
+  describe "make block" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
+      @rooms = @hotel.rooms[0...5]
+      @new_block = make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
+                                             end_date: "10 Feb 2020",
+                                             group_name: "Ada Academy")
+    end
+    it "returns a new block if all rooms are available during the given date range" do
+      expect(@new_block).must_be_instance_of HotelSystem::Block
+    end
+    it "raises an exception if one or more rooms have overlapping reservations" do
+      @hotel.make_reservation(6, "01 Feb 2020", "08 Feb 2020")
+      expect {
+        make_block(6, 7, 8, 9, 10, start_date: "01 Feb 2020",
+                                   end_date: "10 Feb 2020",
+                                   group_name: "Ada Academy")
+      }.must_raise ReservationError
+    end
+    it "raises an exception if one or more rooms have overlapping blocks" do
+      expect {
+        make_block(3, 4, 5, 6, 7, start_date: "01 Feb 2020",
+                                  end_date: "10 Feb 2020",
+                                  group_name: "Ada Academy")
+      }.must_raise BlockError
+    end
+    it "adds the block to the room's collection of blocks" do
+      expect(@room.blocks).must_include @new_block
+    end
+    it "adds the block to the hotel's collection of blocks" do
+      expect(@hotel.blocks["Ada Academy"]).must_equal @new_block
+    end
+    it "raises an exception if invalid dates are given" do
+      make_block(8, 9, 10, start_date: "10 Feb 2020",
+                           end_date: "01 Feb 2020",
+                           group_name: "Ada Academy").must_raise DateRangeError
+    end
+  end
 end

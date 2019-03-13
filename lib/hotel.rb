@@ -36,7 +36,7 @@ module HotelSystem
 
     def list_reservations_by_date(date)
       date = parse_date(date)
-      reservations_on_date = reservations.values.select { |reservation| reservation.includes_date?(date) }
+      reservations_on_date = all_reservations.select { |reservation| reservation.includes_date?(date) }
       return reservations_on_date
     end
 
@@ -52,7 +52,7 @@ module HotelSystem
     end
 
     def reserve_from_block(block, room, name)
-      (raise BlockError, "The given block does not contain the given room") if (!room.blocks.include?(block))
+      (raise BlockError, "The given block does not contain the given room") if (!block.has_room?(room))
       check_room(room: room, date_range: block.date_range, from_block: true)
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
@@ -64,6 +64,10 @@ module HotelSystem
 
     def add_reservation(reservation)
       reservations[reservation.name] = reservation
+    end
+
+    def add_block(block)
+      blocks[block.name] = block
     end
 
     private
@@ -83,6 +87,16 @@ module HotelSystem
       end
     end
 
+    private
+
+    def all_reservations
+      return reservations.values
+    end
+
+    def all_blocks
+      return blocks.values
+    end
+
     def parse_date(date_string)
       return Date.parse(date_string)
     end
@@ -99,8 +113,8 @@ module HotelSystem
       HotelSystem::Reservation.new(date_range: date_range, room: room, id: id, name: name)
     end
 
-    def block(rooms:, date_range:, discount_rate:, id:)
-      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate)
+    def block(rooms:, date_range:, discount_rate:, id:, group_name:)
+      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate, group_name: group_name)
     end
   end
 end
