@@ -43,7 +43,6 @@ module BookingSystem
       return matching_reservations
     end
 
-    # Untested helper method, end of workday 3/12/19
     def available?(date)
       reservations.each do |reservation|
         reservation.date_range.each do |res_date|

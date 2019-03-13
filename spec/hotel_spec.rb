@@ -4,8 +4,8 @@ describe "Hotel" do
   before do
     @test_hotel = BookingSystem::Hotel.new
     @test_room = BookingSystem::Room.new(room_num: 1337)
-    @checkin = Date.new(2019, 1, 1)
-    @checkout = Date.new(2019, 1, 11)
+    @checkin = Date.new(2020, 1, 1)
+    @checkout = Date.new(2020, 1, 11)
   end
 
   describe "initialize" do
@@ -69,10 +69,15 @@ describe "Hotel" do
 
   describe "available?" do
     before do
-
+      @test_hotel.new_reservation(@test_room, @checkin, @checkout)
     end
-    # expect(date.available?).must_equal true
+
+    it "returns true for a room with no reservation on a given day" do
+      expect(@test_hotel.available?(Date.new(1776, 7, 4))).must_equal true
+    end
+
+    it "returns false for a room that is booked on a given day" do
+      expect(@test_hotel.available?(@checkin)).must_equal false
+    end
   end
-
-
 end
