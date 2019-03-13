@@ -12,7 +12,7 @@ module Hotel
     end
 
     def add_room_to_rooms(cost_per_night: COST_OF_ROOM)
-      rooms << RoomWrapper::room(cost: cost_per_day, room_number: rooms.length + 1)
+      rooms << RoomWrapper::room(cost: cost_per_night, room_number: rooms.length + 1)
     end
 
     def list_rooms(rooms_to_list: rooms)
@@ -33,7 +33,7 @@ module Hotel
     def list_unavailable_rooms_by_date(date)
       reserved = []
       rooms.each do |room|
-        room.unavailable.each do |reservation|
+        room.unavailable_list.each do |reservation|
           if reservation.id[0] == "R" && reservation.check_in <= date && date < reservation.check_out
             reserved << room
           end
@@ -48,7 +48,7 @@ module Hotel
 
   module RoomWrapper
     def self.room(cost:, room_number:)
-      Room.new(cost_per_day: cost, id: room_number)
+      Room.new(cost_per_night: cost, id: room_number)
     end
   end
 end

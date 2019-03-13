@@ -2,11 +2,11 @@ require_relative "../spec/spec_helper"
 
 module Hotel
   class Room
-    attr_reader :id, :cost_per_day, :unavailable_list
+    attr_reader :id, :cost_per_night, :unavailable_list
 
-    def initialize(id:, cost_per_day:, unavailable_list: nil)
+    def initialize(id:, cost_per_night:, unavailable_list: nil)
       @id = id
-      @cost_per_day = cost_per_day
+      @cost_per_night = cost_per_night
       @unavailable_list ||= []
     end
 
@@ -18,7 +18,7 @@ module Hotel
     end
 
     def unavailable_dates
-      return unavailable.date_range
+      return unavailable_list.date_range
     end
   end
 end

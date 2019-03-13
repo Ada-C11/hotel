@@ -21,9 +21,9 @@ describe "Booker" do
       reservation1 = Hotel::Reservation.new(check_in: day1, check_out: day2)
       room = manifest.find_room(room_id)
       booker.book_room(reservation1, room)
-      expect(room.unavailable).must_be_instance_of Array
-      expect(room.unavailable.last.check_in).must_be_instance_of Date
-      expect(room.unavailable.last.check_in).must_equal Date.new(2020, 03, 20)
+      expect(room.unavailable_list).must_be_instance_of Array
+      expect(room.unavailable_list.last.check_in).must_be_instance_of Date
+      expect(room.unavailable_list.last.check_in).must_equal Date.new(2020, 03, 20)
     end
   end
 end

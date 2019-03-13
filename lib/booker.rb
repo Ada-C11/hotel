@@ -10,16 +10,16 @@ module Hotel
     end
 
     def book_room(reservation, room)
-      room.unavailable << reservation
+      room.unavailable_list << reservation
       return room
     end
 
     def total_cost_of_booking(reservation, room)
-      return room.cost_per_day * reservation.duration * SALES_TAX_ADJUSTMENT
+      return room.cost_per_night * reservation.duration * SALES_TAX_ADJUSTMENT
     end
 
-    def room_base_cost(room)
-      return room.cost_per_day
+    def room_base_cost
+      return room.cost_per_night
     end
 
     def length_of_stay(reservation)

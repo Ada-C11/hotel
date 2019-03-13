@@ -17,11 +17,11 @@ describe "Manifest" do
         expect(rooms.length).must_equal 20
       end
 
-      it "each element is a struct with :cost_per_day and :id" do
+      it "each element is a struct with :cost_per_night and :id" do
         rooms.each do |room|
-          expect(room).must_respond_to :cost_per_day
+          expect(room).must_respond_to :cost_per_night
           expect(room).must_respond_to :id
-          expect(room).must_respond_to :unavailable
+          expect(room).must_respond_to :unavailable_list
         end
       end
     end
