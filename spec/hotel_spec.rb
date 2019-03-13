@@ -2,7 +2,8 @@ require_relative "spec_helper"
 
 describe "Hotel class" do
   before do
-    @new_hotel = HotelSystem::Hotel.new
+    @rooms = HotelSystem::Room.make_set(20, 200)
+    @new_hotel = HotelSystem::Hotel.new(@rooms)
   end
   describe "initialize" do
     it "initializes a Hotel object" do
@@ -26,7 +27,8 @@ describe "Hotel class" do
   end
   describe "find room" do
     before do
-      @new_hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @new_hotel = HotelSystem::Hotel.new(@rooms)
     end
     it "will find a room when given a number between 1 and 20" do
       expect (@new_hotel.find_room_by_id(1)).must_be_instance_of HotelSystem::Room
@@ -37,7 +39,8 @@ describe "Hotel class" do
   end
   describe "make reservation" do
     before do
-      @new_hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
       @test_room = @new_hotel.rooms.first
     end
@@ -81,7 +84,8 @@ describe "Hotel class" do
   end
   describe "list reservations by date" do
     before do
-      @new_hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
       @date = Date.parse("04 Feb 2020")
       @reservations_on_date = @new_hotel.reservations_by_date("04 Feb 2020")
@@ -101,7 +105,8 @@ describe "Hotel class" do
   end
   describe "list available rooms" do
     before do
-      @new_hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
       @avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
       @total_rooms = @new_hotel.rooms.length
@@ -144,7 +149,8 @@ describe "Hotel class" do
   end
   describe "reserve from block" do
     before do
-      @hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
                                                 end_date: "10 Feb 2020",
@@ -188,7 +194,8 @@ describe "Hotel class" do
   end
   describe "make block" do
     before do
-      @hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @new_block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
                                                     end_date: "10 Feb 2020",

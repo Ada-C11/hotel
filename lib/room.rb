@@ -1,6 +1,7 @@
 module HotelSystem
   class Room
-    attr_reader :id, :reservations, :blocks, :rate
+    attr_reader :id, :reservations, :blocks
+    attr_accessor :rate
 
     def initialize(id:, rate:)
       @id = id
@@ -8,6 +9,17 @@ module HotelSystem
       @reservations = {}
       @blocks = {}
     end
+
+    # Make collection
+    def self.make_set(amount, rate)
+      set = []
+      (1..amount).each do |num|
+        set << new(id: num, rate: rate)
+      end
+      return set
+    end
+
+    # Availability check methods:
 
     def is_reserved?(new_date_range)
       reservations.each do |name, reservation|
@@ -23,6 +35,8 @@ module HotelSystem
       return false
     end
 
+    # 'Add' methods:
+
     def add_reservation(reservation)
       reservations[reservation.id] = reservation
     end
@@ -30,6 +44,8 @@ module HotelSystem
     def add_block(block)
       blocks[block.id] = block
     end
+
+    # 'All' methods:
 
     def all_reservations
       return reservations.values

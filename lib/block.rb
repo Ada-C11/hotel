@@ -19,13 +19,31 @@ module HotelSystem
       @reservations = {}
     end
 
-    def add_reservation(reservation)
-      reservations[reservation.id] = reservation
+    # Room interaction methods
+
+    def block_room(room)
+      room.add_block(self)
     end
 
     def has_available_rooms?
       return rooms.any? { |room| !room.is_reserved?(date_range) }
     end
+
+    def has_room?(room)
+      return rooms.include?(room)
+    end
+
+    # Reservation interaction methods
+
+    def all_reservations
+      return reservations.values
+    end
+
+    def add_reservation(reservation)
+      reservations[reservation.id] = reservation
+    end
+
+    # Date interaction methods
 
     def includes_date?(new_date_range)
       return date_range.includes_date?(new_date_range)
@@ -33,18 +51,6 @@ module HotelSystem
 
     def overlap?(new_date_range)
       return date_range.overlap?(new_date_range)
-    end
-
-    def block_room(room)
-      room.add_block(self)
-    end
-
-    def has_room?(room)
-      return rooms.include?(room)
-    end
-
-    def all_reservations
-      return reservations.values
     end
   end
 end

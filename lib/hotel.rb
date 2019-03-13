@@ -12,14 +12,13 @@ module HotelSystem
   class Hotel
     attr_reader :rooms, :reservations, :blocks
 
-    def initialize
-      @rooms = []
-      (1..NUMBER_OF_ROOMS).each do |num|
-        rooms << room(id: num, rate: RATE_PER_NIGHT)
-      end
+    def initialize(rooms)
+      @rooms = rooms
       @reservations = {}
       @blocks = {}
     end
+
+    # 'Find' methods
 
     def find_room_by_id(room_id)
       return rooms.find { |room| room.id == room_id }
@@ -33,6 +32,8 @@ module HotelSystem
       return blocks[id]
     end
 
+    # 'Add' methods:
+
     def add_reservation(reservation)
       reservations[reservation.id] = reservation
     end
@@ -40,6 +41,8 @@ module HotelSystem
     def add_block(block)
       blocks[block.id] = block
     end
+
+    # 'All' methods:
 
     def all_reservations
       return reservations.values
@@ -49,18 +52,7 @@ module HotelSystem
       return blocks.values
     end
 
-    def make_reservation(room_id:, start_date:, end_date:, name:)
-      room = find_room_by_id(room_id)
-      (raise RoomError, "Room with id #{room_id} does not exist!") if !room
-      request_range = date_range(start_date, end_date)
-      id = generate_id.to_sym
-      check_room(room: room, date_range: request_range)
-      new_res = reservation(date_range: request_range,
-                            room: room,
-                            id: id, name: name)
-      update_reservations(room: room, reservation: new_res)
-      return new_res
-    end
+    # 'By date' methods:
 
     def reservations_by_date(date)
       date = parse_date(date)
@@ -74,14 +66,19 @@ module HotelSystem
       return blocks_on_date
     end
 
-    def list_available_rooms(date, exclude_blocked = true)
-      reserved = reservations_by_date(date).map { |reservation| reservation.room }
-      available_rooms = rooms - reserved
-      if exclude_blocked
-        blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
-        available_rooms = available_rooms - blocked
-      end
-      return available_rooms
+    # 'Make' methods
+
+    def make_reservation(room_id:, start_date:, end_date:, name:)
+      room = find_room_by_id(room_id)
+      (raise RoomError, "Room with id #{room_id} does not exist!") if !room
+      request_range = date_range(start_date, end_date)
+      id = generate_id.to_sym
+      check_room(room: room, date_range: request_range)
+      new_res = reservation(date_range: request_range,
+                            room: room,
+                            id: id, name: name)
+      update_reservations(room: room, reservation: new_res)
+      return new_res
     end
 
     def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
@@ -114,7 +111,26 @@ module HotelSystem
       return new_res
     end
 
+    # Other management methods:
+
+    def list_available_rooms(date, exclude_blocked = true)
+      reserved = reservations_by_date(date).map { |reservation| reservation.room }
+      available_rooms = rooms - reserved
+      if exclude_blocked
+        blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
+        available_rooms = available_rooms - blocked
+      end
+      return available_rooms
+    end
+
+    def set_room_price(room_id, new_rate)
+      room = find_room_by_id(room_id)
+      room.rate = new_rate
+    end
+
     private
+
+    # Private helper methods:
 
     def generate_id
       id = Faker::Alphanumeric.unique.alphanumeric 10
@@ -140,13 +156,10 @@ module HotelSystem
       return Date.parse(date_string)
     end
 
+    # private wrapper methods:
+
     def date_range(date1, date2)
       return HotelSystem::DateRange.new(date1, date2)
-    end
-
-    def room(id:, rate:)
-      return HotelSystem::Room.new(id: id,
-                                   rate: rate)
     end
 
     def reservation(date_range:, room:, id:, name:, block: nil)

@@ -3,7 +3,8 @@ require_relative "spec_helper"
 describe "Block class" do
   describe "initialize method" do
     before do
-      @hotel = HotelSystem::Hotel.new
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, start_date: "01 Feb 2020",
                                           end_date: "10 Feb 2020",
