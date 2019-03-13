@@ -4,9 +4,9 @@ require "date"
 module Hotel
   class Reservation
     attr_reader :name, :checkin_date, :num_of_nights
-    attr_accessor :room_num, :cost, :checkout_date, :reserved_nights
+    attr_accessor :room_num, :cost, :checkout_date, :reserved_nights, :block_reference
 
-    def initialize(name, checkin_date, num_of_nights)
+    def initialize(name, checkin_date, num_of_nights, block_reference: nil)
       @name = name
       @checkin_date = Date.parse(checkin_date)
 
@@ -19,6 +19,7 @@ module Hotel
       @checkout_date = @checkin_date + num_of_nights
       @reserved_nights = calculate_reserved_nights
       @room_num = nil
+      @block_reference = nil #create a password/use regex to check?
     end
 
     def calculate_reserved_nights

@@ -1,7 +1,7 @@
 module Hotel
   class Room
     attr_reader :number
-    attr_accessor :availability #, :status
+    attr_accessor :availability
 
     def initialize(number)
       @number = number

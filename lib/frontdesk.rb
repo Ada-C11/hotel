@@ -3,15 +3,18 @@ require "pry"
 
 module Hotel
   class Frontdesk
-    attr_accessor :rooms, :reservations
+    attr_accessor :rooms, :reservations, :block_reservations
 
     def initialize
-      @rooms = Frontdesk.all_rooms
+      @rooms = Frontdesk.create_rooms(20)
       @reservations = []
+      @block_reservations = []
     end
 
-    def request_reservation(name, checkin_date, num_of_nights)
-      reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
+    # def request_block(name, checkin_date, num_of_nights, num_of_rooms)
+    # end
+
+    def request_reservation(reservation)
       assign_room_number(reservation)
       @reservations << reservation
       return reservation
@@ -50,10 +53,10 @@ module Hotel
 
     private
 
-    def self.all_rooms
+    def self.create_rooms(number_of_rooms)
       room_list = []
       counter = 0
-      20.times do
+      number_of_rooms.times do
         room = Room.new(counter + 1)
         counter += 1
         room_list << room
@@ -62,3 +65,19 @@ module Hotel
     end
   end
 end
+
+# def request_reservation(name, checkin_date, num_of_nights)
+#     reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
+#     assign_room_number(reservation)
+#     @reservations << reservation
+#     return reservation
+#   end
+
+# def request_reservation(name, checkin_date, num_of_nights)
+#   pending_res = Hotel::Reservation.new(name, checkin_date, num_of_nights)
+#   available_rooms = find_available_rooms(pending_res.reserved_nights)
+#   pending_res.room_num = available_rooms.first.number
+#   available_rooms.first.add_reservation(pending_res)
+#   @reservations << pending_res
+#   return pending_res
+# end
