@@ -1,5 +1,5 @@
-require 'time'
-require 'date'
+require "time"
+require "date"
 
 module Hotel
   class Reservation
@@ -11,26 +11,19 @@ module Hotel
     COST_PER_NIGHT = 200.00
 
     # Constructor
-    def initialize (booking_ref:, room_number:, start_date:, end_date:, total_cost:)
-      
+    def initialize(booking_ref:, room_number:, start_date:, end_date:, total_cost:)
+
       # Instance variables visible to all methods within the Reservation class
-      
       @booking_ref = booking_ref
       @room_number = room_number
       @start_date = start_date
       @end_date = end_date
-      @total_cost = ((end_date - start_date) * 
-      COST_PER_NIGHT)
+      @total_cost = ((end_date - start_date) *
+                     COST_PER_NIGHT)
 
       if @start_date < Date.today
         raise ArgumentError, "start date cannot be before today's date."
       end
-
     end
   end # Class end
 end # Module end
-
-
-
-
-
