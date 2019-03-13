@@ -6,9 +6,9 @@ describe "Class named Room" do
       @room = Hotel::Room.new(
         room_number: 1,
       )
-      it "creates an instance of Room" do
-        expect(@room).must_be_kind_of Hotel::Room
-      end
+    end
+    it "creates an instance of Room" do
+      expect(@room).must_be_kind_of Hotel::Room
     end
   end
 end

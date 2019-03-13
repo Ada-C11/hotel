@@ -1,6 +1,5 @@
 module Hotel
   class Room
-
     STATUS = [:AVAILABLE, :UNAVAILABLE]
     COST = 200.00
 
@@ -11,6 +10,5 @@ module Hotel
       @room_number = room_number
       @cost = COST
     end
-    
   end # Class end
 end # Module end
