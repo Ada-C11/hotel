@@ -88,31 +88,35 @@ describe "Frontdesk request_block" do
     @frontdesk = Hotel::Frontdesk.new
     @block_res = Hotel::Reservation.new("Ursula Le Guin", "2019-07-08", 3, block_reference: "WIZARD PARTY")
     @blocked_rooms = @frontdesk.request_block(@block_res, 5)
+    @dates = @block_res.reserved_nights
   end
   it "reserves a block of rooms" do
+    date = (@dates[0]).to_s
     expect(@blocked_rooms).must_be_instance_of Array
-    expect(@blocked_rooms[2]).must_be_instance_of Hotel::Room
+    expect(@blocked_rooms[2]).must_be_instance_of Hotel::Reservation
     expect(@blocked_rooms.length).must_equal 5
-    expect(@frontdesk.find_available_rooms(dates).length).must_equal 15
-    expect(@frontdesk.find_reservation_by_date(dates).length).must_equal 5
-    expect(@block_res.block_reference).must_equal "BIRTHDAY"
+    expect(@frontdesk.find_available_rooms(@dates).length).must_equal 15
+    expect(@frontdesk.find_reservation_by_date(date).length).must_equal 5
+    expect(@block_res.block_reference).must_equal "WIZARD PARTY"
   end
   it "raises an ArgumentError when user requests more than 5 rooms" do
-    expect { @frontdesk.request_block(reservation, 6) }.must_raise ArgumentError
+    expect { @frontdesk.request_block(@block_res, 6) }.must_raise ArgumentError
   end
   it "raises an ArgumentError when no rooms are available to reserve" do
-    @block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
-    @block_res_3 = Hotel::Reservation.new("Agatha Christie", "2019-07-08", 3, block_reference: "MYSTERY PARTY")
-    @block_res_4 = Hotel::Reservation.new("Sally Rooney", "2019-07-08", 3, block_reference: "FICTION PARTY")
-    @frontdesk.request_block(@block_res_2, 5)
-    @frontdesk.request_block(@block_res_3, 5)
-    @frontdesk.request_block(@block_res_4, 3)
-    expect { @frontdesk.request_block(reservation, 3) }.must_raise ArgumentError
+    block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    block_res_3 = Hotel::Reservation.new("Agatha Christie", "2019-07-08", 3, block_reference: "MYSTERY PARTY")
+    block_res_4 = Hotel::Reservation.new("Sally Rooney", "2019-07-08", 3, block_reference: "FICTION PARTY")
+    block_res_5 = Hotel::Reservation.new("Leni Zumas", "2019-07-08", 3, block_reference: "SPECFIC PARTY")
+    @frontdesk.request_block(block_res_2, 5)
+    @frontdesk.request_block(block_res_3, 5)
+    @frontdesk.request_block(block_res_4, 3)
+    expect { @frontdesk.request_block(block_res_5, 3) }.must_raise ArgumentError
   end
   it "allows reservations to be made by those with block access" do
+    block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    expect(block_res_2.cost).must_equal 450
     #expects user can see if given block has any rooms available
     #expect that given the right 'password', user can book a blocked room
-    #expect cost should be adjusted for block price
     #expect that the available rooms in that block decrease by one
     #expect user can only book for those precise block dates
     #expect cost should be adjusted for block price
