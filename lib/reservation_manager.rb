@@ -27,4 +27,24 @@ class Reservation_manager
     end
     return reservations_with_date
   end
+
+  # def find_available_rooms(check_in_time, check_out_time)
+  #   available_rooms = (1..20).to_a
+  #   check_in = Date.parse(check_in_time)
+  #   check_out = Date.parse(check_out_time)
+
+  #   date_range_of_interest = (check_in..check_out).to_a
+
+  #   @reservations.each do |reservation|
+  #     date_range = (reservation.check_in_time..reservation.check_out_time).to_a
+  #     combined_range = date_range + date_range_of_interest
+
+  #     if combined_range.length != combined_range.uniq.length
+  #       # this is trying to subtract a number from an array which doesnt work
+  #       available_rooms -= reservation.room_number
+  #     end
+  #   end
+  #   binding.pry
+  #   return available_rooms
+  # end
 end
