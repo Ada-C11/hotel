@@ -2,22 +2,23 @@ require "date"
 require "pry"
 
 class Reservation
-  attr_reader :start_date, :end_date, :rooms, :reservation_dates, :duration, :total_cost, :reservation_durations_array, :room
+  attr_reader :start_date, :end_date, :rooms, :reservation_dates, :duration, :total_cost, :reservation_durations_array, :room, :cost
 
-  def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0")
+  def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200)
     @start_date = start_date
     @end_date = end_date
     @room = room
+    @cost = cost
   end
 
   def duration
     # add something to make sure date is not in past
 
-    duration = Date.parse(@end_date) - Date.parse(@start_date)
-    if duration < 1
+    trip_duration = Date.parse(@end_date) - Date.parse(@start_date)
+    if trip_duration < 1
       raise ArgumentError, "The duration must be at least one day"
     else
-      return duration
+      return trip_duration
     end
   end
 
@@ -27,7 +28,7 @@ class Reservation
   end
 
   def total_cost
-    cost = duration * 200
-    return cost
+    trip_cost = duration * @cost
+    return trip_cost
   end
 end

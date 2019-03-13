@@ -37,6 +37,26 @@ class ReservationManager
     return new_reservation
   end
 
+  def hotel_block(start_date: Date.today.to_s, end_date: (Date.today +1).to_s, cost: 100, rooms_array: ["0"])
+    start_date = start_date
+    end_date = end_date
+    cost = cost
+    rooms_array = rooms_array
+    blocked_rooms_array = []
+    rooms_array.each do |room|
+      @reservation_array.each do |reservation|
+        if reservation.room.include?(room)
+          raise ArgumentError, "A room in your desired block is booked during that time period"
+        end
+      end
+    end
+    rooms_array.each do |block_room|
+      block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
+      blocked_rooms_array << block_reservation
+    end
+    return blocked_rooms_array
+  end
+
   def view_all_rooms
     return @rooms
   end
