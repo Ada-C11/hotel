@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "Hotel_manager class" do
   before do
-    @hotel_manager = Hotel::Hotel_manager.new
+    @hotel_manager = Hotel::Hotel_manager.new(Hotel::Room.make_rooms_standard)
     @hotel_manager.make_reservation(1, "2019-3-15", "2019-3-20")
     @hotel_manager.make_reservation(2, "2019-3-15", "2019-3-18")
   end
