@@ -8,7 +8,7 @@ require_relative "reserve"
 require_relative "date_range"
 
 class RoomBooker < DateRange
-  attr_reader :check_in, :check_out, :list_all_rooms, :list_reservations
+  attr_reader :check_in, :check_out, :list_all_rooms, :list_reservations, :rooms
 
   def initialize
     @rooms = hotel_rooms
@@ -18,11 +18,11 @@ class RoomBooker < DateRange
   def make_reservation(check_in, check_out)
     room = find_room_id
     @reserved = Reservation.new(id: @reservations.length + 1, check_in: check_in, check_out: check_out, room_booked: room)
-    
+
     add_reservation(@reserved)
   end
 
-  def find_room_id
+  def find_available_room
     @all_rooms.each do |room|
       if room.bookings.empty?
         return room.id
@@ -43,11 +43,12 @@ class RoomBooker < DateRange
   end
 
   def list_all_rooms
-    return @all_rooms
+    @all_rooms.each do |room|
+      puts "Room number: #{room.id}, price: #{room.price}"
+    end
   end
 
   def list_reservations
     @reservations
   end
-
 end

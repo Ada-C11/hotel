@@ -34,6 +34,9 @@ describe "RoomBooker" do
       @Hotel.make_reservation("March 22 2019", "March 30th 2019")
     end
     it "can add a reservation to list of reservations" do
+      puts "******************"
+      puts "#{@Hotel.list_reservations}"
+
       expect(@Hotel.list_reservations.length).must_equal 2
     end
 
@@ -43,20 +46,23 @@ describe "RoomBooker" do
     end
 
     it "returns nil for a reservation id that does not exist" do
-      expect{
-        @Hotel.reservation[1337].id
-      }.must_be_nil
+      # implement this if searching for reservation id
     end
 
     it "raises an argument error if given invalid check-in" do
       expect {
-        @Hotel.make_reservation("March 10th", "March 15th 2019").must_raise ArgumentError
-      }
+        @Hotel.make_reservation("March 10th 2019", "March 15th 2019").must_raise ArgumentError
+      } # THIS SHOULD FAIL BUT IT PASSES!!!
     end
   end
 
   describe "find by reservation date" do
+    before do 
+      @Hotel.make_reservation("3/5/2019", "4/5/2015")
+    end
     it "can look up all reservations for a given date" do
+      puts "********************"
+      puts "#{@Hotel.list_reservations}"
     end
 
     it "will return nil if no reservations are made on that date" do
