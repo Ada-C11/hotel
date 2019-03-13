@@ -3,6 +3,7 @@ require_relative "spec_helper"
 describe "FrontDesk class" do
   let(:frontdesk) { Hotel::FrontDesk.new }
 
+  let(:feb2) { "February 3, 2011" }
   let(:feb3) { "February 3, 2011" }
   let(:feb4) { "February 4, 2011" }
   let(:feb5) { "February 5, 2011" }
@@ -36,13 +37,71 @@ describe "FrontDesk class" do
 
   describe "Reserve" do
     it "can reserve a room for given date range" do
-      expect(reservation).must_be_kind_of Hotel::Reservation
+      res = frontdesk.reserve(check_in: "feb5", check_out: "feb7")
+      expect(res).must_be_kind_of Hotel::Reservation
+    end
+
+    it "reserves first availaƒble room" do
+      res = frontdesk.reserve(check_in: "feb5", check_out: "feb7")
+      expect(res.room.number).must_equal 1
+    end
+
+    it "can reserve a room for a date range that's before another reservation" do
+      frontdesk.reserve(check_in: "feb5", check_out: "feb7")
+      expect(frontdesk.reserve(check_in: "feb2", check_out: "feb4")).must_be_kind_of Hotel::Reservation
+    end
+
+    it "can reserve a room for a date range that's after another reservation" do
+      frontdesk.reserve(check_in: "feb2", check_out: "feb4")
+      expect(frontdesk.reserve(check_in: "feb5", check_out: "feb7")).must_be_kind_of Hotel::Reservation
+    end
+
+    it "can reserve a room for a check-in that begins on another reservation's check-out date" do
+      frontdesk.reserve(check_in: "feb2", check_out: "feb4")
+      expect(frontdesk.reserve(check_in: "feb4", check_out: "feb7")).must_be_kind_of Hotel::Reservation
+    end
+
+    it "can reserve a room for a check-in that ends on another reservation's check-in date" do
+      frontdesk.reserve(check_in: "feb2", check_out: "feb4")
+      expect(frontdesk.reserve(check_in: "feb1", check_out: "feb2")).must_be_kind_of Hotel::Reservation
     end
 
     it "raises an ArgumentError if date range is invalid" do
       expect {
         frontdesk.reserve(check_in: feb5, check_out: feb3)
       }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if no room is not available for date range" do
+      20.times do
+        frontdesk.reserve(check_in: feb9, check_out: feb10)
+      end
+      expect { frontdesk.reserve(check_in: feb9, check_out: feb10) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if room is requested for same dates" do
+      frontdesk.reserve(check_in: feb3, check_out: feb5, room_number: 7)
+      expect { frontdesk.reserve(check_in: feb3, check_out: feb5, room_number: 7) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if room is requested for dates that overlap in the front" do
+      frontdesk.reserve(check_in: feb3, check_out: feb4, room_number: 7)
+      expect { frontdesk.reserve(check_in: feb3, check_out: feb5, room_number: 7) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if room is requested for dates that overlap in the back" do
+      frontdesk.reserve(check_in: feb3, check_out: feb5, room_number: 7)
+      expect { frontdesk.reserve(check_in: feb4, check_out: feb5, room_number: 7) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if room is requested for a range that is contained by another reservation" do
+      frontdesk.reserve(check_in: feb3, check_out: feb6, room_number: 7)
+      expect { frontdesk.reserve(check_in: feb4, check_out: feb5, room_number: 7) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if room is requested for a range that is containing another reservation" do
+      frontdesk.reserve(check_in: feb3, check_out: feb6, room_number: 7)
+      expect { frontdesk.reserve(check_in: feb2, check_out: feb7, room_number: 7) }.must_raise ArgumentError
     end
   end
 
@@ -128,7 +187,8 @@ describe "FrontDesk class" do
         expect(res.room.number).must_equal i + 1
       end
 
-      expect { fd.open_rooms(check_in: feb8, check_out: feb9) }.must_raise ArgumentError
+      expect(fd.open_rooms(check_in: feb8, check_out: feb9)).must_be_kind_of Array
+      expect(fd.open_rooms(check_in: feb8, check_out: feb9)).must_equal []
     end
   end
 

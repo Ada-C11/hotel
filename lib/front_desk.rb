@@ -20,9 +20,11 @@ module Hotel
 
       room = find_room_by_number(room_number: room_number) if room_number
 
-      room ||= assign_room(nights: nights)
+      if room && room.available?(range: nights) == false
+        raise ArgumentError, "That room is not available for those dates"
+      end
 
-      raise ArgumentError, "Room not available" unless room.available?(range: nights)
+      room ||= assign_room(nights: nights)
 
       reservation = Hotel::Reservation.new(nights: nights,
                                            room: room)
@@ -36,7 +38,6 @@ module Hotel
 
     def find_reservations_by_date(date:)
       date = Date.parse(date)
-      # on_this_date = []
 
       reservations.select { |reservation| reservation.nights.include?(date) }
     end
@@ -54,11 +55,7 @@ module Hotel
 
       nights ||= generate_nights(check_in: check_in, check_out: check_out)
 
-      avail_rooms = rooms.select { |room| room.available?(range: nights) }
-
-      raise ArgumentError, "No rooms available" if avail_rooms == []
-
-      return avail_rooms
+      rooms.select { |room| room.available?(range: nights) }
     end
 
     private
@@ -87,7 +84,13 @@ module Hotel
     end
 
     def assign_room(nights:)
-      open_rooms(nights: nights).first
+      open = open_rooms(nights: nights)
+
+      if open == []
+        raise ArgumentError, "No rooms available for those dates"
+      else
+        return open.first
+      end
     end
   end
 end
