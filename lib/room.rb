@@ -13,7 +13,7 @@ module HotelSystem
     #   @reservations << reservation
     # end
 
-    def date_overlap?(new_start_date, new_end_date)
+    def date_available?(new_start_date, new_end_date)
       @reservations.each do |reservation|
         if new_start_date == reservation.start_date
           return false

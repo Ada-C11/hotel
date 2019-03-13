@@ -18,11 +18,18 @@ module HotelSystem
       end
     end
 
-    def make_reservation
+    def make_reservation(room:, start_date:, end_date:, guest:)
+
     end
 
-    def find_available_room
-      # use this to populate the @room_number only with an available room?
+    def room_available?(new_start_date, new_end_date)
+      @all_rooms.each do |room|
+        if room.date_available?(new_start_date, new_end_date)
+          return room
+        else
+          next
+        end
+      end
     end
 
     def add_reservation

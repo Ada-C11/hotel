@@ -1,6 +1,4 @@
 require "date"
-require_relative "hotel"
-require_relative "room"
 
 module HotelSystem
   class Reservation

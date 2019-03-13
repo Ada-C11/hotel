@@ -24,27 +24,27 @@ describe "Room class" do
     end
 
     it "returns false if the chosen start date matches the start date of the reservation" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 11), Date.new(2019, 3, 12))).must_equal false
+      expect(@room.date_available?(Date.new(2019, 3, 11), Date.new(2019, 3, 12))).must_equal false
     end
 
     it "returns false if the chosen start date falls between the reservations start date and end date" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 13), Date.new(2019, 3, 15))).must_equal false
+      expect(@room.date_available?(Date.new(2019, 3, 13), Date.new(2019, 3, 15))).must_equal false
     end
 
     it "returns false if the chosen end date falls between the reservations start date and end date" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 10), Date.new(2019, 3, 12))).must_equal false
+      expect(@room.date_available?(Date.new(2019, 3, 10), Date.new(2019, 3, 12))).must_equal false
     end
 
     it "returns true if the chosen start date is after the reservations end date" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 15), Date.new(2019, 3, 17))).must_equal true
+      expect(@room.date_available?(Date.new(2019, 3, 15), Date.new(2019, 3, 17))).must_equal true
     end
 
     it "returns true if the chosen start date is on the same day as the reservations end date" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 14), Date.new(2019, 3, 15))).must_equal true
+      expect(@room.date_available?(Date.new(2019, 3, 14), Date.new(2019, 3, 15))).must_equal true
     end
 
     it "returns true if the chosen end date matches the start date of the reservation" do
-      expect(@room.date_overlap?(Date.new(2019, 3, 10), Date.new(2019, 3, 11))).must_equal true
+      expect(@room.date_available?(Date.new(2019, 3, 10), Date.new(2019, 3, 11))).must_equal true
     end
   end
 end
