@@ -32,5 +32,15 @@ module Hotel
       end
       return reservations_by_date
     end
+
+    def available_rooms(date)
+      p_date = Date.parse(date)
+      #this returns the room number for the first room unavailable room
+      # unavail_rooms = reservations_by_date(p_date)[0].room_number
+      unavail_rooms = reservations_by_date(p_date).map do |reservation|
+        reservation.room_number
+      end
+      return unavail_rooms
+    end
   end
 end

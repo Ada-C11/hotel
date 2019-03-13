@@ -1,4 +1,5 @@
 require_relative "spec_helper"
+require "awesome_print"
 
 describe "Reservation_manager instantiation" do
   it "is an instance of Reservation Manager" do
@@ -29,6 +30,18 @@ describe "reservations_by_date method" do
     reservation2 = manager.make_reservation(7, "march 17, 2019", "march 22, 2019")
     date = Date.parse("march 18, 2019")
     list_reservations = manager.reservations_by_date(date)
+    ap list_reservations
     expect(list_reservations.length).must_equal 2
+  end
+end
+
+describe "available_rooms method" do
+  it "can return available rooms for a specified date" do
+    manager = Hotel::ReservationManager.new
+    reservation1 = manager.make_reservation(2, "march 15, 2019", "march 20, 2019")
+    reservation2 = manager.make_reservation(3, "march 17, 2019", "march 22, 2019")
+    date = "march 18, 2019"
+    unavail_rooms = manager.available_rooms(date)
+    ap unavail_rooms
   end
 end
