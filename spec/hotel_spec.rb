@@ -3,7 +3,7 @@ require_relative "../lib/hotel.rb"
 
 describe "hotel class" do
   before do
-    @hotel = HotelSystem::Hotel.new
+    @hotel = HotelSystem::Hotel.new(20)
   end
   describe "hotel instantiation" do
     it "will create a new hotel" do
@@ -86,6 +86,35 @@ describe "hotel class" do
 
     it "will return the first available room" do
       expect(@room.room_number).must_equal 1
+    end
+
+    it "will raise an error if no room is available for a start day of 20 reservations" do
+      20.times do 
+        @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
+      end
+
+      expect{
+        @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 4)
+      }.must_raise NotImplementedError
+    end
+
+    it "will raise an error if no room is available for a middle day of 20 reservations" do
+      20.times do 
+        @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
+      end
+
+      expect{
+        @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 6)
+      }.must_raise NotImplementedError
+    end
+
+    it "will return a room when it is requested on the checkout day of other reservations" do
+      20.times do 
+        @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
+      end
+
+      room = @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 9)
+      expect(room.room_number).must_equal 1
     end
   end
 

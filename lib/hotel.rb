@@ -8,13 +8,17 @@ module HotelSystem
     attr_reader :rooms
     attr_accessor :reservations
 
-    def initialize
+    def initialize(number_of_rooms)
       @rooms = []
-      (1..20).each do |num|
+      add_rooms(number_of_rooms)
+      @reservations = []
+    end
+
+    def add_rooms(number)
+      (1..number).each do |num|
         room = HotelSystem::Room.new(num)
         @rooms << room
       end
-      @reservations = []
     end
 
     def valid_date_entry?(year, month, day)
@@ -61,7 +65,11 @@ module HotelSystem
       end
         res_room.reservations.each do |res|
           if res.date_range.include?(date)
-          return true
+            if date == res.date_range.checkout
+              return false
+            else
+              return true
+            end
           end
         end
       return false
@@ -75,7 +83,7 @@ module HotelSystem
           return hotel_room
         end
       end
-        return "Sorry, no available rooms for that date."
+        raise NotImplementedError, "Sorry, no available rooms for that date."
     end
 
     def reservations_by_date(year:, month:, day:)
