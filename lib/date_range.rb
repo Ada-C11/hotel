@@ -3,7 +3,7 @@ require_relative "err/errors"
 
 module HotelSystem
   class DateRange
-    attr_reader :start_date, :end_date, :dates
+    attr_reader :start_date, :end_date
 
     def initialize(start_date_string, end_date_string)
       @start_date = Date.parse(start_date_string)
@@ -11,7 +11,10 @@ module HotelSystem
       if (@end_date <= @start_date)
         raise DateRangeError, "End date must be after start date"
       end
-      @dates = (@start_date...@end_date).to_a
+    end
+
+    def dates
+      return(@start_date...@end_date).to_a
     end
 
     def includes_date?(date)

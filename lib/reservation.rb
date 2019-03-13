@@ -8,6 +8,7 @@ module HotelSystem
       @date_range = date_range
       @name = name
       @block = block
+      update_reservation_listings
     end
 
     # Calculation methods
@@ -24,6 +25,16 @@ module HotelSystem
       return date_range.length
     end
 
+    # room interaction methods
+    def add_res_to_room
+      room.add_reservation(self)
+    end
+
+    # block interaction methods
+    def add_res_to_block
+      block.add_reservation(self) if block
+    end
+
     # Date interaction methods
 
     def includes_date?(date)
@@ -32,6 +43,13 @@ module HotelSystem
 
     def overlap?(new_date_range)
       return date_range.overlap?(new_date_range)
+    end
+
+    # helpers
+
+    def update_reservation_listings
+      add_res_to_room
+      add_res_to_block
     end
   end
 end

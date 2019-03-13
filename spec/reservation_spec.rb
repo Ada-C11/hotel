@@ -20,6 +20,10 @@ describe "Reservation class" do
         )
       }.must_raise DateRangeError
     end
+    it "can add itself to its room's reservation collection" do
+      expect(@new_room.reservations.length).must_equal 1
+      expect(@new_room.find_res_by_id(@new_res.id)).must_equal @new_res
+    end
   end
   describe "reader_methods" do
     before do

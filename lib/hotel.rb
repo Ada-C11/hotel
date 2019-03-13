@@ -4,6 +4,7 @@ require_relative "block"
 require_relative "err/errors"
 
 require "faker"
+require "pry"
 
 module HotelSystem
   class Hotel
@@ -74,7 +75,7 @@ module HotelSystem
       new_res = reservation(date_range: request_range,
                             room: room,
                             id: id, name: name)
-      update_reservations(room: room, reservation: new_res)
+      self.add_reservation(new_res)
       return new_res
     end
 
@@ -104,7 +105,7 @@ module HotelSystem
                             room: room,
                             name: name,
                             block: block)
-      update_reservations(block: block, room: room, reservation: new_res)
+      self.add_reservation(new_res)
       return new_res
     end
 
@@ -132,12 +133,6 @@ module HotelSystem
     def generate_id
       id = Faker::Alphanumeric.unique.alphanumeric 10
       return id.upcase
-    end
-
-    def update_reservations(block: nil, room: nil, reservation:)
-      self.add_reservation(reservation)
-      block.add_reservation(reservation) if block
-      room.add_reservation(reservation) if room
     end
 
     def check_room(room:, date_range:, ignore_blocked: false)

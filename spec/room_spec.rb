@@ -24,21 +24,7 @@ describe "Room class" do
       expect(@new_room.reservations).must_be_empty
     end
   end
-  describe "add reservation" do
-    before do
-      @new_room = HotelSystem::Room.new(id: 1, rate: 200)
-      @date_range = HotelSystem::DateRange.new("01 Feb 2020", "08 Feb 2020")
-      @new_res = HotelSystem::Reservation.new(date_range: @date_range, room: @new_room, id: 1, name: "Ada")
-    end
-    it "can add a reservation to the room" do
-      before = @new_room.reservations.length
-      @new_room.add_reservation(@new_res)
-      after = @new_room.reservations.length
 
-      expect(after).must_equal before + 1
-      expect(@new_room.reservations[@new_res.id]).must_equal @new_res
-    end
-  end
   describe "is reserved" do
     before do
       @new_room = HotelSystem::Room.new(id: 1, rate: 200)
