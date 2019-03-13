@@ -1,5 +1,6 @@
 require_relative "spec_helper"
 require 'date'
+require 'pry'
 
 describe "Hotel class" do
   describe "initialize" do
@@ -21,9 +22,27 @@ describe "Hotel class" do
     end
   end
 
+  describe "make_reservation method" do
+    before do
+    end
+
+    it "can make a reservation" do
+    end
+
+    it "can assign a room, that doesn't have other conflicting reservations, to the reservation on hand" do
+    end
+
+    it "can add the reservation to the @all_reservations array" do
+    end
+
+    it "can add the reservation to the assigned room's reservation array" do
+    end
+  end
+
   describe "room_available? method" do
     before do
       @hotel = HotelSystem::Hotel.new
+      @hotel.all_rooms.slice!(2..19)
 
       @reservation1 = HotelSystem::Reservation.new(room: 1,
                                                    start_date: Date.new(2019, 3, 10),
@@ -43,11 +62,15 @@ describe "Hotel class" do
     end
 
     it "assigns the first available room" do
-      expect(@hotel.room_available?(Date.new(2019, 3, 13), Date.new(2019, 3, 14))).must_equal @hotel.all_rooms[0]
+      expect(@hotel.room_available?(Date.new(2019, 3, 13), Date.new(2019, 3, 14))).must_equal true
     end
 
     it "assigns a subsequent room if previous rooms have a conflicting reservation" do
-      expect(@hotel.room_available?(Date.new(2019, 3, 11), Date.new(2019, 3, 14))).must_equal @hotel.all_rooms[1]
+      expect(@hotel.room_available?(Date.new(2019, 3, 11), Date.new(2019, 3, 14))).must_equal true
+    end
+
+    it "returns false if no room is available during the specified dates" do
+      expect(@hotel.room_available?(Date.new(2019, 3, 11), Date.new(2019, 3, 15))).must_equal false
     end
   end
 end
