@@ -29,15 +29,9 @@ describe "tests the includes_date? method" do
   before do
     @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
   end
-
-  it "finds if date is included in date span" do
-    date_query = Date.parse("2019-07-20")
-    date_match = @dates.includes_date?(date_query)
-    expect(date_match).must_equal true
-  end
 end
 
-describe "testing for date overlap method" do
+describe "testing of date overlap method" do
   it "finds if date ranges overlap" do
     dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
     dates2 = Hotel::DateSpan.new("2019-07-22", "2019-07-24")

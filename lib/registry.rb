@@ -1,27 +1,35 @@
 require 'date'
 require_relative 'datespans.rb'
 module Hotel
-  NUM_ROOMS = 20
 
   class Registry
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = Hotel::Hotel.rooms
-      @reservations = Hotel::reservations
+      @rooms = Hotel::Construction.new.rooms
+      @reservations = []
+    end
+
+    def new_reservation(input)
+      dates = [input[:check_in], input[:check_out]]
+      res_id = @reservations.length + 1
+      room = unoccupied_room(dates)
+      reservation_data = {
+        id: res_id,
+        room: room,
+        span: (dates[0..1])
+      }
+
+      new_res = Reservation.new(reservation_data)
+      @reservations << new_res
+    end
+
+    def nice_room
+      get first available room
     end
 
     def res_list
-      room = find_room(reservation[:room])
-      start_date = Date.parse(reservation[:check_in])
-      end_date = Date.parse(reservation[:check_out])
-      span = DateSpan.new(check_in, check_out)
-      reservation = {
-      id: reservation[:id],
-      rm_id: rm_id,
-      }
-      @reservations << reservation
-      return @reservations
+      @reservations.inspect
     end
 
     def find_by_date(date)
@@ -29,12 +37,12 @@ module Hotel
       by_date = @reservations.select do |entry|
         entry.date.find_in_range(date)
       end
-        by_date
+      by_date
     end
 
-    def find_in_range(span)
+    def find_in_range(given_span)
     in_range = @reservations.select do |entry|
-      entry.span.overlaps?(span)
+      entry.span.overlaps?(given_span)
       end
       in_range
     end
@@ -43,7 +51,7 @@ module Hotel
       conflicts = find_in_range(span)
       available_rooms = @rooms.reject do |room|
         conflicts.find do |entry|
-          entry.room_number == room[:room_number]
+          entry.rm_id == room[:rm_id]
         end
       end
       return available_rooms

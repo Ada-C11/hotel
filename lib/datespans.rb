@@ -17,17 +17,12 @@ module Hotel
       return stay_length
     end
 
-    def get_range
+    def span
       return [*@check_in...@check_out]
     end
 
-    def includes_date?
-
-    end
-
-    def overlaps?(span)
-      overlap = @check_in < span.check_out && span.check_in < @check_out
-      return overlap
+    def overlaps?(existing_span)
+      return !(existing_span.span & self.span).empty?
     end
   end
 end

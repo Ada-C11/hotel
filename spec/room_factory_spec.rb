@@ -1,11 +1,9 @@
-require 'spec_helper.rb'
+require_relative 'spec_helper.rb'
 
 describe "Room class" do
   before do
-    @room = Hotel::Room.new(
-      rm_id: 1,
-      cost: COST
-    )
+    input = {rm_id: "Room #150", cost: COST}
+    @room = Hotel::Room.new(input)
   end
 
   describe "Room instantiation" do
@@ -15,9 +13,18 @@ describe "Room class" do
 
 
     it "has good types" do
+      expect(@room.rm_id).must_be_kind_of String
+      expect(@room.cost).must_be_kind_of Float
+    end
+  end
 
-      expect(@room.rm_id).must_be_kind_of Integer
-      expect(@room.rate).must_be_kind_of Float
+  describe "Building a new hotel" do
+    before do
+      @new_hotel = Hotel::Construction.new
+    end
+
+    it "is an instance of Construction" do
+      expect(@new_hotel).must_be_kind_of Hotel::Construction
     end
   end
 end

@@ -21,15 +21,9 @@ describe "Registry class" do
       expect(@report.rooms).must_be_kind_of Array
       expect(@report.reservations).must_be_kind_of Array
     end
-  end
 
-  describe "rooms" do
-    before do
-      @report = Hotel::Registry.new
-    end
     it "returns an array all of the rooms in the hotel" do
       expect(@report.rooms.length).must_equal 20
     end
-
   end
 end
