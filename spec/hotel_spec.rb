@@ -45,7 +45,7 @@ describe "hotel class" do
 
   describe "create_date_list method" do
     before do
-      @dates = @hotel.create_date_list(start_year: 19, start_month: 11, start_day: 15, num_nights: 5)
+      @dates = @hotel.create_date_list(start_year: 2019, start_month: 11, start_day: 15, num_nights: 5)
     end
 
     it "returns a DateRange" do
@@ -56,20 +56,20 @@ describe "hotel class" do
   describe "room_reserved? method" do
     before do
       3.times do
-        @hotel.reserve_room(start_year: 19, start_month: 12, start_day: 5, num_nights: 4)
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       end
 
-      @dates = @hotel.create_date_list(start_year: 19, start_month: 12, start_day: 5, num_nights: 4)
+      @dates = @hotel.create_date_list(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
     end
 
     it "will return false if the room is not reserved" do
-      status = @hotel.room_reserved?(room_number: 19, year: 19, month: 12, day: 5)
+      status = @hotel.room_reserved?(room_number: 19, year: 2019, month: 12, day: 5)
 
       expect(status).must_equal false
     end
 
     it "will return true if the room is reserved" do
-      status = @hotel.room_reserved?(room_number: 1, year: 19, month: 12, day: 5)
+      status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 5)
 
       expect(status).must_equal true
     end
@@ -77,8 +77,8 @@ describe "hotel class" do
 
   describe "find_available_room method" do
     before do
-      @res_dates = @hotel.create_date_list(start_year: 19, start_month: 1, start_day: 2)
-      @room = @hotel.find_available_room(start_year: 19, start_month: 1, start_day: 2)
+      @res_dates = @hotel.create_date_list(start_year: 2019, start_month: 1, start_day: 2)
+      @room = @hotel.find_available_room(start_year: 2019, start_month: 1, start_day: 2)
     end
     it "will return a room if a room is available" do
       expect(@room).must_be_kind_of HotelSystem::Room
@@ -92,7 +92,7 @@ describe "hotel class" do
   describe "reserve_room method" do
     before do
       3.times do
-        @hotel.reserve_room(start_year: 19, start_month: 12, start_day: 5, num_nights: 4)
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       end
     end
 

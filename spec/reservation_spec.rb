@@ -4,7 +4,7 @@ require_relative "../lib/date_range.rb"
 
 describe "reservation initalization" do
     before do
-        @dates = HotelSystem::DateRange.new(start_year: 19, start_day: 1, start_month: 1, num_nights: 4)
+        @dates = HotelSystem::DateRange.new(start_year: 2019, start_day: 1, start_month: 1, num_nights: 4)
         @reservation = HotelSystem::Reservation.new(id: 1, room_number: 1, date_range: @dates)
     end
 
