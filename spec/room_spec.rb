@@ -45,7 +45,7 @@ describe "Room class" do
       @reserved_room = @reservation.room
     end
 
-    it "decides a room is unavailable if a reservation has the same given date range" do
+    it "decides a room is unavailable if the given date range matches a reservation" do
       @check_in = Date.parse(@check_in)
       @check_out = Date.parse(@check_out)
       date_range = (@check_in..@check_out)
@@ -54,7 +54,7 @@ describe "Room class" do
       expect(availability).must_equal false
     end
 
-    it "decides a room is unavailable if a reservation overlaps with the given date range" do
+    it "decides a room is unavailable if the given date range overlaps with a reservation" do
       @check_in = (Date.parse(@check_in)) + 2
       @check_out = Date.parse(@check_out)
       date_range = (@check_in..@check_out)
@@ -63,7 +63,16 @@ describe "Room class" do
       expect(availability).must_equal false
     end
 
-    it "decides a room is available if a reservation's check_out day and a query's check_in day are the same" do
+    it "decides a room is available if there's no overlap between date ranges" do
+      @check_in = Date.parse(@check_in) + 10
+      @check_out = Date.parse(@check_out) + 10
+      date_range = (@check_in..@check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal true
+    end
+
+    it "decides a room is available when a given date range's check_in day equals a reservation's check_out day" do
       @check_in = Date.parse(@check_out)
       @check_out = (Date.parse(@check_out)) + 5
       date_range = (@check_in..@check_out)
