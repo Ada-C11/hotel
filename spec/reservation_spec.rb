@@ -19,23 +19,23 @@ describe "Reservation" do
     it "raises ArgumentError when date supplied is not an instance of Date" do
       expect do
         BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
-                                                  checkin_date: (2019-1-1),
-                                                  checkout_date: (2018-1-1))
+                                        checkin_date: (2019-1-1),
+                                        checkout_date: (2018-1-1))
       end.must_raise ArgumentError
     end 
 
     it "raises ArgumentError when check-out date is later than check-in date" do
       expect do
         BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
-        checkin_date: Date.new(2019, 1, 1),
-        checkout_date: Date.new(2018, 1, 1))
+                                        checkin_date: Date.new(2019, 1, 1),
+                                        checkout_date: Date.new(2018, 1, 1))
       end.must_raise ArgumentError
     end
   end
 
   describe "#total_cost" do
     it "calculates total cost of a reservation" do
-      expect(@reservation.total_cost).must_equal 2000
+      expect(@reservation.total_cost).must_equal (10 * STANDARD_RATE)
     end
   end
 end
