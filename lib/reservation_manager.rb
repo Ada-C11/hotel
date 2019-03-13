@@ -42,12 +42,12 @@ class ReservationManager
     date_range[0..-2].each do |date| # excluding last day of date range b/c you don't need a room that night
       @reservation_array.each do |reservation|
         if reservation.reservation_dates[0..-2].include?(date) # excluding last day of date range (like above)
-          booked_rooms << reservation.room
+          booked_rooms << reservation.room #booked rooms are not avail bc at least one day of date_range is booked
         end
       end
     end
-    available_rooms = rooms - booked_rooms
-    binding.pry
-    return available_rooms # these rooms are avail to book because at least one day is booked
+    available_rooms = rooms - booked_rooms #subtract booked_rooms from general rooms array to find the available rooms
+    # binding.pry
+    return available_rooms
   end
 end
