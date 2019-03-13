@@ -3,7 +3,6 @@ require_relative "reservation"
 
 module Hotel
   class Booker
-    SALES_TAX_ADJUSTMENT = 1.09
     attr_reader :manifest
 
     def initialize(manifest: Manifest.new)
@@ -16,7 +15,7 @@ module Hotel
     end
 
     def total_cost_of_booking(reservation, room)
-      return room.cost_per_night * reservation.duration * SALES_TAX_ADJUSTMENT
+      return room.cost_per_night * reservation.duration
     end
 
     def room_base_cost
