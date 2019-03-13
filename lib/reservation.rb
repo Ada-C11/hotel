@@ -19,7 +19,7 @@ class Reservation
     else
       @check_out = Date.parse(check_out)
     end
-    #assign random room for sample 1
+    #assign random room for wave 1
     @room = all_rooms.sample
   end
 
