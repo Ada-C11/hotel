@@ -14,7 +14,6 @@ describe "Registry class" do
     it "Has rooms and reservations" do
       expect(@report).must_respond_to :rooms
       expect(@report).must_respond_to :reservations
-      # expect(@booking).must_respond_to :availibility
     end
 
     it "is set up for specific attributes and data types" do
