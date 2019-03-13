@@ -10,6 +10,8 @@ module Hotel
         end
 
         def available?(date)
+            desired_date = Date.iso8601(date.to_s)
+            return status
         end
 
     end
