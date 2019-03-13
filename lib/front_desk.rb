@@ -16,48 +16,46 @@ module Hotel
     end
 
     def reserve(start_date:, end_date:)
-      start_date = Date.parse(start_date)
-      end_date = Date.parse(end_date)
+      nights = generate_nights(start_date: start_date, end_date: end_date)
 
-      if start_date >= end_date
-        raise ArgumentError, "Reservation must be at least one day long"
-      end
+      reservation = Hotel::Reservation.new(nights: nights,
+                                           room: assign_room(array_of_nights: nights))
 
-      dates = generate_dates(start_date: start_date, end_date: end_date)
-
-      reservation = Hotel::Reservation.new(dates: dates,
-                                           room: assign_room(array_of_dates: dates))
-
-      reservation.room.booked_dates.concat(dates)
+      reservation.room.booked_nights.concat(nights)
 
       reservations << reservation
 
       return reservation
     end
 
-    def find_by_date(date:)
+    def find_reservations_by_date(date:)
       date = Date.parse(date)
       on_this_date = []
 
-      reservations.select { |reservation| reservation.dates.include?(date) }
+      reservations.select { |reservation| reservation.nights.include?(date) }
     end
 
-    def find_by_room(room_number:)
-      rooms.find { |room| room.number == room_number }
+    def find_room_by_number(room_number:)
+      found_room = rooms.find { |room| room.number == room_number }
+      raise ArgumentError, "That room doesn't exist" unless found_room
+      return found_room
     end
 
-    def open_rooms(date:)
-      # open_rooms = rooms.reject do |room|
-      #   room.booked_dates.include?(date)
-      # end
+    def open_rooms(start_date:, end_date:)
+      nights = generate_nights(start_date: start_date, end_date: end_date)
 
-      open = rooms.find_all { |room| room.available?(date: date) }
-      p open
-      # if open != true
-      #   raise ArgumentError, "No rooms available"
-      # end
+      avail_rooms = []
+      rooms.each do |room|
+        nights.each do |date|
+          if room.available?(date: date)
+            avail_rooms << room
+          end
+        end
+      end
 
-      return open
+      raise ArgumentError, "No rooms available" if avail_rooms == []
+
+      return avail_rooms
     end
 
     private
@@ -68,20 +66,25 @@ module Hotel
       return rooms
     end
 
-    def generate_dates(start_date:, end_date:)
-      dates = []
+    def generate_nights(start_date:, end_date:)
+      start_date = Date.parse(start_date)
+      end_date = Date.parse(end_date)
+      if start_date >= end_date
+        raise ArgumentError, "Reservation must be at least one day long"
+      end
+      nights = []
       night = start_date
       until night == end_date # not including end date
-        dates << night
+        nights << night
         night += 1 # go to the next day
       end
-      return dates
+      return nights
     end
 
-    def assign_room(array_of_dates:)
+    def assign_room(array_of_nights:)
       assigned_room = nil
       rooms.each do |room|
-        array_of_dates.each do |date|
+        array_of_nights.each do |date|
           if room.available?(date: date)
             assigned_room = room
             break
