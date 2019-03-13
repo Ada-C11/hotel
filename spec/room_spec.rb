@@ -55,28 +55,70 @@ describe "Room class" do
     end
 
     it "returns false if the given date range STARTS on reservaton's check_in day and ENDS DURING" do
+      check_in = Date.parse(@check_in)
+      check_out = Date.parse("2020-03-22")
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns false if the given date range STARTS on reservation's check_in day and ENDS AFTER" do
+      check_in = Date.parse(@check_in)
+      check_out = Date.parse("2020-04-1")
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns true if the given date range STARTS BEFORE and ENDS BEFORE a reservation's date range" do
+      check_in = Date.parse(@check_in) - 10
+      check_out = Date.parse(@check_out) - 10
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal true
     end
 
     it "returns false if the given date range STARTS BEFORE and ENDS DURING a reservation's date range" do
+      check_in = Date.parse(@check_in) - 10
+      check_out = Date.parse(@check_in) + 2
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns false if the date range STARTS BEFORE a reservation and ENDS ON a reservation's check_out day" do
+      check_in = Date.parse(@check_in) - 10
+      check_out = Date.parse(@check_out)
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns false if the date range STARTS BEFORE and ENDS AFTER a reservation" do
+      check_in = Date.parse(@check_in) - 10
+      check_out = Date.parse(@check_out) + 5
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns false if the given date range STARTS DURING and ENDS DURING a reservation" do
+      check_in = Date.parse(@check_in) + 1
+      check_out = Date.parse(@check_in) + 3
+      date_range = (check_in..check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns false if the given date range STARTS DURING and ENDS ON reservation's check_out day" do
-      @check_in = (Date.parse(@check_in)) + 2
+      @check_in = Date.parse(@check_in) + 1
       @check_out = Date.parse(@check_out)
       date_range = (@check_in..@check_out)
       availability = @reserved_room.is_available?(date_range)
@@ -85,12 +127,15 @@ describe "Room class" do
     end
 
     it "returns false if the given date range STARTS DURING and ENDS AFTER a reservation's date range" do
+      @check_in = Date.parse(@check_in) + 1
+      @check_out = Date.parse(@check_out) + 2
+      date_range = (@check_in..@check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
     end
 
     it "returns true if the given date range STARTS AFTER and ENDS AFTER a reservation" do
-    end
-
-    it "returns true if there's NO overlap between date ranges" do
       @check_in = Date.parse(@check_in) + 10
       @check_out = Date.parse(@check_out) + 10
       date_range = (@check_in..@check_out)
