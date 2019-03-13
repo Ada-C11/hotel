@@ -9,7 +9,7 @@ require 'minitest/reporters'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 require 'date'
-require_relative '../lib/datespans.rb'
-require_relative '../lib/reservations.rb'
-require_relative '../lib/registry.rb'
-require_relative '../lib/room_factory.rb'
+require_relative '../lib/datespans'
+require_relative '../lib/reservations'
+require_relative '../lib/registry'
+require_relative '../lib/room_factory'

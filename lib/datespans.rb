@@ -1,5 +1,3 @@
-require "date"
-
 module Hotel
   class DateSpan
     attr_reader :check_in, :check_out

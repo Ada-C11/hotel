@@ -1,5 +1,4 @@
-require_relative "spec_helper"
-
+require_relative 'spec_helper'
 
 describe "initialize" do
   before do
