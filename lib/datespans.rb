@@ -6,21 +6,21 @@ module Hotel
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
 
-      raise ArgumentError, "Check-in must be after today." unless @check_in > Date.today
-      raise ArgumentError, "Check-out must be after check-in." unless @check_in < @check_out
+      raise ArgumentError, 'Check-in date past.' unless @check_in > Date.today
+      raise ArgumentError, 'Reverse in/out dates.' unless @check_in < @check_out
     end
 
     def stay_length
       stay_length = (check_out - check_in).to_i
-      return stay_length
+      stay_length
     end
 
     def span
-      return [*@check_in...@check_out]
+      [*@check_in...@check_out]
     end
 
     def overlaps?(existing_span)
-      return !(existing_span.span & self.span).empty?
+      !(existing_span.span & span).empty?
     end
   end
 end

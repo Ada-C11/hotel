@@ -1,11 +1,10 @@
-HOTEL_SIZE = 20
-COST = 200.00
 module Hotel
-
+  HOTEL_SIZE = 20
+  COST = 200.00
   class Room
     attr_reader :rm_id, :cost
 
-    def initialize(input)
+    def initialize(**input)
       @rm_id = input[:rm_id]
       @cost = input[:cost]
     end

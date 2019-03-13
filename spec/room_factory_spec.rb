@@ -1,5 +1,6 @@
 require_relative 'spec_helper.rb'
-
+HOTEL_SIZE = 20
+COST = 200.00
 describe "Room class" do
   before do
     input = {rm_id: "Room #150", cost: COST}
