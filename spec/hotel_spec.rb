@@ -26,8 +26,8 @@ describe "Hotel class" do
     end
 
     it "contains an empty array hotel_block" do
-      expect(@hotel.hotel_block).must_be_kind_of Array
-      expect(@hotel.hotel_block.length).must_equal 0
+      expect(@hotel.hotel_blocks).must_be_kind_of Array
+      expect(@hotel.hotel_blocks.length).must_equal 0
     end
   end
 
@@ -129,37 +129,42 @@ describe "Hotel class" do
     end
   end
 
-  describe "#hotel_block" do
-    before do
-      new_reservation = @hotel.reserve_room(333, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 0)
-      new_reservation2 = @hotel.reserve_room(334, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 1)
-      new_reservation3 = @hotel.reserve_room(335, Date.new(2001, 3, 9), Date.new(2001, 3, 15), 2)
-      new_reservation4 = @hotel.reserve_room(336, Date.new(2001, 3, 4), Date.new(2001, 3, 12), 12)
+  #   describe "#hotel_block" do
+  #     before do
+  #       new_reservation = @hotel.reserve_room(333, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 0)
+  #       new_reservation2 = @hotel.reserve_room(334, Date.new(2001, 3, 5), Date.new(2001, 3, 7), 1)
+  #       new_reservation3 = @hotel.reserve_room(335, Date.new(2001, 3, 9), Date.new(2001, 3, 15), 2)
+  #       new_reservation4 = @hotel.reserve_room(336, Date.new(2001, 3, 4), Date.new(2001, 3, 12), 12)
 
-      @hotel.add_reservation(new_reservation)
-      @hotel.add_reservation(new_reservation2)
-      @hotel.add_reservation(new_reservation3)
-      @hotel.add_reservation(new_reservation4)
+  #       @hotel.add_reservation(new_reservation)
+  #       @hotel.add_reservation(new_reservation2)
+  #       @hotel.add_reservation(new_reservation3)
+  #       @hotel.add_reservation(new_reservation4)
 
-      new_reservation.room.add_reservation(new_reservation)
-      new_reservation2.room.add_reservation(new_reservation2)
-      new_reservation3.room.add_reservation(new_reservation3)
-      new_reservation4.room.add_reservation(new_reservation4)
-    end
+  #       new_reservation.room.add_reservation(new_reservation)
+  #       new_reservation2.room.add_reservation(new_reservation2)
+  #       new_reservation3.room.add_reservation(new_reservation3)
+  #       new_reservation4.room.add_reservation(new_reservation4)
+  #     end
 
-    it "creates a Hotel Block that is added to #hotel_block array" do
-      # can be a hash
+  #     it "creates a Hotel Block that is added to #hotel_block array" do
+  #       # can be a hash
 
-      start_date = Date.new(2011, 2, 5)
-      end_date = Date.new(2011, 2, 10)
-      collection_rooms = [2, 3, 4, 5]
-      discounted_rate = 150
-      hotel_block_reserved = @hotel.reserve_hotel_block(start_date, end_date, collection_rooms, discounted_rate)
-      expect(@hotel.hotel_block.length).must_equal 1
-      expect(@hotel.hotel_block[0][:collection_rooms]).must_equal collection_rooms
-    end
+  #       start_date = Date.new(2001, 2, 5)
+  #       end_date = Date.new(2001, 2, 10)
+  #       collection_rooms = [2, 3, 4, 5]
+  #       discounted_rate = 150
+  #       hotel_block_reserved = @hotel.reserve_hotel_block(1, start_date, end_date, collection_rooms, discounted_rate)
+  #       expect(@hotel.hotel_block.length).must_equal 1
+  #       expect(@hotel.hotel_block[0][:collection_rooms]).must_equal collection_rooms
+  #     end
 
-    it "is of type array" do
-    end
-  end
+  #     it "raises an argument error if tries to create Hotel Block and one of the rooms is unavailable for the given data range" do
+  #       start_date = Date.new(2001, 3, 5)
+  #       end_date = Date.new(2001, 3, 10)
+  #       collection_rooms = [0, 1, 2, 3, 4, 5]
+  #       discounted_rate = 150
+  #       expect { @hotel.reserve_hotel_block(1, start_date, end_date, collection_rooms, discounted_rate) }.must_raise ArgumentError
+  #     end
+  #   end
 end

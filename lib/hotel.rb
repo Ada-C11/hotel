@@ -1,12 +1,12 @@
 module Hotel
   class Hotel
-    attr_reader :id, :rooms, :reservations, :hotel_block
+    attr_reader :id, :rooms, :reservations, :hotel_blocks
 
     def initialize(id:, rooms:, reservations: nil)
       @id = id
       @rooms = rooms
       @reservations ||= reservations
-      @hotel_block = []
+      @hotel_blocks = []
     end
 
     def reserve_room(id, start_date, end_date, room_id)
@@ -38,6 +38,9 @@ module Hotel
         if room.reservations == []
           avail_rooms << room
         else
+          # could also use previous method #access_reservations here, loop through
+          #reservations by date, and exclude rooms reserved on one of those dates
+
           check_avail = room.reservations.select do |reservation|
             !(reservation.start_date...reservation.end_date).include?(start_date) &&
             !(reservation.start_date..reservation.end_date).include?(end_date)
@@ -46,16 +49,18 @@ module Hotel
           avail_rooms << room if check_avail.length > 0
         end
       end
-      return avail_rooms.map { |room| room.id }
+      return avail_rooms.map { |room| room.id } #return object?
     end
 
-    def reserve_hotel_block(start_date, end_date, collection_rooms, discounted_rate)
-      hotel_block << {
-        start_date: start_date,
-        end_date: end_date,
-        collection_rooms: collection_rooms,
-        discounted_rate: discounted_rate,
-      }
+    def reserve_hotel_block(id, start_date, end_date, collection_rooms, discounted_rate)
+      collection_rooms.each do |room|
+        raise ArgumentError if !(available_rooms(start_date, end_date).include?(room.id))
+      end
+      return Block.new(id: id, start_date: start_date, end_date: end_date, collection_rooms: collection_rooms, discounted_rate: discounted_rate)
+    end
+
+    def add_hotel_block(block)
+      hotel_blocks << block
     end
 
     def reserve_room_hotel_block
