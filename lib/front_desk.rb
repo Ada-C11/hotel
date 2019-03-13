@@ -20,7 +20,7 @@ module Hotel
 
       room = find_room_by_number(room_number: room_number) if room_number
 
-      room ||= assign_room(array_of_nights: nights)
+      room ||= assign_room(nights: nights)
 
       raise ArgumentError, "Room not available" unless room.available?(range: nights)
 
@@ -72,24 +72,24 @@ module Hotel
     end
 
     def generate_nights(check_in:, check_out:)
-      first_day = Date.parse(check_in)
-      last_day = Date.parse(check_out)
+      check_in = Date.parse(check_in)
+      check_out = Date.parse(check_out)
 
-      if first_day >= last_day
+      if check_in >= check_out
         raise ArgumentError, "Reservation must be at least one day long"
       end
 
       nights = []
-      night = first_day
-      until night == last_day # not including last day
+      night = check_in
+      until night == check_out # not including checkout day
         nights << night
         night += 1 # go to the next day
       end
       return nights
     end
 
-    def assign_room(array_of_nights:)
-      open_rooms(nights: array_of_nights).first
+    def assign_room(nights:)
+      open_rooms(nights: nights).first
     end
   end
 end

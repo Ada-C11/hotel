@@ -1,5 +1,3 @@
-# require "date"
-
 module Hotel
   class Reservation
     attr_reader :first_night, :last_night, :length_of_stay, :cost, :room, :nights
