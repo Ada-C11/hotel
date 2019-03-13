@@ -35,6 +35,10 @@ module HotelSystem
       return dates_array
     end
 
+    def checkout
+      return self.date_list.last
+    end
+    
     def include?(date)
       if date.class != Date
         raise ArgumentError, "Please enter an instance of the Date class."
