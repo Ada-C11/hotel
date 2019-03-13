@@ -10,15 +10,11 @@ module Hotel
       @unavailable_list ||= []
     end
 
-    def room_available?(check_in:, check_out:)
+    def room_available?(date:)
       unavailable_list.each do |unavailable|
-        return false if unavaiable_dates.include?(check_in) || unavaiable_dates.include?(check_out)
+        return false if unavailable.date_range.include?(date)
       end
       return true
-    end
-
-    def unavailable_dates
-      return unavailable_list.date_range
     end
   end
 end

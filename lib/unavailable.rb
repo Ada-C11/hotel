@@ -26,8 +26,8 @@ module Hotel
 
     private
 
-    def generate_confirmation_id(prefix = "R")
-      return "#{prefix}#{self.class.confirmation_number_generator}"
+    def generate_confirmation_id(prefix:)
+      raise NotImplementedError.new
     end
 
     def self.confirmation_number_generator
