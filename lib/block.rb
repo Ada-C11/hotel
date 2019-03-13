@@ -27,6 +27,10 @@ module HotelSystem
       return rooms.any? { |room| !room.is_reserved?(date_range) }
     end
 
+    def includes_date?(new_date_range)
+      return date_range.includes_date?(new_date_range)
+    end
+
     def overlap?(new_date_range)
       return date_range.overlap?(new_date_range)
     end

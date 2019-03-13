@@ -84,7 +84,7 @@ describe "Hotel class" do
       @new_hotel = HotelSystem::Hotel.new
       @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
       @date = Date.parse("04 Feb 2020")
-      @reservations_on_date = @new_hotel.list_reservations_by_date("04 Feb 2020")
+      @reservations_on_date = @new_hotel.reservations_by_date("04 Feb 2020")
     end
     it "will return an array of Reservation objects" do
       expect(@reservations_on_date).must_be_instance_of Array
@@ -104,6 +104,7 @@ describe "Hotel class" do
       @new_hotel = HotelSystem::Hotel.new
       @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
       @avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
+      @total_rooms = @new_hotel.rooms.length
     end
     it "returns an array of rooms" do
       expect(@avail_rooms).must_be_instance_of Array
@@ -113,10 +114,32 @@ describe "Hotel class" do
     end
     it "excludes reserved rooms" do
       reserved_room = @new_hotel.find_room_by_id(1)
-      total_rooms = @new_hotel.rooms.length
 
       expect(@avail_rooms).wont_include reserved_room
-      expect(@avail_rooms.length).must_equal (total_rooms - 1)
+      expect(@avail_rooms.length).must_equal (@total_rooms - 1)
+    end
+    it "excludes blocked rooms if exclude_blocked parameter is true" do
+      @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
+                                     end_date: "10 Feb 2020",
+                                     discount_rate: 180,
+                                     group_name: "ComicCon")
+      blocked_room = @new_hotel.find_room_by_id(3)
+
+      avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
+
+      expect(avail_rooms).wont_include blocked_room
+      expect(avail_rooms.length).must_equal (@total_rooms - 4)
+    end
+    it "includes blocked rooms if exclude_blocked parameter is false" do
+      @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
+                                     end_date: "10 Feb 2020",
+                                     discount_rate: 180,
+                                     group_name: "ComicCon")
+      blocked_room = @new_hotel.find_room_by_id(3)
+      avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020", exclude_blocked = false)
+
+      expect(avail_rooms).must_include blocked_room
+      expect(avail_rooms.length).must_equal (@total_rooms - 1)
     end
   end
   describe "reserve from block" do

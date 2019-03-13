@@ -3,7 +3,6 @@ require_relative "reservation"
 require_relative "block"
 require_relative "err/errors"
 
-require "pry"
 require "faker"
 
 module HotelSystem
@@ -54,7 +53,7 @@ module HotelSystem
       room = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room
       request_range = date_range(start_date, end_date)
-      id = generate_id
+      id = generate_id.to_sym
       check_room(room: room, date_range: request_range)
       new_res = reservation(date_range: request_range,
                             room: room,
@@ -63,22 +62,32 @@ module HotelSystem
       return new_res
     end
 
-    def list_reservations_by_date(date)
+    def reservations_by_date(date)
       date = parse_date(date)
       reservations_on_date = all_reservations.select { |reservation| reservation.includes_date?(date) }
       return reservations_on_date
     end
 
-    def list_available_rooms(date)
-      reserved = list_reservations_by_date(date).map! { |reservation| reservation.room }
+    def blocks_by_date(date)
+      date = parse_date(date)
+      blocks_on_date = all_blocks.select { |block| block.includes_date?(date) }
+      return blocks_on_date
+    end
+
+    def list_available_rooms(date, exclude_blocked = true)
+      reserved = reservations_by_date(date).map { |reservation| reservation.room }
       available_rooms = rooms - reserved
+      if exclude_blocked
+        blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
+        available_rooms = available_rooms - blocked
+      end
       return available_rooms
     end
 
     def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
       rooms = room_ids.map { |id| find_room_by_id(id) }
       request_range = date_range(start_date, end_date)
-      id = generate_id
+      id = generate_id.to_sym
       rooms.each do |room|
         check_room(room: room, date_range: request_range)
       end
