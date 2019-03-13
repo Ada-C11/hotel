@@ -21,6 +21,7 @@ class Reservation
     end
     #assign random room for wave 1
     @room = all_rooms.sample
+    # @room = ((1..20).map { |i| i }).sample
     # @available_rooms = (1..20).map { |i| i }
   end
 
@@ -44,10 +45,7 @@ class Reservation
   end
 
   def all_rooms
-    all_rooms = []
-    20.times do |i|
-      all_rooms << i + 1
-    end
+    all_rooms = (1..20).map { |i| i }
     return all_rooms
   end
 end
