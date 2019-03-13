@@ -38,20 +38,32 @@ describe "Room class" do
   describe "is_available? method" do
     before do
       @manager = Hotel::Manager.new
-      @check_in = "2019-3-20"
-      @check_out = "2019-3-21"
+      @check_in = "2020-3-20"
+      @check_out = "2020-3-25"
 
       @reservation = @manager.reserve_room(@check_in, @check_out)
       @reserved_room = @reservation.room
     end
 
-    it "returns false if the room is unavailable during a given date range" do
+    it "returns false if the room has reservation dates equal to the given date range" do
       @check_in = Date.parse(@check_in)
       @check_out = Date.parse(@check_out)
       date_range = (@check_in..@check_out)
       availability = @reserved_room.is_available?(date_range)
 
       expect(availability).must_equal false
+    end
+
+    it "returns false if the room has reservations that overlap with the given date range" do
+      @check_in = (Date.parse(@check_in)) + 2
+      @check_out = Date.parse(@check_out)
+      date_range = (@check_in..@check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal false
+    end
+
+    it "returns true if the reservation's check_out date equals the query's check_in date" do
     end
   end
 end
