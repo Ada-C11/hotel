@@ -18,7 +18,7 @@ module Hotel
     def room_template
       blueprint = {
         rm_id: "Room #" + "#{i}"
-        cost: COST
+        :cost =  COST
       }
     end
 
