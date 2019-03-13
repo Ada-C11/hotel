@@ -29,9 +29,27 @@ describe "HotelBlock class" do
     end
   end
 
-  describe "prints itself nicely" do
+  describe "instance methods" do
     it "prints itself nicely" do
-      expect(@hotel_block.print_nicely).must_equal "Block 2: Room 1: AVAILABLE Room 2: AVAILABLE Room 3: AVAILABLE "
+      expect(@hotel_block.print_nicely).must_equal "Block 2: Room 1: AVAILABLE, price $160.00; Room 2: AVAILABLE, price $160.00; Room 3: AVAILABLE, price $160.00; "
+    end
+
+    it "rooms_available? returns true if any rooms are available" do
+      expect(@hotel_block.rooms_available?).must_equal true
+    end
+
+    it "rooms_available? returns false if no rooms are available" do
+      @hotel_block.set_unavailable(@room1)
+      @hotel_block.set_unavailable(@room2)
+      @hotel_block.set_unavailable(@room3)
+
+      expect(@hotel_block.rooms_available?).must_equal false
+    end
+
+    it "set_unavailable changes value for room key to :UNAVAILABLE" do
+      @hotel_block.set_unavailable(@room1)
+
+      expect(@hotel_block.rooms[@room1]).must_equal :UNAVAILABLE
     end
   end
 end

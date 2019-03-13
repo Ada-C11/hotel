@@ -22,10 +22,24 @@ class HotelBlock
     @rooms = room_hash
   end
 
+  def set_unavailable(room)
+    rooms[room] = :UNAVAILABLE
+  end
+
+  def rooms_available?
+    rooms.each do |k, v|
+      puts v
+      if v == :AVAILABLE
+        return true
+      end
+    end
+    return false
+  end
+
   def print_nicely
     formatted_rooms = ""
     rooms.each do |k, v|
-      formatted_rooms << "Room #{k.number}: #{v} "
+      formatted_rooms << "Room #{k.number}: #{v}, price $#{format("%.2f", k.price)}; "
     end
     return "Block #{id}: #{formatted_rooms}"
   end

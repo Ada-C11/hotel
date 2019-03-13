@@ -64,4 +64,19 @@ class Hotel
 
     return available_rooms
   end
+
+  def create_hotel_block(id, start_time, end_time, rooms)
+    id = create_block_id
+
+    rooms.each do |room|
+      if !room.is_available?(start_time, end_time)
+        raise ArgumentError, "Room #{room.number} is not available on the given dates:#{start_time} #{end_time}"
+      end
+      res = Reservation.new(0, start_time, end_time, room)
+      room.add_reservation(res)
+    end
+    hotel_block = HotelBlock.new(id, start_time, end_time, rooms)
+
+    return hotel_block
+  end
 end

@@ -1,12 +1,12 @@
 require_relative "reservation"
 
 class Room
-  attr_accessor :number, :price, :reservations
+  attr_accessor :number, :price, :reservations, :unavailable_dates
 
   def initialize(number, price)
     @number = number
     @price = price
-
+    @unavailable_dates = []
     @reservations = []
   end
 
@@ -15,11 +15,15 @@ class Room
       raise ArgumentError, "Room is already reserved for this date range"
     end
     reservations << res
+    unavailable_dates << [res.start_time, res.end_time]
   end
 
   def is_available?(start_time, end_time)
-    reservations.each do |res|
-      if !(res.start_time >= end_time || res.end_time <= start_time)
+    if unavailable_dates == []
+      return true
+    end
+    unavailable_dates.each do |date_array|
+      if !(date_array[0] >= end_time || date_array[1] <= start_time)
         return false
       end
     end

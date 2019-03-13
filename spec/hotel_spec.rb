@@ -88,9 +88,35 @@ describe "hotel class" do
 
   describe "hotel block creation" do
     before do
+      @hotel = Hotel.new
+      @start_time = Date.new(2019, 3, 9)
+      @end_time = Date.new(2019, 3, 11)
+
+      @start_time2 = Date.new(2019, 4, 9)
+      @end_time2 = Date.new(2019, 4, 11)
+
+      @start_time3 = Date.new(2019, 3, 10)
+      @end_time3 = Date.new(2019, 3, 15)
+
+      @start_time4 = Date.new(2018, 5, 5)
+      @end_time4 = Date.new(2018, 5, 10)
+
+      @hotel.add_reservation(@start_time, @end_time)
+      @hotel.add_reservation(@start_time2, @end_time2)
+      @hotel.add_reservation(@start_time3, @end_time3)
     end
     it "generates a block id" do
-      expect(@hotel.create_res_id).must_equal 1
+      expect(@hotel.create_block_id).must_equal 1
+    end
+
+    it "raises an error if one of the rooms is unavailable for the given date range" do
+      expect { @hotel.create_hotel_block(0, @start_time, @end_time, [@hotel.reservations[2].room]) }.must_raise ArgumentError
+    end
+
+    it "creates HotelBlock object if rooms are available" do
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+
+      expect(block).must_be_kind_of HotelBlock
     end
   end
 end
