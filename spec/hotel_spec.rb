@@ -28,7 +28,8 @@ describe "Hotel" do
     end
 
     it "returns nil if there is no room in the hotel" do
-      expect(@test_hotel.list_rooms).must_equal nil
+      expect(@test_hotel.list_rooms).must_be_kind_of Array
+      expect(@test_hotel.list_rooms.length).must_equal 0
     end
 
     it "returns an array of all the rooms in the hotel" do

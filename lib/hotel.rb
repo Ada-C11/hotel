@@ -19,7 +19,7 @@ module BookingSystem
 
     def list_rooms
       # Evaluates length first, skips .map method if there is no room
-      return nil if rooms.length == 0
+      return reservations if rooms.length == 0
       all_rooms = @rooms.map {|room| room.room_num}
       return all_rooms
     end
@@ -47,11 +47,7 @@ module BookingSystem
     def available?(date)
       reservations.each do |reservation|
         reservation.date_range.each do |res_date|
-          if date == res_date
-            return false
-          else
-            return true
-          end
+          return date == res_date ? false : true
         end
       end
     end
