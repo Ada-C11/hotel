@@ -16,13 +16,24 @@ module Hotel
       return @range = (@start_date ... @end_date)
     end
 
-    def is_overlapped?(date)
+    def is_included?(date)
       if self.to_range.include?(Date.parse(date))
         return true
       else
         return false
       end
     end
+
+    def is_overlapped?(start_date, end_date)
+      range_array = (Date.parse(start_date)...Date.parse(end_date)).to_a
+      range_array.each do |date|
+        if self.to_range.include?(date) 
+          return true
+        end
+      end
+      return false
+    end
+
 
     def date_count 
       return (@end_date - @start_date).to_i
