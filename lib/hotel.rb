@@ -1,11 +1,12 @@
 module Hotel
   class Hotel
-    attr_reader :id, :rooms, :reservations
+    attr_reader :id, :rooms, :reservations, :hotel_block
 
     def initialize(id:, rooms:, reservations: nil)
       @id = id
       @rooms = rooms
       @reservations ||= reservations
+      @hotel_block = []
     end
 
     def reserve_room(id, start_date, end_date, room_id)
@@ -28,7 +29,7 @@ module Hotel
 
     def access_reservations(date)
       list_reservations = @reservations.select { |reservation| (Range.new(reservation.start_date, reservation.end_date)).include?(date) }
-      return list_reservations.map { |reservation| reservation.id }
+      return list_reservations.map { |reservation| reservation }
     end
 
     def available_rooms(start_date, end_date)
@@ -46,6 +47,18 @@ module Hotel
         end
       end
       return avail_rooms.map { |room| room.id }
+    end
+
+    def reserve_hotel_block(start_date, end_date, collection_rooms, discounted_rate)
+      hotel_block << {
+        start_date: start_date,
+        end_date: end_date,
+        collection_rooms: collection_rooms,
+        discounted_rate: discounted_rate,
+      }
+    end
+
+    def reserve_room_hotel_block
     end
   end
 end
