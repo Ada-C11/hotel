@@ -4,9 +4,9 @@ describe "FrontDesk class" do
   let(:frontdesk) { Hotel::FrontDesk.new }
   let(:date1) { "February 3, 2011" }
   let(:date2) { "February 5, 2011" }
-  let(:reservation) { frontdesk.reserve(start_date: date1, end_date: date2) }
-  let(:start_date) { Date.parse(date1) }
-  let(:end_date) { Date.parse(date2) }
+  let(:reservation) { frontdesk.reserve(check_in: date1, check_out: date2) }
+  let(:check_in) { Date.parse(date1) }
+  let(:check_out) { Date.parse(date2) }
 
   describe "Initialization" do
     it "is able to instantiate" do
@@ -35,17 +35,17 @@ describe "FrontDesk class" do
 
     it "raises an ArgumentError if date range is invalid" do
       expect {
-        frontdesk.reserve(start_date: date2, end_date: date1)
+        frontdesk.reserve(check_in: date2, check_out: date1)
       }.must_raise ArgumentError
     end
 
     describe "Assign room" do
       it "can assign an available room" do
         fd = Hotel::FrontDesk.new
-        res = fd.reserve(start_date: date1, end_date: date2)
+        res = fd.reserve(check_in: date1, check_out: date2)
         expect(res.room).must_be_kind_of Hotel::Room
         expect(res.room.number).must_equal 1
-        res2 = fd.reserve(start_date: date1, end_date: date2) # another reservation on the same nights
+        res2 = fd.reserve(check_in: date1, check_out: date2) # another reservation on the same nights
         expect(res2.room.number).must_equal 2
       end
     end
@@ -56,26 +56,26 @@ describe "FrontDesk class" do
       expect(frontdesk.reservations).must_be_kind_of Array
       expect(frontdesk.reservations.length).must_equal 0
 
-      frontdesk.reserve(start_date: "February 3, 2011",
-                        end_date: "February 5, 2011")
+      frontdesk.reserve(check_in: "February 3, 2011",
+                        check_out: "February 5, 2011")
 
       expect(frontdesk.reservations.length).must_equal 1
 
-      frontdesk.reserve(start_date: "February 4, 2011",
-                        end_date: "February 6, 2011")
+      frontdesk.reserve(check_in: "February 4, 2011",
+                        check_out: "February 6, 2011")
 
       expect(frontdesk.reservations.length).must_equal 2
     end
 
     it "can find a reservation by date" do
-      res1 = frontdesk.reserve(start_date: "February 3, 2011",
-                               end_date: "February 5, 2011")
+      res1 = frontdesk.reserve(check_in: "February 3, 2011",
+                               check_out: "February 5, 2011")
 
-      res2 = frontdesk.reserve(start_date: "February 4, 2011",
-                               end_date: "February 6, 2011")
+      res2 = frontdesk.reserve(check_in: "February 4, 2011",
+                               check_out: "February 6, 2011")
 
-      res3 = frontdesk.reserve(start_date: "February 5, 2011",
-                               end_date: "February 7, 2011")
+      res3 = frontdesk.reserve(check_in: "February 5, 2011",
+                               check_out: "February 7, 2011")
 
       expect(
         frontdesk.find_reservations_by_date(date: "February 3 2011")
@@ -101,7 +101,7 @@ describe "FrontDesk class" do
 
   describe "Open rooms" do
     it "can find open rooms for a date range" do
-      open = frontdesk.open_rooms(start_date: date1, end_date: date2)
+      open = frontdesk.open_rooms(check_in: date1, check_out: date2)
       expect(open).must_be_kind_of Array
       expect(open.first).must_be_kind_of Hotel::Room
       expect(open.first.available?(date: date2)).must_equal true
@@ -114,14 +114,15 @@ describe "FrontDesk class" do
       jan10 = "january 10, 2019"
 
       fd = Hotel::FrontDesk.new
-      expect(fd.open_rooms(start_date: jan8, end_date: jan9)).must_be_kind_of Array
+      expect(fd.open_rooms(check_in: jan8, check_out: jan9)).must_be_kind_of Array
 
       20.times do |i|
-        res = fd.reserve(start_date: jan7, end_date: jan10)
+        expect(fd.open_rooms(check_in: jan7, check_out: jan10).length).must_equal 20 - i
+        res = fd.reserve(check_in: jan7, check_out: jan10)
         expect(res.room.number).must_equal i + 1
       end
 
-      expect { fd.open_rooms(start_date: jan8, end_date: jan9) }.must_raise ArgumentError
+      expect { fd.open_rooms(check_in: jan8, check_out: jan9) }.must_raise ArgumentError
     end
   end
 
@@ -140,13 +141,13 @@ describe "FrontDesk class" do
 
   describe "Generate nights" do
     it "correctly extracts nights needed from days given" do
-      days = end_date - start_date + 1
+      days = check_out - check_in + 1
       nights = reservation.nights.length
       expect(days).must_equal 3
       expect(nights).must_equal 2
       expect(days - nights).must_equal 1
-      expect(start_date).must_equal reservation.nights.first
-      expect(end_date).must_equal Date.new(2011, 2, 5)
+      expect(check_in).must_equal reservation.nights.first
+      expect(check_out).must_equal Date.new(2011, 2, 5)
       expect(reservation.nights.last).must_equal Date.new(2011, 2, 4)
     end
   end

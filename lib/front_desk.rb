@@ -15,8 +15,8 @@ module Hotel
       @rooms = rooms_array
     end
 
-    def reserve(start_date:, end_date:)
-      nights = generate_nights(start_date: start_date, end_date: end_date)
+    def reserve(check_in:, check_out:)
+      nights = generate_nights(check_in: check_in, check_out: check_out)
 
       reservation = Hotel::Reservation.new(nights: nights,
                                            room: assign_room(array_of_nights: nights))
@@ -41,16 +41,11 @@ module Hotel
       return found_room
     end
 
-    def open_rooms(start_date:, end_date:)
-      nights = generate_nights(start_date: start_date, end_date: end_date)
+    def open_rooms(check_in:, check_out:)
+      nights = generate_nights(check_in: check_in, check_out: check_out)
 
-      avail_rooms = []
-      rooms.each do |room|
-        nights.each do |date|
-          if room.available?(date: date)
-            avail_rooms << room
-          end
-        end
+      avail_rooms = rooms.select do |room|
+        room.available?(range: nights)
       end
 
       raise ArgumentError, "No rooms available" if avail_rooms == []
@@ -66,9 +61,9 @@ module Hotel
       return rooms
     end
 
-    def generate_nights(start_date:, end_date:)
-      start_date = Date.parse(start_date)
-      end_date = Date.parse(end_date)
+    def generate_nights(check_in:, check_out:)
+      start_date = Date.parse(check_in)
+      end_date = Date.parse(check_out)
       if start_date >= end_date
         raise ArgumentError, "Reservation must be at least one day long"
       end
