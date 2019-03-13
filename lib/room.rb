@@ -2,7 +2,8 @@ STANDARD_RATE = 200
 
 module BookingSystem
   class Room
-    attr_reader :room_num, :price, :reservations # Do we need to list reservations by room?
+    attr_reader :room_num, :price
+    attr_accessor :reservations
 
     def initialize(room_num:, price: STANDARD_RATE, reservations: [])
       @room_num = room_num

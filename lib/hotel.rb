@@ -24,17 +24,13 @@ module BookingSystem
       return all_rooms
     end
 
-    def available?(date_range)
-      # Iterates through date range, checking if that date for that room is blocked off
-      # Return true if all returns true
-    end
-
-    def book(date_range)
-      if available?(date_range)
-        # Iterate through each room's bookings
-        # When found, block off date range as new reservation, return room_num?
-        # Add reservation to reservations
-      end
+    def new_reservation(room, checkin_date, checkout_date)
+      # Based on Trip#connect on RideShare where we add trip to both passenger & driver
+      reservation = BookingSystem::Reservation.new(room: room, checkin_date: checkin_date, checkout_date: checkout_date)
+      # Adds new reservation to Hotel's array of reservations
+      @reservations << reservation
+      # Adds new reservation to Room's array of reservations
+      room.add_reservation(reservation)
     end
 
     def list_by_date(date)

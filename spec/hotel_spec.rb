@@ -37,6 +37,23 @@ describe "Hotel" do
     end
   end
 
+  describe "new_reservation" do
+    before do
+      @test_room = BookingSystem::Room.new(room_num: 1337)
+      checkin_date = Date.new(2019, 1, 1)
+      checkout_date = Date.new(2019, 1, 11)
+      @test_hotel.new_reservation(@test_room, checkin_date, checkout_date)
+    end
+
+    it "adds new reservation to Hotel's reservations" do
+      expect(@test_hotel.reservations.length).must_equal 1
+    end
+
+    it "adds new reservation to Room's reservations" do
+      expect(@test_room.reservations.length).must_equal 1
+    end
+  end
+
   describe "available?" do
 
   end
