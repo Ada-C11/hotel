@@ -71,5 +71,16 @@ describe "Room class" do
 
       expect(availability).must_equal true
     end
+
+    it "decides a room is available even if there are no reservations attached to it" do
+      @reserved_room.reservations.clear
+
+      @check_in = Date.today
+      @check_out = Date.today + 1
+      date_range = (@check_in..@check_out)
+      availability = @reserved_room.is_available?(date_range)
+
+      expect(availability).must_equal true
+    end
   end
 end
