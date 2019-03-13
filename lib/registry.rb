@@ -11,7 +11,7 @@ module Hotel
     def new_reservation(input)
       dates = [input[:check_in], input[:check_out]]
       res_id = @reservations.length + 1
-      room = openings(dates).first
+      room = openings(dates).first || []
       reservation_data = {
         id: res_id,
         room: room,
@@ -24,12 +24,12 @@ module Hotel
 
     def openings(span)
       conflicts = find_in_range(span)
-      openings = @rooms.reject do |room|
+      open_rms = @rooms.reject do |room|
         conflicts.find do |entry|
           entry.rm_id == room[:rm_id]
         end
       end
-      return openings
+      open_rms
     end
 
     def res_list

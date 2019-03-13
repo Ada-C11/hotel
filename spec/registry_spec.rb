@@ -24,5 +24,23 @@ describe "Registry class" do
     it "returns an array all of the rooms in the hotel" do
       expect(@report.rooms.length).must_equal 20
     end
+
+# ******************************************************** #
+# ************* TESTS I HAVEN'T WRITTEN YET ************** #
+# ******************************************************** #
+# def find_by_date(date)
+#   date = Date.parse(date)
+#   by_date = @reservations.select do |entry|
+#     entry.date.find_in_range(date)
+#   end
+#   by_date
+# end
+
+# def find_in_range(given_span)
+#   in_range = @reservations.select do |entry|
+#     entry.span.overlaps?(given_span)
+#   end
+#   in_range
+# end
   end
 end
