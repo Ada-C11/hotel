@@ -40,11 +40,11 @@ describe "Hotel class" do
       expect(@new_res).must_be_instance_of HotelSystem::Reservation
     end
 
-    it "adds the new reservation to the hotel's list of reservations" do
+    it "adds the new reservation to the hotel's collection of reservations" do
       expect(@new_hotel.reservations).must_include @new_res
     end
 
-    it "adds the new reservation to the room's list of reservations" do
+    it "adds the new reservation to the room's collection of reservations" do
       expect(@test_room.reservations).must_include @new_res
     end
 
@@ -68,7 +68,7 @@ describe "Hotel class" do
       expect { @new_hotel.make_reservation(0, "01 Mar 2020", "08 Mar 2020") }.must_raise RoomError
       expect { @new_hotel.make_reservation(-5, "01 Mar 2020", "08 Mar 2020") }.must_raise RoomError
     end
-    it "raises an ArgumentError if the dates given are invalid" do
+    it "raises an exception if the dates given are invalid" do
       expect {
         @new_hotel.make_reservation(1, "08 Feb 2020", "01 Feb 2020")
       }.must_raise DateRangeError
@@ -156,6 +156,45 @@ describe "Hotel class" do
       expect {
         @hotel.reserve_from_block(@block, @room)
       }.must_raise ReservationError
+    end
+  end
+  describe "make block" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
+      @rooms = @hotel.rooms[0...5]
+      @new_block = make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
+                                             end_date: "10 Feb 2020",
+                                             group_name: "Ada Academy")
+    end
+    it "returns a new block if all rooms are available during the given date range" do
+      expect(@new_block).must_be_instance_of HotelSystem::Block
+    end
+    it "raises an exception if one or more rooms have overlapping reservations" do
+      @hotel.make_reservation(6, "01 Feb 2020", "08 Feb 2020")
+      expect {
+        make_block(6, 7, 8, 9, 10, start_date: "01 Feb 2020",
+                                   end_date: "10 Feb 2020",
+                                   group_name: "Ada Academy")
+      }.must_raise ReservationError
+    end
+    it "raises an exception if one or more rooms have overlapping blocks" do
+      expect {
+        make_block(3, 4, 5, 6, 7, start_date: "01 Feb 2020",
+                                  end_date: "10 Feb 2020",
+                                  group_name: "Ada Academy")
+      }.must_raise BlockError
+    end
+    it "adds the block to the room's collection of blocks" do
+      expect(@room.blocks).must_include @new_block
+    end
+    it "adds the block to the hotel's collection of blocks" do
+      expect(@hotel.blocks["Ada Academy"]).must_equal @new_block
+    end
+    it "raises an exception if invalid dates are given" do
+      make_block(8, 9, 10, start_date: "10 Feb 2020",
+                           end_date: "01 Feb 2020",
+                           group_name: "Ada Academy").must_raise DateRangeError
     end
   end
 end
