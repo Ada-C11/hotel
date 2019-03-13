@@ -10,11 +10,11 @@ module HotelSystem
       @blocks = {}
     end
 
-    def is_available?(new_date_range)
+    def is_reserved?(new_date_range)
       reservations.each do |name, reservation|
-        return false if reservation.overlap?(new_date_range)
+        return true if reservation.overlap?(new_date_range)
       end
-      return true
+      return false
     end
 
     def is_blocked?(new_date_range)

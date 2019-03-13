@@ -20,18 +20,32 @@ module HotelSystem
     end
 
     def make_reservation(room_id:, start_date:, end_date:, name:)
-      room_being_reserved = find_room_by_id(room_id)
-      (raise RoomError, "Room with id #{room_id} does not exist!") if !room_being_reserved
+      room = find_room_by_id(room_id)
+      (raise RoomError, "Room with id #{room_id} does not exist!") if !room
       request_range = date_range(start_date, end_date)
-      check_room(room: room_being_reserved, date_range: request_range)
+      id = reservations.length + 1
+      check_room(room: room, date_range: request_range)
       new_res = reservation(date_range: request_range,
-                            room: room_being_reserved,
-                            id: (reservations.length + 1), name: name)
-      update_reservations(room: room_being_reserved, reservation: new_res)
+                            room: room,
+                            id: id, name: name)
+      update_reservations(room: room, reservation: new_res)
       return new_res
     end
 
-    def make_block
+    def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
+      rooms = room_ids.map { |id| find_room_by_id(id) }
+      request_range = date_range(start_date, end_date)
+      id = blocks.length + 1
+      rooms.each do |room|
+        check_room(room: room, date_range: request_range)
+      end
+      new_block = block(rooms: rooms,
+                        date_range: request_range,
+                        discount_rate: discount_rate,
+                        id: id,
+                        group_name: group_name)
+      self.add_block(new_block)
+      return new_block
     end
 
     def list_reservations_by_date(date)
@@ -41,19 +55,14 @@ module HotelSystem
     end
 
     def list_available_rooms(date)
-      reserved = list_reservations_by_date(date)
-      reserved.map! { |reservation| reservation.room }
+      reserved = list_reservations_by_date(date).map! { |reservation| reservation.room }
       available_rooms = rooms - reserved
       return available_rooms
     end
 
-    def find_room_by_id(room_id)
-      return rooms.find { |room| room.id == room_id }
-    end
-
     def reserve_from_block(block, room, name)
       (raise BlockError, "The given block does not contain the given room") if (!block.has_room?(room))
-      check_room(room: room, date_range: block.date_range, from_block: true)
+      check_room(room: room, date_range: block.date_range, ignore_blocked: true)
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
                             room: room,
@@ -62,12 +71,32 @@ module HotelSystem
       return new_res
     end
 
+    def find_room_by_id(room_id)
+      return rooms.find { |room| room.id == room_id }
+    end
+
+    def find_res_by_name(name)
+      return reservations[name]
+    end
+
+    def find_block_by_name(name)
+      return blocks[name]
+    end
+
     def add_reservation(reservation)
       reservations[reservation.name] = reservation
     end
 
     def add_block(block)
-      blocks[block.name] = block
+      blocks[block.group_name] = block
+    end
+
+    def all_reservations
+      return reservations.values
+    end
+
+    def all_blocks
+      return blocks.values
     end
 
     private
@@ -78,23 +107,13 @@ module HotelSystem
       room.add_reservation(reservation) if room
     end
 
-    def check_room(room:, date_range:, from_block: false)
-      if !room.is_available?(date_range)
+    def check_room(room:, date_range:, ignore_blocked: false)
+      if room.is_reserved?(date_range)
         raise ReservationError, "The room you requested is not available on the given dates!"
       end
-      if room.is_blocked?(date_range) && !from_block
+      if room.is_blocked?(date_range) && !ignore_blocked
         raise BlockError, "The room you requested is blocked on the given dates!"
       end
-    end
-
-    private
-
-    def all_reservations
-      return reservations.values
-    end
-
-    def all_blocks
-      return blocks.values
     end
 
     def parse_date(date_string)

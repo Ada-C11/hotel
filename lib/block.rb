@@ -25,7 +25,7 @@ module HotelSystem
     end
 
     def block_room(room)
-      room.blocks[group_name] = self
+      room.add_block(self)
       room.rate = discount_rate
     end
 
