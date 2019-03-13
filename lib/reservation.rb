@@ -1,6 +1,6 @@
 module Hotel
   class Reservation
-    attr_reader :first_night, :last_night, :length_of_stay, :cost, :room, :nights
+    attr_reader :length_of_stay, :cost, :room, :nights
 
     def initialize(room:, nights:)
       @length_of_stay = nights.length

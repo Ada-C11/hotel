@@ -105,6 +105,16 @@ describe "FrontDesk class" do
       expect(open).must_be_kind_of Array
       expect(open.first).must_be_kind_of Hotel::Room
       expect(open.first.available?(night: date2)).must_equal true
+      open2 = frontdesk.open_rooms(nights: [Date.new(2011, 1, 2), Date.new(2011, 3, 2)])
+      expect(open2).must_be_kind_of Array
+      expect(open2.first).must_be_kind_of Hotel::Room
+      expect(open2.first.available?(night: Date.new(2011, 3, 2))).must_equal true
+    end
+
+    it "raises an ArgumentError if insufficient parameters are given" do
+      expect { frontdesk.open_rooms(check_in: "march 7") }.must_raise ArgumentError
+      expect { frontdesk.open_rooms(check_out: "march 9") }.must_raise ArgumentError
+      expect { frontdesk.open_rooms() }.must_raise ArgumentError
     end
 
     it "doesn't find open rooms when there are none available" do
