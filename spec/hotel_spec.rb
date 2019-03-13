@@ -76,10 +76,7 @@ describe "Hotel" do
 
   describe "available?" do
 
-  end
-
-  describe "book" do
-
+    # expect(date.available?).must_equal true
   end
 
 

@@ -10,7 +10,7 @@ describe "Room" do
       expect(@test_room).must_be_kind_of BookingSystem::Room
     end
 
-    it "costs $200 for each Room" do
+    it "costs $200 per Room per night" do
       expect(@test_room.price).must_equal 200
     end
 
@@ -20,10 +20,5 @@ describe "Room" do
     end
   end
 
-  describe "add_reservation" do
-    before do
-      # Initialize room, add new reservation
-      # Check if .last calls newly added reservations
-    end
-  end
+  # Test for add_room is under hotel_spec - new_reservation
 end

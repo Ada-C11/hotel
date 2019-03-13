@@ -24,11 +24,16 @@ module BookingSystem
       return all_rooms
     end
 
+    # Break this out of new_reservation to reduce dependency
+    def add_reservation(reservation)
+      @reservations << reservation
+    end
+
     def new_reservation(room, checkin_date, checkout_date)
       # Based on Trip#connect on RideShare where we add trip to both passenger & driver
       reservation = BookingSystem::Reservation.new(room: room, checkin_date: checkin_date, checkout_date: checkout_date)
       # Adds new reservation to Hotel's array of reservations
-      @reservations << reservation
+      add_reservation(reservation)
       # Adds new reservation to Room's array of reservations
       room.add_reservation(reservation)
     end
