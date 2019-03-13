@@ -1,6 +1,8 @@
 # Add simplecov
 require "simplecov"
-SimpleCov.start
+SimpleCov.start do
+  add_filter %r{^/spec/}
+end
 
 require "minitest"
 require "minitest/autorun"

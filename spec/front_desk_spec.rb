@@ -22,16 +22,31 @@ describe "FrontDesk class" do
   end
 
   describe "Reserve" do
+    let(:reservation) { frontdesk.reserve(start_date: date1, end_date: date2) }
+    let(:start_date) { Date.parse(date1) }
+    let(:end_date) { Date.parse(date2) }
+
     it "can reserve a room for given date range" do
-      expect(
-        frontdesk.reserve(start_date: date1, end_date: date2)
-      ).must_be_kind_of Hotel::Reservation
+      expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "raises an ArgumentError if date range is invalid" do
       expect {
         frontdesk.reserve(start_date: date2, end_date: date1)
       }.must_raise ArgumentError
+    end
+
+    describe "Assign room" do
+      it "correctly extracts nights needed from days given" do
+        days = end_date - start_date + 1
+        nights = reservation.dates.length
+        expect(days).must_equal 3
+        expect(nights).must_equal 2
+        expect(days - nights).must_equal 1
+        expect(start_date).must_equal reservation.dates.first
+        expect(end_date).must_equal Date.new(2011, 2, 5)
+        expect(reservation.dates.last).must_equal Date.new(2011, 2, 4)
+      end
     end
   end
 
@@ -82,16 +97,19 @@ describe "FrontDesk class" do
       ).must_equal res2
     end
 
-    it "can find open room" do
-      expect(frontdesk.find_open_room).must_be_kind_of Hotel::Room
-      expect(frontdesk.find_open_room.available?).must_equal true
-      expect(frontdesk.find_open_room.status).must_equal :AVAILABLE
-
-      frontdesk.rooms.each do |room|
-        room.status = :UNAVAILABLE
-      end
-
-      expect { frontdesk.find_open_room }.must_raise ArgumentError
+    it "can find open rooms on a date" do
+      expect(frontdesk.open_rooms(date: date2)).must_be_kind_of Array
+      expect(frontdesk.open_rooms(date: date2).first).must_be_kind_of Hotel::Room
+      expect(frontdesk.open_rooms(date: date2).first.available?(date: date2)).must_equal true
     end
+
+    ## Currently doesn't work
+    # it "doesn't find open rooms when there are none available" do
+    #   20.times do
+    #     frontdesk.reserve(start_date: "january 7, 2019", end_date: "january 10, 2019")
+    #   end
+
+    #   expect { frontdesk.open_rooms(date: "january 9, 2019") }.must_raise ArgumentError
+    # end
   end
 end

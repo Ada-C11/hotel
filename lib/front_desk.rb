@@ -23,11 +23,14 @@ module Hotel
         raise ArgumentError, "Reservation must be at least one day long"
       end
 
-      reservations << Hotel::Reservation.new(start_date: start_date,
-                                             end_date: end_date,
-                                             room: find_open_room)
+      dates = generate_dates(start_date: start_date, end_date: end_date)
 
-      return reservations.last
+      reservation = Hotel::Reservation.new(dates: dates,
+                                           room: assign_room(array_of_dates: dates))
+
+      reservations << reservation
+
+      return reservation
     end
 
     def find_by_date(date:)
@@ -37,10 +40,31 @@ module Hotel
       reservations.select { |reservation| reservation.dates.include?(date) }
     end
 
-    def find_open_room
-      open_room = rooms.find { |room| room.available? }
-      raise ArgumentError, "No rooms available" unless open_room
-      return open_room
+    def open_rooms(date:)
+      open_rooms = rooms.reject do |room|
+        room.booked_dates.include?(date)
+      end
+
+      # open_room = rooms.find { |room| room.available? }
+      raise ArgumentError, "No rooms available" if open_rooms.empty?
+      return open_rooms
+    end
+
+    def assign_room(array_of_dates:)
+      assigned_room = nil
+      rooms.each do |room|
+        array_of_dates.each do |date|
+          next if room.booked_dates.include?(date)
+          assigned_room = room
+          break
+        end
+      end
+      raise ArgumentError, "No available rooms for that date range" if assigned_room == nil
+      return assigned_room
+    end
+
+    def find_by_room(room_number:)
+      rooms.find { |room| room.number == room_number }
     end
 
     private
@@ -49,6 +73,16 @@ module Hotel
       rooms = []
       NUMBER_OF_ROOMS.times { |i| rooms << Hotel::Room.new(room_number: i + 1) }
       return rooms
+    end
+
+    def generate_dates(start_date:, end_date:)
+      dates = []
+      night = start_date
+      until night == end_date # not including end date
+        dates << night
+        night += 1 # go to the next day
+      end
+      return dates
     end
   end
 end

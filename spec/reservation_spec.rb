@@ -4,24 +4,15 @@ describe "Reservation class " do
   describe "Initalizer" do
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
+    let(:dates) { [Date.new(2001, 2, 3), Date.new(2001, 2, 4)] }
     let(:room) { Hotel::Room.new(room_number: 1) }
     let(:reservation) {
-      reservation = Hotel::Reservation.new(start_date: start_date,
-                                           end_date: end_date,
-                                           room: room)
+      reservation = Hotel::Reservation.new(room: room,
+                                           dates: dates)
     }
 
     it "is able to instantiate" do
       expect(reservation).must_be_kind_of Hotel::Reservation
-    end
-
-    it "correctly extracts nights needed from days given" do
-      days = end_date - start_date
-      nights = reservation.last_night - reservation.first_night
-      expect(days - nights).must_equal 1
-      expect(end_date).must_equal Date.new(2001, 2, 5)
-      expect(start_date).must_equal reservation.first_night
-      expect(reservation.last_night).must_equal Date.new(2001, 2, 4)
     end
 
     it "calculates length of stay" do
@@ -32,23 +23,21 @@ describe "Reservation class " do
       expect(reservation.cost).must_equal 400
     end
 
-    it "assigns available room" do
+    it "assigns room" do # used to check if it assigned available room
       expect(reservation.room).must_be_kind_of Hotel::Room
-      expect(reservation.room.available?).must_equal true
-      expect(reservation.room.status).must_equal :AVAILABLE
+      # expect(reservation.room.available?).must_equal true
     end
 
     it "creates an array of booked dates" do
       expect(reservation.dates).must_be_kind_of Array
       expect(reservation.dates.length).must_equal 2
 
-      reservation2 = Hotel::Reservation.new(start_date: Date.new(2018, 7, 10),
-                                            end_date: Date.new(2018, 7, 20),
-                                            room: room)
+      reservation2 = Hotel::Reservation.new(room: room,
+                                            dates: dates)
 
-      expect(reservation2.dates.length).must_equal 10
-      expect(reservation2.dates.first).must_equal Date.new(2018, 7, 10)
-      expect(reservation2.dates.last).must_equal Date.new(2018, 7, 19)
+      expect(reservation2.dates.length).must_equal 2
+      expect(reservation2.dates.first).must_equal Date.new(2001, 2, 3)
+      expect(reservation2.dates.last).must_equal Date.new(2001, 2, 4)
     end
   end
 end
