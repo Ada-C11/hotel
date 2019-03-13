@@ -13,11 +13,11 @@ describe "HotelDispatcher class" do
     end
     it "returns array of all the rooms" do
       hotel = Hotel::HotelDispatcher.new
-      expect(hotel.list_all_rooms.length).must_equal 20
+      expect(hotel.rooms).must_be_kind_of Array
     end
     it "reserves a room" do
-      new_booking = Hotel::HotelDispatcher.new
-      expect(new_booking.reserve("2019-2-23", "2019-2-25")).must_be_kind_of Hotel::Reservation
+      hotel = Hotel::HotelDispatcher.new
+      expect(hotel.reserve("2019-2-23", "2019-2-25")).must_be_kind_of Hotel::Reservation
     end
 
     it "returns all the reservations" do
@@ -33,6 +33,30 @@ describe "HotelDispatcher class" do
       hotel.reserve("2019-2-20", "2019-2-24")
       hotel.reserve("2019-2-10", "2019-2-27")
       expect(hotel.find_reservation("2019-2-23").length).must_equal 3
+    end
+
+    it "returns available rooms for a specific date" do
+      hotel = Hotel::HotelDispatcher.new
+      hotel.reserve("2019-2-21", "2019-2-26")
+      hotel.reserve("2019-2-20", "2019-2-24")
+      hotel.reserve("2019-2-10", "2019-2-27")
+      expect(hotel.find_available_room("2019-2-21", "2019-2-25").length).must_equal 17
+    end
+
+    it "returns 0 if there are no available room" do
+      hotel = Hotel::HotelDispatcher.new
+      20.times do
+      hotel.reserve("2019-2-21", "2019-2-26")
+      end 
+      expect(hotel.find_available_room("2019-2-21", "2019-2-26").length).must_equal 0
+    end
+
+    it "returns a message saying that there are no available rooms" do
+      hotel = Hotel::HotelDispatcher.new
+      20.times do
+      hotel.reserve("2019-2-21", "2019-2-26")
+      end 
+      expect(hotel.reserve("2019-2-21", "2019-2-26")).must_equal nil
     end
   end
 end
