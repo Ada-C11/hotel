@@ -5,16 +5,23 @@ NUM_OF_ROOMS = 20
 
 module BookingSystem
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :reservations
+    attr_accessor :rooms
 
     def initialize(rooms: [], reservations: [])
       @rooms = rooms
       @reservations = reservations
     end
 
-    def self.list_rooms
-      # all_rooms = @rooms.map {|room| room.room_num}
-      # return all_rooms
+    def add_room(room)
+      @rooms << room
+    end
+
+    def list_rooms
+      # Evaluates length first, skips .map method if there is no room
+      return nil if rooms.length == 0
+      all_rooms = @rooms.map {|room| room.room_num}
+      return all_rooms
     end
 
     def available?(date_range)
