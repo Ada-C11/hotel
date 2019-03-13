@@ -6,7 +6,6 @@ module Hotel
     def initialize(number)
       @number = number
       @availability = []
-      #@status = []
     end
 
     def add_reservation(reservation)

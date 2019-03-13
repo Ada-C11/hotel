@@ -27,21 +27,25 @@ describe "Frontdesk request_reservation" do
   it "adds reservation to reservation list" do
     expect(@frontdesk.reservations[0]).must_be_instance_of Hotel::Reservation
   end
+  it "assigns an available room to the reservation" do
+  end
+  it "raises and argument error if no rooms are available for that date" do
+  end
 end
 
 describe "Frontdesk find_reservation_by_date()" do
   before do
     @frontdesk = Hotel::Frontdesk.new
     @frontdesk.request_reservation("Agatha Christie", "2019-05-20", 2)
-    @frontdesk.request_reservation("Nnedi Okorafor", "2019-5-19", 2)
+    @frontdesk.request_reservation("Nnedi Okorafor", "2018-5-20", 2)
   end
-  it "returns reservations by date" do
-    @reservation = @frontdesk.find_reservation_by_date("2019-05-20")
-    @no_reservation = @frontdesk.find_reservation_by_date("2017-05-20")
-    expect(@reservation).must_be_instance_of Array
-    expect(@reservation[0]).must_be_instance_of Hotel::Reservation
-    expect(@reservation[1].name).must_equal "Nnedi Okorafor"
-    expect(@no_reservation).must_be_nil
+  it "returns a list of reservations by date" do
+    known_reservations = @frontdesk.find_reservation_by_date("2019-05-20")
+    no_reservation = @frontdesk.find_reservation_by_date("2017-05-20")
+    expect(known_reservations).must_be_instance_of Array
+    expect(known_reservations[0]).must_be_instance_of Hotel::Reservation
+    expect(known_reservations[0].name).must_equal "Agatha Christie"
+    expect(no_reservation).must_be_nil
   end
 end
 
@@ -50,8 +54,6 @@ describe "Frontdesk find_available_rooms" do
     @frontdesk = Hotel::Frontdesk.new
     @reservation1 = @frontdesk.request_reservation("Agatha Christie", "2019-05-20", 2)
     @reservation2 = @frontdesk.request_reservation("Nnedi Okorafor", "2019-5-20", 2)
-    @frontdesk.assign_room_number(@reservation1)
-    @frontdesk.assign_room_number(@reservation2)
   end
   it "returns an array of available rooms" do
     dates = @reservation1.reserved_nights
@@ -62,8 +64,7 @@ describe "Frontdesk find_available_rooms" do
   end
   it "raises argument error if there are no available rooms" do
     18.times do
-      reservation = @frontdesk.request_reservation("Agatha Christie", "2019-05-20", 2)
-      @frontdesk.assign_room_number(reservation)
+      reservation3 = @frontdesk.request_reservation("Agatha Christie", "2019-05-20", 2)
     end
     dates = @reservation1.reserved_nights
     expect { @frontdesk.find_available_rooms(dates) }.must_raise ArgumentError

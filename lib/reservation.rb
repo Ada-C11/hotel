@@ -19,7 +19,6 @@ module Hotel
       @checkout_date = @checkin_date + num_of_nights
       @reserved_nights = calculate_reserved_nights
       @room_num = nil
-      #@block = nil
     end
 
     def calculate_reserved_nights

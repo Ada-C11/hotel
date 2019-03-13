@@ -1,9 +1,5 @@
 require "date"
 require "pry"
-# I can reserve an available room for a given date range
-# I want an exception raised if I try to reserve a room that is unavailable
-# for a given day, so that I cannot make two reservations for the same room
-# that overlap by date
 
 module Hotel
   class Frontdesk
@@ -15,10 +11,10 @@ module Hotel
     end
 
     def request_reservation(name, checkin_date, num_of_nights)
-      pending_reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
-      @reservations << pending_reservation
-      #Hotel::Room.add_reservation()
-      return pending_reservation
+      reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
+      assign_room_number(reservation)
+      @reservations << reservation
+      return reservation
     end
 
     def find_available_rooms(dates)
@@ -37,10 +33,10 @@ module Hotel
     end
 
     def assign_room_number(reservation)
-      available_room = @rooms.find { |room| room.availability.length == 0 }
-      room_assignment = available_room.number
-      reservation.room_num = room_assignment
-      available_room.add_reservation(reservation)
+      available_rooms = find_available_rooms(reservation.reserved_nights)
+      room_assignment = available_rooms.first
+      reservation.room_num = room_assignment.number
+      room_assignment.add_reservation(reservation)
     end
 
     def find_reservation_by_date(date)
@@ -51,13 +47,6 @@ module Hotel
         return reservations_by_date
       end
     end
-
-    # def connect(reservation, room)
-    # @passenger = passenger
-    # passenger.add_trip(self)
-    # @driver = driver
-    # driver.add_trip(self)
-    #   end
 
     private
 
@@ -73,10 +62,3 @@ module Hotel
     end
   end
 end
-
-# def request_reservation(name, checkin_date, num_of_nights)
-#     pending_reservation = Hotel::Reservation.new(name, checkin_date, num_of_nights)
-#     @reservations << pending_reservation
-#     #Hotel::Room.add_reservation()
-#     return pending_reservation
-#   end
