@@ -6,7 +6,7 @@ class Reservation_Manager
 
   def initialize
     @all_reservations = all_reservations || []
-    # @all_blocks = all_blocks || []
+    @all_blocks = all_blocks || []
     # @available_rooms = (1..20).map { |i| i }
     # @all_rooms = all_rooms
   end
@@ -30,18 +30,38 @@ class Reservation_Manager
       raise ArguementError, "Check out time is not after check in time. Inputted check in date was #{check_in} and check out date was #{check_out}"
     end
 
-    #change @available_rooms to reflect the reservation being made for that date
     available_rooms = find_available_rooms(check_in, check_out)
-    if @available_rooms.length > 0
+    if available_rooms.length > 0
       reservation.room = available_rooms[0]
     else
       raise ArgumentError, "There are no available rooms at the moment. Please try again later!"
     end
 
-    # change available room used to not available. but make available after date passes.
-    # reservation_date_range = (reservation.check_in...reservation.check_out).to_a
     all_reservations << reservation
     return reservation
+  end
+
+  def make_hotel_block(check_in, check_out, room_num)
+    hotel_block = Hotel_Block.new(check_in, check_out, room_num)
+    available_block_rooms = find_available_rooms(check_in, check_out)
+
+    block_rooms = available_block_rooms.take(room_num)
+    # binding.pry
+
+    #
+
+    #this adds blocked rooms into @all_rooms
+    if available_rooms.length > 0
+      block_rooms.each do |room|
+        all_blocks << room
+      end
+    end
+
+    return block_rooms
+
+    # returns rooms in the block
+    # updates available_rooms to not include these blocks
+    # must still be reservable for the length of time
   end
 
   def find_available_rooms(finding_check_in, finding_check_out)
@@ -54,7 +74,6 @@ class Reservation_Manager
     else
       given_date_range = (date1...date2).to_a
     end
-    # binding.pry
 
     unavailable_rooms = []
     all_reservations.each do |reservation|
@@ -62,7 +81,7 @@ class Reservation_Manager
       day_out = reservation.check_out
       reserve_date_range = (day_in...day_out).to_a
       combined_ranges = (given_date_range + reserve_date_range).flatten
-      # binding.pry
+
       if combined_ranges.length != combined_ranges.uniq.length
         unavailable_rooms << reservation
       end

@@ -120,4 +120,43 @@ describe "RESERVATION MANAGER TESTS" do
       expect(check_rooms.length).must_equal 19
     end
   end
+
+  describe "hotel block management" do
+    it "returns dates that are available only to hotel block users" do
+      test_manager = Reservation_Manager.new
+
+      check_in = "2019-4-5"
+      check_out = "2019-4-5"
+      room_num = 5
+      testing_block = test_manager.make_hotel_block(check_in, check_out, room_num)
+
+      puts "this is testing_block: #{testing_block}"
+      expect(testing_block.length).must_equal 5
+      expect(testing_block).must_be_kind_of Array
+    end
+
+    it "updates all_blocks to include the block rooms created" do
+      test_manager = Reservation_Manager.new
+      check_in = "2019-4-5"
+      check_out = "2019-4-10"
+      room_num = 5
+      testing_block1 = test_manager.make_hotel_block(check_in, check_out, room_num)
+
+      check_in = "2019-3-5"
+      check_out = "2019-3-10"
+      room_num = 5
+      testing_block2 = test_manager.make_hotel_block(check_in, check_out, room_num)
+
+      expect(test_manager.all_blocks.length).must_equal 10
+    end
+    # it "removes the blocked rooms from the list of available rooms" do
+    #   test_manager = Reservation_Manager.new
+    #   check_in = "2019-4-5"
+    #   check_out = "2019-4-5"
+    #   room_num = 5
+    #   testing_block = test_manager.make_hotel_block(check_in, check_out, room_num)
+
+    #   expect(test_manager.find_available_rooms(check_in, check_out).length).must_equal 15
+    # end
+  end
 end
