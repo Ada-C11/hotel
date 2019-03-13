@@ -6,17 +6,9 @@ module Hotel
     class Booker
         attr_reader :rooms, :reservations
 
-        def initialize
-            @rooms = load_rooms
+        def initialize(rooms)
+            @rooms = rooms
             @reservations = []
-        end
-
-        def load_rooms
-            rooms = []
-            20.times do |i|
-                rooms.push(Hotel::Room.new(i+1))
-            end
-            return rooms
         end
 
         def book_room(start_date: ,end_date: )
