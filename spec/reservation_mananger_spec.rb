@@ -47,10 +47,10 @@ describe "RESERVATION MANAGER TESTS" do
       first_reserve_room = test_manager.all_reservations[0].room
       second_reserve_room = test_manager.all_reservations[1].room
 
-      puts "These are all unavailable rooms"
-      test_manager.all_reservations.each do |reservation|
-        puts "#{reservation.room}"
-      end
+      # puts "These are all unavailable rooms"
+      # test_manager.all_reservations.each do |reservation|
+      #   puts "#{reservation.room}"
+      # end
 
       expect(check_rooms.length).must_equal 19
       expect(first_reserve_room).must_equal second_reserve_room
@@ -79,7 +79,9 @@ describe "RESERVATION MANAGER TESTS" do
 
       expect(test_manager.find_reservation_date(check_in, check_out)).must_include test_manager.all_reservations[-1]
       expect(test_manager.find_reservation_date(check_in, check_out)).must_include test_manager.all_reservations[-2]
+      expect(test_manager.find_available_rooms(check_in, check_out).length).must_equal 18
     end
+    # TODO: think of more tests for #find_reservation?
   end
 
   describe "#find_available_rooms" do

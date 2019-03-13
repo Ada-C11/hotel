@@ -2,10 +2,11 @@ require "pry"
 require "date"
 
 class Reservation_Manager
-  attr_reader :rooms, :all_reservations, :available_rooms
+  attr_reader :rooms, :all_reservations, :available_rooms, :all_blocks
 
   def initialize
     @all_reservations = all_reservations || []
+    # @all_blocks = all_blocks || []
     # @available_rooms = (1..20).map { |i| i }
     # @all_rooms = all_rooms
   end
