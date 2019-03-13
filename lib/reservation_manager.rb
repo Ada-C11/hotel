@@ -12,8 +12,6 @@ class Reservation_manager
     @reservation_id = reservation_id
     @check_in_time = check_in_time
     @check_out_time = check_out_time
-    # @room_number = room_number
-    # @room_number = @all_rooms.shift
     @new_reservation = Reservation.new(reservation_id: @reservation_id, check_in_time: @check_in_time, check_out_time: @check_out_time)
     @reservations << @new_reservation
     # binding.pry

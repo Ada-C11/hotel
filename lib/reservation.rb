@@ -10,6 +10,8 @@ class Reservation
     @reservation_id = reservation_id
     @check_in_time = Date.parse(check_in_time)
     @check_out_time = Date.parse(check_out_time)
+    @duration_of_stay
+    @total_cost
     # binding.pry
   end
 
