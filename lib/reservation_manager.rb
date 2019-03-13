@@ -40,7 +40,10 @@ module Hotel
       unavail_rooms = reservations_by_date(p_date).map do |reservation|
         reservation.room_number
       end
-      return unavail_rooms
+
+      avail_rooms = all_rooms.reject { |rm_num| unavail_rooms.include? rm_num }
+
+      return avail_rooms
     end
   end
 end

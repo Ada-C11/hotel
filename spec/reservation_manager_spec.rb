@@ -41,7 +41,16 @@ describe "available_rooms method" do
     reservation1 = manager.make_reservation(2, "march 15, 2019", "march 20, 2019")
     reservation2 = manager.make_reservation(3, "march 17, 2019", "march 22, 2019")
     date = "march 18, 2019"
-    unavail_rooms = manager.available_rooms(date)
-    ap unavail_rooms
+    vacant_rooms = manager.available_rooms(date)
+    expect(vacant_rooms.length).must_equal 18
+  end
+
+  it "does not include the booked rooms" do
+    manager = Hotel::ReservationManager.new
+    reservation1 = manager.make_reservation(2, "march 15, 2019", "march 20, 2019")
+    reservation2 = manager.make_reservation(3, "march 17, 2019", "march 22, 2019")
+    date = "march 18, 2019"
+    vacant_rooms = manager.available_rooms(date)
+    expect(vacant_rooms).wont_include 3
   end
 end
