@@ -181,5 +181,27 @@ describe "hotel class" do
       expect(@hotel.reservations[1].id).must_equal 2
       expect(@hotel.reservations[2].id).must_equal 3
     end
+
+    it "will raise an error if there are no available rooms" do
+      17.times do
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      end
+
+      expect{
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      }.must_raise NotImplementedError
+    end
+
+    it "will correctly assign a room if checkout day of another reservation is requested" do
+      17.times do
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      end
+
+      @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 9, num_nights: 2)
+
+      status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 10)
+      
+      expect(status).must_equal true
+    end
   end
 end
