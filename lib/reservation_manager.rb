@@ -20,6 +20,7 @@ module Hotel
     end
 
     def find_reservation(id: nil, date: nil)
+      index = 0
       if id.class == Integer
         @reservations.find do |reservation|
           if reservation.id == id
@@ -27,12 +28,19 @@ module Hotel
           end
         end
       elsif date.class == Time
-        @reservations.find do |reservation|
-          if date > reservation.start_date && date < reservation.end_date
-            return reservation
-          else
-            raise ArgumentError, "There are no reservations during that"
+        # if index <= @reservations.length
+        # @reservations.find do |reservation|
+        re = []
+        @reservations.each_with_index do |reservation, index|
+          if date >= reservation.start_date && date <= reservation.end_date
+            re << reservation
           end
+        end
+        if re.empty?
+          raise ArgumentError, "There are no reservations for that date"
+        else
+          return re # STORED ALL THE RESERVATIONS FOR AN ESPECIFIC DATE
+          # HOW DO I ACCESS THE INFO FROM SPEC?
         end
       end
     end
