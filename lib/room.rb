@@ -1,5 +1,4 @@
 require 'date'
-# require_relative 'hotel'
 require_relative 'reservation'
 
 module HotelManagementSystem
@@ -8,7 +7,7 @@ module HotelManagementSystem
 
         COST = 200
 
-        def initialize(room:) # this is where you pass in values
+        def initialize(room:)
             @room = room
             @cost = COST
             @reservations = []
@@ -18,7 +17,7 @@ module HotelManagementSystem
             end
         end 
 
-        def add_reservation(reservation) # room keeps track of own reservations
+        def add_reservation(reservation)
             @reservations << reservation
         end
     end
