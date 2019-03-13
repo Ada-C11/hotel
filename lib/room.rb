@@ -1,26 +1,25 @@
+require 'date'
+require_relative 'date_range'
 
-class Room 
+
+class Room < DateRange
   ROOM_RATE = 200.00
-  attr_reader :id, :price
+  attr_reader :id, :price, :bookings, :booked_on
 
-  def initialize id: nil
-    valid_id(id)
-    @id = id
-    @price = ROOM_RATE
-  end
 
-  def self.all
-    CSV.read('support/rooms.csv', headers: true, header_converters: :symbol, converters: :numeric).map do |line| 
-      Room.new(id: line[0].to_i)
-    end
-  end
-
-  def valid_id(id)
+  def initialize id
     unless id.instance_of?(Integer) && id > 0 && id <= 20
       raise ArgumentError, "ID must be a positive number, given #{id}..."
     end
+
+    @id = id
+    @price = ROOM_RATE
+    @bookings = []
   end
 
-  private 
-  #incase i need anything to be private
+  def booked_on(reservation)
+    @bookings << reservation #will have an array of it's own bookings
+  end
+
+
 end

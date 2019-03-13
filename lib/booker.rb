@@ -1,27 +1,53 @@
 require "csv"
 require "chronic"
-require 'time'
-require 'date'
+require "time"
+require "date"
 
 require_relative "room"
 require_relative "reserve"
-require_relative 'date_range'
+require_relative "date_range"
 
-class Booking
-  attr_reader :check_in, :check_out
-  
-  def initialize(check_in: nil, check_out: nil)
-    # check_in = Chronic.parse(check_in)
-    # check_out = Chronic.parse(check_out)
-    
+class RoomBooker < DateRange
+  attr_reader :check_in, :check_out, :list_all_rooms, :list_reservations
+
+  def initialize
+    @rooms = hotel_rooms
+    @reservations = []
   end
 
-  def make_reservation
-    #Using the date range given it creates a reservation and books a room, appends an instance of Reserve to reservation array. 
-    #What happens if no rooms are available?
+  def make_reservation(check_in, check_out)
+    room = find_room_id
+    @reserved = Reservation.new(id: @reservations.length + 1, check_in: check_in, check_out: check_out, room_booked: room)
+    
+    add_reservation(@reserved)
+  end
+
+  def find_room_id
+    @all_rooms.each do |room|
+      if room.bookings.empty?
+        return room.id
+      end
+    end
+  end
+
+  def hotel_rooms
+    @all_rooms = []
+    20.times do |room_num|
+      @all_rooms << Room.new(@id = room_num + 1)
+    end
+    return @all_rooms
+  end
+
+  def add_reservation(res)
+    @reservations << res
+  end
+
+  def list_all_rooms
+    return @all_rooms
+  end
+
+  def list_reservations
+    @reservations
   end
 
 end
-
-# check_in = DateTime.strptime(check_in, '%m-%d-%Y')
-# check_out = DateTime.strptime(check_out, '%m-%d-%Y')

@@ -1,29 +1,28 @@
-require 'date'
-require_relative 'date_range'
+require "date"
+require_relative "date_range"
+require_relative "room"
 
 class Reservation < DateRange
-  attr_reader :id, :start_date, :end_date, :room_booked, :total_cost
+  attr_reader :id, :check_in, :check_out, :room_booked, :total_cost, :add_reservation, :reservations
 
-  def initialize id:nil, start_date:, end_date:, room_booked: nil
-    valid_id(id)
-    valid_date?(start_date)
-    valid_date?(end_date)
-    date_range_valid?(start_date, end_date)
+  def initialize(id: nil, check_in: nil, check_out: nil, room_booked: nil, total_cost: nil)
+    valid_date?(check_in)
+    valid_date?(check_out)
+    date_range_valid?(check_in, check_out)
 
+    def count_nights(check_in, check_out)
+      start = Date.parse(check_in)
+      leave = Date.parse(check_out)
+      nights = (start...leave).count
+      return nights
+    end
+
+    total = count_nights(check_in, check_out) * 200.00
     @id = id
-    @start_date = start_date
-    @end_date = end_date
-    @room_booked = room_booked
-    @total_cost = total_cost
-  end
-
-  def self.make_reservation(reservation)
-    @reservations = []
-    @reservations << reservation
-  end
-
-  def self.all_rooms
-    return @Room.all_rooms
+    @check_in = check_in
+    @check_out = check_out
+    @room_booked = room_booked # get from room available
+    @total_cost = total
   end
 
   def valid_id(id)
@@ -32,7 +31,7 @@ class Reservation < DateRange
     end
   end
 
-  def  valid_date?(date)
+  def valid_date?(date)
     super
   end
 
@@ -40,11 +39,5 @@ class Reservation < DateRange
     super
   end
 
-  def total_cost
-  end
-  
-
   private
-  
 end
-
