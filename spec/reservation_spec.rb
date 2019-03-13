@@ -40,7 +40,7 @@ describe "Reservation class" do
   describe "reservation_dates method" do
     it "creates an array of arrays of the dates included in a reservation" do
       reservation = Reservation.new(start_date: "1st Mar 2019", end_date: "3rd Mar 2019")
-      expect(reservation.reservation_dates).must_equal Date.parse("1st Mar 2019")..Date.parse("3rd Mar 2019")
+      expect(reservation.reservation_dates).must_equal [Date.parse("1st Mar 2019"), Date.parse("2nd Mar 2019"), Date.parse("3rd Mar 2019")]
     end
   end
 

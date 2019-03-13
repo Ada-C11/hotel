@@ -52,5 +52,10 @@ describe "ReservationManager class" do
       reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019", room: "1")
       expect(reservation_manager.view_available_rooms(start_date: "3rd July 2019", end_date: "9th July 2019").length).must_equal 19
     end
+    it "Ignores trip end date since you don't need to book a room that night" do
+      reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019", room: "1")
+      expect(reservation_manager.view_available_rooms(start_date: "5th July 2019", end_date: "9th July 2019").length).must_equal 20
+    end
+    # add more tests to check limits of this
   end
 end

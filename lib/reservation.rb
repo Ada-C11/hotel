@@ -22,7 +22,7 @@ class Reservation
   end
 
   def reservation_dates
-    date_range = Date.parse(@start_date)..Date.parse(@end_date)
+    date_range = (Date.parse(@start_date)..Date.parse(@end_date)).to_a
     return date_range
   end
 
