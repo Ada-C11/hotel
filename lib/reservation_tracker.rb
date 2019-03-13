@@ -1,4 +1,2 @@
-require 'date'
 
-module HotelSystemTracker
-    
+# return reservation.cost
