@@ -1,13 +1,13 @@
-class Scheduler
-  attr_reader :schedule
-  
-  def initialize
-    @schedule = Array.new
+module Scheduler
+  def self.list_all_rooms
+    all_rooms = Array.new
+    20.times do |i|
+      all_rooms << Room.new(i + 1)
+    end
+    return all_rooms
   end
 
-  def add_to_schedule(time_interval, id)
-    @schedule.each do |h|
-      @schedule << {time_interval => [id]}
-    end
+  def find_available_room
+
   end
 end

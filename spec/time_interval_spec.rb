@@ -16,9 +16,9 @@ describe "time_interval class" do
       }.must_raise ArgumentError
     end
 
-    it "raises an argument error if check in and check out time are in the past" do
-      check_in = "2019/02/12"
-      check_out = "2019/02/14"
+    it "raises an argument error if check in time equals check out time" do
+      check_in = "2019/05/12"
+      check_out = "2019/05/12"
       expect {
         Time_Interval.new(check_in, check_out)
       }.must_raise ArgumentError
@@ -26,37 +26,71 @@ describe "time_interval class" do
   end
 
   describe "overlap? method" do
-    let(:d1) {
-      check_in = "2019-12-15"
-      check_out = "2019-12-19"
-      Time_Interval.new(check_in, check_out)
-    }
+    describe "returns true if two time intervals overlap" do
+      it "two long identical intervals" do
+        i1 = Time_Interval.new("2019-06-15", "2019-07-15")
+        i2 = Time_Interval.new("2019-06-15", "2019-07-15")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
 
-    let(:d2) {
-      check_in = "2019-12-17"
-      check_out = "2019-12-20"
-      Time_Interval.new(check_in, check_out)
-    }
+      it "two short identical intervals" do
+        i1 = Time_Interval.new("2019-09-15", "2019-09-16")
+        i2 = Time_Interval.new("2019-09-15", "2019-09-16")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
 
-    let(:d3) {
-      check_in = "2019-12-15"
-      check_out = "2019-12-19"
-      Time_Interval.new(check_in, check_out)
-    }
+      it "one very long interval and one short interval with same check_out time" do
+        i1 = Time_Interval.new("2019-09-15", "2019-12-15")
+        i2 = Time_Interval.new("2019-12-14", "2019-12-15")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
 
-    let(:d4) {
-      check_in = "2019-12-10"
-      check_out = "2019-12-15"
-      Time_Interval.new(check_in, check_out)
-    }
+      it "one very short interval falls within a very long interval" do
+        i1 = Time_Interval.new("2019-09-15", "2019-09-16")
+        i2 = Time_Interval.new("2019-04-15", "2019-12-15")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
 
-    it "returns true if two time intervals overlap" do
-      expect(Time_Interval.overlap?(d1, d2)).must_equal true
-      expect(Time_Interval.overlap?(d3, d4)).must_equal true
+      it "a medium length interval falls within a very long interval" do
+        i1 = Time_Interval.new("2019-08-15", "2019-09-15")
+        i2 = Time_Interval.new("2019-04-15", "2019-12-15")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
+
+      it "two similar length intervals with one's check_in time before the other's check_out time" do
+        i1 = Time_Interval.new("2019-08-15", "2019-08-25")
+        i2 = Time_Interval.new("2019-08-20", "2019-08-30")
+        expect(i1.overlap?(i2)).must_equal true
+        expect(i2.overlap?(i1)).must_equal true
+      end
     end
 
-    it "returns false if two time intervals do not overlap" do
-      expect(Time_Interval.overlap?(d2, d4)).must_equal false
+    describe "returns false if two time intervals do not overlap" do
+      it "two similar length intervals with one's check_out time equals the other's check_in time" do
+        i1 = Time_Interval.new("2019-08-15", "2019-08-25")
+        i2 = Time_Interval.new("2019-08-25", "2019-08-30")
+        expect(i1.overlap?(i2)).must_equal false
+        expect(i2.overlap?(i1)).must_equal false
+      end
+
+      it "one very long interval with check_out time collides with check_in time of a very short interval" do
+        i1 = Time_Interval.new("2019-08-15", "2019-08-25")
+        i2 = Time_Interval.new("2019-08-25", "2019-08-26")
+        expect(i1.overlap?(i2)).must_equal false
+        expect(i2.overlap?(i1)).must_equal false
+      end
+
+      it "two intervals whose boundaries don't collide" do
+        i1 = Time_Interval.new("2019-08-15", "2019-08-20")
+        i2 = Time_Interval.new("2019-08-25", "2019-08-30")
+        expect(i1.overlap?(i2)).must_equal false
+        expect(i2.overlap?(i1)).must_equal false
+      end
     end
   end
 end
