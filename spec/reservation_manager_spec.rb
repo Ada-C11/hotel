@@ -47,11 +47,10 @@ describe "ReservationManager class" do
       expect(reservation_manager.access_reservations_by_date("10th Jul 2019").length).must_equal 0
     end
   end
-  #   describe "view available rooms method" do
-  #     it "returns an array of booked rooms" do
-  #       reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019")
-  #       reservation.assign_room
-  #       expect(reservation_manager.view_available_rooms(start_date: "5th July 2019", end_date: "9th July 2019").length).must_equal 1
-  #     end
-  #   end
+  describe "view available rooms method" do
+    it "returns an array of available rooms for a given date range" do
+      reservation = reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019", room: "1")
+      expect(reservation_manager.view_available_rooms(start_date: "3rd July 2019", end_date: "9th July 2019").length).must_equal 19
+    end
+  end
 end

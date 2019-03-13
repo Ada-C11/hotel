@@ -30,9 +30,4 @@ class Reservation
     cost = duration * 200
     return cost
   end
-
-  # def assign_room
-  #   @rooms = ("1".."20").to_a
-  #   return @rooms.sample
-  # end
 end
