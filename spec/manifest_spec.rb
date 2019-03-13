@@ -65,7 +65,7 @@ Room number 20
 "
     end
   end
-  describe "Manifest#list_reservations_by_date" do
+  describe "Manifest#list_unavailable_rooms_by_date" do
     before do
       booker = Hotel::Booker.new
       @manifest_unavailable = booker.manifest
@@ -78,15 +78,15 @@ Room number 20
       end
     end
     it "returns a string" do
-      expect(@manifest_unavailable.list_reservations_by_date(@day1)).must_be_instance_of String
+      expect(@manifest_unavailable.list_unavailable_rooms_by_date(@day1)).must_be_instance_of String
     end
 
     it "formats string and correctly selects unavailable rooms" do
-      expect(@manifest_unavailable.list_reservations_by_date(@day1 + 1)).must_equal "Room number 2\nRoom number 10\nRoom number 12\n"
+      expect(@manifest_unavailable.list_unavailable_rooms_by_date(@day1 + 1)).must_equal "Room number 2\nRoom number 10\nRoom number 12\n"
     end
 
     it "returns an empty string if no rooms reserved for given date" do
-      expect(@manifest_unavailable.list_reservations_by_date(@day2 + 5)).must_equal ""
+      expect(@manifest_unavailable.list_unavailable_rooms_by_date(@day2 + 5)).must_equal ""
     end
   end
 end

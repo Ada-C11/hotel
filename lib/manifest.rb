@@ -30,7 +30,7 @@ module Hotel
              end
     end
 
-    def list_reservations_by_date(date)
+    def list_unavailable_rooms_by_date(date)
       reserved = []
       rooms.each do |room|
         room.unavailable.each do |reservation|
