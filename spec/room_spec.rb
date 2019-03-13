@@ -35,4 +35,22 @@ describe "Room class" do
       expect(@room.reservations.length).must_equal previous + 1
     end
   end
+  describe "is_available? method" do
+    before do
+      @manager = Hotel::Manager.new
+      @check_in = "2019-3-20"
+      @check_out = "2019-3-21"
+
+      @reservation = @manager.reserve_room(@check_in, @check_out)
+      @reserved_room = @reservation.room
+    end
+
+    it "returns false if the room is unavailable during a given date range" do
+      @check_in = Date.parse(@check_in)
+      @check_out = Date.parse(@check_out)
+      availability = @reserved_room.is_available?(@check_in, @check_out)
+
+      expect(availability).must_equal false
+    end
+  end
 end

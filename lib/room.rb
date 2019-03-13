@@ -15,5 +15,14 @@ module Hotel
     def add_reservation(reservation)
       @reservations << reservation
     end
+
+    def is_available?(possible_check_in, possible_check_out)
+      availability = true
+
+      @reservations.each do |reservation|
+        availability = !availability if reservation.check_in == possible_check_in
+      end
+      return availability
+    end
   end
 end
