@@ -12,8 +12,6 @@ module Hotel
       @room = room
 
       @cost = length_of_stay * room.rate
-
-      room.booked_dates.concat(dates)
     end
   end
 end

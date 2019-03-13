@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe "Reservation class " do
-  describe "Initalizer" do
+  describe "Initializer" do
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
     let(:dates) { [Date.new(2001, 2, 3), Date.new(2001, 2, 4)] }

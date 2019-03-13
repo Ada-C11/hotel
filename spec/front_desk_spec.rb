@@ -4,7 +4,9 @@ describe "FrontDesk class" do
   let(:frontdesk) { Hotel::FrontDesk.new }
   let(:date1) { "February 3, 2011" }
   let(:date2) { "February 5, 2011" }
-  let(:room) { Hotel::Room.new(room_number: 2) }
+  let(:reservation) { frontdesk.reserve(start_date: date1, end_date: date2) }
+  let(:start_date) { Date.parse(date1) }
+  let(:end_date) { Date.parse(date2) }
 
   describe "Initialization and more" do
     it "is able to instantiate" do
@@ -22,10 +24,6 @@ describe "FrontDesk class" do
   end
 
   describe "Reserve" do
-    let(:reservation) { frontdesk.reserve(start_date: date1, end_date: date2) }
-    let(:start_date) { Date.parse(date1) }
-    let(:end_date) { Date.parse(date2) }
-
     it "can reserve a room for given date range" do
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
@@ -37,15 +35,13 @@ describe "FrontDesk class" do
     end
 
     describe "Assign room" do
-      it "correctly extracts nights needed from days given" do
-        days = end_date - start_date + 1
-        nights = reservation.dates.length
-        expect(days).must_equal 3
-        expect(nights).must_equal 2
-        expect(days - nights).must_equal 1
-        expect(start_date).must_equal reservation.dates.first
-        expect(end_date).must_equal Date.new(2011, 2, 5)
-        expect(reservation.dates.last).must_equal Date.new(2011, 2, 4)
+      it "can assign an available room" do
+        fd = Hotel::FrontDesk.new
+        res = fd.reserve(start_date: date1, end_date: date2)
+        expect(res.room).must_be_kind_of Hotel::Room
+        expect(res.room.number).must_equal 1
+        res2 = fd.reserve(start_date: date1, end_date: date2) # another reservation on the same dates
+        expect(res2.room.number).must_equal 2
       end
     end
   end
@@ -103,13 +99,47 @@ describe "FrontDesk class" do
       expect(frontdesk.open_rooms(date: date2).first.available?(date: date2)).must_equal true
     end
 
-    ## Currently doesn't work
-    # it "doesn't find open rooms when there are none available" do
-    #   20.times do
-    #     frontdesk.reserve(start_date: "january 7, 2019", end_date: "january 10, 2019")
-    #   end
+    # Currently doesn't work
+    it "doesn't find open rooms when there are none available" do
+      fd = Hotel::FrontDesk.new
+      # expect { fd.open_rooms(date: "january 8, 2019") }.must_be_kind_of Array
 
-    #   expect { frontdesk.open_rooms(date: "january 9, 2019") }.must_raise ArgumentError
-    # end
+      20.times do |i|
+        res = fd.reserve(start_date: "january 7, 2019", end_date: "january 10, 2019")
+        expect(res.room.number).must_equal i + 1
+      end
+
+      expect { fd.open_rooms(date: "january 8, 2019") }.must_raise ArgumentError
+    end
+  end
+
+  describe "Find by room" do
+    it "can find a room based on the room number" do
+      room = frontdesk.find_by_room(room_number: 7)
+
+      expect(room).must_be_kind_of Hotel::Room
+      expect(room.number).must_equal 7
+    end
+  end
+
+  describe "Generate dates" do
+    it "correctly extracts nights needed from days given" do
+      days = end_date - start_date + 1
+      nights = reservation.dates.length
+      expect(days).must_equal 3
+      expect(nights).must_equal 2
+      expect(days - nights).must_equal 1
+      expect(start_date).must_equal reservation.dates.first
+      expect(end_date).must_equal Date.new(2011, 2, 5)
+      expect(reservation.dates.last).must_equal Date.new(2011, 2, 4)
+    end
+  end
+
+  describe "Rooms array" do
+    it "generates an array of rooms" do
+      expect(frontdesk.rooms).must_be_kind_of Array
+      expect(frontdesk.rooms.length).must_equal 20
+      expect(frontdesk.rooms.first).must_be_kind_of Hotel::Room
+    end
   end
 end

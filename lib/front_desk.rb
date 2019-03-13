@@ -28,6 +28,8 @@ module Hotel
       reservation = Hotel::Reservation.new(dates: dates,
                                            room: assign_room(array_of_dates: dates))
 
+      reservation.room.booked_dates.concat(dates)
+
       reservations << reservation
 
       return reservation
@@ -40,31 +42,22 @@ module Hotel
       reservations.select { |reservation| reservation.dates.include?(date) }
     end
 
-    def open_rooms(date:)
-      open_rooms = rooms.reject do |room|
-        room.booked_dates.include?(date)
-      end
-
-      # open_room = rooms.find { |room| room.available? }
-      raise ArgumentError, "No rooms available" if open_rooms.empty?
-      return open_rooms
-    end
-
-    def assign_room(array_of_dates:)
-      assigned_room = nil
-      rooms.each do |room|
-        array_of_dates.each do |date|
-          next if room.booked_dates.include?(date)
-          assigned_room = room
-          break
-        end
-      end
-      raise ArgumentError, "No available rooms for that date range" if assigned_room == nil
-      return assigned_room
-    end
-
     def find_by_room(room_number:)
       rooms.find { |room| room.number == room_number }
+    end
+
+    def open_rooms(date:)
+      # open_rooms = rooms.reject do |room|
+      #   room.booked_dates.include?(date)
+      # end
+
+      open = rooms.find_all { |room| room.available?(date: date) }
+      p open
+      # if open != true
+      #   raise ArgumentError, "No rooms available"
+      # end
+
+      return open
     end
 
     private
@@ -83,6 +76,21 @@ module Hotel
         night += 1 # go to the next day
       end
       return dates
+    end
+
+    def assign_room(array_of_dates:)
+      assigned_room = nil
+      rooms.each do |room|
+        array_of_dates.each do |date|
+          if room.available?(date: date)
+            assigned_room = room
+            break
+          end
+        end
+        break if assigned_room
+      end
+      raise ArgumentError, "No available rooms for that date range" if assigned_room == nil
+      return assigned_room
     end
   end
 end
