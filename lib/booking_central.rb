@@ -17,13 +17,18 @@ class BookingCentral
 
   def list_available_rooms(check_in, check_out)
     asking_date = DateRange.generate_date_range(check_in, check_out)
-    #available_rooms = @all_reservations.reject{ |k,v| k.date_range.cover?(asking_date.begin) && k.date_range.cover?(asking_date.end) }
-    available_rooms = @all_reservations.reject{ |k,v| k.date_range.cover?(asking_date.begin) && k.date_range.cover?(asking_date.end) }
-    puts available_rooms.class
+    reserved_dates = @all_reservations.select { |reservation, details| reservation.date_range }
+
+    if reserved_dates == []
+      available_rooms = @rooms
+    else
+      check_overlap = DateRange.dates_overlap?(reserved_dates, asking_date)
+      available_rooms = @all_reservations.select{ |reservation, details| reservation.room unless check_overlap == true}
+    end  
   end
 
-  bookings = BookingCentral.new
-  puts bookings.list_available_rooms('2019-04-01', '2019-04-03')
+  # bookings = BookingCentral.new
+  # puts bookings.list_available_rooms('2019-04-01', '2019-04-03')
 
   def assign_room
     if @all_reservations.length == 0
