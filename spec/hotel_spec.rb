@@ -37,6 +37,24 @@ describe "hotel class" do
     end
   end
 
+  describe "valid_date_entry? method" do
+    it "will raise an error if date is invalid" do
+      expect{
+        @hotel.valid_date_entry?(2019, 1, 32)
+      }.must_raise ArgumentError
+    end
+  end
+
+  describe "create_date_list method" do
+    before do
+      @dates = @hotel.create_date_list(start_year: 2019, start_month: 11, start_day: 15, num_nights: 5)
+    end
+
+    it "returns a DateRange" do
+      expect(@dates).must_be_kind_of HotelSystem::DateRange
+    end
+  end
+
   describe "find_room method" do
     it "returns an instance of a room" do
       room = @hotel.find_room(19)
@@ -57,16 +75,6 @@ describe "hotel class" do
     end
   end
 
-  describe "create_date_list method" do
-    before do
-      @dates = @hotel.create_date_list(start_year: 2019, start_month: 11, start_day: 15, num_nights: 5)
-    end
-
-    it "returns a DateRange" do
-      expect(@dates).must_be_kind_of HotelSystem::DateRange
-    end
-  end
-
   describe "room_reserved? method" do
     before do
       3.times do
@@ -83,9 +91,15 @@ describe "hotel class" do
     end
 
     it "will return true if the room is reserved" do
-      status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 5)
+      status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 7)
 
       expect(status).must_equal true
+    end
+
+    it "will return false if the date entered is the checkout day of a reservation" do
+      status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 9)
+
+      expect(status).must_equal false
     end
   end
 
@@ -129,6 +143,24 @@ describe "hotel class" do
 
       room = @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 9)
       expect(room.room_number).must_equal 1
+    end
+  end
+
+  describe "create_reservation_id method" do
+    it "will return 1 if the hotel has no reservations yet" do
+      res_id = @hotel.create_reservation_id
+
+      expect(res_id).must_equal 1
+    end
+
+    it "will return the correct number if the hotel has reservations" do
+      3.times do
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      end
+
+      res_id = @hotel.create_reservation_id
+
+      expect(res_id).must_equal 4
     end
   end
 
