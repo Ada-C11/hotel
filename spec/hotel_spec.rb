@@ -3,6 +3,7 @@ require_relative "./spec_helper"
 describe "Hotel" do
   before do
     @test_hotel = BookingSystem::Hotel.new
+    @test_room = BookingSystem::Room.new(room_num: 1337)
   end
 
   describe "initialize" do
@@ -13,7 +14,6 @@ describe "Hotel" do
 
   describe "add_room" do
     it "adds room into Hotel's array of rooms" do
-      @test_room = BookingSystem::Room.new(room_num: 1337)
       @test_hotel.add_room(@test_room)
       expect(@test_hotel.rooms).must_be_kind_of Array
       expect(@test_hotel.rooms[0]).must_be_kind_of BookingSystem::Room
@@ -23,10 +23,6 @@ describe "Hotel" do
   end
 
   describe "list_rooms" do
-    before do
-      @test_room = BookingSystem::Room.new(room_num: 1337)
-    end
-
     it "returns nil if there is no room in the hotel" do
       expect(@test_hotel.list_rooms).must_be_kind_of Array
       expect(@test_hotel.list_rooms.length).must_equal 0
@@ -42,7 +38,6 @@ describe "Hotel" do
 
   describe "new_reservation" do
     before do
-      @test_room = BookingSystem::Room.new(room_num: 1337)
       checkin_date = Date.new(2019, 1, 1)
       checkout_date = Date.new(2019, 1, 11)
       @test_hotel.new_reservation(@test_room, checkin_date, checkout_date)
@@ -61,7 +56,6 @@ describe "Hotel" do
 
   describe "list_by_date" do
     before do
-      @test_room = BookingSystem::Room.new(room_num: 1337)
       checkin_date = Date.new(2019, 1, 1)
       checkout_date = Date.new(2019, 1, 11)
       @test_hotel.new_reservation(@test_room, checkin_date, checkout_date)
@@ -74,11 +68,4 @@ describe "Hotel" do
       expect(reservations.length).must_equal 1
     end
   end
-
-  describe "available?" do
-
-    # expect(date.available?).must_equal true
-  end
-
-
 end
