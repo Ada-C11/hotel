@@ -26,7 +26,7 @@ describe "Registry class" do
     end
 
 # ******************************************************** #
-# ************* TESTS I HAVEN'T WRITTEN YET ************** #
+# *************TODO: TESTS I HAVEN'T WRITTEN************** #
 # ******************************************************** #
 # def find_by_date(date)
 #   date = Date.parse(date)
