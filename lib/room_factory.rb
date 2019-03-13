@@ -1,6 +1,5 @@
 module Hotel
-  HOTEL_SIZE = 20
-  COST = 200.00
+
   class Room
     attr_reader :rm_id, :cost
 
@@ -9,8 +8,13 @@ module Hotel
       @cost = input[:cost]
     end
   end
+end
 
-  class Construction
+  module Construction
+    HOTEL_SIZE = 20
+    COST = 200.00
+
+  class Build
     attr_accessor :rooms
 
     def initialize
