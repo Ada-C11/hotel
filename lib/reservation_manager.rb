@@ -30,7 +30,7 @@ module Hotel
       @reservations.each do |reservation|
         if e_date > reservation.check_in && e_date <= reservation.check_out
           reservations_by_date << reservation
-        elsif s_date >= reservation.check_in && s_date <= reservation.check_out
+        elsif s_date >= reservation.check_in && s_date < reservation.check_out
           reservations_by_date << reservation
         elsif s_date <= reservation.check_in && e_date >= reservation.check_out
           reservations_by_date << reservation
@@ -42,9 +42,6 @@ module Hotel
     end
 
     def available_rooms(start_date, end_date)
-      # Do I need this?
-      # p_date = Date.parse(date)
-
       unavail_rooms = reservations_by_date(start_date, end_date).map do |reservation|
         reservation.room_number
       end
