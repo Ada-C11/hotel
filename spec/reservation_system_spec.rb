@@ -2,46 +2,32 @@ require_relative "spec_helper"
 
 describe "ReservationSystem class" do
   describe 'Rooms and bookings methods' do
-    it "can find room by booking number" do
-      booking = HotelBooking::Booking.new(
-        reference_number: 20,
-        room: 1,
-        start_date: Date.parse('2001-02-03'),
-        end_date: Date.parse('2001-02-07'),
-        price: 200
-        )
 
-      ReservationSystem.add_booking(booking)
-      room = ReservationSystem.find_room_by_number(20)
-      expect(room.room).must_equal 1
+    it "can find room by booking number" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
+
+      room = reservation_system.find_room_by_booking_number(booking.reference_number)
+
+      expect(room).wont_equal nil
     end
 
     it "can find booking by room number" do
-      booking = HotelBooking::Booking.new(
-        reference_number: 20,
-        room: 1,
-        start_date: Date.parse('2001-02-03'),
-        end_date: Date.parse('2001-02-07'),
-        price: 200
-        )
+      reservation_system = HotelBooking::ReservationSystem.new
+      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
 
-      ReservationSystem.add_booking(booking)
-      room = ReservationSystem.find_booking_by_number(1)
-      expect(room.reference_number).must_equal 20
+      bookings = reservation_system.find_bookings_by_room_number(booking.room.number)
+      
+      expect(bookings).must_equal [booking]
     end
 
     it "can find bookings by date" do
-      booking = HotelBooking::Booking.new(
-        reference_number: 20,
-        room: 1,
-        start_date: Date.parse('2001-02-03'),
-        end_date: Date.parse('2001-02-07'),
-        price: 200
-        )
+      reservation_system = HotelBooking::ReservationSystem.new
+      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
 
-      ReservationSystem.add_booking(booking)
-      room = ReservationSystem.find_booking_by_number(1)
-      expect(room.reference_number).must_equal 20
+      bookings = reservation_system.find_booking_by_date('2001-02-03')
+      
+      expect(bookings).must_equal [booking]
     end
   end
 

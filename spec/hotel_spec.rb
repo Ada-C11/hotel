@@ -29,7 +29,7 @@ describe 'Hotel class' do
 
     it "stores an instance of a room" do
       hotel = HotelBooking::Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 0)
-      room = Room.new(1)
+      room = HotelBooking::Room.new(1)
 
       hotel.add_room(room)
       expect(hotel.rooms.first).must_equal room
@@ -37,7 +37,7 @@ describe 'Hotel class' do
 
     it "stores an instance of a booking" do
       hotel = HotelBooking::Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 0)
-      booking = Booking.new(
+      booking = HotelBooking::Booking.new(
         reference_number: 1,
         room: 1,
         start_date: Date.parse('2001-02-03'),
@@ -48,5 +48,6 @@ describe 'Hotel class' do
         hotel.add_booking(booking)
       expect(hotel.bookings.first).must_equal booking
     end
+
   end
 end

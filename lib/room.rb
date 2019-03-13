@@ -1,5 +1,5 @@
 module HotelBooking
-  class Room
+  class Room 
 
     attr_accessor :number
     # is initialized with a room number as a parameter

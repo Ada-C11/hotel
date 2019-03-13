@@ -1,8 +1,5 @@
-require_relative "room"
-require_relative "booking"
-
 module HotelBooking
-  class Hotel
+  class Hotel 
 
     attr_accessor :hotel_name, :number_of_rooms, :rooms, :bookings
 
@@ -19,15 +16,14 @@ module HotelBooking
       @bookings = []
     end
 
-      # Can add an instance of room to the array of rooms
-      def add_room(room)
-        @rooms.push(room)
-      end
-    
-      # Can add an instance of booking to the array of bookings
-      def add_booking(booking)
-        @bookings.push(booking)
-      end  
-
+    # Can add an instance of room to the array of rooms
+    def add_room(room)
+      @rooms.push(room)
+    end
+  
+    # Can add an instance of booking to the array of bookings
+    def add_booking(booking)
+      @bookings.push(booking)
+    end  
   end
 end
