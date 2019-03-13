@@ -13,19 +13,25 @@ module HotelSystem
     #   @reservations << reservation
     # end
 
-    def date_available?(new_start_date, new_end_date)
+    def date_available?(possible_start_date, possible_end_date)
       @reservations.each do |reservation|
-        if new_start_date == reservation.start_date
+        if possible_start_date == reservation.start_date
           return false
-        elsif reservation.start_date < new_start_date && new_start_date < reservation.end_date
+        elsif reservation.start_date < possible_start_date && possible_start_date < reservation.end_date
           return false
-        elsif reservation.start_date < new_end_date && new_end_date < reservation.end_date
+        elsif reservation.start_date < possible_end_date && possible_end_date < reservation.end_date
           return false
-        elsif new_start_date > reservation.end_date
+        elsif possible_start_date < reservation.start_date && possible_end_date == reservation.end_date
+          return false
+        elsif possible_start_date < reservation.start_date && reservation.end_date < possible_end_date
+          return false
+        elsif reservation.end_date < possible_start_date
           return true
-        elsif new_start_date == reservation.end_date
+        elsif possible_start_date < reservation.start_date && possible_end_date < reservation.start_date
           return true
-        elsif new_end_date == reservation.start_date
+        elsif possible_start_date == reservation.end_date
+          return true
+        elsif possible_end_date == reservation.start_date
           return true
         end
       end
