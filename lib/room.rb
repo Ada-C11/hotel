@@ -16,10 +16,10 @@ module Hotel
       @reservations << reservation
     end
 
-    def is_available?(date_range)
+    def is_available?(booking_range)
       @reservations.each do |reservation|
         reservation_range = (reservation.check_in..reservation.check_out)
-        unless date_range.end <= reservation_range.begin || date_range.begin >= reservation_range.end
+        unless booking_range.end <= reservation_range.begin || booking_range.begin >= reservation_range.end
           return false
         end
       end
