@@ -24,9 +24,9 @@ class Hotel
     return reservation
   end
 
-  def self.load_rooms
-    return @rooms
-  end
+  # def self.load_rooms
+  #   return @rooms
+  # end
 
   def load_reservation(date)
     all_reservations = []

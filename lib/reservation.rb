@@ -23,8 +23,8 @@ class Reservation
   end
 end
 
-b = Reservation.new(1, 3, Date.new(2018, 3, 5), Date.new(2018, 3, 8))
-puts b.start_date
-puts b.end_date
+# b = Reservation.new(1, 3, Date.new(2018, 3, 5), Date.new(2018, 3, 8))
+# puts b.start_date
+# puts b.end_date
 
-puts b.dates
+# puts b.dates
