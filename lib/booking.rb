@@ -10,9 +10,16 @@ module Hotel
     end
 
     def request_reservation(checkin, checkout)
-      reservation = Hotel::Reservation.new(checkin, checkout)
-      reservations << reservation
+      date_range = Reservation.reservation_dates(checkin, checkout)
+      room = check_availability(date_range)
+      num_nights = Reservation.nights(checkin, checkout)
+      reservation = Hotel::Reservation.new(checkin: checkin, checkout: checkout, nights: num_nights, dates: date_range, room: room)
+      @reservations << reservation
       return reservation
+    end
+
+    def check_availability(date_range)
+      return @rooms.first 
     end
 
     def find_reservation(date)

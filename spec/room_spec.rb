@@ -18,15 +18,15 @@ describe "Room" do
     end
 
     it "Has the correct cost" do
-      expect(@rooms.first[:cost]).must_equal 150
+      expect(@rooms.first.cost).must_equal 150
     end
 
     it "Has the correct ID for the first room" do
-      expect(@rooms.first[:id]).must_equal 100
+      expect(@rooms.first.id).must_equal 100
     end
 
     it "Has the correct ID for the last room" do
-      expect(@rooms.last[:id]).must_equal 119
+      expect(@rooms.last.id).must_equal 119
     end
   end
 end

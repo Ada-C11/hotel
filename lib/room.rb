@@ -5,13 +5,14 @@ module Hotel
       @id = id
       @cost = cost
     end
-    
+
     def self.list_rooms(starting_id, num_rooms, cost)
       rooms = []
       num_rooms.times do
-        rooms << {id: starting_id, cost: cost}
+        rooms << Room.new(starting_id, cost)
         starting_id += 1
       end
+      @rooms = rooms
       return rooms
     end
   end
