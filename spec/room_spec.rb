@@ -1,5 +1,5 @@
 require_relative "spec_helper"
-
+require "Date"
 describe "Room class" do
   describe "Room instantiation" do
     before do
@@ -18,7 +18,12 @@ describe "Room class" do
 
     it "sets reservations to an empty array if not provided" do
       expect(@room.reservations.length).must_equal 0
-    end # needed?
+    end # needed? needed for block?
+
+    it "has a block parameter" do
+      expect(@room.block.length).must_equal 0
+      expect(@room.block).must_be_kind_of Array
+    end
   end
 
   describe "#add_reservation" do
@@ -31,6 +36,7 @@ describe "Room class" do
         start_date: Date.new(2001, 2, 3),
         end_date: Date.new(2001, 2, 5),
         room: @room,
+
       )
       @room.add_reservation(@reservation)
     end
@@ -41,6 +47,33 @@ describe "Room class" do
 
     it "is of object Hotel::Reservation" do
       expect(@room.reservations[0]).must_be_kind_of Hotel::Reservation
+    end
+  end
+
+  describe "#add_block" do
+    before do
+      @collection = []
+      @room1 = Hotel::Room.new(
+        id: 1,
+      )
+      @room2 = Hotel::Room.new(
+        id: 2,
+      )
+      @collection << @room1
+      @collection << @room2
+      p @collection
+      @block1 = Hotel::Block.new(
+        id: 1,
+        start_date: Date.new(2001, 2, 3),
+        end_date: Date.new(2001, 2, 5),
+        collection_rooms: @collection,
+        discounted_rate: 150,
+      )
+      @room1.add_block(@block1)
+      @room2.add_block(@block1)
+    end
+    it "adds a block to list of hotel blocks" do
+      expect(@room1.block.length).must_equal 1
     end
   end
 end
