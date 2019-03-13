@@ -8,31 +8,35 @@ module HotelSystem
   NUMBER_OF_ROOMS = 20
 
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @rooms = []
       (1..NUMBER_OF_ROOMS).each do |num|
         rooms << room(id: num, rate: RATE_PER_NIGHT)
       end
-      @reservations = []
+      @reservations = {}
+      @blocks = {}
     end
 
-    def make_reservation(room_id, date1, date2)
+    def make_reservation(room_id:, start_date:, end_date:, name:)
       room_being_reserved = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room_being_reserved
-      request_range = date_range(date1, date2)
+      request_range = date_range(start_date, end_date)
       check_room(room: room_being_reserved, date_range: request_range)
       new_res = reservation(date_range: request_range,
                             room: room_being_reserved,
-                            id: (reservations.length + 1))
+                            id: (reservations.length + 1), name: name)
       update_reservations(room: room_being_reserved, reservation: new_res)
       return new_res
     end
 
+    def make_block
+    end
+
     def list_reservations_by_date(date)
       date = parse_date(date)
-      reservations_on_date = reservations.select { |reservation| reservation.includes_date?(date) }
+      reservations_on_date = reservations.values.select { |reservation| reservation.includes_date?(date) }
       return reservations_on_date
     end
 
@@ -47,20 +51,25 @@ module HotelSystem
       return rooms.find { |room| room.id == room_id }
     end
 
-    def reserve_from_block(block, room)
+    def reserve_from_block(block, room, name)
       (raise BlockError, "The given block does not contain the given room") if (!room.blocks.include?(block))
       check_room(room: room, date_range: block.date_range, from_block: true)
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
-                            room: room)
+                            room: room,
+                            name: name)
       update_reservations(block: block, room: room, reservation: new_res)
       return new_res
+    end
+
+    def add_reservation(reservation)
+      reservations[reservation.name] = reservation
     end
 
     private
 
     def update_reservations(block: nil, room: nil, reservation:)
-      self.reservations << reservation
+      self.add_reservation(reservation)
       block.add_reservation(reservation) if block
       room.add_reservation(reservation) if room
     end
@@ -86,8 +95,8 @@ module HotelSystem
       return HotelSystem::Room.new(id: id, rate: rate)
     end
 
-    def reservation(date_range:, room:, id:)
-      HotelSystem::Reservation.new(date_range: date_range, room: room, id: id)
+    def reservation(date_range:, room:, id:, name:)
+      HotelSystem::Reservation.new(date_range: date_range, room: room, id: id, name: name)
     end
 
     def block(rooms:, date_range:, discount_rate:, id:)
