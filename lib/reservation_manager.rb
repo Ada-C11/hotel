@@ -21,6 +21,8 @@ module Hotel
 
     def find_reservation(id: nil, date: nil)
       index = 0
+      # THIS IS NOT REQUIRED!! SHOULD I GET RID OF IT OR
+      # PUT IT INTO ANOTHER METHOD??
       if id.class == Integer
         @reservations.find do |reservation|
           if reservation.id == id
@@ -28,19 +30,18 @@ module Hotel
           end
         end
       elsif date.class == Time
-        # if index <= @reservations.length
-        # @reservations.find do |reservation|
-        re = []
+        reservations_found = []
         @reservations.each_with_index do |reservation, index|
           if date >= reservation.start_date && date <= reservation.end_date
-            re << reservation
+            reservations_found << reservation
           end
         end
-        if re.empty?
+        if reservations_found.empty?
           raise ArgumentError, "There are no reservations for that date"
+        elsif reservations_found.length == 1
+          return reservations_found[0]
         else
-          return re # STORED ALL THE RESERVATIONS FOR AN ESPECIFIC DATE
-          # HOW DO I ACCESS THE INFO FROM SPEC?
+          return reservations_found
         end
       end
     end
