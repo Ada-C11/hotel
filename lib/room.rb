@@ -10,8 +10,10 @@ module Hotel
     end
 
     def add_reservation(reservation)
-      booked = reservation.reserved_nights
-      @availability << booked
+      booking = reservation.reserved_nights
+      booking.each do |night|
+        @availability << night
+      end
     end
   end
 end

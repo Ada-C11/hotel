@@ -1,4 +1,3 @@
-# Add simplecov
 require "simplecov"
 SimpleCov.start
 require "minitest"

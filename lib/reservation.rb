@@ -1,5 +1,3 @@
-# check if t <=> t2 is greater than or equal to 1
-
 require "pry"
 require "date"
 
@@ -39,12 +37,4 @@ module Hotel
       return @num_of_nights * 200
     end
   end
-
-  # def connect(reservation, room)
-  # @passenger = passenger
-  # passenger.add_trip(self)
-  # @driver = driver
-  # driver.add_trip(self)
-  #   end
-
 end
