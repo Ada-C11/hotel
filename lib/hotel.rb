@@ -34,14 +34,8 @@ module BookingSystem
     end
 
     def list_by_date(date)
-      # Search through reservations by date
-      return reservations
+      matching_reservations = @reservations.select {|reservation| reservation.date_range.include?(date)}
+      return matching_reservations
     end
   end
 end
-
-# test_room = BookingSystem::Room.new(room_num: 1)
-# test_reservation = BookingSystem::Reservation.new(room: test_room,
-#                                                   checkin_date: Date.new(2019, 1, 1),
-#                                                   checkout_date: Date.new(2019, 1, 11))
-# test_room.add_reservation(test_reservation)
