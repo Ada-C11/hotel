@@ -2,12 +2,12 @@
 
 module Hotel
   class Reservation
-    attr_reader :first_night, :last_night, :length_of_stay, :cost, :room, :dates
+    attr_reader :first_night, :last_night, :length_of_stay, :cost, :room, :nights
 
-    def initialize(room:, dates:)
-      @length_of_stay = dates.length
+    def initialize(room:, nights:)
+      @length_of_stay = nights.length
 
-      @dates = dates
+      @nights = nights
 
       @room = room
 

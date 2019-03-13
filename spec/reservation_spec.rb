@@ -4,11 +4,11 @@ describe "Reservation class " do
   describe "Initializer" do
     let(:start_date) { Date.new(2001, 2, 3) }
     let(:end_date) { Date.new(2001, 2, 5) }
-    let(:dates) { [Date.new(2001, 2, 3), Date.new(2001, 2, 4)] }
+    let(:nights) { [Date.new(2001, 2, 3), Date.new(2001, 2, 4)] }
     let(:room) { Hotel::Room.new(room_number: 1) }
     let(:reservation) {
       reservation = Hotel::Reservation.new(room: room,
-                                           dates: dates)
+                                           nights: nights)
     }
 
     it "is able to instantiate" do
@@ -25,19 +25,21 @@ describe "Reservation class " do
 
     it "assigns room" do # used to check if it assigned available room
       expect(reservation.room).must_be_kind_of Hotel::Room
-      # expect(reservation.room.available?).must_equal true
+
+      expect(reservation.room.available?(date: nights.first)).must_equal true
+      expect(reservation.room.available?(date: nights.last)).must_equal true
     end
 
-    it "creates an array of booked dates" do
-      expect(reservation.dates).must_be_kind_of Array
-      expect(reservation.dates.length).must_equal 2
+    it "creates an array of booked nights" do
+      expect(reservation.nights).must_be_kind_of Array
+      expect(reservation.nights.length).must_equal 2
 
       reservation2 = Hotel::Reservation.new(room: room,
-                                            dates: dates)
+                                            nights: nights)
 
-      expect(reservation2.dates.length).must_equal 2
-      expect(reservation2.dates.first).must_equal Date.new(2001, 2, 3)
-      expect(reservation2.dates.last).must_equal Date.new(2001, 2, 4)
+      expect(reservation2.nights.length).must_equal 2
+      expect(reservation2.nights.first).must_equal Date.new(2001, 2, 3)
+      expect(reservation2.nights.last).must_equal Date.new(2001, 2, 4)
     end
   end
 end

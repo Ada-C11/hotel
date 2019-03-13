@@ -1,16 +1,16 @@
 module Hotel
   class Room
     attr_reader :rate, :number
-    attr_accessor :booked_dates
+    attr_accessor :booked_nights
 
     def initialize(room_number:)
       @rate = 200
       @number = room_number
-      @booked_dates = []
+      @booked_nights = []
     end
 
     def available?(date:)
-      booked_dates.include?(date) ? false : true
+      booked_nights.include?(date) ? false : true
     end
   end
 end
