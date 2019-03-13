@@ -63,7 +63,7 @@ describe "check_availability method" do
     @reservation = @hotel.add_reservation(@checkin_date, @checkout_date)
 
     @checkin_date2 = Date.new(2019,1,4)
-    @checkout_date2 = Date.new(2019,1,8)
+    @checkout_date2 = Date.new(2019,1,7)
     
     # @reservation2 = Booking::Reservation.new(@hotel.check_availability(@checkin_date2, @checkout_date2).first, @checkin_date, @checkout_date)
 
@@ -89,15 +89,51 @@ describe "check_availability method" do
 
   it "raises an error if there are no available rooms for that date" do
     @checkin_date3 = Date.new(2019,1,4)
-    @checkout_date3 = Date.new(2019,1,5)
+    @checkout_date3 = Date.new(2019,1,7)
     @reservation3 = @hotel.add_reservation(@checkin_date3, @checkout_date3)
 
     @checkin_date4 = Date.new(2019,1,4)
-    @checkout_date4 = Date.new(2019,1,6)
+    @checkout_date4 = Date.new(2019,1,7)
 
     expect{@hotel.check_availability(@checkin_date4, @checkout_date4)}.must_raise ArgumentError
-    
   end
 
+  it "allows a room to be reserved on a previous reservation's checkout date" do
+    @checkin_date5 = Date.new(2019,1,7)
+    @checkout_date5 = Date.new(2019,1,9)
+
+    @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
+    expect(@reservation5).must_be_kind_of Booking::Reservation
+  end
+end
+
+describe "hotel_block method" do
+  before do
+    @hotel = Booking::Hotel.new(5)
+    @checkin_date = Date.new(2019,1,4)
+    @checkout_date = Date.new(2019,1,7)
+    @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
+  end
+
+  it "creates a hotel_block" do
+   expect(@block).must_be_kind_of Array
+   expect(@block.length).must_equal 4
+   expect(@block[1]).must_be_kind_of Integer
+  end
+
+  it "removes the block rooms from available_rooms array" do
+    expect(@hotel.available_rooms[0]).wont_equal 1
+  end
+
+  it "raises an error if at least one of the selected rooms is unavailable" do
+    @hotel.add_reservation(@checkin_date, @checkout_date)
+    expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)}.must_raise ArgumentError
+  end
+
+  it "raises an error if I try to create another block with a room already in another block" do
+    @checkin_date2 = Date.new(2019,1,6)
+    @checkout_date2 = Date.new(2019,1,9)
+    expect{@hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8,3], 150)}.must_raise ArgumentError
+  end
 end
 

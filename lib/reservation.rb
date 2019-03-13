@@ -2,11 +2,11 @@ require 'date'
 # require_relative 'hotel.rb'
 
 module Booking
-  class Reservation < Hotel
+  class Reservation
       ROOM_COST = 200
-      attr_reader :room_number, :checkin_date, :checkout_date, :total_cost
+      attr_reader :room_number, :checkin_date, :checkout_date, :total_cost, :cost
   
-      def initialize(room_number, checkin_date, checkout_date)
+      def initialize(room_number, checkin_date, checkout_date, cost: 200)
         @room_number = room_number
         @checkin_date = checkin_date
 
@@ -16,12 +16,17 @@ module Booking
           @checkout_date = checkout_date
         end
 
+        @cost = cost
+
         @total_cost = self.total_cost
       end
   
       def total_cost
         days_spent = (self.checkout_date - self.checkin_date)
-        total = (days_spent)*ROOM_COST
+        if cost = 200
+          total = (days_spent)*ROOM_COST
+        else total = (days_spent)*cost
+        end
         return total
       end
   end
