@@ -4,7 +4,7 @@ require "pry"
 class Reservation
   attr_reader :start_date, :end_date, :rooms, :reservation_dates, :duration, :total_cost, :reservation_durations_array, :room
 
-  def initialize(start_date: Date.today, end_date: Date.today + 1, room: "0")
+  def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0")
     @start_date = start_date
     @end_date = end_date
     @room = room
