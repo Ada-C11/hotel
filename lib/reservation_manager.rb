@@ -24,6 +24,7 @@ class Reservation_Manager
     reservation = Reservation.new(1)
     reservation.check_in = fixed_check_in
     reservation.check_out = fixed_check_out
+    ##TODO: should people be able to make a reservation for one day, same checkin/checkout date?
     if reservation.check_out - reservation.check_in <= 0
       raise ArguementError, "Check out time is not after check in time. Inputted check in date was #{check_in} and check out date was #{check_out}"
     end
@@ -47,7 +48,11 @@ class Reservation_Manager
     # binding.pry
     date1 = Date.parse(finding_check_in)
     date2 = Date.parse(finding_check_out)
-    given_date_range = (date1...date2).to_a
+    if date1 == date2
+      given_date_range = (date1..date2).to_a
+    else
+      given_date_range = (date1...date2).to_a
+    end
     # binding.pry
 
     unavailable_rooms = []

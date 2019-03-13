@@ -92,7 +92,7 @@ describe "RESERVATION MANAGER TESTS" do
       available_rooms = (1..20).map { |i| i }
 
       expect(check_rooms).must_be_kind_of Array
-      expect(check_rooms.length).must_equal 20
+      expect(check_rooms).must_equal available_rooms
     end
 
     it "returns list of available rooms - dates overlap" do
@@ -105,6 +105,17 @@ describe "RESERVATION MANAGER TESTS" do
       check_rooms = test_manager.find_available_rooms(check_in, check_out)
 
       expect(check_rooms.length).must_equal 18
+    end
+
+    it "returns list of available rooms - check in and check out day are the same" do
+      test_manager = Reservation_Manager.new
+      check_in = "2019-4-5"
+      check_out = "2019-4-5"
+      test_manager.make_reservation("2019-4-4", "2019-4-10")
+      check_rooms = test_manager.find_available_rooms(check_in, check_out)
+
+      expect(check_rooms).must_be_kind_of Array
+      expect(check_rooms.length).must_equal 19
     end
   end
 end
