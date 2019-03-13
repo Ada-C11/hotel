@@ -1,5 +1,6 @@
 require_relative "room"
 require_relative "reservation"
+require_relative "date_range.rb"
 require "date"
 
 module HotelSystem
@@ -16,16 +17,22 @@ module HotelSystem
       @reservations = []
     end
 
+    def create_date_list(start_year:, start_month:, start_day:, num_nights: nil)
+      dates = HotelSystem::DateRange.new(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
+      return dates
+    end
+
     def find_room(number)
       HotelSystem::Room.valid_room_number(number)
       return @rooms.find { |room| room.room_number == number }
     end
 
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
-      res_dates = reservation_dates(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
-      res_room = find_available_room(res_dates)
+      res_dates = create_date_list(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
+      # res_dates_range = res_dates.date_list
+      res_room = find_available_room(start_year: start_year, start_month: start_month, start_day: start_day)
       id = create_reservation_id
-      res = HotelSystem::Reservation.new(id: id, room: res_room, dates: res_dates)
+      res = HotelSystem::Reservation.new(id: id, room: res_room, date_range: res_dates)
       @reservations << res
       res_room.add_reservation(res)
     end
@@ -39,37 +46,23 @@ module HotelSystem
       end
     end
 
-    def reservation_dates(start_year:, start_month:, start_day:, num_nights:)
-      dates = []
-      start_date = Date.new(start_year, start_month, start_day)
-      dates << start_date
-      i = 1
-      num_nights.times do
-        date = start_date + i
-        dates << date
-        i += 1
-      end
-      return dates
-    end
-
-    def room_reserved?(room_number:, dates:)
+    def room_reserved?(room_number:, year:, month:, day:)
       res_room = find_room(room_number)
+      date = Date.new(year, month, day)
       if res_room.reservations == []
         return false
       end
-      dates.each do |date|
         res_room.reservations.each do |res|
-          if res.dates.include?(date)
+          if res.date_range.include?(date)
           return true
           end
         end
-      end
       return false
     end
 
-    def find_available_room(dates_list)
+    def find_available_room(start_year:, start_month:, start_day:)
       @rooms.each do |hotel_room|
-        reserved = room_reserved?(room_number: hotel_room.room_number, dates: dates_list)
+        reserved = room_reserved?(room_number: hotel_room.room_number, year: start_year, month: start_month, day: start_day)
         if reserved == false
           return hotel_room
         end
@@ -81,7 +74,7 @@ module HotelSystem
       date = Date.new(year, month, day)
       date_reservations = []
       @reservations.each do |reservation|
-        if reservation.dates.include?(date)
+        if reservation.date_range.include?(date)
           found_res = {}
           found_res[:reservation_id] = reservation.id
           found_res[:room_number] = reservation.room_number

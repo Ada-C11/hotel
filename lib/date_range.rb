@@ -1,3 +1,5 @@
+require "date"
+
 module HotelSystem
   class DateRange
     attr_reader :start_year, :start_month, :start_day, :num_nights
@@ -22,6 +24,17 @@ module HotelSystem
         end
       end
       return dates_array
+    end
+
+    def include?(date)
+      if date.class != Date
+        raise ArgumentError, "Please enter an instance of the Date class."
+      end
+      if self.date_list.include?(date)
+        return true
+      else
+        return false
+      end
     end
   end
 end

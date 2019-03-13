@@ -1,9 +1,11 @@
 require_relative "spec_helper.rb"
 require_relative "../lib/reservation.rb"
+require_relative "../lib/date_range.rb"
 
 describe "reservation initalization" do
     before do
-        @reservation = HotelSystem::Reservation.new(id: 1, room_number: 1)
+        @dates = HotelSystem::DateRange.new(start_year: 19, start_day: 1, start_month: 1, num_nights: 4)
+        @reservation = HotelSystem::Reservation.new(id: 1, room_number: 1, date_range: @dates)
     end
 
     it "creates an instance of Room" do
@@ -32,7 +34,7 @@ describe "reservation initalization" do
         }.must_raise ArgumentError
     end
 
-    it "has an array for the dates" do
-        expect(@reservation.dates).must_be_kind_of Array
+    it "has a DateRange for the dates" do
+        expect(@reservation.date_range).must_be_kind_of HotelSystem::DateRange
     end
 end
