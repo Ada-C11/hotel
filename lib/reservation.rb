@@ -19,7 +19,7 @@ module Hotel
       @checkout_date = @checkin_date + num_of_nights
       @reserved_nights = calculate_reserved_nights
       @room_num = nil
-      @block_reference = nil #create a password/use regex to check?
+      @block_reference = nil
     end
 
     def calculate_reserved_nights
@@ -34,7 +34,11 @@ module Hotel
     end
 
     def cost
-      return @num_of_nights * 200
+      if @block_reference != nil
+        return @num_of_nights * 150
+      else
+        return @num_of_nights * 200
+      end
     end
   end
 end
