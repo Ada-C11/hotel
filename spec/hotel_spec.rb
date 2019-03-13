@@ -41,7 +41,13 @@ describe "Hotel class" do
     before do
       @rooms = HotelSystem::Room.make_set(20, 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
-      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
+      @start = "01 Feb 2020"
+      @end = "08 Feb 2020"
+      @middle = "04 Feb 2020"
+      @middle2 = "06 Feb 2020"
+      @before = "24 Jan 2020"
+      @after = "12 Feb 2020"
+      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end, name: "Ada")
       @test_room = @new_hotel.rooms.first
     end
     it "returns a new reservation if the room is available during the given dates" do
@@ -57,19 +63,29 @@ describe "Hotel class" do
     end
 
     it "allows reservations where the start date is on an existing reservation's end date" do
-      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: "08 Feb 2020", end_date: "15 Feb 2020", name: "Ada")
+      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @end, end_date: @after, name: "Ada")
       expect(test_reservation).must_be_instance_of HotelSystem::Reservation
     end
 
     it "allows reservations where the end date is on an existing reservation's start date" do
-      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: "08 Jan 2020", end_date: "01 Feb 2020", name: "Ada")
+      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @start, name: "Ada")
       expect(test_reservation).must_be_instance_of HotelSystem::Reservation
     end
 
     it "raises an exception if the room is not available during the given dates" do
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada") }.must_raise ReservationError
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: "04 Feb 2020", end_date: "08 Feb 2020", name: "Ada") }.must_raise ReservationError
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: "04 Feb 2020", end_date: "12 Feb 2020", name: "Ada") }.must_raise ReservationError
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end, name: "Ada") }.must_raise ReservationError # same dates
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @end, name: "Ada") }.must_raise ReservationError # same end, starts in midle
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @middle, name: "Ada") }.must_raise ReservationError # same start, ends in middle
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @after, name: "Ada") }.must_raise ReservationError # starts in middle, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @middle, name: "Ada") }.must_raise ReservationError # ends in middle, starts before
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @end, name: "Ada") }.must_raise ReservationError # same end, starts before
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @after, name: "Ada") }.must_raise ReservationError # same start, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @after, name: "Ada") }.must_raise ReservationError # starts before, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @middle2, name: "Ada") }.must_raise ReservationError # starts in middle, ends in middle
+    end
+
+    it "raises an exception if start date and end date are the same" do
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @start, name: "Ada") }.must_raise DateRangeError # starts before, ends after
     end
     it "raises an exception if an invalid room id is given" do
       expect { @new_hotel.make_reservation(room_id: 10000000, start_date: "01 Mar 2020", end_date: "08 Mar 2020", name: "Ada") }.must_raise RoomError
