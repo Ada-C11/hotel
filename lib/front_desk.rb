@@ -49,14 +49,12 @@ module Hotel
 
     def open_rooms(check_in: nil, check_out: nil, nights: nil)
       unless (check_in && check_out) || nights
-        raise ArgumentError, "Check in and check out dates or a list of nights must be given"
+        raise ArgumentError, "Either check in and check out dates or a list of nights must be given"
       end
 
       nights ||= generate_nights(check_in: check_in, check_out: check_out)
 
-      avail_rooms = rooms.select do |room|
-        room.available?(range: nights)
-      end
+      avail_rooms = rooms.select { |room| room.available?(range: nights) }
 
       raise ArgumentError, "No rooms available" if avail_rooms == []
 
