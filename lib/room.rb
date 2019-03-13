@@ -4,17 +4,17 @@ require_relative 'reservation'
 
 module HotelManagementSystem
     class Room
-        attr_reader :room_number, :cost, :reservations
+        attr_reader :room, :cost, :reservations
 
         COST = 200
 
-        def initialize(room_number) # this is where you pass in values
-            @room_number = room_number
+        def initialize(room:) # this is where you pass in values
+            @room = room
             @cost = COST
             @reservations = []
 
-            if @room_number > 20 || @room_number < 1
-                raise ArgumentError, "Invalid room number #{@room_number}."
+            if @room > 20 || @room < 1
+                raise ArgumentError, "Invalid room number #{@room}."
             end
         end 
 
