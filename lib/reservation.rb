@@ -19,7 +19,7 @@ module HotelManagementSystem
                 raise ArgumentError, "Reservation can not be created. Room is invalid."
             end
 
-            # @room.add_reservation(self) # add reservation to list of reservations
+            room.add_reservation(self) # add reservation to list of reservations
         end
 
         def duration
