@@ -52,10 +52,7 @@ describe "Concierge class" do
       expect{(@concierge.reservations.length).must_equal (res_count + 1)}
     end
     
-    # it "outputs an instance of Room" do
-    #   reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
-    #   expect reservation.room.must_be_instance_of Hotel::Room
-    # end
+
   
     
     end
