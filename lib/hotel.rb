@@ -46,15 +46,15 @@ module HotelSystem
       if res_room.reservations == []
         return false
       end
-        res_room.reservations.each do |res|
-          if res.date_range.include?(date)
-            if date == res.date_range.checkout
-              return false
-            else
-              return true
-            end
+      res_room.reservations.each do |res|
+        if res.date_range.include?(date)
+          if date == res.date_range.checkout
+            return false
+          else
+            return true
           end
         end
+      end
       return false
     end
 
@@ -66,7 +66,7 @@ module HotelSystem
           return hotel_room
         end
       end
-        raise NotImplementedError, "Sorry, no available rooms for that date."
+      raise NotImplementedError, "Sorry, no available rooms for that date."
     end
 
     def create_reservation_id
@@ -76,7 +76,7 @@ module HotelSystem
         id = @reservations.length + 1
         return id
       end
-    end    
+    end
 
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
       valid_date_entry?(start_year, start_month, start_day)
@@ -100,9 +100,26 @@ module HotelSystem
       end
       if date_reservations.length == 0
         puts "There are no dates for that reservation."
-        return 0
+        return nil
       else
         return date_reservations
+      end
+    end
+
+    def available_rooms_by_date(year:, month:, day:)
+      valid_date_entry?(year, month, day)
+      available_rooms = []
+      @rooms.each do |room|
+        status = room_reserved?(room_number: room.room_number, year: year, month: month, day: day)
+        if status == false
+          available_rooms << room
+        end
+      end
+      if available_rooms.length == 0
+        puts "There are no available rooms for that date."
+        return nil
+      else
+        return available_rooms
       end
     end
   end

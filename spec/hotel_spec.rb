@@ -229,8 +229,34 @@ describe "hotel class" do
           @hotel.reservations_by_date(year: 2019, month: 2, day: 30)
         }.must_raise ArgumentError
       end
-
-    
     end
+
+    describe "available_rooms_by_date method" do
+      before do
+        @avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
+      end
+      
+      it "will return an array if there are available rooms" do
+        expect(@avail_rooms).must_be_kind_of Array
+      end
+
+      it "will return an array of Room instances" do
+        expect(@avail_rooms[0]).must_be_kind_of HotelSystem::Room
+      end
+
+      it "will return an array of all the rooms in the hotel if all rooms are available" do
+        expect(@avail_rooms.length).must_equal 20
+      end
+
+      it "will not include a room if it gets booked for a date range including the given day" do
+        @hotel.reserve_room(start_year: 2019, start_month: 6, start_day: 14, num_nights: 3)
+        avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
+
+        room1 = @hotel.rooms[0]
+        status = avail_rooms.include?(room1)
+        expect(status).must_equal false
+      end
+    end
+
   end
 end
