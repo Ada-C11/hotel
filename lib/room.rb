@@ -15,13 +15,21 @@ module HotelSystem
 
     ##### NEEDS TESTS
     def available?(date)
-      # puts " IN RES #{date.class.object_id}"
       reservations.each do |reservation|
         reservation.date_range.each do |reserved_date|
           return false if reserved_date.to_s == date.to_s
         end
       end
       return true
+    end
+
+    def self.create_rooms(room_numbers)
+      rooms = []
+      room_numbers.each do |num|
+        new_room = HotelSystem::Room.new(id: num)
+        rooms << new_room
+      end
+      return rooms
     end
   end
 end

@@ -1,11 +1,18 @@
+require "date"
+
+require_relative "room"
+require_relative "reservation"
+require_relative "block"
+require_relative "block_reservation"
+
 module HotelSystem
   class Hotel
-    attr_reader :reservations, :blocks
+    attr_reader :reservations, :blocks, :id
     attr_accessor :rooms
 
     def initialize(id:, rooms: [], reservations: [], blocks: [])
       @id = id
-      @rooms = rooms
+      @rooms = HotelSystem::Room.create_rooms(rooms)
       @reservations = reservations
       @blocks = blocks
     end
@@ -65,9 +72,15 @@ module HotelSystem
 
     def create_block(rooms, first_day, last_day, discount)
       new_block = HotelSystem::Block.new(rooms: rooms, first_day: first_day, last_day: last_day, discount: discount)
-      new_block.create_reservations
+      new_block.create_block_reservations
       @blocks << new_block
       return new_block
+    end
+
+    def available_block_rooms(block)
+    end
+
+    def reserve_block_room(block, room)
     end
   end
 end
