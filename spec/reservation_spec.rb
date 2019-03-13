@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "Reservation class" do
   let(:valid_reservation) {
-    Hotel::Reservation.new(check_in: "March 20, 2020", check_out: "March 27, 2020")
+    Hotel::Reservation.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"))
   }
   describe "Reservation#initialize" do
     it "is an instance of Reservation" do
@@ -22,9 +22,9 @@ describe "Reservation class" do
     end
 
     it "will raise exception if invalid date range used" do
-      date1 = (Time.new + 172800).to_date.to_s
-      date2 = (Time.new + 172800 * 4).to_date.to_s
-      past = "march 2, 2019"
+      date1 = (Time.new + 172800).to_date
+      date2 = (Time.new + 172800 * 4).to_date
+      past = Date.parse("march 2, 2019")
       expect { Hotel::Reservation.new(check_in: date2, check_out: date1) }.must_raise InvalidDateRangeError
       expect { Hotel::Reservation.new(check_in: past, check_out: date1) }.must_raise InvalidDateRangeError
     end

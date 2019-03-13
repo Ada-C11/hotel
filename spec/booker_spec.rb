@@ -14,16 +14,20 @@ describe "Booker" do
   end
 
   describe "Booker#book_room" do
-    it "adds check_in and check_out dates to unavailable array to manifest by room id" do
+    it "adds reservation to unavailable array to manifest for a given room" do
       room_id = 1
-      day1 = "march 20, 2020"
-      day2 = "march 28, 2020"
+      day1 = Date.parse("march 20, 2020")
+      day2 = Date.parse("march 28, 2020")
       reservation1 = Hotel::Reservation.new(check_in: day1, check_out: day2)
       room = manifest.find_room(room_id)
       booker.book_room(reservation1, room)
-      expect(room.unavailable_list).must_be_instance_of Array
-      expect(room.unavailable_list.last.check_in).must_be_instance_of Date
-      expect(room.unavailable_list.last.check_in).must_equal Date.new(2020, 03, 20)
+      expect(room.unavailable_list[-1]).must_be_instance_of Hotel::Reservation
     end
+
+    it "adds reservation correctly" do
+    end
+  end
+
+  describe "Booker#cost_of_booking" do
   end
 end

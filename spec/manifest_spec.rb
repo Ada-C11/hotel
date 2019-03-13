@@ -74,7 +74,7 @@ Room number 20
       room_ids = [2, 10, 12]
       room_ids.each do |id|
         room = @manifest_unavailable.find_room(id)
-        booker.book_room(Hotel::Reservation.new(check_in: @day1.to_s, check_out: @day2.to_s), room)
+        booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
       end
     end
     it "returns a string" do
