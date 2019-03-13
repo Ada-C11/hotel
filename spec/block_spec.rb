@@ -143,26 +143,42 @@ describe "Block" do
     end
   end
 
-  # describe "Book Block Reservation" do
-  #   before do
-  #     @number_of_rooms = 3
-  #     @block = create_block(@number_of_rooms, Date.parse("2019-04-27"), Date.parse("2019-05-08"), 0.2)
-  #     @block.create_block_reservations
-  #     @reservations = @block.find_available_reservations
-  #   end
+  describe "Book Block Reservation" do
+    before do
+      @number_of_rooms = 3
+      @first_day = Date.parse("2019-04-27")
+      @last_day = Date.parse("2019-05-08")
+      @block = create_block(@number_of_rooms, @first_day, @last_day, 0.2)
+      @block.create_block_reservations
+      @reservations = @block.find_available_reservations
+    end
 
-  #   it "Can be called on a block" do
-  #     # @block.book_block_reservation(@reservations.first)
-  #     expect(@block).must_respond_to :book_block_reservation
-  #   end
+    it "Can be called on a block" do
+      # @block.book_block_reservation(@reservations.first)
+      expect(@block).must_respond_to :book_block_reservation
+    end
 
-  #   it "Will raise an ArgumentError if called with reservation that is :UNAVAILABLE" do
-  #     first_res = @reservations.first
-  #     @block.book_block_reservation(first_res)
-  #     expect(first_res.status).must_equal :UNAVAILABLE
-  #     expect {
-  #       @block.book_block_reservation(first_res)
-  #     }.must_raise ArgumentError
-  #   end
-  # end
+    it "Will raise an ArgumentError if called with reservation that is :UNAVAILABLE" do
+      first_res = @reservations.first
+      @block.book_block_reservation(first_res)
+      expect(first_res.status).must_equal :UNAVAILABLE
+      expect {
+        @block.book_block_reservation(first_res)
+      }.must_raise ArgumentError
+    end
+
+    it "Will raise an ArgumentError if its passed a regular Reservations" do
+      reservation = create_reservation(create_room(4), @first_day, @last_day)
+      expect {
+        @block.book_block_reservation(reservation)
+      }.must_raise ArgumentError
+    end
+
+    it "Will change the status of the reservation from AVAILABLE to UNAVAILABLE" do
+      first_res = @reservations.first
+      expect(first_res.status).must_equal :AVAILABLE
+      @block.book_block_reservation(first_res)
+      expect(first_res.status).must_equal :UNAVAILABLE
+    end
+  end
 end

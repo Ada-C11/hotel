@@ -40,9 +40,10 @@ module HotelSystem
       return availabe_reservations
     end
 
-    # def book_block_reservation(reservation)
-    #   raise ArgumentError, "Reservation is Unavailable" if reservation.status == :UNAVAILABLE
-
-    # end
+    def book_block_reservation(reservation)
+      raise ArgumentError, "Cannot be used on regular reservations" if reservation.class == HotelSystem::Reservation
+      raise ArgumentError, "Reservation is Unavailable" if reservation.status == :UNAVAILABLE
+      reservation.book_reservation
+    end
   end
 end
