@@ -1,12 +1,10 @@
 module HotelSystem
   class Room
     attr_reader :room_number, :reservations
-    attr_accessor :price_per_night
 
     def initialize(number)
       self.class.valid_room_number(number)
       @room_number = number
-      @price_per_night = 200
       @reservations = []
     end
 

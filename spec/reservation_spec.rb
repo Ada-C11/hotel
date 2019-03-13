@@ -2,11 +2,14 @@ require_relative "spec_helper.rb"
 require_relative "../lib/reservation.rb"
 require_relative "../lib/date_range.rb"
 
-describe "reservation initalization" do
+describe "Reservation class" do 
+
     before do
         @dates = HotelSystem::DateRange.new(start_year: 2019, start_day: 1, start_month: 1, num_nights: 4)
         @reservation = HotelSystem::Reservation.new(id: 1, room_number: 1, date_range: @dates)
     end
+
+describe "reservation initalization" do
 
     it "creates an instance of Room" do
         expect(@reservation).must_be_kind_of HotelSystem::Reservation
@@ -37,4 +40,14 @@ describe "reservation initalization" do
     it "has a DateRange for the dates" do
         expect(@reservation.date_range).must_be_kind_of HotelSystem::DateRange
     end
+end
+
+describe "cost method" do
+it "will return the correct cost for a reservation" do
+expect(@reservation.cost).must_equal 800
+
+end
+
+end
+
 end
