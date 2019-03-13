@@ -1,9 +1,10 @@
 require_relative "spec_helper"
 
 describe "Booker Class" do
-    let(:booker) {Hotel::Booker.new}
+    describe "Booker Class Wave 1" do
+    let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
 
-    describe "Initialization of booker" do
+     describe "Initialization of booker" do
 
         it "is an instance of Booker" do
             expect(booker).must_be_kind_of Hotel::Booker
@@ -66,14 +67,50 @@ describe "Booker Class" do
 
     end
 
-    describe "Wave 2 book_room method" do
+    end
 
-        it "finds rooms for same requesting dates" do
-            booker.book_room(start_date: 20190313, end_date: 20190316)
-            booker.book_room(start_date: 20190313, end_date: 20190316)
-            expect(booker.reservations.length).must_equal 2
+
+    describe "Wave 2 book_room method with one room" do
+        before do 
+            @rooms = [Hotel::Room.new(1)]
+            @booker = Hotel::Booker.new(@rooms)
         end
 
+        it "finds room for requesting dates" do
+            @booker.book_room(start_date: 20190313, end_date: 20190316)
+            expect(@booker.reservations.length).must_equal 1
+        end
+
+        it "does not find room for two requests with same dates" do
+            expect{2.times do 
+                @booker.book_room(start_date: 20190313, end_date: 20190316)
+            end}.must_raise ArgumentError
+        end
+
+        it "can book room for a request that starts the same day another ends" do
+            @booker.book_room(start_date: 20190313, end_date: 20190316)
+            @booker.book_room(start_date: 20190316, end_date: 20190318)
+            expect(@booker.reservations.length).must_equal 2
+        end
+
+        it "can book room for a request that ends the same day another starts" do
+            @booker.book_room(start_date: 20190313, end_date: 20190316)
+            @booker.book_room(start_date: 20190311, end_date: 20190313)
+            expect(@booker.reservations.length).must_equal 2
+        end
+
+        it "cannot book room for a request that starts and ends in the middle of another" do
+            expect{@booker.book_room(start_date: 20190313, end_date: 20190316)
+            @booker.book_room(start_date: 20190314, end_date: 20190315)}.must_raise ArgumentError
+        end
+
+    end
+
+
+    describe "Wave 2 book_room method with multiple rooms" do
+        
+        let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
+        
         it "finds different rooms for 5 of the same requesting dates" do
             5.times do 
                 booker.book_room(start_date: 20190313, end_date: 20190316)
@@ -85,6 +122,13 @@ describe "Booker Class" do
             expect{22.times do 
                 booker.book_room(start_date: 20190313, end_date: 20190316)
             end}.must_raise ArgumentError
+        end
+
+        it "reserves room for requests that begins on the same day another ends" do
+            booker.book_room(start_date: 20190313, end_date: 20190316)
+            booker.book_room(start_date: 20190316, end_date: 20190320)
+            expect(booker.reservations.length).must_equal 2
+            expect(booker.reservations[0].room).must_equal booker.reservations[1].room
         end
 
 
