@@ -5,6 +5,9 @@ module HotelSystem
     attr_reader :start_year, :start_month, :start_day, :num_nights
 
     def initialize(start_year:, start_month:, start_day:, num_nights: nil)
+      if start_year.class != Integer || start_year.digits.length != 4
+        raise ArgumentError, "Please enter 4 digits for the year."
+      end
       @start_year = start_year
       @start_month = start_month
       @start_day = start_day
@@ -14,6 +17,9 @@ module HotelSystem
     def date_list
       dates_array = []
       start_date = Date.new(start_year, start_month, start_day)
+      if start_year.class != Integer || start_year.digits.length != 4
+        raise ArgumentError, "Please enter 4 digits for the year."
+      end
       dates_array << start_date
       if num_nights
         i = 1
