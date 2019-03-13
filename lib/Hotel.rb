@@ -22,5 +22,6 @@ class Hotel
     res_by_date = @reservation.select do |x|
       x.check_in <= date && date < x.check_out
     end
+    #so its nil if its empty, but is that a valid response?
   end
 end
