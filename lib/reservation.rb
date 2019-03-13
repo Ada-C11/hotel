@@ -7,14 +7,15 @@ module Hotel
 
         attr_accessor :room
 
-        def initialize(id: , date_range: , room: nil)
+        def initialize(id:, date_range: , room: nil)
             @id = id
             @date_range = date_range
             @room = room
+            @cost = cost
         end
 
         def cost
-            total = 200.0 * (date_range.length - 1)
+            total = 200.0 * (date_range)
             return total
         end
 

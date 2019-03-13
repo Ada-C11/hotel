@@ -28,8 +28,10 @@ describe "Date Range Class" do
     it "fills in the range array with instances of Dates" do
         expect(dates.range).must_be_kind_of Array
         expect(dates.range[0]).must_be_kind_of Date
-        expect(dates.range.length).must_equal 4
     end
 
+    it "takes out last date to show that the room will be available that day again" do
+        expect(dates.range.length).must_equal 3
+    end
   
 end

@@ -11,8 +11,9 @@ module Hotel
             #     raise ArgumentError, "Please enter a valid date!" 
             # end
             raise ArgumentError, "Please enter a valid date!" if @start_date > @end_date
-            
-            @range = (@start_date .. @end_date).to_a
+            range = (@start_date .. @end_date).to_a
+            range.pop
+            @range = range
         end
 
     end
