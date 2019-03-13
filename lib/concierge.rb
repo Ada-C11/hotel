@@ -16,25 +16,34 @@ module Hotel
       @reservations = []
     end
         
-    def reserve_room(check_in_date, check_out_date)
+    def reserve_room(start_date, end_date)
       available_room = @all_rooms.find do |room| 
         room.status == :AVAILABLE
-        return room
       end
-      reservation = Reservation.new(res_id: @reservations.length + 1, 
+      reservation = Reservation.new(id: @reservations.length + 1, 
                                     room: available_room, 
-                                    check_in_date: check_in_date, 
-                                    check_out_date: check_out_date)
-                                    
-      available_room.add_reservation(reservation)                             
-      @reservations << reservation
+                                    start_date: start_date, 
+                                    end_date: end_date
+                                   )     
+      self.reservations << reservation
+      available_room.add_reservation(reservation)                                   
     end
-     
+    
+    
+    def view_reservations_by_date(date)
+      return @reservations.filter {|res| res.include_date?(date)}
+    end
+    
+    # def connect(room, reservation)
+    #   @room = room
+    #   room.add_reservation(reservation)
+    # end
+  
 
     def see_all_rooms
       return "#{@all_rooms}" 
     end
 
-    
+ 
   end # end Concierge Class
 end # end Hotel Module

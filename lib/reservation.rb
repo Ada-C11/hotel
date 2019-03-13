@@ -5,42 +5,49 @@ require_relative "date_range"
 
 module Hotel
   class Reservation
-    attr_reader :res_id, :room, :check_in_date, :check_out_date, :total_cost
+    attr_reader :id, :room, :start_date, :end_date, :total_cost, :date_range
     
-    def initialize(res_id:, room:, check_in_date:, check_out_date:)
-      @res_id = res_id
+    def initialize(id:, room:, start_date:, end_date:)
+      @id = id
       @room = room
-      @check_in_date = check_in_date
-      @check_out_date = check_out_date
+      @start_date = start_date
+      @end_date = end_date
       @date_range = date_range
       
-      if check_out_date < check_in_date
+      if Date.parse(end_date) < Date.parse(start_date)
         raise ArgumentError, "End date cannot be before start date"
       end 
     end
     
+    
+    
     def date_range
-        DateRange.new(start_date: check_in_date, end_date: check_out_date)
+      @date_range = DateRange.new(start_date: start_date, end_date: end_date)
+    end
+    
+    def date_range=(date_range)
+      self.start_date = date_range.start_date
+      self.end_date = date_range.end_date
+    end
+    
+    def include_date?(date)
+      if start_date <= date || date  >= end_date
+        return true
+      else
+        return false
+      end
     end
 
-    def date_range=(date_range)
-      check_in_date = date_range.start_date
-      check_out_date = date_range.end_date
+  
+    
+    def total_cost
+      return ('%.2f' % (200.00 * duration)).to_f
     end
     
-    def length_of_stay(reservation_id)
-      return (check_out_date - check_in_date).to_i
+    def duration
+      return (date_range.end_date - date_range.start_date).to_i
     end
-    
-    def total_cost(reservation_id)
-      return (200 * length_of_stay).to_f
-    end
-    
-    
     
     
   end # class Reservation
 end # module Hotel
-
-# reservation = Hotel::Reservation.new(id: 1, room: 5, check_in_date:"2019-1-1", check_out_date:"2019-1-4")
-
