@@ -11,8 +11,8 @@ module Hotel
 
     def available?(night: nil, range: nil)
       if range
-        range.each do |night|
-          return false if booked_nights.include?(night)
+        range.each do |n|
+          return false if booked_nights.include?(n)
         end
 
         return true

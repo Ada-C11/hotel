@@ -36,7 +36,7 @@ module Hotel
 
     def find_reservations_by_date(date:)
       date = Date.parse(date)
-      on_this_date = []
+      # on_this_date = []
 
       reservations.select { |reservation| reservation.nights.include?(date) }
     end
