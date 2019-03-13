@@ -41,8 +41,12 @@ module Hotel
       return found_room
     end
 
-    def open_rooms(check_in:, check_out:)
-      nights = generate_nights(check_in: check_in, check_out: check_out)
+    def open_rooms(check_in: nil, check_out: nil, nights: nil)
+      unless (check_in && check_out) || nights
+        raise ArgumentError, "Check in and check out dates or a list of nights must be given"
+      end
+
+      nights ||= generate_nights(check_in: check_in, check_out: check_out)
 
       avail_rooms = rooms.select do |room|
         room.available?(range: nights)
@@ -64,9 +68,11 @@ module Hotel
     def generate_nights(check_in:, check_out:)
       first_day = Date.parse(check_in)
       last_day = Date.parse(check_out)
+
       if first_day >= last_day
         raise ArgumentError, "Reservation must be at least one day long"
       end
+
       nights = []
       night = first_day
       until night == last_day # not including last day
@@ -77,18 +83,7 @@ module Hotel
     end
 
     def assign_room(array_of_nights:)
-      assigned_room = nil
-      rooms.each do |room|
-        array_of_nights.each do |night|
-          if room.available?(night: night)
-            assigned_room = room
-            break
-          end
-        end
-        break if assigned_room
-      end
-      raise ArgumentError, "No available rooms for that date range" if assigned_room == nil
-      return assigned_room
+      open_rooms(nights: array_of_nights).first
     end
   end
 end
