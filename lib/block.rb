@@ -49,8 +49,8 @@ module HotelSystem
 
     # Date interaction methods
 
-    def includes_date?(new_date_range)
-      return date_range.includes_date?(new_date_range)
+    def includes_date?(new_date)
+      return date_range.includes_date?(new_date)
     end
 
     def overlap?(new_date_range)
