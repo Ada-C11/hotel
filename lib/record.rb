@@ -1,4 +1,3 @@
-require_relative "room"
 
 module Hotel
   class Record
