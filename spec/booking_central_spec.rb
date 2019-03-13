@@ -14,15 +14,15 @@ describe 'BookingCentral' do
 
   it 'creates a new reservation' do
     bookings = BookingCentral.new
-    new_booking = bookings.reserve_room(check_in: '2019-01-01', check_out: '2019-01-02')
+    new_booking = bookings.reserve_room(check_in: '2019-01-01', check_out: '2019-01-02', room: 1)
     expect(bookings.all_reservations.include?(new_booking)).must_equal true
   end
 
   it 'updates array of reservations' do
     bookings = BookingCentral.new
-    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04')
-    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06')
-    new_booking3 = bookings.reserve_room(check_in: '2019-01-07', check_out: '2019-01-08')
+    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
+    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06', room: 2)
+    new_booking3 = bookings.reserve_room(check_in: '2019-01-07', check_out: '2019-01-08', room: 3)
     # puts "TTTTTTTTTT"
     # puts bookings.all_reservations.select { |k, v| k.date_range.include?('2019-01-03') }.map(&:firs)
     # puts "TTTTTTTTTT"
@@ -31,9 +31,9 @@ describe 'BookingCentral' do
 
   it 'shows reservations by date' do
     bookings = BookingCentral.new
-    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04')
-    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06')
-    new_booking3 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-08')
+    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
+    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06', room: 10)
+    new_booking3 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-08', room: 20)
 
     expect((bookings.reservations_by_date('2019-01-03')).length).must_equal 3
   end
