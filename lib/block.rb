@@ -2,13 +2,14 @@ require_relative "err/errors"
 
 module HotelSystem
   class Block
-    attr_reader :rooms, :date_range, :discount_rate, :reservations, :group_name
+    attr_reader :rooms, :date_range, :discount_rate, :reservations, :group_name, :id
 
-    def initialize(rooms:, date_range:, discount_rate:, group_name:)
+    def initialize(rooms:, date_range:, discount_rate:, group_name:, id:)
       if rooms.length > 5 || rooms.length < 1
         raise BlockError, "A block must contain 1 to 5 rooms"
       end
       @rooms = rooms
+      @id = id
       @discount_rate = discount_rate
 
       @rooms.each { |room| block_room(room) }
@@ -19,7 +20,7 @@ module HotelSystem
     end
 
     def add_reservation(reservation)
-      reservations[reservation.name] = reservation
+      reservations[reservation.id] = reservation
     end
 
     def has_available_rooms?

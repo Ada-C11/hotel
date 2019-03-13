@@ -25,11 +25,11 @@ module HotelSystem
     end
 
     def add_reservation(reservation)
-      reservations[reservation.name] = reservation
+      reservations[reservation.id] = reservation
     end
 
     def add_block(block)
-      blocks[block.group_name] = block
+      blocks[block.id] = block
     end
 
     def all_reservations

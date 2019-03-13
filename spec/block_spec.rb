@@ -24,14 +24,16 @@ describe "Block class" do
         HotelSystem::Block.new(date_range: @date_range,
                                rooms: @hotel.rooms[0...7],
                                discount_rate: 180,
-                               group_name: "ComicCon")
+                               group_name: "ComicCon",
+                               id: :dklj324321)
       }.must_raise BlockError
 
       expect {
         HotelSystem::Block.new(date_range: @date_range,
                                rooms: [],
                                discount_rate: 180,
-                               group_name: "ComicCon")
+                               group_name: "ComicCon",
+                               id: :asdfh4h5k9)
       }.must_raise BlockError
     end
     it "will contain a date range " do
@@ -50,7 +52,7 @@ describe "Block class" do
     it "can check whether it has any rooms available" do
       expect(@block.has_available_rooms?).must_equal true
       (1..3).each do |id|
-        @hotel.reserve_from_block("ComicCon", id, "Ada")
+        @hotel.reserve_from_block(@block.id, id, "Ada")
       end
       expect(@block.has_available_rooms?).must_equal false
     end

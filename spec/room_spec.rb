@@ -36,7 +36,7 @@ describe "Room class" do
       after = @new_room.reservations.length
 
       expect(after).must_equal before + 1
-      expect(@new_room.reservations[@new_res.name]).must_equal @new_res
+      expect(@new_room.reservations[@new_res.id]).must_equal @new_res
     end
   end
   describe "is reserved" do

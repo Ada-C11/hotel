@@ -4,6 +4,7 @@ require_relative "block"
 require_relative "err/errors"
 
 require "pry"
+require "faker"
 
 module HotelSystem
   RATE_PER_NIGHT = 200
@@ -25,20 +26,20 @@ module HotelSystem
       return rooms.find { |room| room.id == room_id }
     end
 
-    def find_res_by_name(name)
-      return reservations[name]
+    def find_res_by_id(id)
+      return reservations[id]
     end
 
-    def find_block_by_name(name)
-      return blocks[name]
+    def find_block_by_id(id)
+      return blocks[id]
     end
 
     def add_reservation(reservation)
-      reservations[reservation.name] = reservation
+      reservations[reservation.id] = reservation
     end
 
     def add_block(block)
-      blocks[block.group_name] = block
+      blocks[block.id] = block
     end
 
     def all_reservations
@@ -53,7 +54,7 @@ module HotelSystem
       room = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room
       request_range = date_range(start_date, end_date)
-      id = reservations.length + 1
+      id = generate_id
       check_room(room: room, date_range: request_range)
       new_res = reservation(date_range: request_range,
                             room: room,
@@ -77,7 +78,7 @@ module HotelSystem
     def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
       rooms = room_ids.map { |id| find_room_by_id(id) }
       request_range = date_range(start_date, end_date)
-      id = blocks.length + 1
+      id = generate_id
       rooms.each do |room|
         check_room(room: room, date_range: request_range)
       end
@@ -90,9 +91,9 @@ module HotelSystem
       return new_block
     end
 
-    def reserve_from_block(block_name, room_id, name)
+    def reserve_from_block(block_id, room_id, name)
       room = find_room_by_id(room_id)
-      block = find_block_by_name(block_name)
+      block = find_block_by_id(block_id)
       (raise BlockError, "The given block does not contain the given room") if (!(block.has_room?(room)))
       check_room(room: room, date_range: block.date_range, ignore_blocked: true)
       new_res = reservation(date_range: block.date_range,
@@ -104,6 +105,11 @@ module HotelSystem
     end
 
     private
+
+    def generate_id
+      id = Faker::Alphanumeric.unique.alphanumeric 10
+      return id.upcase
+    end
 
     def update_reservations(block: nil, room: nil, reservation:)
       self.add_reservation(reservation)
@@ -137,7 +143,7 @@ module HotelSystem
     end
 
     def block(rooms:, date_range:, discount_rate:, id:, group_name:)
-      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate, group_name: group_name)
+      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate, group_name: group_name, id: id)
     end
   end
 end
