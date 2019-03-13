@@ -1,11 +1,12 @@
 require "pry"
 require "date"
+require_relative "room_manager"
 
 module Hotel
   class Reservation
-    attr_reader :reservation_id, :room, :room_id, :check_in_date, :check_out_date
+    attr_reader :check_in_date, :check_out_date, :room, :room_id, :reservation_id
 
-    def initialize(reservation_id:, room: nil, room_id: nil, check_in_date:, check_out_date:)
+    def initialize(check_in_date:, check_out_date:, room: nil, room_id: nil, reservation_id: reservation_id)
       if room
         @room = room
         @room_id = room.room_id
@@ -18,6 +19,8 @@ module Hotel
       @check_in_date = Date.parse(check_in_date)
       @check_out_date = Date.parse(check_out_date)
       raise ArgumentError, "Check_out_date must be after check_in_date" if @check_out_date < @check_in_date || @check_in_date == nil || @check_out_date == nil
+      reservation_id = Hotel::RoomManager.new.reservations.length + 1
+      @reservation_id = reservation_id
     end
 
     def cost
@@ -29,9 +32,9 @@ module Hotel
       @reservations = []
     end
 
-    def connect(room)
-      @room = room
-      room.add_reservation(self)
-    end
+    # def connect(room)
+    #   @room = room
+    #   room.add_reservation(self)
+    # end
   end
 end

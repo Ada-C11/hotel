@@ -2,17 +2,20 @@ require_relative "reservation"
 require_relative "record"
 
 module Hotel
-  class Room < Record
+  class Room
     attr_reader :room_id, :cost, :reservations
 
     def initialize(room_id, cost: 200.0, reservations: nil)
+      self.class.validate_room_id(room_id)
       @room_id = room_id
       @cost = cost
       @reservations = reservations || []
     end
 
-    def add_reservation(reservation)
-      @reservations << reservation
+    def self.validate_room_id(room_id)
+      if room_id.nil? || room_id <= 0 || room_id > 20
+        raise ArgumentError, "ID cannot be blank, less than zero or larger than 20."
+      end
     end
 
     def self.load_all

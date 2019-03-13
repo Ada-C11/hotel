@@ -27,17 +27,20 @@ module Hotel
       reservations = self.reservations.select do |reservation|
         date >= reservation.check_in_date && date < reservation.check_out_date
       end
+      return reservations
     end
 
     def find_room(room_id)
-      Room.validate_id(room_id)
+      Room.validate_room_id(room_id)
       return @rooms.find { |room| room.room_id == room_id }
     end
+
+    private
 
     def connect_reservations
       @reservations.each do |reservation|
         room = find_room(reservation.room_id)
-        reservation.connect(room)
+        # reservation.connect(room)
       end
     end
   end

@@ -65,4 +65,20 @@ describe "RoomManager" do
       expect { room_manager.find_room(nil) }.must_raise ArgumentError
     end
   end
+
+  # describe "connect_reservations" do
+  #   it "can connect reservations with the room/s" do
+  #     room1 = Hotel::Room.new(1)
+  #     room2 = Hotel::Room.new(2)
+  #     room_manager.reserve(room1, "2019-03-12", "2019-03-15")
+  #     room_manager.reserve(room2, "2019-04-12", "2019-04-15")
+  #     room_manager.connect_reservations
+
+  #     room_manager.reservations.each do |reservation|
+  #       expect(reservation.room).wont_be_nil
+  #       expect(reservation.room.room_id).must_equal reservation.room_id
+  #       expect(reservation.room.reservations).must_include room
+  #     end
+  #   end
+  # end
 end
