@@ -1,4 +1,5 @@
 require_relative "reservation"
+require_relative "room"
 
 class Hotel
   attr_reader :name, :rooms
@@ -16,15 +17,24 @@ class Hotel
   end
 
   def make_reservation(start_date, end_date)
-    id = Hotels.reservations.length + 1
-    room_id = Hotel.rooms.sample.to_s
-    start_date = Date.parse(start_date)
-    end_date = Date.parse(end_date)
+    id = @reservations.length + 1
+    room_id = @rooms.sample.id
     reservation = Reservation.new(id, room_id, start_date, end_date)
-    @reservations << reservation
+    @reservations.push(reservation)
+    return reservation
   end
 
   def self.load_rooms
     return @rooms
+  end
+
+  def load_reservation(date)
+    all_reservations = []
+    @reservations.each do |reservation|
+      if reservation.dates.include?(date)
+        all_reservations.push(reservation)
+      end
+    end
+    return all_reservations
   end
 end

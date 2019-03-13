@@ -19,13 +19,25 @@ describe Hotel do
     end
   end
   describe "add reservation method" do
-    # it "adds to the reservation array everytime a new reservation happens" do
-    #   start_date = Date.new(2018, 5, 20)
-    #   end_date = start_date + 3
-    #   id = 8,
-    #   room_id = 10,
-
-    #   reservation = Reservation.new(, 3, )
-    # end
+    it "can make a new reservation for given dates" do
+      hotel = Hotel.new
+      start_date = Date.new(2018, 3, 5)
+      end_date = start_date + 3
+      reservation = hotel.make_reservation(start_date, end_date)
+      expect(reservation).must_be_instance_of Reservation
+    end
+  end
+  describe "load_reservation" do
+    it "return an array of reservationd that have that date" do
+      hotel = Hotel.new
+      start_date = Date.new(2018, 3, 5)
+      end_date = start_date + 3
+      hotel.make_reservation(start_date, end_date)
+      start_date = Date.new(2018, 3, 4)
+      end_date = start_date + 3
+      hotel.make_reservation(start_date, end_date)
+      a = hotel.load_reservation(Date.new(2018, 3, 4))
+      expect(a.length).must_equal 2
+    end
   end
 end

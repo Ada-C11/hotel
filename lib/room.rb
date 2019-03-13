@@ -6,6 +6,6 @@ class Room
     @price = 200
   end
 
-  def self.available(date)
-  end
+  # def self.available(date)
+  # end
 end
