@@ -35,15 +35,27 @@ describe "Concierge class" do
     end
   end
   
+  
   describe "Reserve room method" do
    before do
       @concierge = Hotel::Concierge.new
     end
     
-    it "outputs an instance of Room" do
-      reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
-      expect reservation.room.must_be_instance_of Hotel::Room
+    it "selects an available room" do
+     reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
+      expect(reservation.status).must_equal :AVAILABLE
     end
+    
+    it "updates the Concierge Reservations array" do
+      res_count = @concierge.reservations.length
+      reservation1 = @concierge.reserve_room("2019-01-01", "2019-01-03")
+      expect{(@concierge.reservations.length).must_equal (res_count + 1)}
+    end
+    
+    # it "outputs an instance of Room" do
+    #   reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
+    #   expect reservation.room.must_be_instance_of Hotel::Room
+    # end
   
     
     end

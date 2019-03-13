@@ -17,33 +17,24 @@ module Hotel
     end
         
     def reserve_room(check_in_date, check_out_date)
-      reserved_room = Hotel::Room.new(
-                                      room_number: rand(1..20), 
-                                      status: :AVAILABLE, 
-                                      reservations: [])
-      
-      reservation = Reservation.new(res_id: 1, room: reserved_room, check_in_date: check_in_date, check_out_date: check_out_date)
-      
-      return reservation
+      available_room = @all_rooms.find do |room| 
+        room.status == :AVAILABLE
+        return room
+      end
+      reservation = Reservation.new(res_id: @reservations.length + 1, 
+                                    room: available_room, 
+                                    check_in_date: check_in_date, 
+                                    check_out_date: check_out_date)
+                                    
+      available_room.add_reservation(reservation)                             
+      @reservations << reservation
     end
-        
-    # def add_reservation(reservation_id)
-    #   res_id.room.reservations << reservation_id
-    # end
-        
-   
-      
+     
 
-    
     def see_all_rooms
       return "#{@all_rooms}" 
     end
-  
-    
-    # def reserve_room(check_in_date, check_out_date)
-      
-    #   reserved_room = all_rooms.select { |room| room.status == :AVAILABLE}
-    # end
+
     
   end # end Concierge Class
 end # end Hotel Module

@@ -1,7 +1,6 @@
 require "date"
 
 require_relative "room"
-require_relative "concierge"
 require_relative "date_range"
 
 module Hotel
