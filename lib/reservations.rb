@@ -1,5 +1,3 @@
-require 'datespans.rb'
-
 module Hotel
 
   class Reservation
