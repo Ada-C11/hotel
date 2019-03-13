@@ -21,11 +21,11 @@ describe "Room class" do
 
   describe "Building a new hotel" do
     before do
-      @new_hotel = Hotel::Construction.new
+      @new_hotel = Construction::Build.new
     end
 
     it "is an instance of Construction" do
-      expect(@new_hotel).must_be_kind_of Hotel::Construction
+      expect(@new_hotel).must_be_kind_of Construction::Build
     end
   end
 end

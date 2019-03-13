@@ -4,7 +4,7 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = Hotel::Construction.new.rooms
+      @rooms = Construction::Build.new.rooms
       @reservations = []
     end
 
