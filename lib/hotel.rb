@@ -90,25 +90,18 @@ module HotelSystem
     end
 
     def reservations_by_date(year:, month:, day:)
-      valid_date_entry?(start_year, start_month, start_day)
+      valid_date_entry?(year, month, day)
       date = Date.new(year, month, day)
       date_reservations = []
       @reservations.each do |reservation|
         if reservation.date_range.include?(date)
-          found_res = {}
-          found_res[:reservation_id] = reservation.id
-          found_res[:room_number] = reservation.room_number
-          date_reservations << found_res
+          date_reservations << reservation
         end
       end
       if date_reservations.length == 0
         puts "There are no dates for that reservation."
         return 0
-      elsif date_reservations.length == 1
-        puts "There's one reservation for that date. The reservation id is #{date_reservations[0][:reservation_id]} and the room number is #{date_reservations[0][:room_number]}."
-        return date_reservations
       else
-        puts "Here's a list of the reservations for that date: #{date_reservations}."
         return date_reservations
       end
     end

@@ -5,6 +5,7 @@ describe "hotel class" do
   before do
     @hotel = HotelSystem::Hotel.new(20)
   end
+
   describe "hotel instantiation" do
     it "will create a new hotel" do
       expect(@hotel).must_be_kind_of HotelSystem::Hotel
@@ -25,7 +26,7 @@ describe "hotel class" do
 
   describe "add_rooms method" do
     it "will raise an ArgumentError for bad arguments" do
-      expect{
+      expect {
         @hotel.add_rooms("cat")
       }.must_raise ArgumentError
     end
@@ -39,7 +40,7 @@ describe "hotel class" do
 
   describe "valid_date_entry? method" do
     it "will raise an error if date is invalid" do
-      expect{
+      expect {
         @hotel.valid_date_entry?(2019, 1, 32)
       }.must_raise ArgumentError
     end
@@ -117,27 +118,27 @@ describe "hotel class" do
     end
 
     it "will raise an error if no room is available for a start day of 20 reservations" do
-      20.times do 
+      20.times do
         @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
       end
 
-      expect{
+      expect {
         @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 4)
       }.must_raise NotImplementedError
     end
 
     it "will raise an error if no room is available for a middle day of 20 reservations" do
-      20.times do 
+      20.times do
         @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
       end
 
-      expect{
+      expect {
         @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 6)
       }.must_raise NotImplementedError
     end
 
     it "will return a room when it is requested on the checkout day of other reservations" do
-      20.times do 
+      20.times do
         @hotel.reserve_room(start_year: 2019, start_month: 7, start_day: 4, num_nights: 5)
       end
 
@@ -187,7 +188,7 @@ describe "hotel class" do
         @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       end
 
-      expect{
+      expect {
         @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       }.must_raise NotImplementedError
     end
@@ -200,8 +201,36 @@ describe "hotel class" do
       @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 9, num_nights: 2)
 
       status = @hotel.room_reserved?(room_number: 1, year: 2019, month: 12, day: 10)
-      
+
       expect(status).must_equal true
+    end
+
+    describe "reservations_by_date method" do
+      before do
+        3.times do
+          @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+        end
+      end
+
+      it "will return an array" do
+        reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
+        
+        expect(reservations).must_be_kind_of Array
+      end
+
+      it "each index in the returned array will hold a hash with the reservation information" do
+        reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
+        
+        expect(reservations[0]).must_be_kind_of HotelSystem::Reservation
+      end
+
+      it "will raise ArgumentError for invalid date entry" do
+        expect{
+          @hotel.reservations_by_date(year: 2019, month: 2, day: 30)
+        }.must_raise ArgumentError
+      end
+
+    
     end
   end
 end
