@@ -33,6 +33,23 @@ module Hotel
       return reservation
     end
 
+    def list_available_rooms(check_in, check_out)
+      list = []
+      booking_range = (Date.parse(check_in)..Date.parse(check_out))
+
+      @rooms.each do |room|
+        if room.is_available?(booking_range)
+          list << room
+        end
+      end
+
+      if list.length == 0
+        return "Sorry, we're booked!  Try another date."
+      else
+        return list
+      end
+    end
+
     def list_reservations_on(date)
       list = []
       date = Date.parse(date)
@@ -45,7 +62,6 @@ module Hotel
           list << reservation
         end
       end
-      return list
     end
   end
 end

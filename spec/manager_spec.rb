@@ -73,4 +73,32 @@ describe "Manager class" do
       expect(list[0]).must_be_kind_of Hotel::Reservation
     end
   end
+
+  describe "list_available_rooms" do
+    before do
+      @manager = Hotel::Manager.new
+      @reservation = @manager.reserve_room("2020-03-20", "2020-03-25")
+      @reserved_room = @reservation.room
+      @available_rooms = @manager.list_available_rooms("2020-03-20", "2020-03-25")
+    end
+
+    it "can create a list of rooms" do
+      expect(@available_rooms).must_be_kind_of Array
+      expect(@available_rooms[0]).must_be_kind_of Hotel::Room
+    end
+
+    it "only puts available rooms inside that list" do
+      expect(@available_rooms.length).must_equal 19
+    end
+
+    it "returns a string if there are no available rooms" do
+      100.times do
+        @manager.reserve_room("2020-03-20", "2020-03-25")
+      end
+
+      available_rooms = @manager.list_available_rooms("2020-03-20", "2020-03-25")
+
+      expect(available_rooms).must_be_kind_of String
+    end
+  end
 end
