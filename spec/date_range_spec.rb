@@ -26,14 +26,14 @@ describe "date_list method" do
   end
 
   it "first date in array is start date" do
-    jan_1_2019 = Date.new(19, 1, 1)
+    jan_1_2019 = Date.new(2019, 1, 1)
 
     expect(@dates.date_list.first).must_equal jan_1_2019
   end
 
   it "last date in array is correct date" do
     dates = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 1, num_nights: 5)
-    jan_6_2019 = Date.new(19, 1, 6)
+    jan_6_2019 = Date.new(2019, 1, 6)
 
     expect(dates.date_list.last).must_equal jan_6_2019
   end

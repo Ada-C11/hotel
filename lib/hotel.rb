@@ -17,14 +17,12 @@ module HotelSystem
       @reservations = []
     end
 
-    def valid_year?(year)
-      if year.class != Integer || year.digits.length != 4
-        raise ArgumentError, "Please enter 4 digits for the year."
-      end
+    def valid_date_entry?(year, month, day)
+      HotelSystem::DateRange.valid_date_entry?(year, month, day)
     end
 
     def create_date_list(start_year:, start_month:, start_day:, num_nights: nil)
-      valid_year?(start_year)
+      valid_date_entry?(start_year, start_month, start_day)
       dates = HotelSystem::DateRange.new(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       return dates
     end
@@ -35,7 +33,7 @@ module HotelSystem
     end
 
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
-      valid_year?(start_year)
+      valid_date_entry?(start_year, start_month, start_day)
       res_dates = create_date_list(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       # res_dates_range = res_dates.date_list
       res_room = find_available_room(start_year: start_year, start_month: start_month, start_day: start_day)
@@ -55,7 +53,7 @@ module HotelSystem
     end
 
     def room_reserved?(room_number:, year:, month:, day:)
-      valid_year?(year)
+      valid_date_entry?(year, month, day)
       res_room = find_room(room_number)
       date = Date.new(year, month, day)
       if res_room.reservations == []
@@ -70,7 +68,7 @@ module HotelSystem
     end
 
     def find_available_room(start_year:, start_month:, start_day:)
-      valid_year?(start_year)
+      valid_date_entry?(start_year, start_month, start_day)
       @rooms.each do |hotel_room|
         reserved = room_reserved?(room_number: hotel_room.room_number, year: start_year, month: start_month, day: start_day)
         if reserved == false
@@ -81,7 +79,7 @@ module HotelSystem
     end
 
     def reservations_by_date(year:, month:, day:)
-      valid_year?(year)
+      valid_date_entry?(start_year, start_month, start_day)
       date = Date.new(year, month, day)
       date_reservations = []
       @reservations.each do |reservation|
