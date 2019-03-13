@@ -2,14 +2,14 @@ require_relative "spec_helper"
 
 describe "Hotel_manager class" do
   before do
-    @hotel_manager = Hotel::Hotel_manager.new(Hotel::Room.make_rooms_standard)
+    @hotel_manager = Hotel::HotelManager.new(Hotel::Room.make_rooms_standard)
     @hotel_manager.make_reservation(1, "2019-3-15", "2019-3-20")
     @hotel_manager.make_reservation(2, "2019-3-15", "2019-3-18")
   end
 
   describe "Hotel_manager instantiation" do
     it "is an istanceof a Hotel_manager" do
-      expect(@hotel_manager).must_be_kind_of Hotel::Hotel_manager
+      expect(@hotel_manager).must_be_kind_of Hotel::HotelManager
     end
 
     it "has an array of 20 rooms" do

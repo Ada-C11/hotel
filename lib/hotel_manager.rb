@@ -2,12 +2,13 @@ require_relative "room.rb"
 require_relative "reservation.rb"
 
 module Hotel
-  class Hotel_manager
+  class HotelManager
     attr_reader :rooms, :reservations
 
     def initialize(rooms)
       @rooms = rooms
       @reservations = []
+      @blocks = []
     end
 
     def make_reservation(room_number, start_date, end_date)
