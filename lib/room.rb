@@ -7,14 +7,13 @@ module HotelSystem
       @number = number
       @price = 200.00
       @reservations = []
-      @status = :AVAILABLE
     end
 
     def add_reservation(reservation)
       @reservations << reservation
     end
 
-    def update_status
+    def date_overlap?
     end
   end
 end

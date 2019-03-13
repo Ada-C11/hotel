@@ -12,17 +12,12 @@ module HotelSystem
       @room = room
       @price = 200
       @guest = guest
-      @reservation_id = ((0...5).map { rand(10) }).join.to_s #necessary?
-      # add to @all_reservations?
+      @reservation_id = ((0...5).map { rand(10) }).join.to_s
       raise ArgumentError, "Invalid date range" if @end_date <= @start_date
     end
 
     def calculate_cost
       return ('%.2f' % ((@end_date - @start_date) * @price)).to_f
-    end
-
-    def find_available_room
-      # use this to populate the @room_number only with an available room?
     end
   end
 end

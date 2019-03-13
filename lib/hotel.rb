@@ -20,5 +20,9 @@ module HotelSystem
 
     def make_reservation
     end
+
+    def find_available_room
+      # use this to populate the @room_number only with an available room?
+    end
   end
 end
