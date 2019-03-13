@@ -6,9 +6,6 @@ require_relative "err/errors"
 require "faker"
 
 module HotelSystem
-  RATE_PER_NIGHT = 200
-  NUMBER_OF_ROOMS = 20
-
   class Hotel
     attr_reader :rooms, :reservations, :blocks
 

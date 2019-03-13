@@ -49,11 +49,11 @@ describe "Hotel class" do
     end
 
     it "adds the new reservation to the hotel's collection of reservations" do
-      expect(@new_hotel.reservations[@new_res.id]).must_equal @new_res
+      expect(@new_hotel.find_res_by_id(@new_res.id)).must_equal @new_res
     end
 
     it "adds the new reservation to the room's collection of reservations" do
-      expect(@test_room.reservations[@new_res.id]).must_equal @new_res
+      expect(@test_room.find_res_by_id(@new_res.id)).must_equal @new_res
     end
 
     it "allows reservations where the start date is on an existing reservation's end date" do
@@ -82,6 +82,7 @@ describe "Hotel class" do
       }.must_raise DateRangeError
     end
   end
+
   describe "list reservations by date" do
     before do
       @rooms = HotelSystem::Room.make_set(20, 200)
@@ -163,13 +164,13 @@ describe "Hotel class" do
       expect(@block_reservation).must_be_instance_of HotelSystem::Reservation
     end
     it "will add the new reservation to the hotel's list of reservations" do
-      expect(@hotel.reservations[@block_reservation.id]).must_equal @block_reservation
+      expect(@hotel.find_res_by_id(@block_reservation.id)).must_equal @block_reservation
     end
     it "will add the reservation to the room's list of reservations" do
-      expect(@room.reservations[@block_reservation.id]).must_equal @block_reservation
+      expect(@room.find_res_by_id(@block_reservation.id)).must_equal @block_reservation
     end
     it "will add the reservation to the block's list of reservations" do
-      expect(@block.reservations[@block_reservation.id]).must_equal @block_reservation
+      expect(@block.find_res_by_id(@block_reservation.id)).must_equal @block_reservation
     end
     it "will set the reservation's date range equal to the block's date range" do
       expect(@block_reservation.date_range).must_equal @block.date_range
@@ -222,13 +223,14 @@ describe "Hotel class" do
                                          discount_rate: 180)
       }.must_raise BlockError
     end
-    it "is_blocked? returns true for all rooms in the block on the block's date" do
+    it "adds the block to each room's collection of blocks" do
       @new_block.rooms.each do |room|
+        expect(room.find_block_by_id(@new_block.id)).must_equal @new_block
         expect(room.is_blocked?(@date_range)).must_equal true
       end
     end
     it "adds the block to the hotel's collection of blocks" do
-      expect(@hotel.blocks[@new_block.id]).must_equal @new_block
+      expect(@hotel.find_block_by_id(@new_block.id)).must_equal @new_block
     end
     it "raises an exception if invalid dates are given" do
       expect {

@@ -43,6 +43,10 @@ module HotelSystem
       reservations[reservation.id] = reservation
     end
 
+    def find_res_by_id(id)
+      return reservations[id]
+    end
+
     # Date interaction methods
 
     def includes_date?(new_date_range)

@@ -54,5 +54,15 @@ module HotelSystem
     def all_blocks
       return blocks.values
     end
+
+    # 'Find' methods
+
+    def find_res_by_id(id)
+      return reservations[id]
+    end
+
+    def find_block_by_id(id)
+      return blocks[id]
+    end
   end
 end
