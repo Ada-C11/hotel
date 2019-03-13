@@ -1,5 +1,4 @@
 require "date"
-require_relative "room"
 
 module BookingSystem
   class Reservation
@@ -18,7 +17,7 @@ module BookingSystem
     def total_cost
       cost, num_of_nights = 0, 0
       num_of_nights = date_range.count
-      cost = num_of_nights * STANDARD_RATE
+      cost = num_of_nights * room.price
       return cost 
     end
   end
