@@ -1,4 +1,4 @@
-require_relative "../spec/spec_helper"
+require_relative "reservation"
 
 module Hotel
   class Room

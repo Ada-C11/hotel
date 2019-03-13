@@ -1,4 +1,4 @@
-require_relative "../spec/spec_helper"
+require_relative "room"
 
 module Hotel
   class Manifest

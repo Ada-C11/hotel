@@ -1,4 +1,5 @@
-require_relative "../spec/spec_helper"
+require_relative "manifest"
+require_relative "reservation"
 
 module Hotel
   class Booker
