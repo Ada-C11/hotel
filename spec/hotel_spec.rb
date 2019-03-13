@@ -123,12 +123,12 @@ describe "Hotel class" do
     before do
       @hotel = HotelSystem::Hotel.new
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
-      @block = HotelSystem::Block.new(date_range: @date_range,
-                                      rooms: @hotel.rooms[0...5],
-                                      discount_rate: 180,
-                                      group_name: "ComicCon")
+      @block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
+                                                end_date: "10 Feb 2020",
+                                                discount_rate: 180,
+                                                group_name: "ComicCon")
       @room = @block.rooms[0]
-      @block_reservation = @hotel.reserve_from_block(@block, @room, "Ada")
+      @block_reservation = @hotel.reserve_from_block("ComicCon", 1, "Ada")
     end
     it "will return a new reservation for a room within the block" do
       expect(@block_reservation).must_be_instance_of HotelSystem::Reservation
@@ -152,15 +152,14 @@ describe "Hotel class" do
     end
 
     it "will raise an exception if reserving a room that is not within the block" do
-      my_room = HotelSystem::Room.new(id: 21, rate: 200)
       expect {
-        @hotel.reserve_from_block(@block, my_room, "Ada")
+        @hotel.reserve_from_block("ComicCon", 7, "Ada")
       }.must_raise BlockError
     end
 
     it "will raise an exception if reserving a room that is reserved for the date" do
       expect {
-        @hotel.reserve_from_block(@block, @room, "Ada")
+        @hotel.reserve_from_block("ComicCon", 1, "Ada")
       }.must_raise ReservationError
     end
   end

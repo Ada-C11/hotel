@@ -5,10 +5,10 @@ describe "Block class" do
     before do
       @hotel = HotelSystem::Hotel.new
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
-      @block = HotelSystem::Block.new(date_range: @date_range,
-                                      rooms: @hotel.rooms[0...5],
-                                      discount_rate: 180,
-                                      group_name: "ComicCon")
+      @block = @hotel.make_block(1, 2, 3, start_date: "01 Feb 2020",
+                                          end_date: "10 Feb 2020",
+                                          discount_rate: 180,
+                                          group_name: "ComicCon")
     end
     it "will create an instance of block" do
       expect(@block).must_be_instance_of HotelSystem::Block
@@ -44,8 +44,15 @@ describe "Block class" do
     end
     it "will add the block to each room's collection of blocks" do
       @block.rooms.each do |room|
-        expect(room.blocks.values).must_include(@block)
+        expect(room.all_blocks).must_include(@block)
       end
+    end
+    it "can check whether it has any rooms available" do
+      expect(@block.has_available_rooms?).must_equal true
+      (1..3).each do |id|
+        @hotel.reserve_from_block("ComicCon", id, "Ada")
+      end
+      expect(@block.has_available_rooms?).must_equal false
     end
   end
 end

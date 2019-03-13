@@ -9,15 +9,21 @@ module HotelSystem
         raise BlockError, "A block must contain 1 to 5 rooms"
       end
       @rooms = rooms
-      @date_range = date_range
       @discount_rate = discount_rate
+
       @rooms.each { |room| block_room(room) }
+      @date_range = date_range
       @group_name = group_name
+
       @reservations = {}
     end
 
     def add_reservation(reservation)
       reservations[reservation.name] = reservation
+    end
+
+    def has_available_rooms?
+      return rooms.any? { |room| !room.is_reserved?(date_range) }
     end
 
     def overlap?(new_date_range)

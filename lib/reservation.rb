@@ -9,10 +9,6 @@ module HotelSystem
       @name = name
     end
 
-    def total_cost
-      return rate * number_of_nights
-    end
-
     def includes_date?(date)
       return date_range.includes_date?(date)
     end
@@ -21,7 +17,9 @@ module HotelSystem
       return date_range.overlap?(new_date_range)
     end
 
-    private
+    def total_cost
+      return rate * number_of_nights
+    end
 
     def rate
       return room.rate
