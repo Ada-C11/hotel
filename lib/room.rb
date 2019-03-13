@@ -1,5 +1,4 @@
 require_relative "reservation"
-require_relative "record"
 
 module Hotel
   class Room
