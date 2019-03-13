@@ -7,19 +7,18 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = []
-      @reservations = []
+      @rooms = Hotel::Hotel.rooms
+      @reservations = Hotel::reservations
     end
 
     def res_list
       room = find_room(reservation[:room])
       start_date = Date.parse(reservation[:check_in])
       end_date = Date.parse(reservation[:check_out])
-      range = DateSpan.new(start_date, end_date)
+      span = DateSpan.new(check_in, check_out)
       reservation = {
       id: reservation[:id],
       rm_id: rm_id,
-      datespan: span
       }
       @reservations << reservation
       return @reservations
