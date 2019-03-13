@@ -1,12 +1,13 @@
 module HotelSystem
   class Reservation
-    attr_reader :date_range, :room, :id, :name
+    attr_reader :date_range, :room, :id, :name, :block
 
-    def initialize(date_range:, room:, id:, name:)
+    def initialize(date_range:, room:, id:, name:, block: nil)
       @id = id
       @room = room
       @date_range = date_range
       @name = name
+      @block = block
     end
 
     def includes_date?(date)
@@ -22,7 +23,7 @@ module HotelSystem
     end
 
     def rate
-      return room.rate
+      return block ? block.discount_rate : room.rate
     end
 
     def number_of_nights

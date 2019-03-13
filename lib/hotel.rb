@@ -99,7 +99,8 @@ module HotelSystem
       new_res = reservation(date_range: block.date_range,
                             id: (reservations.length + 1),
                             room: room,
-                            name: name)
+                            name: name,
+                            block: block)
       update_reservations(block: block, room: room, reservation: new_res)
       return new_res
     end
@@ -135,15 +136,24 @@ module HotelSystem
     end
 
     def room(id:, rate:)
-      return HotelSystem::Room.new(id: id, rate: rate)
+      return HotelSystem::Room.new(id: id,
+                                   rate: rate)
     end
 
-    def reservation(date_range:, room:, id:, name:)
-      HotelSystem::Reservation.new(date_range: date_range, room: room, id: id, name: name)
+    def reservation(date_range:, room:, id:, name:, block: nil)
+      HotelSystem::Reservation.new(date_range: date_range,
+                                   room: room,
+                                   id: id,
+                                   name: name,
+                                   block: block)
     end
 
     def block(rooms:, date_range:, discount_rate:, id:, group_name:)
-      HotelSystem::Block.new(rooms: rooms, date_range: date_range, discount_rate: discount_rate, group_name: group_name, id: id)
+      HotelSystem::Block.new(rooms: rooms,
+                             date_range: date_range,
+                             discount_rate: discount_rate,
+                             group_name: group_name,
+                             id: id)
     end
   end
 end

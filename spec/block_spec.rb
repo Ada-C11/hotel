@@ -39,10 +39,9 @@ describe "Block class" do
     it "will contain a date range " do
       expect(@block.date_range).must_be_instance_of HotelSystem::DateRange
     end
-    it "will adjust the rates of each of its rooms" do
-      @block.rooms.each do |room|
-        expect(room.rate).must_equal(@block.discount_rate)
-      end
+    it "will apply the discount to reservations made from it" do
+      new_res = @hotel.reserve_from_block(@block.id, 1, "Ada")
+      expect(new_res.rate).must_equal @block.discount_rate
     end
     it "will add the block to each room's collection of blocks" do
       @block.rooms.each do |room|

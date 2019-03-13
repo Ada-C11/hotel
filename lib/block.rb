@@ -33,7 +33,6 @@ module HotelSystem
 
     def block_room(room)
       room.add_block(self)
-      room.rate = discount_rate
     end
 
     def has_room?(room)

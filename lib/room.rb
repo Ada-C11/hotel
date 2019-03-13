@@ -1,7 +1,6 @@
 module HotelSystem
   class Room
-    attr_reader :id, :reservations, :blocks
-    attr_accessor :rate
+    attr_reader :id, :reservations, :blocks, :rate
 
     def initialize(id:, rate:)
       @id = id
