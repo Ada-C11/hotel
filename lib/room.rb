@@ -14,5 +14,14 @@ module Hotel
             return status
         end
 
+        def self.load_rooms
+            rooms = []
+            20.times do |i|
+                rooms.push(Hotel::Room.new(i+1))
+            end
+            return rooms
+        end
+        
+
     end
 end
