@@ -48,7 +48,8 @@ describe "Room class" do
     it "returns false if the room is unavailable during a given date range" do
       @check_in = Date.parse(@check_in)
       @check_out = Date.parse(@check_out)
-      availability = @reserved_room.is_available?(@check_in, @check_out)
+      date_range = (@check_in..@check_out)
+      availability = @reserved_room.is_available?(date_range)
 
       expect(availability).must_equal false
     end
