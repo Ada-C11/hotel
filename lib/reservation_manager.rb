@@ -1,5 +1,6 @@
 require_relative "room"
 require_relative "reservation"
+require "pry"
 
 module Hotel
   class ReservationManager
@@ -26,6 +27,21 @@ module Hotel
 
     def reservations_by_date(date)
       reservations.find_all { |reservation| reservation.all_dates.include?(Date.parse(date)) }
+    end
+
+    def available_rooms(date)
+      available = []
+      availability = "yes"
+
+      rooms.each do |room|
+        room.reservations.each do |reservation|
+          availability = "no" if reservation.all_dates.include?(Date.parse(date))
+        end
+        available << room if availability == "yes"
+        availability = "yes"
+      end
+
+      return available
     end
 
     # def available_rooms(date)

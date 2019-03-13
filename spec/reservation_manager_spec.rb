@@ -92,4 +92,29 @@ describe "ReservationManager class" do
       expect(@manager.reservations_by_date("2018-03-10").length).must_equal 0
     end
   end
+
+  describe "#available_rooms" do
+    let (:manager) do
+      manager = Hotel::ReservationManager.new
+    end
+
+    it "returns an array which includes instances of rooms" do
+      rooms = manager.available_rooms("Feb 12, 2019")
+      expect(rooms).must_be_kind_of Array
+      expect(rooms[0]).must_be_kind_of Hotel::Room
+    end
+
+    it "returns an array of the correct length when all rooms are available" do
+      rooms = manager.available_rooms("Feb 12, 2019")
+      reservation_one = manager.request_reservation("Feb 12, 2019", "Feb 13, 2019")
+      updated_rooms = manager.available_rooms("Feb 12, 2019")
+      expect(rooms.length).must_equal 20
+      expect(updated_rooms.length).must_equal 19
+    end
+
+    # it "returns an array of the correct length when a room is unavailable" do
+
+    #   rooms = manager.available_rooms("Feb 12, 2019")
+    # end
+  end
 end
