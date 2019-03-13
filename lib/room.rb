@@ -9,15 +9,15 @@ module Hotel
       @booked_nights = []
     end
 
-    def available?(date: nil, range: nil)
+    def available?(night: nil, range: nil)
       if range
-        range.each do |date|
-          return false if booked_nights.include?(date)
+        range.each do |night|
+          return false if booked_nights.include?(night)
         end
 
         return true
-      elsif date
-        return booked_nights.include?(date) ? false : true
+      elsif night
+        return booked_nights.include?(night) ? false : true
       end
     end
   end

@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "Room class" do
   let(:room) { Hotel::Room.new(room_number: 1) }
-  let(:date) { Date.new(2000, 1, 8) }
+  let(:night) { Date.new(2000, 1, 8) }
 
   it "is able to instantiate" do
     expect(room).must_be_kind_of Hotel::Room
@@ -13,10 +13,10 @@ describe "Room class" do
   end
 
   it "can check if room is available" do
-    expect(room.available?(date: date)).must_equal true
+    expect(room.available?(night: night)).must_equal true
 
-    room.booked_nights << date
+    room.booked_nights << night
 
-    expect(room.available?(date: date)).must_equal false
+    expect(room.available?(night: night)).must_equal false
   end
 end

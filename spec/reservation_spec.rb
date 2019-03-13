@@ -2,8 +2,6 @@ require_relative "spec_helper"
 
 describe "Reservation class " do
   describe "Initializer" do
-    let(:start_date) { Date.new(2001, 2, 3) }
-    let(:end_date) { Date.new(2001, 2, 5) }
     let(:nights) { [Date.new(2001, 2, 3), Date.new(2001, 2, 4)] }
     let(:room) { Hotel::Room.new(room_number: 1) }
     let(:reservation) {
@@ -26,8 +24,8 @@ describe "Reservation class " do
     it "assigns room" do # used to check if it assigned available room
       expect(reservation.room).must_be_kind_of Hotel::Room
 
-      expect(reservation.room.available?(date: nights.first)).must_equal true
-      expect(reservation.room.available?(date: nights.last)).must_equal true
+      expect(reservation.room.available?(night: nights.first)).must_equal true
+      expect(reservation.room.available?(night: nights.last)).must_equal true
     end
 
     it "creates an array of booked nights" do

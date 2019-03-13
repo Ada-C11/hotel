@@ -62,14 +62,14 @@ module Hotel
     end
 
     def generate_nights(check_in:, check_out:)
-      start_date = Date.parse(check_in)
-      end_date = Date.parse(check_out)
-      if start_date >= end_date
+      first_day = Date.parse(check_in)
+      last_day = Date.parse(check_out)
+      if first_day >= last_day
         raise ArgumentError, "Reservation must be at least one day long"
       end
       nights = []
-      night = start_date
-      until night == end_date # not including end date
+      night = first_day
+      until night == last_day # not including last day
         nights << night
         night += 1 # go to the next day
       end
@@ -79,8 +79,8 @@ module Hotel
     def assign_room(array_of_nights:)
       assigned_room = nil
       rooms.each do |room|
-        array_of_nights.each do |date|
-          if room.available?(date: date)
+        array_of_nights.each do |night|
+          if room.available?(night: night)
             assigned_room = room
             break
           end

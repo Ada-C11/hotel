@@ -104,7 +104,7 @@ describe "FrontDesk class" do
       open = frontdesk.open_rooms(check_in: date1, check_out: date2)
       expect(open).must_be_kind_of Array
       expect(open.first).must_be_kind_of Hotel::Room
-      expect(open.first.available?(date: date2)).must_equal true
+      expect(open.first.available?(night: date2)).must_equal true
     end
 
     it "doesn't find open rooms when there are none available" do
