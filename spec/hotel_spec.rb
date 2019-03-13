@@ -4,6 +4,8 @@ describe "Hotel" do
   before do
     @test_hotel = BookingSystem::Hotel.new
     @test_room = BookingSystem::Room.new(room_num: 1337)
+    @checkin = Date.new(2019, 1, 1)
+    @checkout = Date.new(2019, 1, 11)
   end
 
   describe "initialize" do
@@ -38,9 +40,7 @@ describe "Hotel" do
 
   describe "new_reservation" do
     before do
-      checkin_date = Date.new(2019, 1, 1)
-      checkout_date = Date.new(2019, 1, 11)
-      @test_hotel.new_reservation(@test_room, checkin_date, checkout_date)
+      @test_hotel.new_reservation(@test_room, @checkin, @checkout)
     end
 
     it "adds new reservation to Hotel's reservations" do
@@ -56,16 +56,23 @@ describe "Hotel" do
 
   describe "list_by_date" do
     before do
-      checkin_date = Date.new(2019, 1, 1)
-      checkout_date = Date.new(2019, 1, 11)
-      @test_hotel.new_reservation(@test_room, checkin_date, checkout_date)
+      @test_hotel.new_reservation(@test_room, @checkin, @checkout)
     end
 
     it "returns an array of all reservations on a given date" do
-      reservations = @test_hotel.list_by_date(Date.new(2019, 1, 1))
+      reservations = @test_hotel.list_by_date(@checkin)
       expect(reservations).must_be_kind_of Array
       expect(reservations[0]).must_be_kind_of BookingSystem::Reservation
       expect(reservations.length).must_equal 1
     end
   end
+
+  describe "available?" do
+    before do
+
+    end
+    # expect(date.available?).must_equal true
+  end
+
+
 end

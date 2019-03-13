@@ -2,9 +2,12 @@ require_relative "spec_helper"
 
 describe "Reservation" do
   before do
-    @reservation = BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
-                                                  checkin_date: Date.new(2019, 1, 1),
-                                                  checkout_date: Date.new(2019, 1, 11))
+    @test_room = BookingSystem::Room.new(room_num: 1)
+    @checkin = Date.new(2019, 1, 1)
+    @checkout = Date.new(2019, 1, 11)
+    @reservation = BookingSystem::Reservation.new(room: @test_room,
+                                                  checkin_date: @checkin,
+                                                  checkout_date: @checkout)
   end
 
   describe "#initialize" do
@@ -18,24 +21,29 @@ describe "Reservation" do
 
     it "raises ArgumentError when date supplied is not an instance of Date" do
       expect do
-        BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
-                                        checkin_date: (2019-1-1),
-                                        checkout_date: (2018-1-1))
+        BookingSystem::Reservation.new(room: @test_room,
+                                        checkin_date: @checkin,
+                                        checkout_date: 1234)
+      end.must_raise ArgumentError
+      expect do
+        BookingSystem::Reservation.new(room: @test_room,
+                                        checkin_date: 1234,
+                                        checkout_date: @checkout)
       end.must_raise ArgumentError
     end 
 
     it "raises ArgumentError when check-out date is later than check-in date" do
       expect do
-        BookingSystem::Reservation.new(room: BookingSystem::Room.new(room_num: 1),
-                                        checkin_date: Date.new(2019, 1, 1),
-                                        checkout_date: Date.new(2018, 1, 1))
+        BookingSystem::Reservation.new(room: @test_room,
+                                        checkin_date: @checkin,
+                                        checkout_date: @checkin - 100)
       end.must_raise ArgumentError
     end
   end
 
   describe "#total_cost" do
     it "calculates total cost of a reservation" do
-      expect(@reservation.total_cost).must_equal (10 * STANDARD_RATE)
+      expect(@reservation.total_cost).must_equal ((@checkout - @checkin) * STANDARD_RATE)
     end
   end
 end
