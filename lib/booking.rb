@@ -10,6 +10,7 @@ module Hotel
     end
 
     def request_reservation(checkin, checkout)
+      Reservation.validate_dates(checkin, checkout)
       date_range = Reservation.reservation_dates(checkin, checkout)
       room = check_availability(date_range)
       num_nights = Reservation.nights(checkin, checkout)

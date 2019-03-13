@@ -23,6 +23,28 @@ describe "Reservation" do
     end
   end
 
+  describe "validate_dates" do
+    it "Raises an error if one or both of the dates is in the past" do
+      expect {
+        Hotel::Reservation.validate_dates("April 1, 1999", "April 5, 2019")
+      }.must_raise ArgumentError
+
+      expect {
+        Hotel::Reservation.validate_dates("April 1, 2019", "April 5, 1999")
+      }.must_raise ArgumentError
+
+      expect {
+        Hotel::Reservation.validate_dates("April 1, 1999", "April 5, 1999")
+      }.must_raise ArgumentError
+    end
+
+    it "Raises an error if the checkout date is before the checkin date" do
+      expect {
+        Hotel::Reservation.validate_dates("April 5, 2019", "April 1, 2019")
+      }.must_raise ArgumentError
+    end
+  end
+
   describe "total_cost" do
     it "Returns the total cost for a reservation" do
       booking = Hotel::Booking.new
