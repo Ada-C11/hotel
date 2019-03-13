@@ -21,6 +21,7 @@ class Reservation
     end
     #assign random room for wave 1
     @room = all_rooms.sample
+    # @available_rooms = (1..20).map { |i| i }
   end
 
   def duration
