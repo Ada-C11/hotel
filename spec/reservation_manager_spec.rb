@@ -27,9 +27,31 @@ describe "ReservationManager class" do
       second_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "2")
       expect(reservation_manager.reservation_array[1].room).must_equal "2"
     end
-    it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range" do
+    it "Allows user to reserve an available room for a given date range (starts on the checkout date)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
+      second_reservation = reservation_manager.make_reservation(start_date: "3rd Jan 2019", end_date: "5th Jan 2019", room: "1")
+      expect(reservation_manager.reservation_array[1].room).must_equal "1"
+    end
+    it "Allows user to reserve an available room for a given date range (ends on the checkin date)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "5th Jan 2019", end_date: "6th Jan 2019", room: "1")
+      second_reservation = reservation_manager.make_reservation(start_date: "3rd Jan 2019", end_date: "5th Jan 2019", room: "1")
+      expect(reservation_manager.reservation_array[1].room).must_equal "1"
+    end
+    it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (same dates)" do
       first_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
       expect { reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1") }.must_raise ArgumentError
+    end
+    it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (overlaps one day)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
+      expect { reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "4th Jan 2019", room: "1") }.must_raise ArgumentError
+    end
+    it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (completely contained)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "5th Jan 2019", room: "1")
+      expect { reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "4th Jan 2019", room: "1") }.must_raise ArgumentError
+    end
+    it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (completely containing)" do
+      first_reservation = reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "1")
+      expect { reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "6th Jan 2019", room: "1") }.must_raise ArgumentError
     end
   end
   describe "view_all_rooms method" do

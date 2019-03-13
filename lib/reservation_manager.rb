@@ -29,7 +29,7 @@ class ReservationManager
     end
 
     if @booked_rooms.include?(new_reservation.room)
-      raise ArgumentError, "That room is booked, choose another room"
+      raise ArgumentError, "That room is not availble, choose another room"
     else
       @reservation_array << new_reservation
     end
