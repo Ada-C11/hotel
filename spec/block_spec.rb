@@ -1,4 +1,15 @@
 require_relative "spec_helper"
+
+# def create_block(num_rooms, first_day, last_day, discount)
+#   rooms = []
+#   num_rooms.times do |num|
+#     room = HotelSystem::Room.new(id: num)
+#     rooms << room
+#   end
+#   block = HotelSystem::Block.new(rooms: rooms, first_day: first_day, last_day: last_day, discount: discount)
+#   return block
+# end
+
 describe "Block" do
   describe "initialize" do
     before do
@@ -66,7 +77,7 @@ describe "Block" do
     end
   end
 
-  describe "Create Reservations" do
+  describe "Create Block Reservations" do
     before do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
@@ -78,12 +89,12 @@ describe "Block" do
         discount: 0,
       )
     end
-    it "Block can call create_reservations" do
-      expect(@block).must_respond_to :create_reservations
+    it "Block can call create_block_reservations" do
+      expect(@block).must_respond_to :create_block_reservations
     end
 
     it "Creates a reservation Array containing a reservation for each room in the block, of type BlockReservation" do
-      reservations = @block.create_reservations
+      reservations = @block.create_block_reservations
       expect(reservations.length).must_equal 3
       expect(reservations).must_be_kind_of Array
       expect(reservations.first).must_be_kind_of HotelSystem::BlockReservation
@@ -91,16 +102,67 @@ describe "Block" do
 
     it "adds reservation to the blocks reservation array" do
       expect(@block.reservations.length).must_equal 0
-      reservations = @block.create_reservations
+      reservations = @block.create_block_reservations
       expect(@block.reservations.length).must_equal 3
     end
 
     it "adds each reservation to the corrosponding rooms reservation array" do
       expect(@room.reservations.length).must_equal 0
-      reservations = @block.create_reservations
+      reservations = @block.create_block_reservations
       expect(@room.reservations.length).must_equal 1
       expect(reservations).must_include @room.reservations.first
       expect(@room.reservations.first.room.id).must_equal @room.id
     end
   end
+  describe "find_available_reservations" do
+    before do
+      @number_of_rooms = 3
+      @block = create_block(@number_of_rooms, Date.parse("2019-04-27"), Date.parse("2019-05-08"), 0.2)
+      @block.create_block_reservations
+    end
+
+    it "Can be called on a block" do
+      expect(@block).must_respond_to :find_available_reservations
+    end
+
+    it "Returns an Array of reservations" do
+      available_rooms = @block.find_available_reservations
+      expect(available_rooms).must_be_kind_of Array
+      expect(available_rooms.first).must_be_kind_of HotelSystem::Reservation
+      expect(available_rooms.length).must_equal @number_of_rooms
+    end
+    it "Returns Rooms with :AVAILABLE status in the block reservation" do
+      available_reservations = @block.find_available_reservations
+      available_reservations.each do |reservation|
+        expect(reservation.status).must_equal :AVAILABLE
+      end
+    end
+
+    it "does not return rooms that have :UNAVAILABLE status" do
+      # TODO ######
+    end
+  end
+
+  # describe "Book Block Reservation" do
+  #   before do
+  #     @number_of_rooms = 3
+  #     @block = create_block(@number_of_rooms, Date.parse("2019-04-27"), Date.parse("2019-05-08"), 0.2)
+  #     @block.create_block_reservations
+  #     @reservations = @block.find_available_reservations
+  #   end
+
+  #   it "Can be called on a block" do
+  #     # @block.book_block_reservation(@reservations.first)
+  #     expect(@block).must_respond_to :book_block_reservation
+  #   end
+
+  #   it "Will raise an ArgumentError if called with reservation that is :UNAVAILABLE" do
+  #     first_res = @reservations.first
+  #     @block.book_block_reservation(first_res)
+  #     expect(first_res.status).must_equal :UNAVAILABLE
+  #     expect {
+  #       @block.book_block_reservation(first_res)
+  #     }.must_raise ArgumentError
+  #   end
+  # end
 end
