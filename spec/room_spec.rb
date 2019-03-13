@@ -17,9 +17,9 @@ describe "Room class" do
             expect { HotelManagementSystem::Room.new(room_number: 8, status: :NO) }.must_raise ArgumentError
         end
 
-        # it "has a default status of :AVAILABLE" do
-        #     expect {@room.status}.must_equal :AVAILABLE
-        # end
+        it "has a default status of :AVAILABLE" do
+            expect {@room.status}.must_equal :AVAILABLE
+        end
 
 
 
