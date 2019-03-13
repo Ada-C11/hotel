@@ -5,14 +5,14 @@ module Hotel
     attr_reader :rooms
     NUMBER_OF_ROOMS = 20
     COST_OF_ROOM = 200
-    Room = Struct.new(:id, :cost_per_day, :unavailable)
 
-    def initialize
-      @rooms = []
-      NUMBER_OF_ROOMS.times do |i|
-        id = i + 1
-        rooms << Room.new(id, COST_OF_ROOM, [])
-      end
+    def initialize(rooms: nil)
+      @rooms ||= []
+      NUMBER_OF_ROOMS.times { add_room_to_rooms }
+    end
+
+    def add_room_to_rooms(cost_per_night: COST_OF_ROOM)
+      rooms << RoomWrapper::room(cost: cost_per_day, room_number: rooms.length + 1)
     end
 
     def list_rooms(rooms_to_list: rooms)
@@ -40,6 +40,15 @@ module Hotel
         end
       end
       return list_rooms(rooms_to_list: reserved)
+    end
+
+    def next_available_room(check_in:, check_out:)
+    end
+  end
+
+  module RoomWrapper
+    def self.room(cost:, room_number:)
+      Room.new(cost_per_day: cost, id: room_number)
     end
   end
 end

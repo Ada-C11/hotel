@@ -17,5 +17,13 @@ module Hotel
     def total_cost_of_booking(reservation, room)
       return room.cost_per_day * reservation.duration * SALES_TAX_ADJUSTMENT
     end
+
+    def room_base_cost(room)
+      return room.cost_per_day
+    end
+
+    def length_of_stay(reservation)
+      return reservation.duration
+    end
   end
 end

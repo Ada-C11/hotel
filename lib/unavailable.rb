@@ -20,6 +20,10 @@ module Hotel
       return (check_out - check_in)
     end
 
+    def date_range
+      return (check_in...check_out)
+    end
+
     private
 
     def generate_confirmation_id(prefix = "R")
