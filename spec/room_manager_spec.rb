@@ -32,38 +32,38 @@ describe "RoomManager" do
   end
 
   describe "reserve method" do
-    reserved_room = Hotel::Room.new(1)
+    # reserved_room = Hotel::Room.new(1)
 
     it "add a new reservation to the list of reservations" do
       before_reserve = room_manager.reservations.length
-      room_manager.reserve(reserved_room, "2019-03-12", "2019-03-15")
+      room_manager.reserve(1, "2019-03-12", "2019-03-15")
       after_reserve = room_manager.reservations.length
       expect(after_reserve - before_reserve).must_equal 1
     end
 
     it "raises an ArgumentError if date is not a string" do
-      expect { room_manager.reserve(reserved_room, 2019 - 03 - 12, "2019-03-15") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, 2019 - 03 - 12, "2019-03-15") }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if the date is not the right format" do
-      expect { room_manager.reserve(reserved_room, "03/12/2019", "03/12/2019") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, "03/12/2019", "03/12/2019") }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if the date is nil" do
-      expect { room_manager.reserve(reserved_room, nil, "2019-03-15") }.must_raise ArgumentError
-      expect { room_manager.reserve(reserved_room, "2019-03-15", nil) }.must_raise ArgumentError
+      expect { room_manager.reserve(1, nil, "2019-03-15") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, "2019-03-15", nil) }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if month is larger than 12" do
-      expect { room_manager.reserve(reserved_room, "2019-13-12", "2019-03-15") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, "2019-13-12", "2019-03-15") }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if day is larger than 31" do
-      expect { room_manager.reserve(reserved_room, "2019-03-32", "2019-03-15") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, "2019-03-32", "2019-03-15") }.must_raise ArgumentError
     end
 
     it "raises an ArgumentEorr if check_out_date is before check_in_date" do
-      expect { room_manager.reserve(reserved_room, "2019-03-18", "2019-03-15") }.must_raise ArgumentError
+      expect { room_manager.reserve(1, "2019-03-18", "2019-03-15") }.must_raise ArgumentError
     end
   end
 

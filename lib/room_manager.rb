@@ -6,19 +6,19 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = Room.load_all
-      @reservations = Reservation.load_all
+      @rooms = Hotel::Room.load_all
+      @reservations = reservations || Hotel::Reservation.load_all
       connect_reservations
     end
 
-    def reserve(room, check_in_date, check_out_date)
+    def reserve(room_id, check_in_date, check_out_date)
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      reservation_id = @reservations.length + 1
+      # reservation_id = @reservations.length + 1
       new_reservation = Reservation.new(
-        reservation_id: reservation_id,
-        room: room,
+        reservation_id: @reservations.length + 1,
+        room_id: room_id,
         check_in_date: check_in_date,
         check_out_date: check_out_date,
       )
@@ -32,6 +32,9 @@ module Hotel
         date >= reservation.check_in_date && date < reservation.check_out_date
       end
       return reservations
+    end
+
+    def find_avaialable_rooms(check_in_date, check_out_date)
     end
 
     def find_room(room_id)
