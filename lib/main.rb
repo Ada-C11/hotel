@@ -5,10 +5,10 @@ module Hotel
   $reservations = [] # => stores all reservation objects
 
   class Main
-    # attr_accessor :all_rooms, :reservations
+    attr_accessor :all_rooms, :reservations
 
     def self.make_reservation(booking_ref, room_number, start_date, end_date)
-      reserve = Hotel::Reservation.new(booking_ref: booking_ref, room_number: room_number, start_date: start_date, end_date: end_date, total_cost: @total_cost)
+      reserve = Hotel::Reservation.new(booking_ref: booking_ref, room_number: room_number, start_date: start_date, end_date: end_date, total_cost: $total_cost)
 
       return reserve
     end
@@ -19,9 +19,9 @@ module Hotel
 
     def self.get_reservation_by_date(start_date)
       reservations_by_date = []
-      puts "vvvvvvvvvvvvvvvv"
-      puts $reservations
-      puts "^^^^^^^^^^^^^^^"
+      # puts "vvvvvvvvvvvvvvvv"
+      # puts $reservations
+      # puts "^^^^^^^^^^^^^^^"
       for i in (0...$reservations.length)
         if $reservations[i].start_date == start_date
           reservations_by_date.push($reservations[i])
@@ -30,7 +30,7 @@ module Hotel
       return reservations_by_date
     end
 
-    # add_reservation(Main.make_reservation(@reservations.length + 1, 1, Date.new(2019, 3, 9), Date.new(2019, 3, 15)))
+    # add_reservation(Main.make_reservation($reservations.length + 1, 1, Date.new(2019, 3, 9), Date.new(2019, 3, 15)))
 
     # add_reservation(Main.make_reservation($reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 18)))
 
@@ -58,4 +58,4 @@ module Hotel
   end # Class end
 end # Module end
 
-# puts "#{@all_rooms}"
+# puts "#{$all_rooms}"
