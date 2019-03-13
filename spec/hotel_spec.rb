@@ -15,11 +15,25 @@ describe "hotel class" do
       expect(@hotel.reservations).must_be_kind_of Array
     end
 
-    it "hotel will have an array of 20 unique rooms" do
+    it "hotel will have an array of unique rooms" do
       expect(@hotel.rooms[0]).must_be_kind_of HotelSystem::Room
       expect(@hotel.rooms[0].room_number).must_equal 1
       expect(@hotel.rooms.length).must_equal 20
       expect(@hotel.rooms[0].object_id).wont_equal @hotel.rooms[1].object_id
+    end
+  end
+
+  describe "add_rooms method" do
+    it "will raise an ArgumentError for bad arguments" do
+      expect{
+        @hotel.add_rooms("cat")
+      }.must_raise ArgumentError
+    end
+
+    it "will add rooms to the hotel" do
+      @hotel.add_rooms(3)
+
+      expect(@hotel.rooms.length).must_equal 23
     end
   end
 

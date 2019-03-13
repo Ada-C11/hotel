@@ -15,6 +15,9 @@ module HotelSystem
     end
 
     def add_rooms(number)
+      if number.class != Integer || number < 1
+        raise ArgumentError, "Please enter a number greater than 1."
+      end
       (1..number).each do |num|
         room = HotelSystem::Room.new(num)
         @rooms << room
