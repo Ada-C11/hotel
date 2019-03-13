@@ -21,6 +21,10 @@ class BookingCentral
     return new_reservation
   end
 
+  def reservations_by_date(check_in)
+    matching_reservations = @all_reservations.select { |k, v| k.room if k.date_range.include?(check_in) }
+    return matching_reservations
+  end
 end
 
 

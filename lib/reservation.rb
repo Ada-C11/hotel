@@ -3,7 +3,7 @@ require_relative 'room'
 
 class Reservation
   RATE = 200
-  attr_accessor :date_range, :room, :cost_of_stay
+  attr_accessor :room, :date_range, :cost_of_stay
 
   def initialize(check_in:, check_out:)
     @room = room,

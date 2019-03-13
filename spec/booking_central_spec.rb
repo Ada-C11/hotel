@@ -9,8 +9,29 @@ describe 'BookingCentral' do
 
   it 'creates a new reservation' do
     bookings = BookingCentral.new
-    new_booking = bookings.reserve_room(check_in: '04-01-2019', check_out: '04-02-2019')
-    puts bookings.all_reservations
+    new_booking = bookings.reserve_room(check_in: '2019-01-01', check_out: '2019-01-02')
     expect(bookings.all_reservations.include?(new_booking)).must_equal true
+  end
+
+  it 'updates array of reservations' do
+    bookings = BookingCentral.new
+    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04')
+    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06')
+    new_booking3 = bookings.reserve_room(check_in: '2019-01-07', check_out: '2019-01-08')
+    # puts "TTTTTTTTTT"
+    # puts bookings.all_reservations.select { |k, v| k.date_range.include?('2019-01-03') }.map(&:firs)
+    # puts "TTTTTTTTTT"
+
+    
+    expect(bookings.all_reservations.length).must_equal 3
+  end
+
+  it 'shows reservations by date' do
+    bookings = BookingCentral.new
+    new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04')
+    new_booking2 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-06')
+    new_booking3 = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-08')
+
+    expect((bookings.reservations_by_date('2019-01-03')).length).must_equal 3
   end
 end
