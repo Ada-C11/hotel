@@ -5,7 +5,7 @@ describe "ReservationSystem class" do
 
     it "can find room by booking number" do
       reservation_system = HotelBooking::ReservationSystem.new
-      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
+      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
 
       room = reservation_system.find_room_by_booking_number(booking.reference_number)
 
@@ -14,7 +14,7 @@ describe "ReservationSystem class" do
 
     it "can find booking by room number" do
       reservation_system = HotelBooking::ReservationSystem.new
-      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
+      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
 
       bookings = reservation_system.find_bookings_by_room_number(booking.room.number)
       
@@ -23,7 +23,7 @@ describe "ReservationSystem class" do
 
     it "can find bookings by date" do
       reservation_system = HotelBooking::ReservationSystem.new
-      booking = reservation_system.request_trip('2001-02-03', '2001-02-07')
+      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
 
       bookings = reservation_system.find_booking_by_date('2001-02-03')
       

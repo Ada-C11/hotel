@@ -14,7 +14,7 @@ module HotelBooking
         @rooms.push(room)
       end
       @bookings = []
-    end
+    end 
 
     # Can add an instance of room to the array of rooms
     def add_room(room)

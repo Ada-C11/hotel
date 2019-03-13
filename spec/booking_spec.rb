@@ -14,6 +14,7 @@ describe 'Booking class' do
 
       expect(booking).must_be_kind_of HotelBooking::Booking
     end
+  
 
     it "is set up for specific attributes and data types" do
       booking = HotelBooking::Booking.new(
