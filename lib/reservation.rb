@@ -19,7 +19,7 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
       @total_cost = ((end_date - start_date) *
-                     COST_PER_NIGHT)
+                     COST_PER_NIGHT).round(2)
 
       if (@start_date >= @end_date) || (@start_date < Date.today)
         raise ArgumentError, "end date cannot be before start date. Start date cannot be earlier than today's date."

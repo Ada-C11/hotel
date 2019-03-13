@@ -53,7 +53,7 @@ describe "class FrontDesk" do
       puts "^^^^^^^^^^^^^^"
       @specific_reservation.add_reservation(reservation_2)
 
-      by_date = @specific_reservation.get_reservation_by_date(Date.new(2019, 4, 8))
+      by_date = @specific_reservation.get_reservation_by_date(Date.new(2019, 4, 8), Date.new(2019, 4, 10))
 
       puts "VVVVVVVVVVVVVV"
       puts by_date

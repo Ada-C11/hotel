@@ -39,7 +39,7 @@ module Hotel
       puts @reservations
       puts "^^^^^^^^^^^^^^^"
       for i in (0...@reservations.length)
-        if (@reservations[i].start_date == date) || (@reservations[i].end_date == date)
+        if (@reservations[i].start_date == start_date) || (@reservations[i].end_date == end_date)
           reservations_by_date.push(@reservations[i])
         end
       end
@@ -64,22 +64,22 @@ module Hotel
 
     # add_reservation(Hotel.make_reservation(@@reservations.length + 1, 1, Date.new(2019, 3, 3), Date.new(2019, 3, 15)))
 
-    add_reservation(Hotel.make_reservation(@@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 18)))
+    # add_reservation(Hotel.make_reservation(@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 18)))
 
-    add_reservation(Hotel.make_reservation(@@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 17)))
+    # add_reservation(Hotel.make_reservation(@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 17)))
 
-    add_reservation(Hotel.make_reservation(@@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 16)))
+    # add_reservation(Hotel.make_reservation(@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 16)))
 
-    add_reservation(Hotel.make_reservation(@@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 15)))
+    # add_reservation(Hotel.make_reservation(@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 15)))
 
-    date_reserves = get_reservation_by_date(Date.today + 1)
+    # date_reserves = get_reservation_by_date(Date.today + 1)
 
-    puts date_reserves[0].start_date
-    puts date_reserves[0].end_date
+    # puts date_reserves[0].start_date
+    # puts date_reserves[0].end_date
 
-    # puts @@reservations[0].total_cost
-    # puts @@reservations[1].total_cost
-    # puts @@reservations[2].total_cost
+    # # puts @@reservations[0].total_cost
+    # # puts @@reservations[1].total_cost
+    # # puts @@reservations[2].total_cost
     # puts @@reservations[3].total_cost
 
     # puts @@reservations.length
