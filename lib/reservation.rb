@@ -3,7 +3,7 @@ require "date"
 class Reservation
   attr_reader :id, :room_id, :start_date, :end_date, :dates, :cost
 
-  def initialize(id, room_id, start_date, end_date)
+  def initialize(id, room, start_date, end_date)
     @id = id
     @start_date = start_date
     @end_date = end_date
@@ -22,9 +22,3 @@ class Reservation
     @cost = ((date_range.to_i) - 1) * 200
   end
 end
-
-# b = Reservation.new(1, 3, Date.new(2018, 3, 5), Date.new(2018, 3, 8))
-# puts b.start_date
-# puts b.end_date
-
-# puts b.dates

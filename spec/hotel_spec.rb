@@ -52,4 +52,8 @@ describe Hotel do
       expect(reservations3.length).must_equal 1
     end
   end
+  describe "load available method" do
+    it "return an array of all the available rooms" do
+    end
+  end
 end

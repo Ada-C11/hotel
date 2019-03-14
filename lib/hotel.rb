@@ -18,10 +18,14 @@ class Hotel
 
   def make_reservation(start_date, end_date)
     id = @reservations.length + 1
-    room_id = @rooms.sample.id
-    reservation = Reservation.new(id, room_id, start_date, end_date)
-    @reservations.push(reservation)
+    room = @rooms.sample
+    reservation = Reservation.new(id, room.id, start_date, end_date)
+    #@reservations.push(reservation)
+    room.add_reservation
     return reservation
+  end
+
+  def load_availables(start_date, end_date)
   end
 
   # def self.load_rooms

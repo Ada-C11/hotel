@@ -4,8 +4,10 @@ class Room
   def initialize(id)
     @id = id
     @price = 200
+    @reservations = []
   end
 
-  # def self.available(date)
-  # end
+  def self.add_reservation
+    @reservations << reservation
+  end
 end
