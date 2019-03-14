@@ -7,14 +7,23 @@ module Hotel
     def initialize(check_in_date:, check_out_date:, room_number:)
       @check_in_date = Date.parse(check_in_date)
       @check_out_date = Date.parse(check_out_date)
-      @all_dates = @check_in_date..@check_out_date
+
+      if @check_in_date == @check_out_date
+        @all_dates = [@check_in_date]
+      else
+        @all_dates = (@check_in_date...@check_out_date).to_a
+        # map { |date| date }
+      end
+
       @room_number = room_number
 
-      raise ArgumentError, "Check-out date cannot be before check-in date" if check_out_date < check_in_date
+      if check_out_date < check_in_date
+        raise ArgumentError, "Check-out date cannot be before check-in date"
+      end
     end
 
     def total_cost
-      return @check_in_date == check_out_date ? 200.0 : (@check_out_date - @check_in_date) * 200.0
+      all_dates.length * 200.0
     end
   end
 end
