@@ -18,13 +18,5 @@ module Hotel
     def cost_of_booking(reservation:, room:)
       return room.cost_per_night.to_f * reservation.duration_in_days
     end
-
-    # def room_base_cost
-    #   return room.cost_per_night
-    # end
-
-    # def length_of_stay(reservation)
-    #   return reservation.duration
-    # end
   end
 end
