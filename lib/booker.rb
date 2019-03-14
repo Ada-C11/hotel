@@ -5,7 +5,8 @@ require_relative "room"
 require_relative "reserve"
 require_relative "date_range"
 
-class RoomBooker < DateRange
+class RoomBooker 
+  include DateRange
   attr_reader :check_in, :check_out, :list_all_rooms, :list_reservations, :rooms
 
   def initialize

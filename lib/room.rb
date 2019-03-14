@@ -1,7 +1,6 @@
 require "date"
-require_relative "date_range"
 
-class Room < DateRange
+class Room
   ROOM_RATE = 200.00
   attr_reader :id, :price, :bookings, :booked_on
 

@@ -1,15 +1,16 @@
 require "date"
-require_relative "date_range"
 require_relative "room"
+require_relative "date_range"
 
-class Reservation < DateRange
+class Reservation
+  include DateRange
   attr_reader :id, :check_in, :check_out, :room_booked, :total_cost, :dates_booked
 
   def initialize(id: nil, check_in: nil, check_out: nil, room_booked: nil, total_cost: nil)
     valid_date?(check_in)
     valid_date?(check_out)
     date_range_valid?(check_in, check_out)
-    
+
     @check_in = check_in
     @check_out = check_out
     @id = id
