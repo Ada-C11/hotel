@@ -1,0 +1,50 @@
+  in reserve:
+      unless block_id
+        raise ArgumentError, "Check in and check out dates must be provided" unless check_in && check_out
+      end
+
+      if block_id
+        # get info from block for dates and room number
+
+        # create a reservation but don't adjust room availability
+
+        # make room unavailable in block
+
+      end
+
+
+
+    def reserve_block(start_date: nil,
+                      end_date: nil,
+                      range: nil,
+                      block_id: nil,
+                      number_of_rooms: nil,
+                      room_numbers: nil)
+      unless (start_date && end_date) || range
+        raise ArgumentError, "Either start date and end date or a date range must be provided"
+      end
+
+      unless number_of_rooms || rooms
+        raise ArgumentError, "Either number of rooms or collection of rooms must be provided"
+      end
+
+      if room_numbers
+        room_numbers.map do |room_number|
+          find_room_by_number(room_number: room_number)
+        end
+      end
+
+      if room && room.available?(range: nights) == false
+        raise ArgumentError, "That room is not available for those dates"
+      end
+
+      rooms ||= []
+
+      number_of_rooms.times { rooms << assign_room(range) } if number_of_rooms
+
+      nights = range
+
+      rooms.each do |room|
+        room.booked_nights.concat(nights)
+      end
+    end

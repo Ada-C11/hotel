@@ -5,6 +5,7 @@ module Hotel
 
     def initialize(room_number:)
       @rate = 200
+      @block_rate = 160
       @number = room_number
       @booked_nights = []
     end

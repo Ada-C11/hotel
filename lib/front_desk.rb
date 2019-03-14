@@ -2,6 +2,7 @@ require "date"
 
 require_relative "room"
 require_relative "reservation"
+require_relative "block"
 
 module Hotel
   class FrontDesk
@@ -15,7 +16,7 @@ module Hotel
       @rooms = rooms_array
     end
 
-    def reserve(check_in:, check_out:, room_number: nil)
+    def reserve_room(check_in: nil, check_out: nil, room_number: nil)
       nights = generate_nights(check_in: check_in, check_out: check_out)
 
       room = find_room_by_number(room_number: room_number) if room_number
@@ -56,6 +57,20 @@ module Hotel
       nights ||= generate_nights(check_in: check_in, check_out: check_out)
 
       rooms.select { |room| room.available?(range: nights) }
+    end
+
+    def reserve_block(range:, room_collection:, room_rate:)
+      # ASSUME FOR NOW THAT:
+      ### range is an array of Dates
+      ### room_collection is an array of room numbers
+      ### room_rate is an integer price per night
+      rooms = room_collection.map { |room_number| find_room_by_number(room_number: room_number) }
+
+      rooms.each do |room|
+        raise ArgumentError, "Rooms are available for that date range" unless room.available?(range: range)
+      end
+
+      Hotel::Block.new(range: range, room_collection: room_collection, room_rate: room_rate)
     end
 
     private
