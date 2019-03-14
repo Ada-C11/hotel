@@ -52,19 +52,21 @@ describe "Reservation_manager" do
     end
 
     it "should remove a room from list of available rooms if there is a conflict" do
-      # this reservation has conflicts
+      # this following reservation has conflicts
       res_manager.make_reservation(1, check_in_time: "2nd April 2019", check_out_time: "10th April 2019")
       res_manager.make_reservation(2, check_in_time: "4th april 2019", check_out_time: "20th april 2019")
       res_manager.make_reservation(3, check_in_time: "22nd march 2019", check_out_time: "1st april 2019")
+      # rooms 2 and 3 have reservations that don't conflict, rooms 4-20 don't have reservations so they're free too
       expect(res_manager.find_available_rooms("1st April 2019", "4th April 2019").length).must_equal 19
     end
 
-    # it "should return an empty array if there are no rooms available" do
-    #   # 20.times do |res|
-    #   #   res_manager.make_reservation(check_in_time: "2nd April 2019", check_out_time: "10th April 2019")
-    #   # end
-    #   puts res_manager.find_available_rooms("1st April 2019", "4th April 2019")
-    #   expect(res_manager.find_available_rooms("1st April 2019", "4th April 2019").length).must_equal 0
-    # end
+    it "should return an empty array if there are no rooms available" do
+      room_num = 1
+      20.times do |res|
+        res_manager.make_reservation(room_num, check_in_time: "2nd April 2019", check_out_time: "10th April 2019")
+        room_num += 1
+      end
+      expect(res_manager.find_available_rooms("1st April 2019", "4th April 2019").length).must_equal 0
+    end
   end
 end
