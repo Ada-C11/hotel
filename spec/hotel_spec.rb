@@ -47,7 +47,7 @@ describe "Hotel class" do
       @middle2 = "06 Feb 2020"
       @before = "24 Jan 2020"
       @after = "12 Feb 2020"
-      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end, name: "Ada")
+      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end)
       @test_room = @new_hotel.rooms.first
     end
     it "returns a new reservation if the room is available during the given dates" do
@@ -63,38 +63,38 @@ describe "Hotel class" do
     end
 
     it "allows reservations where the start date is on an existing reservation's end date" do
-      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @end, end_date: @after, name: "Ada")
+      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @end, end_date: @after)
       expect(test_reservation).must_be_instance_of HotelSystem::Reservation
     end
 
     it "allows reservations where the end date is on an existing reservation's start date" do
-      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @start, name: "Ada")
+      test_reservation = @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @start)
       expect(test_reservation).must_be_instance_of HotelSystem::Reservation
     end
 
     it "raises an exception if the room is not available during the given dates" do
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end, name: "Ada") }.must_raise ReservationError # same dates
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @end, name: "Ada") }.must_raise ReservationError # same end, starts in midle
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @middle, name: "Ada") }.must_raise ReservationError # same start, ends in middle
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @after, name: "Ada") }.must_raise ReservationError # starts in middle, ends after
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @middle, name: "Ada") }.must_raise ReservationError # ends in middle, starts before
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @end, name: "Ada") }.must_raise ReservationError # same end, starts before
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @after, name: "Ada") }.must_raise ReservationError # same start, ends after
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @after, name: "Ada") }.must_raise ReservationError # starts before, ends after
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @middle2, name: "Ada") }.must_raise ReservationError # starts in middle, ends in middle
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @end) }.must_raise ReservationError # same dates
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @end) }.must_raise ReservationError # same end, starts in midle
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @middle) }.must_raise ReservationError # same start, ends in middle
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @after) }.must_raise ReservationError # starts in middle, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @middle) }.must_raise ReservationError # ends in middle, starts before
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @end) }.must_raise ReservationError # same end, starts before
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @after) }.must_raise ReservationError # same start, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @before, end_date: @after) }.must_raise ReservationError # starts before, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @middle, end_date: @middle2) }.must_raise ReservationError # starts in middle, ends in middle
     end
 
     it "raises an exception if start date and end date are the same" do
-      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @start, name: "Ada") }.must_raise DateRangeError # starts before, ends after
+      expect { @new_hotel.make_reservation(room_id: 1, start_date: @start, end_date: @start) }.must_raise DateRangeError # starts before, ends after
     end
     it "raises an exception if an invalid room id is given" do
-      expect { @new_hotel.make_reservation(room_id: 10000000, start_date: "01 Mar 2020", end_date: "08 Mar 2020", name: "Ada") }.must_raise RoomError
-      expect { @new_hotel.make_reservation(room_id: 0, start_date: "01 Mar 2020", end_date: "08 Mar 2020", name: "Ada") }.must_raise RoomError
-      expect { @new_hotel.make_reservation(room_id: -5, start_date: "01 Mar 2020", end_date: "08 Mar 2020", name: "Ada") }.must_raise RoomError
+      expect { @new_hotel.make_reservation(room_id: 10000000, start_date: "01 Mar 2020", end_date: "08 Mar 2020") }.must_raise RoomError
+      expect { @new_hotel.make_reservation(room_id: 0, start_date: "01 Mar 2020", end_date: "08 Mar 2020") }.must_raise RoomError
+      expect { @new_hotel.make_reservation(room_id: -5, start_date: "01 Mar 2020", end_date: "08 Mar 2020") }.must_raise RoomError
     end
     it "raises an exception if the dates given are invalid" do
       expect {
-        @new_hotel.make_reservation(room_id: 1, start_date: "08 Feb 2020", end_date: "01 Feb 2020", name: "Ada")
+        @new_hotel.make_reservation(room_id: 1, start_date: "08 Feb 2020", end_date: "01 Feb 2020")
       }.must_raise DateRangeError
     end
   end
@@ -103,7 +103,7 @@ describe "Hotel class" do
     before do
       @rooms = HotelSystem::Room.make_set(20, 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
-      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
+      @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
       @date = Date.parse("04 Feb 2020")
       @reservations_on_date = @new_hotel.reservations_by_date("04 Feb 2020")
     end
@@ -124,7 +124,7 @@ describe "Hotel class" do
     before do
       @rooms = HotelSystem::Room.make_set(20, 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
-      @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
+      @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
       @avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
       @total_rooms = @new_hotel.rooms.length
     end
@@ -143,8 +143,7 @@ describe "Hotel class" do
     it "excludes blocked rooms if exclude_blocked parameter is true" do
       @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
                                      end_date: "10 Feb 2020",
-                                     discount_rate: 180,
-                                     group_name: "ComicCon")
+                                     discount_rate: 180)
       blocked_room = @new_hotel.find_room_by_id(3)
 
       avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
@@ -155,8 +154,7 @@ describe "Hotel class" do
     it "includes blocked rooms if exclude_blocked parameter is false" do
       @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
                                      end_date: "10 Feb 2020",
-                                     discount_rate: 180,
-                                     group_name: "ComicCon")
+                                     discount_rate: 180)
       blocked_room = @new_hotel.find_room_by_id(3)
       avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020", exclude_blocked = false)
 
@@ -171,8 +169,7 @@ describe "Hotel class" do
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
                                                 end_date: "10 Feb 2020",
-                                                discount_rate: 180,
-                                                group_name: "ComicCon")
+                                                discount_rate: 180)
       @room = @block.rooms[0]
       @block_reservation = @hotel.reserve_from_block(@block.id, 1, "Ada")
     end
@@ -216,18 +213,16 @@ describe "Hotel class" do
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @new_block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
                                                     end_date: "10 Feb 2020",
-                                                    group_name: "Ada Academy",
                                                     discount_rate: 180)
     end
     it "returns a new block if all rooms are available during the given date range" do
       expect(@new_block).must_be_instance_of HotelSystem::Block
     end
     it "raises an exception if one or more rooms have overlapping reservations" do
-      @hotel.make_reservation(room_id: 6, start_date: "01 Feb 2020", end_date: "08 Feb 2020", name: "Ada")
+      @hotel.make_reservation(room_id: 6, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
       expect {
         @hotel.make_block(6, 7, 8, 9, 10, start_date: "01 Feb 2020",
                                           end_date: "10 Feb 2020",
-                                          group_name: "Ada Academy",
                                           discount_rate: 180)
       }.must_raise ReservationError
     end
@@ -235,7 +230,6 @@ describe "Hotel class" do
       expect {
         @hotel.make_block(3, 4, 5, 6, 7, start_date: "01 Feb 2020",
                                          end_date: "10 Feb 2020",
-                                         group_name: "Ada Academy",
                                          discount_rate: 180)
       }.must_raise BlockError
     end
@@ -252,7 +246,6 @@ describe "Hotel class" do
       expect {
         @hotel.make_block(8, 9, 10, start_date: "10 Feb 2020",
                                     end_date: "01 Feb 2020",
-                                    group_name: "Ada Academy",
                                     discount_rate: 180)
       }.must_raise DateRangeError
     end

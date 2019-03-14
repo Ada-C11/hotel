@@ -64,7 +64,7 @@ module HotelSystem
 
     # 'Make' methods
 
-    def make_reservation(room_id:, start_date:, end_date:, name:)
+    def make_reservation(room_id:, start_date:, end_date:)
       room = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room
       request_range = HotelFactory.date_range(start_date, end_date)
@@ -72,12 +72,12 @@ module HotelSystem
       check_room(room: room, date_range: request_range)
       new_res = HotelFactory.reservation(date_range: request_range,
                                          room: room,
-                                         id: id, name: name)
+                                         id: id)
       self.add_reservation(new_res)
       return new_res
     end
 
-    def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
+    def make_block(*room_ids, start_date:, end_date:, discount_rate:)
       rooms = room_ids.map { |id| find_room_by_id(id) }
       request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
@@ -87,8 +87,7 @@ module HotelSystem
       new_block = HotelFactory.block(rooms: rooms,
                                      date_range: request_range,
                                      discount_rate: discount_rate,
-                                     id: id,
-                                     group_name: group_name)
+                                     id: id)
       self.add_block(new_block)
       return new_block
     end
@@ -106,7 +105,6 @@ module HotelSystem
       new_res = HotelFactory.reservation(date_range: dates,
                                          id: id,
                                          room: room,
-                                         name: name,
                                          block: block)
 
       self.add_reservation(new_res)

@@ -8,8 +8,7 @@ describe "Block class" do
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, start_date: "01 Feb 2020",
                                           end_date: "10 Feb 2020",
-                                          discount_rate: 180,
-                                          group_name: "ComicCon")
+                                          discount_rate: 180)
     end
     it "will create an instance of block" do
       expect(@block).must_be_instance_of HotelSystem::Block
@@ -25,7 +24,6 @@ describe "Block class" do
         HotelSystem::Block.new(date_range: @date_range,
                                rooms: @hotel.rooms[0...7],
                                discount_rate: 180,
-                               group_name: "ComicCon",
                                id: :dklj324321)
       }.must_raise BlockError
 
@@ -33,7 +31,6 @@ describe "Block class" do
         HotelSystem::Block.new(date_range: @date_range,
                                rooms: [],
                                discount_rate: 180,
-                               group_name: "ComicCon",
                                id: :asdfh4h5k9)
       }.must_raise BlockError
     end

@@ -1,12 +1,11 @@
 module HotelSystem
   class Reservation
-    attr_reader :date_range, :room, :id, :name, :block
+    attr_reader :date_range, :room, :id, :block
 
-    def initialize(date_range:, room:, id:, name:, block: nil)
+    def initialize(date_range:, room:, id:, block: nil)
       @id = id
       @room = room
       @date_range = date_range
-      @name = name
       @block = block
       update_reservation_listings
     end
