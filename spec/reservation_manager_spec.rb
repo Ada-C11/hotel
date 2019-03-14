@@ -84,7 +84,7 @@ describe "Reservation_manager" do
       expect { res_manager.make_reservation(1, check_in_time: "5th April 2019", check_out_time: "23rd April 2019") }.must_raise ArgumentError
     end
 
-    it "should NOT raise an error if you try to book a room that is already booked with legal time overlaps" do
+    it "should NOT raise an error if you try to book a room that is already booked with 'legal' time overlaps" do
       res_manager.make_reservation(1, check_in_time: "2nd April 2019", check_out_time: "10th April 2019")
       res_manager.make_reservation(1, check_in_time: "10th april 2019", check_out_time: "21st april 2019")
 

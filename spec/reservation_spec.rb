@@ -15,6 +15,14 @@ describe "Reservation" do
     expect(my_rez.room_number).must_be_instance_of Integer
   end
 
+  it "should throw an error if room number is over 20" do
+    expect { Reservation.new(22) }.must_raise ArgumentError
+  end
+
+  it "should throw an error if room number is under 1" do
+    expect { Reservation.new(0) }.must_raise ArgumentError
+  end
+
   describe "duration_of_stay" do
     it "must return an integer for duration of stay" do
       expect(my_rez.duration_of_stay).must_be_instance_of Integer
