@@ -4,7 +4,7 @@ module Hotel
   class Manifest
     attr_reader :rooms
     NUMBER_OF_ROOMS = 20
-    COST_OF_ROOM = 200
+    COST_OF_ROOM = 200.0
 
     def initialize(rooms: nil)
       @rooms ||= []
