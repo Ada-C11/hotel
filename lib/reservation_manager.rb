@@ -30,6 +30,7 @@ class ReservationManager
     end
 
     if @booked_rooms.include?(new_reservation.room)
+      # binding.pry
       raise ArgumentError, "That room is not availble, choose another room"
     elsif @blocked_rooms_array.include?(new_reservation.room)
       raise ArgumentError, "That room is blocked, choose another room"
@@ -54,8 +55,9 @@ class ReservationManager
     end
     rooms_array.each do |block_room|
       block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
-      @blocked_rooms_array << block_reservation
+      @blocked_rooms_array << block_reservation.room
     end
+    # binding.pry
     return @blocked_rooms_array
   end
 
