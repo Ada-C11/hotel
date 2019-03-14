@@ -15,21 +15,6 @@ class BookingCentral
     end
   end
 
-  def list_available_rooms(check_in, check_out)
-    asking_date = DateRange.generate_date_range(check_in, check_out)
-    reserved_dates = @all_reservations.select { |reservation, details| reservation.date_range }
-
-    if reserved_dates == []
-      available_rooms = @rooms
-    else
-      check_overlap = DateRange.dates_overlap?(reserved_dates, asking_date)
-      available_rooms = @all_reservations.select{ |reservation, details| reservation.room unless check_overlap == true}
-    end  
-  end
-
-  # bookings = BookingCentral.new
-  # puts bookings.list_available_rooms('2019-04-01', '2019-04-03')
-
   def assign_room
     if @all_reservations.length == 0
       assigned_room = @rooms.sample
@@ -39,22 +24,28 @@ class BookingCentral
     end
     return assigned_room
   end
-
-  # bookings = BookingCentral.new
-  # puts bookings.assign_room
   
-  
-
   def reserve_room(check_in:, check_out:, room: self.assign_room)
     new_reservation = Reservation.new(check_in: check_in, check_out: check_out, room: assign_room)
     @all_reservations << new_reservation
     return new_reservation
   end
 
-  def reservations_by_date(check_in)
-    matching_reservations = @all_reservations.select { |reservation, details| reservation if reservation.date_range.include?(check_in) }
+  def reservations_by_date(check_in, check_out)
+    asking_date = DateRange.generate_date_range(check_in, check_out)
+    matching_reservations = @all_reservations.select { |reservation, details| reservation if DateRange.dates_overlap?(reservation.date_range, asking_date) }
     return matching_reservations
   end
+
+  def list_available_rooms(check_in, check_out)
+    asking_date = DateRange.generate_date_range(check_in, check_out)
+    available_rooms = @rooms - (reservations_by_date(check_in, check_out)).map{ |reservation| reservation.room}
+    return available_rooms
+  end
+
+  # bookings = BookingCentral.new
+  # new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
+  # bookings.list_available_rooms('2019-01-03', '2019-01-04')
 end
 
 
