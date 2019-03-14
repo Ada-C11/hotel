@@ -9,6 +9,7 @@ class Reservation < DateRange
     valid_date?(check_in)
     valid_date?(check_out)
     date_range_valid?(check_in, check_out)
+    
     @check_in = check_in
     @check_out = check_out
     @id = id
@@ -31,7 +32,7 @@ class Reservation < DateRange
   end
 
   def dates_booked
-    return (@check_in...@check_out)
+    return (@check_in...@check_out) #work in progres...
   end
 
   def valid_date?(date)
