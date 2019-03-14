@@ -1,25 +1,25 @@
+require 'pry'
 module Hotel
 
   class Registry
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = Construction::Build.new.rooms
+      @rooms = (1..20)
       @reservations = []
     end
 
-    def new_reservation(input)
+    def reserve_room(input)
       dates = [input[:check_in], input[:check_out]]
-      res_id = @reservations.length + 1
       room = openings(dates).first || []
       reservation_data = {
-        id: res_id,
         room: room,
         span: (dates[0..1])
       }
 
       new_res = Reservation.new(reservation_data)
       @reservations << new_res
+      @reservations
     end
 
     def openings(span)
@@ -33,6 +33,7 @@ module Hotel
     end
 
     def res_list
+      binding.pry
       @reservations.inspect
     end
 
