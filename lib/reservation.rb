@@ -5,8 +5,9 @@ class Reservation
 
   COST_PER_NIGHT = 200
 
-  def initialize(reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
-    @room_number = all_rooms.sample
+  def initialize(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
+    @room_number = room_number
+    # @room_number = all_rooms.sample
     @reservation_id = reservation_id
     @check_in_time = Date.parse(check_in_time)
     @check_out_time = Date.parse(check_out_time)

@@ -8,11 +8,12 @@ class Reservation_manager
     @reservations = []
   end
 
-  def make_reservation(reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
+  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
+    @room_number = room_number
     @reservation_id = reservation_id
     @check_in_time = check_in_time
     @check_out_time = check_out_time
-    @new_reservation = Reservation.new(reservation_id: @reservation_id, check_in_time: @check_in_time, check_out_time: @check_out_time)
+    @new_reservation = Reservation.new(room_number, reservation_id: @reservation_id, check_in_time: @check_in_time, check_out_time: @check_out_time)
     @reservations << @new_reservation
     # binding.pry
     return @new_reservation
@@ -43,7 +44,7 @@ class Reservation_manager
         available_rooms.delete(reservation.room_number)
       end
     end
-
+    # binding.pry
     return available_rooms
   end
 end
