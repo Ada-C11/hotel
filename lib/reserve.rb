@@ -3,6 +3,7 @@ require_relative "room"
 require_relative "date_range"
 
 class Reservation
+  ROOM_RATE = 200.00
   include DateRange
   attr_reader :id, :check_in, :check_out, :room_booked, :total_cost, :dates_booked
 
@@ -15,8 +16,8 @@ class Reservation
     @check_out = check_out
     @id = id
     @room_booked = room_booked # get from room available
-    @total_cost = count_nights(check_in, check_out) * 200.00
-    dates_booked
+    @total_cost = count_nights(check_in, check_out) * ROOM_RATE
+    @dates_booked = dates_booked
   end
 
   def count_nights(check_in, check_out)
@@ -33,7 +34,7 @@ class Reservation
   end
 
   def dates_booked
-    return (@check_in...@check_out) #work in progres...
+    return (Date.parse(@check_in)...Date.parse(@check_out))
   end
 
   def valid_date?(date)

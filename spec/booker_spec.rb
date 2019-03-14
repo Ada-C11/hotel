@@ -30,11 +30,11 @@ describe "RoomBooker" do
   describe "make_reservation" do
     before do
       @Hotel = RoomBooker.new
-      @Hotel.make_reservation("March 10 2019", "March 15th 2019")
-      @Hotel.make_reservation("March 22 2019", "March 30th 2019")
+      @Hotel.make_reservation(check_in: "March 10 2019", check_out: "March 15th 2019")
+      @Hotel.make_reservation(check_in: "March 22 2019", check_out: "March 30th 2019")
     end
     it "can add a reservation to list of reservations" do
-      expect(@Hotel.list_reservations.length).must_equal 2
+      expect(@Hotel.reservations.length).must_equal 2
     end
 
     it "accurately records reservation id" do
@@ -48,14 +48,14 @@ describe "RoomBooker" do
 
     it "raises an argument error if given invalid check-in" do
       expect {
-        @Hotel.make_reservation("March 10th 2019", "March 15th 2019").must_raise ArgumentError
+        @Hotel.make_reservation(check_in: "March 10th 2019", check_out: "March 15th 2019").must_raise ArgumentError
       } # THIS TEST SHOULD FAIL BUT IT PASSES!!!
     end
   end
 
   describe "find by reservation date" do
-    before do 
-      # @Hotel.make_reservation("March 3rd 2019", "March 6th 2019")
+    before do
+      # @Hotel.make_reservation(check_in: "March 3rd 2019", check_out: "March 6th 2019")
     end
     it "can look up all reservations for a given date" do
     end

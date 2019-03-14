@@ -10,11 +10,10 @@ class Room
     end
 
     @id = id
-    @price = ROOM_RATE
     @bookings = []
   end
 
-  def booked_on(reservation)
-    @bookings << reservation #will have an array of it's own bookings
+  def booked_on(reservation_span)
+    @bookings << reservation_span #will have a range of it's own bookings
   end
 end

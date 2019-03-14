@@ -2,9 +2,6 @@ require_relative 'spec_helper'
 require 'date'
 
 describe "DateRange" do 
-  before do
-    @date_range = DateRange.new(date: "2019-03-03")
-  end
   
   describe "initialize" do 
     it "is an instance of a booking" do 
