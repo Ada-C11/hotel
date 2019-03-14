@@ -1,3 +1,7 @@
+require_relative "room"
+require_relative "reservation"
+require_relative "block"
+
 module HotelFactory
   def self.date_range(date1, date2)
     return HotelSystem::DateRange.new(date1, date2)

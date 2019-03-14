@@ -1,8 +1,5 @@
-require_relative "room"
-require_relative "reservation"
-require_relative "block"
-require_relative "err/errors"
 require_relative "factory"
+require_relative "err/errors"
 
 require "faker"
 require "pry"
