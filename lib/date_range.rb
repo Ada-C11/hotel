@@ -51,8 +51,8 @@ module HotelSystem
     end
 
     def overlap?(range)
-      if range.class != self.class
-        raise ArgumentError, "Please enter an instance of DateRange."
+      if range.class != self.class && range.class != Date
+        raise ArgumentError, "Please enter an instance of Date or DateRange."
       end
       range.date_list.each do |date|
         if self.include?(date) && (date != self.checkout)
