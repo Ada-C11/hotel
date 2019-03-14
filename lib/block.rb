@@ -1,10 +1,17 @@
 
 module Hotel
   class Block
-    def initialize(range:, room_collection:, room_rate:)
+    attr_reader :rooms
+
+    def initialize(range:, room_collection:, room_rate:, block_id: rand(100...999))
       @range = range
-      @room_collection = room_collection
+      @rooms = room_collection
       @room_rate = room_rate
+      @block_id = block_id
+    end
+
+    def available?
+      rooms.length > 0
     end
   end
 end

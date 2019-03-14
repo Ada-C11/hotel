@@ -8,12 +8,14 @@ module Hotel
   class FrontDesk
     NUMBER_OF_ROOMS = 20
 
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @reservations = []
 
       @rooms = rooms_array
+
+      @blocks = []
     end
 
     def reserve_room(check_in: nil, check_out: nil, room_number: nil)
@@ -35,6 +37,37 @@ module Hotel
       reservations << reservation
 
       return reservation
+    end
+
+    def reserve_room_in_block(block_id:, room: nil)
+      block = find_block_by_id(block_id: block_id)
+
+      unless block.rooms.available?
+        raise ArgumentError, "No rooms available in block"
+      end
+
+      if room && !block.rooms.include?(room)
+        raise ArgumentError, "That room is already booked or not in block"
+      end
+
+      nights = block.range
+
+      room ||= block.rooms.first
+
+      reservation = Hotel::Reservation.new(room: room,
+                                           nights: nights,
+                                           block_id: block_id,
+                                           rate: block.room_rate)
+
+      block.rooms.delete(room)
+
+      reservations << reservation
+
+      return reservation
+    end
+
+    def find_block_by_id(block_id:)
+      blocks.select { |block| block.block_id == block_id }
     end
 
     def find_reservations_by_date(date:)
@@ -61,16 +94,33 @@ module Hotel
 
     def reserve_block(range:, room_collection:, room_rate:)
       # ASSUME FOR NOW THAT:
-      ### range is an array of Dates
+      ### range is an array of Dates, check-in to check-out
       ### room_collection is an array of room numbers
       ### room_rate is an integer price per night
-      rooms = room_collection.map { |room_number| find_room_by_number(room_number: room_number) }
 
-      rooms.each do |room|
-        raise ArgumentError, "Rooms are available for that date range" unless room.available?(range: range)
+      rooms = room_collection.map do |room_number|
+        find_room_by_number(room_number: room_number)
       end
 
-      Hotel::Block.new(range: range, room_collection: room_collection, room_rate: room_rate)
+      rooms.each do |room|
+        unless room.available?(range: range)
+          raise ArgumentError, "Rooms are available for that date range"
+        end
+      end
+
+      range.pop
+
+      block = Hotel::Block.new(range: range,
+                               room_collection: rooms,
+                               room_rate: room_rate)
+
+      blocks << block
+
+      rooms.each do |room|
+        room.booked_nights.concat(range)
+      end
+
+      return block
     end
 
     private
