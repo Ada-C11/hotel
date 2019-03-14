@@ -1,7 +1,10 @@
 require 'date'
 
 class Reservation
-  COST_PER_NIGHT = 200.00
+  attr_reader :time_interval, :id
+  COST_PER_NIGHT = 200.00.freeze
+  DISCOUNT_RATE = (COST_PER_NIGHT * 0.8).freeze
+  private_constant :COST_PER_NIGHT, :DISCOUNT_RATE
 
   def initialize(time_interval)
     @time_interval = time_interval

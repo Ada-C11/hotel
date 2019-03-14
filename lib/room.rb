@@ -1,14 +1,22 @@
 class Room
-  attr_reader :id, :reservation_list
-
+  attr_reader :id, :bookings
+  
   def initialize(id)
     @id = id
-    @reservation_list = Array.new
+    @bookings = Array.new
   end
 
   def reserve(time_interval)
-    new_reservation = Reservation.new(time_interval)
-    @reservation_list << new_reservation
+    @bookings << time_interval
   end
 
+  def overlap?(time_interval)
+    if @bookings.empty?
+      return false
+    end
+
+    @bookings.each do |booking|
+      return booking.overlap?(time_interval)
+    end
+  end
 end
