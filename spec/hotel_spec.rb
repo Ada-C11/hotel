@@ -46,9 +46,9 @@ describe "hotel class" do
     end
   end
 
-  describe "create_date_list method" do
+  describe "create_date_range method" do
     before do
-      @dates = @hotel.create_date_list(start_year: 2019, start_month: 11, start_day: 15, num_nights: 5)
+      @dates = @hotel.create_date_range(start_year: 2019, start_month: 11, start_day: 15, num_nights: 5)
     end
 
     it "returns a DateRange" do
@@ -82,7 +82,7 @@ describe "hotel class" do
         @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       end
 
-      @dates = @hotel.create_date_list(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      @dates = @hotel.create_date_range(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
     end
 
     it "will return false if the room is not reserved" do
@@ -106,7 +106,7 @@ describe "hotel class" do
 
   describe "find_available_room method" do
     before do
-      @res_dates = @hotel.create_date_list(start_year: 2019, start_month: 1, start_day: 2)
+      @res_dates = @hotel.create_date_range(start_year: 2019, start_month: 1, start_day: 2)
       @room = @hotel.find_available_room(start_year: 2019, start_month: 1, start_day: 2)
     end
     it "will return a room if a room is available" do

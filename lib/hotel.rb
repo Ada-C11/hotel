@@ -12,6 +12,7 @@ module HotelSystem
       @rooms = []
       add_rooms(number_of_rooms)
       @reservations = []
+      @blocks = []
     end
 
     def add_rooms(number)
@@ -28,7 +29,7 @@ module HotelSystem
       HotelSystem::DateRange.valid_date_entry?(year, month, day)
     end
 
-    def create_date_list(start_year:, start_month:, start_day:, num_nights: nil)
+    def create_date_range(start_year:, start_month:, start_day:, num_nights: nil)
       valid_date_entry?(start_year, start_month, start_day)
       dates = HotelSystem::DateRange.new(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       return dates
@@ -80,7 +81,7 @@ module HotelSystem
 
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
       valid_date_entry?(start_year, start_month, start_day)
-      res_dates = create_date_list(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
+      res_dates = create_date_range(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       # res_dates_range = res_dates.date_list
       res_room = find_available_room(start_year: start_year, start_month: start_month, start_day: start_day)
       id = create_reservation_id
@@ -122,5 +123,11 @@ module HotelSystem
         return available_rooms
       end
     end
+
+    def create_block(date_range:, rooms:, room_rate:)
+      block = HotelSystem::HotelBlock.new(date_rage: date_range, rooms: rooms, room_rate: room_rate)
+      @blocks << block
+    end
+
   end
 end
