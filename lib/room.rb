@@ -14,11 +14,15 @@ module HotelSystem
     end
 
     ##### NEEDS TESTS
+
     def available?(date)
       reservations.each do |reservation|
-        reservation.date_range.each do |reserved_date|
-          return false if reserved_date.to_s == date.to_s
+        if date >= reservation.arrive_day && date < reservation.depart_day
+          return false
         end
+        # reservation.date_range.each do |reserved_date|
+        #   return false if reserved_date.to_s == date.to_s
+        # end
       end
       return true
     end
