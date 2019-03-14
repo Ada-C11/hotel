@@ -3,23 +3,23 @@ require_relative "spec_helper"
 describe "reservation class" do
   describe "initialize" do
     before do
-      @room = Room.new(3, 200)
-      @res = Reservation.new(1, Date.new(2019, 3, 10), Date.new(2019, 3, 12), @room)
+      @room = HotelGroup::Room.new(3, 200)
+      @res = HotelGroup::Reservation.new(1, Date.new(2019, 3, 10), Date.new(2019, 3, 12), @room)
     end
-    it "returns an instance of class Reservation" do
-      expect(@res).must_be_kind_of Reservation
+    it "returns an instance of class HotelGroup::Reservation" do
+      expect(@res).must_be_kind_of HotelGroup::Reservation
     end
 
     it "finds total price based on number of days in reservation" do
-      @res.room = Room.new(21, 200)
-      expect(@res.find_total_price).must_equal "400.00"
+      @res.room = HotelGroup::Room.new(21, 200)
+      expect(@res.total_price).must_equal "400.00"
     end
   end
 
   describe "finds a reservation by date" do
     before do
-      @room = Room.new(3, 200)
-      @res = Reservation.new(1, Date.new(2019, 3, 3), Date.new(2019, 3, 6), @room)
+      @room = HotelGroup::Room.new(3, 200)
+      @res = HotelGroup::Reservation.new(1, Date.new(2019, 3, 3), Date.new(2019, 3, 6), @room)
     end
 
     it "includes_date? returns true for date within res date range" do

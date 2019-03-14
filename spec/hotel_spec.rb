@@ -2,11 +2,11 @@ require_relative "spec_helper"
 
 describe "hotel class" do
   before do
-    @hotel = Hotel.new
+    @hotel = HotelGroup::Hotel.new
   end
   describe "initialize" do
-    it "returns an object of type Hotel with instance variables" do
-      expect(@hotel).must_be_kind_of Hotel
+    it "returns an object of type HotelGroup::Hotel with instance variables" do
+      expect(@hotel).must_be_kind_of HotelGroup::Hotel
       expect(@hotel).must_respond_to :rooms, :reservations
     end
 
@@ -18,8 +18,8 @@ describe "hotel class" do
 
   describe "list rooms and reservations" do
     before do
-      @hotel = Hotel.new
-      @hotel.rooms = [Room.new(3, 900)]
+      @hotel = HotelGroup::Hotel.new
+      @hotel.rooms = [HotelGroup::Room.new(3, 900)]
     end
 
     it "returns a formatted room" do
@@ -29,7 +29,7 @@ describe "hotel class" do
 
   describe "creates new reservation" do
     before do
-      @hotel = Hotel.new
+      @hotel = HotelGroup::Hotel.new
       @start_time = Date.new(2019, 3, 9)
       @end_time = Date.new(2019, 3, 11)
 
@@ -41,26 +41,26 @@ describe "hotel class" do
       expect(@hotel.create_res_id).must_equal 1
     end
 
-    it "creates new Reservation objects and adds them to reservations array" do
-      @hotel.add_reservation(@start_time, @end_time)
+    it "creates new HotelGroup::Reservation objects and adds them to reservations array" do
+      @hotel.make_reservation(@start_time, @end_time)
 
-      @hotel.add_reservation(@start_time2, @end_time2)
+      @hotel.make_reservation(@start_time2, @end_time2)
 
       expect(@hotel.reservations.count).must_equal 2
-      expect(@hotel.reservations[0]).must_be_kind_of Reservation
+      expect(@hotel.reservations[0]).must_be_kind_of HotelGroup::Reservation
       expect(@hotel.reservations[1].id).must_equal 2
     end
 
     it "raises an exception when invalid date range is entered" do
       @end_time_bad = Date.new(2018, 3, 9)
 
-      expect { @hotel.add_reservation(@start_time, @end_time_bad) }.must_raise ArgumentError
+      expect { @hotel.make_reservation(@start_time, @end_time_bad) }.must_raise ArgumentError
     end
   end
 
   describe "finds reservations by date" do
     before do
-      @hotel = Hotel.new
+      @hotel = HotelGroup::Hotel.new
       @start_time = Date.new(2019, 3, 9)
       @end_time = Date.new(2019, 3, 11)
 
@@ -70,9 +70,9 @@ describe "hotel class" do
       @start_time3 = Date.new(2019, 3, 10)
       @end_time3 = Date.new(2019, 3, 15)
 
-      @hotel.add_reservation(@start_time, @end_time)
-      @hotel.add_reservation(@start_time2, @end_time2)
-      @hotel.add_reservation(@start_time3, @end_time3)
+      @hotel.make_reservation(@start_time, @end_time)
+      @hotel.make_reservation(@start_time2, @end_time2)
+      @hotel.make_reservation(@start_time3, @end_time3)
     end
 
     it "adds reservations to an array if they match given date" do
@@ -88,7 +88,7 @@ describe "hotel class" do
 
   describe "hotel block creation" do
     before do
-      @hotel = Hotel.new
+      @hotel = HotelGroup::Hotel.new
       @start_time = Date.new(2019, 3, 9)
       @end_time = Date.new(2019, 3, 11)
 
@@ -101,9 +101,9 @@ describe "hotel class" do
       @start_time4 = Date.new(2018, 5, 5)
       @end_time4 = Date.new(2018, 5, 10)
 
-      @hotel.add_reservation(@start_time, @end_time)
-      @hotel.add_reservation(@start_time2, @end_time2)
-      @hotel.add_reservation(@start_time3, @end_time3)
+      @hotel.make_reservation(@start_time, @end_time)
+      @hotel.make_reservation(@start_time2, @end_time2)
+      @hotel.make_reservation(@start_time3, @end_time3)
     end
     it "generates a block id" do
       expect(@hotel.create_block_id).must_equal 1
@@ -113,10 +113,56 @@ describe "hotel class" do
       expect { @hotel.create_hotel_block(0, @start_time, @end_time, [@hotel.reservations[2].room]) }.must_raise ArgumentError
     end
 
-    it "creates HotelBlock object if rooms are available" do
+    it "creates HotelGroup::HotelBlock object if rooms are available" do
       block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
 
-      expect(block).must_be_kind_of HotelBlock
+      expect(block).must_be_kind_of HotelGroup::HotelBlock
+    end
+
+    it "won't reserve a room that is already part of a block" do
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+
+      room = @hotel.reservations[0].room
+
+      expect { @hotel.make_reservation(@start_time4, @end_time4, room: room) }.must_raise ArgumentError
+    end
+
+    it "won't create a block if a room is already part of another block" do
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+
+      expect { @hotel.create_hotel_block(1, @start_time4, @end_time4, [@hotel.reservations[0].room]) }.must_raise ArgumentError
+    end
+
+    describe "reserve_block_room" do
+      before do
+        @block_room = HotelGroup::Room.new(7, 200)
+        @block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@block_room])
+      end
+      it "reserves a block room" do
+        @hotel.reserve_block_room(@block_room, @block)
+
+        expect(@hotel.blocks.count).must_equal 1
+
+        expect(@hotel.blocks[0]).must_be_kind_of HotelGroup::HotelBlock
+      end
+
+      it "won't reserve_block_room a room that isn't part of the block" do
+        non_block_room = HotelGroup::Room.new(9, 200)
+
+        expect { @hotel.reserve_block_room(non_block_room, @block) }.must_raise ArgumentError
+      end
+
+      it "won't reserve_block_room a room that is already reserved in the block" do
+        @hotel.reserve_block_room(@block_room, @block)
+
+        expect { @hotel.reserve_block_room(@block_room, @block) }.must_raise ArgumentError
+      end
+
+      it "adds reservation to room.reservations after reserve_block_room is successfully called" do
+        @hotel.reserve_block_room(@block_room, @block)
+
+        expect(@block_room.reservations.count).must_equal 1
+      end
     end
   end
 end
