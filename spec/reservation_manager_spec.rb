@@ -38,6 +38,11 @@ describe "ReservationManager class" do
       reservation_manager.make_reservation(start_date: "3rd Jan 2019", end_date: "5th Jan 2019", room: "1")
       expect(reservation_manager.reservation_array[1].room).must_equal "1"
     end
+    #WORKING ON THIS TEST
+    it "Raises an ArgumentError if the user tries to book a room that is blocked for a certain date range" do
+      reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "1")
+      expect { reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["1", "19", "20"], cost: 100) }.must_raise ArgumentError
+    end
     it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (same dates)" do
       reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
       expect { reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1") }.must_raise ArgumentError
