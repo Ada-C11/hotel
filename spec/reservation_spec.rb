@@ -19,7 +19,7 @@ describe "Reservation Class" do
     end
 
     it "Stores a range of dates" do
-      ["2018-03-09", "2018-03-10", "2018-03-11", "2018-03-12"].each do |date|
+      ["2018-03-09", "2018-03-10", "2018-03-11"].each do |date|
         expect(reservation.all_dates).must_include Date.parse(date)
       end
     end

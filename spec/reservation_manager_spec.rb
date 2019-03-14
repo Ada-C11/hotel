@@ -35,17 +35,17 @@ describe "ReservationManager class" do
     it "accurately loads a reservation into the reservations array" do
       new_reservation = manager.request_reservation("2018-03-12", "2018-03-15")
       first_reservation = manager.reservations.first
-      expect(first_reservation.check_in_date).must_equal Date.strptime("2018-03-12")
-      expect(first_reservation.check_out_date).must_equal Date.strptime("2018-03-15")
-      expect(first_reservation.all_dates).must_equal Date.strptime("2018-03-12")..Date.strptime("2018-03-15")
+      expect(first_reservation.check_in_date).must_equal Date.parse("2018-03-12")
+      expect(first_reservation.check_out_date).must_equal Date.parse("2018-03-15")
+      expect(first_reservation.all_dates).must_be_kind_of Array
+      expect(first_reservation.all_dates.length).must_equal 3
+      expect(first_reservation.all_dates[0]).must_equal Date.parse("2018-03-12)")
       expect(first_reservation.room_number).must_be :<=, 20
       expect(first_reservation.room_number).must_be :>, 0
     end
 
-    # will break when reserve an available room, using room 1 as a reference for if working or not
     it "adds the reservation to the room" do
       new_reservation = manager.request_reservation("2018-03-12", "2018-03-12")
-
       expect(manager.rooms.first.reservations.length).must_equal 1
     end
   end
@@ -87,9 +87,9 @@ describe "ReservationManager class" do
     end
 
     it "returns a list of all reservations for a given date" do
-      expect(@manager.reservations_by_date("2018-03-14").length).must_equal 3
+      expect(@manager.reservations_by_date("2018-03-14").length).must_equal 2
       expect(@manager.reservations_by_date("2018-03-12").length).must_equal 2
-      expect(@manager.reservations_by_date("2018-03-10").length).must_equal 0
+      expect(@manager.reservations_by_date("2018-03-15").length).must_equal 0
     end
   end
 
@@ -99,22 +99,42 @@ describe "ReservationManager class" do
     end
 
     it "returns an array which includes instances of rooms" do
-      rooms = manager.available_rooms("Feb 12, 2019")
+      rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
       expect(rooms).must_be_kind_of Array
       expect(rooms[0]).must_be_kind_of Hotel::Room
     end
 
-    it "returns an array of the correct length when all rooms are available" do
-      rooms = manager.available_rooms("Feb 12, 2019")
+    it "returns an array that does not contain unavailable rooms" do
+      rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
+      3.times { manager.request_reservation("Feb 12, 2019", "Feb 13, 2019") }
+      updated_rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
+      other_dates = manager.available_rooms("Feb 13, 2019", "Feb 13, 2019")
+      expect(rooms.length).must_equal 20
+      expect(updated_rooms.first.number).must_equal 4
+      expect(updated_rooms.length).must_equal 17
+      expect(other_dates.length).must_equal 20
+    end
+
+    it "returns an array of the correct length for check-in date not available" do
+      rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
       reservation_one = manager.request_reservation("Feb 12, 2019", "Feb 13, 2019")
-      updated_rooms = manager.available_rooms("Feb 12, 2019")
+      updated_rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
       expect(rooms.length).must_equal 20
       expect(updated_rooms.length).must_equal 19
     end
 
-    # it "returns an array of the correct length when a room is unavailable" do
-
-    #   rooms = manager.available_rooms("Feb 12, 2019")
-    # end
+    it "returns an empty array when no rooms are available" do
+      rooms = manager.available_rooms("Feb 1, 2019", "Feb 2, 2019")
+      20.times { manager.request_reservation("Feb 1, 2019", "Feb 2, 2019") }
+      updated_rooms = manager.available_rooms("Feb 1, 2019", "Feb 2, 2019")
+      different_rooms = manager.available_rooms("Feb 4, 2019", "Feb 4, 2019")
+      # reservation = manager.request_reservation("Feb 1, 2019", "Feb 1, 2019")
+      expect(rooms.length).must_equal 20
+      expect(updated_rooms.length).must_equal 0
+      expect {
+        manager.request_reservation("feb1", "feb1")
+      }.must_raise ArgumentError
+      expect(different_rooms.length).must_equal 20
+    end
   end
 end
