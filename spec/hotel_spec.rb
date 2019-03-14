@@ -1,11 +1,11 @@
 require_relative "spec_helper"
 
 describe "Hotel class" do
-  before do
-    @rooms = HotelSystem::Room.make_set(20, 200)
-    @new_hotel = HotelSystem::Hotel.new(@rooms)
-  end
   describe "initialize" do
+    before do
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @new_hotel = HotelSystem::Hotel.new(@rooms)
+    end
     it "initializes a Hotel object" do
       expect(@new_hotel).must_be_instance_of HotelSystem::Hotel
     end
@@ -255,6 +255,17 @@ describe "Hotel class" do
                                     group_name: "Ada Academy",
                                     discount_rate: 180)
       }.must_raise DateRangeError
+    end
+  end
+
+  describe "set_room_price" do
+    before do
+      @rooms = HotelSystem::Room.make_set(20, 200)
+      @hotel = HotelSystem::Hotel.new(@rooms)
+    end
+    it "will change the price of a room" do
+      @hotel.set_room_price(1, 150)
+      expect(@rooms.first.rate).must_equal 150
     end
   end
 end
