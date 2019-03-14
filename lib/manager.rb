@@ -46,8 +46,12 @@ module Hotel
       if list.length == 0
         return "Sorry, we're booked!  Try another date."
       else
-        return list
+        puts "AVAILABLE ROOMS (from #{check_in} to #{check_out})"
+        list.each_with_index do |room, i|
+          puts "#{i + 1}. Room ##{room.room_number}"
+        end
       end
+      return list
     end
 
     def list_reservations_on(date)

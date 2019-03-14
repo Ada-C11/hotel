@@ -89,6 +89,12 @@ describe "Manager class" do
 
     it "only puts available rooms inside that list" do
       expect(@available_rooms.length).must_equal 19
+
+      @reservation = @manager.reserve_room("2020-03-20", "2020-03-25")
+      @reserved_room = @reservation.room
+      @available_rooms = @manager.list_available_rooms("2020-03-20", "2020-03-25")
+
+      expect(@available_rooms.length).must_equal 18
     end
 
     it "returns a string if there are no available rooms" do
