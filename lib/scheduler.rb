@@ -16,7 +16,6 @@ module Scheduler
   def self.list_reservations(date)
     list = Array.new
     ALL_RESERVATIONS.each do |reservation|
-      puts "abc"
       if reservation.includes_date?(date)
         list << reservation
       end

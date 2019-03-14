@@ -39,7 +39,7 @@ describe "Scheduler module" do
       num_reservations_before = Scheduler::ALL_RESERVATIONS.length
 
       20.times do
-        Scheduler.make_reservation(@duration)
+        Scheduler.make_reservation(@d1)
       end
 
       expect(Scheduler::ALL_RESERVATIONS).must_be_instance_of Array
