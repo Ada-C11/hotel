@@ -21,7 +21,13 @@ module Hotel
     end
 
     def make_reservation(booking_ref, room_number, start_date, end_date)
-      reserve = Hotel::Reservation.new(booking_ref: booking_ref, room_number: room_number, start_date: start_date, end_date: end_date, total_cost: @total_cost)
+      reserve = Hotel::Reservation.new(
+        booking_ref: booking_ref,
+        room_number: room_number,
+        start_date: start_date,
+        end_date: end_date,
+        total_cost: @total_cost,
+      )
 
       return reserve
     end
@@ -46,23 +52,51 @@ module Hotel
       return reservations_by_date
     end
 
-    def is_room_available?(start_date, end_date)
-      # reserved_rooms = []
-      # for i in (0...reservations_by_date.length)
-      #   if (reservations_by_date[i].start_date == start_date) || (reservations_by_date[i].end_date == end_date)
-      #     reserved_rooms.push(reservations_by_date[i])
-      #   end
-      # end
+    def is_room_available(start_date, end_date)
+      puts "is_room_available:"
+      reservations_at_date = get_reservation_by_date(start_date, end_date)
+      puts "CURRENT ROOMS"
+      puts "room_in_question: #{reservations_at_date}"
+      #puts current_reservations[0].room_number
+      puts "^^^^^^^^^^^^^^^"
 
-      reserved_rooms = reservations_by_date(start_date, end_date).map { |reservation|
-        reservations_by_date.room_number
-      }
-      available_rooms = @all_rooms.reject { |rm_num| reserved_rooms.include? rm_num }
+      puts "@RESERVATIONS"
+      puts "#{@reservations.length} reservations"
+      puts "^^^^^^^^^^^^^^^"
+      available_rooms = []
+      for room_idx in (0..@all_rooms.length - 1)
+        room_booked = false
+        for res_idx in (0..reservations_at_date.length - 1)
+          resrved_room = reservations_at_date[res_idx].room_number
+          room_in_question = @all_rooms[room_idx]
+          if resrved_room == room_in_question
+            room_booked = true
+            break
+          end
+        end
+
+        if room_booked == false
+          available_rooms << @all_rooms[room_idx]
+        end
+      end
+      puts "ALL ROOMS"
+      puts "#{@all_rooms}"
+      puts "^^^^^^^^^^^^^^^"
+
+      puts "AVAILABLE ROOMS"
+      puts "#{available_rooms}"
+      puts "^^^^^^^^^^^^^^^"
 
       return available_rooms
     end
 
-    # add_reservation(Hotel.make_reservation(@@reservations.length + 1, 1, Date.new(2019, 3, 3), Date.new(2019, 3, 15)))
+    # reserved_rooms = get_reservation_by_date(start_date, end_date).map { |reservation|
+    #   reservations_by_date[reservation].room_number
+    # }
+
+    # available_rooms = @all_rooms.reject { |rm_num| reserved_rooms.include? rm_num }
+
+    # add_reservation(make_reservation(@reservations.length + 1, 1, Date.new(2019, 3, 3), Date.new(2019, 3, 15)))
 
     # add_reservation(Hotel.make_reservation(@reservations.length + 1, 2, Date.today + 1, Date.new(2019, 3, 18)))
 

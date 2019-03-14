@@ -1,6 +1,5 @@
 require_relative "spec_helper"
 
-# module Hotel
 describe "class FrontDesk" do
   def build_front_desk
     return Hotel::FrontDesk.new
@@ -55,12 +54,35 @@ describe "class FrontDesk" do
 
       by_date = @specific_reservation.get_reservation_by_date(Date.new(2019, 4, 8), Date.new(2019, 4, 10))
 
-      puts "VVVVVVVVVVVVVV"
+      puts "BY DATE"
       puts by_date
       puts "^^^^^^^^^^^^^^"
       expect(by_date).must_be_kind_of Array
       expect(by_date[0].start_date).must_equal Date.new(2019, 4, 8)
     end
   end
+
+  describe "is_room_available method" do
+    before do
+      @check_rooms = build_front_desk
+    end
+
+    it "will return array of available rooms" do
+      reservation_3 = @check_rooms.make_reservation(
+        1001,
+        3,
+        Date.new(2019, 4, 8),
+        Date.new(2019, 4, 10),
+      )
+      @check_rooms.add_reservation(reservation_3)
+
+      all_available_rooms = @check_rooms.is_room_available(
+        Date.new(2019, 4, 8),
+        Date.new(2019, 4, 10)
+      )
+
+      expect(all_available_rooms).must_be_kind_of Array
+      expect(all_available_rooms.length).must_equal 19
+    end
+  end
 end
-# end
