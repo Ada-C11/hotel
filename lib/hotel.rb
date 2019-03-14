@@ -17,37 +17,44 @@ module BookingSystem
       @rooms << room
     end
 
-    def list_rooms
-      # Evaluates length first, skips .map method if there is no room
-      return reservations if rooms.length == 0
-      all_rooms = @rooms.map {|room| room.room_num}
-      return all_rooms
+    def list_all_rooms
+      # Evaluates length first, bypasses .map method if there is no room
+      return rooms if rooms.length == 0
+      return @rooms.map {|room| room.room_num}
     end
 
-    # Break this out of new_reservation to reduce dependency
     def add_reservation(reservation)
       @reservations << reservation
     end
 
     def new_reservation(room, checkin_date, checkout_date)
-      # Based on Trip#connect on RideShare where we add trip to both passenger & driver
       reservation = BookingSystem::Reservation.new(room: room, checkin_date: checkin_date, checkout_date: checkout_date)
-      # Adds new reservation to Hotel's array of reservations
       add_reservation(reservation)
-      # Adds new reservation to Room's array of reservations
       room.add_reservation(reservation)
     end
 
     def list_by_date(date)
-      matching_reservations = @reservations.select {|reservation| reservation.date_range.include?(date)}
-      return matching_reservations
+      return reservations if reservations.length == 0
+      return @reservations.select {|reservation| reservation.date_range.include?(date)}
     end
 
-    def available?(date)
+    def overlap?(date)
       reservations.each do |reservation|
         reservation.date_range.each do |res_date|
-          return date == res_date ? false : true
+          return true if date == res_date
         end
+      end
+      return false
+    end
+
+    # Rewrite this
+    def list_available_rooms(date)
+      raise ArgumentError.new("There is no room") if rooms.length == 0
+      available_rooms = @rooms.select {|room| self.reserved?(date)}
+      if available_rooms.length == 0
+        raise ArgumentError.new("There is no available room")
+      else
+        return available_rooms
       end
     end
   end
