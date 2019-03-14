@@ -43,6 +43,8 @@ describe "Hotel" do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
       @room_three = HotelSystem::Room.new(id: 3)
+      @room_four = HotelSystem::Room.new(id: 4)
+      @room_five = HotelSystem::Room.new(id: 5)
 
       @hotel.rooms << @room
       @hotel.rooms << @room_two
@@ -51,8 +53,12 @@ describe "Hotel" do
       @arrive_day = "2019-02-10"
       @depart_day = "2019-02-14"
 
+      # @another_first_day = "2019-01-06"
+      # @another_second_day = "2019-02-10"
+
       @hotel.book_reservation(@room, @arrive_day, @depart_day)
       @hotel.book_reservation(@room_two, @arrive_day, @depart_day)
+      # @hotel.book_reservation(@room_three, @another_first_day, @another_second_day)
       # @reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
     end
     describe "hotel#book_reservation" do
@@ -86,18 +92,53 @@ describe "Hotel" do
     end
 
     describe "#reservations_by_date" do
+      before do
+        @reg_res = @hotel.add_reservation(create_reservation(@room, Date.parse("2019-02-06"), Date.parse("2019-02-09")))
+      end
       it "returns an array of reservations" do
-        # reservation_list = @hotel.reservations_by_date(Date.new(2019, 2, 10))
         reservation_list = @hotel.reservations_by_date("2019-02-10")
 
         expect(reservation_list).must_be_kind_of Array
-        expect(reservation_list.length).must_equal 2
         expect(reservation_list.first).must_be_kind_of HotelSystem::Reservation
+      end
+
+      it "Does not return reservations that do not contain specified date" do
+        reservation_list = @hotel.reservations_by_date("2019-02-10")
+        expect(reservation_list.length).must_equal 2
+        expect(reservation_list).wont_include @reg_res
       end
 
       it "returns an empty array if no reservations are found for that date" do
         reservation_list = @hotel.reservations_by_date("2018-02-10")
         expect(reservation_list).must_equal []
+      end
+    end
+    describe "Reservations by date including block_reservations " do
+      before do
+        @block = @hotel.create_block([@room_four, @room_five], @arrive_day, @depart_day, 0.2)
+        # @block.create_block_reservations
+      end
+      it "will NOT return block reservations that have a status of :AVAILABLE" do
+        @block.create_block_reservations
+        reservation_list = @hotel.reservations_by_date("2019-02-10")
+        expect(reservation_list.length).must_equal 2
+        @block.reservations.each do |reservation|
+          expect(reservation_list).wont_include reservation
+          expect(reservation.status).must_equal :AVAILABLE
+        end
+      end
+
+      it "will return block reservations that have a status of :UNAVAILABLE" do
+        available_reservations = @block.find_available_reservations
+        available_reservations.each do |res|
+          @block.book_block_reservation(res)
+        end
+        reservation_list = @hotel.reservations_by_date("2019-02-10")
+        expect(reservation_list.length).must_equal 4
+        @block.reservations.each do |res|
+
+          #expect(reservation_list).must_include res
+        end
       end
     end
     describe "get_available_rooms" do

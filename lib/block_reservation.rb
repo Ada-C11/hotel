@@ -6,6 +6,7 @@ module HotelSystem
       super(room: room, arrive_day: arrive_day, depart_day: depart_day)
       @block = block
       @status = status.to_sym
+      @date_range = (arrive_day...depart_day)
     end
 
     def book_reservation

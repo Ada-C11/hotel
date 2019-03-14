@@ -138,8 +138,19 @@ describe "Block" do
       end
     end
 
-    it "does not return rooms that have :UNAVAILABLE status" do
-      # TODO ######
+    it "does not return reservations that have :UNAVAILABLE status" do
+      first_res = @block.reservations.first
+      @block.book_block_reservation(first_res)
+      available_rooms = @block.find_available_reservations
+      expect(first_res.status).must_equal :UNAVAILABLE
+      expect(available_rooms).wont_include first_res
+    end
+
+    it "returns an empty array if no block reservations are available" do
+      @block.reservations.each do |res|
+        @block.book_block_reservation(res)
+      end
+      expect(@block.find_available_reservations).must_equal []
     end
   end
 
