@@ -72,7 +72,7 @@ describe "Booker Class" do
 
     describe "Wave 2 book_room method with one room" do
         before do 
-            @rooms = [Hotel::Room.new(1)]
+            @rooms = [Hotel::Room.new(id: 1)]
             @booker = Hotel::Booker.new(@rooms)
         end
 
@@ -129,6 +129,66 @@ describe "Booker Class" do
             booker.book_room(start_date: 20190316, end_date: 20190320)
             expect(booker.reservations.length).must_equal 2
             expect(booker.reservations[0].room).must_equal booker.reservations[1].room
+        end
+
+
+
+    end
+
+
+    describe "create_block method" do
+        let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
+        let(:room1) {booker.rooms[0]}
+        let(:room2) {booker.rooms[1]}
+        let(:request_block) {booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room1, room2], cost: 100)}
+
+        it "creates a block" do
+            expect(request_block).must_be_kind_of Hotel::Block
+            expect(request_block.id).must_equal 1
+            expect(request_block.block_reservations.length).must_equal 2
+        end
+
+        it "raises exception for no available rooms of the requesting block dates" do
+            20.times do 
+                booker.book_room(start_date: 20190313, end_date: 20190316)
+            end
+            expect{request_block}.must_raise ArgumentError
+        end
+
+        it "raises exception for requesting more than 5 rooms in a block" do
+            test_rooms = []
+            6.times do |i|
+               test_rooms.push(booker.rooms[i])
+            end
+            expect{booker.create_block(start_date: 20190313, end_date: 20190316, rooms: test_rooms, cost: 100)}.must_raise ArgumentError
+        end
+
+        # it "does not raise an exception for requesting 5 rooms in a block" do
+        #     test_rooms = []
+        #     .times do |i|
+        #        test_rooms.push(booker.rooms[i])
+        #     end
+        #     expect{booker.create_block(start_date: 20190313, end_date: 20190316, rooms: test_rooms, cost: 100)}.must_raise ArgumentError
+        # end
+
+        it "adds block to list of blocks in booker" do
+            booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room1, room2], cost: 100)
+            expect(booker.blocks.length).must_equal 1
+            expect(booker.blocks[0]).must_be_kind_of Hotel::Block
+        end
+
+        it "adds block reservations to reservation list" do
+            booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room1, room2], cost: 100)
+            expect(booker.reservations.length).must_equal 2
+            expect(booker.reservations[0]).must_be_kind_of Hotel::Block_Reservation
+        end
+
+        it "adds block reservations to rooms reservation list" do
+            booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room1, room2], cost: 100)
+            expect(room1.reservations.length).must_equal 1
+            expect(room1.reservations[0]).must_be_kind_of Hotel::Block_Reservation
+            expect(room2.reservations.length).must_equal 1
+            expect(room2.reservations[0]).must_be_kind_of Hotel::Block_Reservation
         end
 
 

@@ -9,7 +9,7 @@ describe "Reservation Class" do
 
     it "calculates the cost of a reservation" do
         expect(reservation.cost).must_be_kind_of Float
-        expect(reservation.cost).must_equal 200.0
+        expect(reservation.cost).must_equal 400.0
     end
 
 end

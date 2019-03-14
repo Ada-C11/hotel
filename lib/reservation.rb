@@ -1,5 +1,4 @@
 
-
 module Hotel
 
     class Reservation
@@ -15,7 +14,7 @@ module Hotel
         end
 
         def cost
-            total = 200.0 * (date_range)
+            total = 200.0 * (date_range.length)
             return total
         end
 
