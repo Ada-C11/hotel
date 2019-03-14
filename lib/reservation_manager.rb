@@ -2,26 +2,10 @@ require_relative "reservation"
 require "pry"
 
 class Reservation_manager
-  attr_reader :reservations, :all_rooms, :make_reservation
+  attr_reader :reservations, :all_rooms, :make_reservation, :find_available_rooms
 
   def initialize
     @reservations = []
-  end
-
-  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
-    new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time)
-    @reservations << new_reservation
-    return new_reservation
-  end
-
-  def find_reservations(date)
-    date = Date.parse(date)
-    reservations_with_date = @reservations.select do |reservation|
-      if date.between?(reservation.check_in_time, reservation.check_out_time)
-        reservation
-      end
-    end
-    return reservations_with_date
   end
 
   def find_available_rooms(check_in_time, check_out_time)
@@ -40,5 +24,26 @@ class Reservation_manager
       end
     end
     return available_rooms
+  end
+
+  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
+    list_of_available_rooms = find_available_rooms(check_in_time, check_out_time)
+    if list_of_available_rooms.include?(room_number)
+      new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time)
+      @reservations << new_reservation
+    else
+      raise ArgumentError, "You cannot book this room for this date range because it conflicts with another reservation"
+    end
+    return new_reservation
+  end
+
+  def find_reservations(date)
+    date = Date.parse(date)
+    reservations_with_date = @reservations.select do |reservation|
+      if date.between?(reservation.check_in_time, reservation.check_out_time)
+        reservation
+      end
+    end
+    return reservations_with_date
   end
 end
