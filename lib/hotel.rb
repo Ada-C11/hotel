@@ -2,6 +2,7 @@ require_relative "room"
 require_relative "reservation"
 require_relative "block"
 require_relative "err/errors"
+require_relative "factory"
 
 require "faker"
 require "pry"
@@ -69,28 +70,28 @@ module HotelSystem
     def make_reservation(room_id:, start_date:, end_date:, name:)
       room = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room
-      request_range = date_range(start_date, end_date)
+      request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
       check_room(room: room, date_range: request_range)
-      new_res = reservation(date_range: request_range,
-                            room: room,
-                            id: id, name: name)
+      new_res = HotelFactory.reservation(date_range: request_range,
+                                         room: room,
+                                         id: id, name: name)
       self.add_reservation(new_res)
       return new_res
     end
 
     def make_block(*room_ids, start_date:, end_date:, group_name:, discount_rate:)
       rooms = room_ids.map { |id| find_room_by_id(id) }
-      request_range = date_range(start_date, end_date)
+      request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
       rooms.each do |room|
         check_room(room: room, date_range: request_range)
       end
-      new_block = block(rooms: rooms,
-                        date_range: request_range,
-                        discount_rate: discount_rate,
-                        id: id,
-                        group_name: group_name)
+      new_block = HotelFactory.block(rooms: rooms,
+                                     date_range: request_range,
+                                     discount_rate: discount_rate,
+                                     id: id,
+                                     group_name: group_name)
       self.add_block(new_block)
       return new_block
     end
@@ -98,13 +99,19 @@ module HotelSystem
     def reserve_from_block(block_id, room_id, name)
       room = find_room_by_id(room_id)
       block = find_block_by_id(block_id)
+      dates = block.date_range
+      id = generate_id.to_sym
+
       (raise BlockError, "The given block does not contain the given room") if (!(block.has_room?(room)))
-      check_room(room: room, date_range: block.date_range, ignore_blocked: true)
-      new_res = reservation(date_range: block.date_range,
-                            id: (reservations.length + 1),
-                            room: room,
-                            name: name,
-                            block: block)
+
+      check_room(room: room, date_range: dates, ignore_blocked: true)
+
+      new_res = HotelFactory.reservation(date_range: dates,
+                                         id: id,
+                                         room: room,
+                                         name: name,
+                                         block: block)
+
       self.add_reservation(new_res)
       return new_res
     end
@@ -146,28 +153,6 @@ module HotelSystem
 
     def parse_date(date_string)
       return Date.parse(date_string)
-    end
-
-    # private wrapper methods:
-
-    def date_range(date1, date2)
-      return HotelSystem::DateRange.new(date1, date2)
-    end
-
-    def reservation(date_range:, room:, id:, name:, block: nil)
-      HotelSystem::Reservation.new(date_range: date_range,
-                                   room: room,
-                                   id: id,
-                                   name: name,
-                                   block: block)
-    end
-
-    def block(rooms:, date_range:, discount_rate:, id:, group_name:)
-      HotelSystem::Block.new(rooms: rooms,
-                             date_range: date_range,
-                             discount_rate: discount_rate,
-                             group_name: group_name,
-                             id: id)
     end
   end
 end
