@@ -60,9 +60,13 @@ describe "Manager class" do
       expect(@reservation.id).must_equal(@previous + 1)
     end
 
-    it "allows you to select a room" do
+    it "allows someone to reserve a specific room" do
       reservation = @manager.reserve_room("2019-3-20", "2019-3-21", room_selection: 3)
       expect(reservation.room.room_number).must_equal 3
+    end
+
+    it "raises an ArgumentError if someone tries to reserve a specific room that's unavailable" do
+      expect { @manager.reserve_room("2019-3-20", "2019-3-21", room_selection: 1) }.must_raise ArgumentError
     end
   end
 
