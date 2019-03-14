@@ -17,8 +17,14 @@ module Hotel
       @reservations = []
     end
 
-    def reserve_room(check_in, check_out)
-      available_room = @rooms.sample
+    def reserve_room(check_in, check_out, room: nil)
+      available_room_list = list_available_rooms(check_in, check_out)
+
+      if available_room_list == []
+        return "Try again!"
+      else
+        available_room = available_room_list[0]
+      end
 
       reservation = Hotel::Reservation.new(
         check_in: check_in,
@@ -43,14 +49,10 @@ module Hotel
         end
       end
 
-      if list.length == 0
-        return "Sorry, we're booked!  Try another date."
-      else
-        puts "AVAILABLE ROOMS (from #{check_in} to #{check_out})"
-        list.each_with_index do |room, i|
-          puts "#{i + 1}. Room ##{room.room_number}"
-        end
-      end
+      # if list.length == 0
+      #   puts "Sorry, we're booked!  Try another date."
+      # end
+
       return list
     end
 
