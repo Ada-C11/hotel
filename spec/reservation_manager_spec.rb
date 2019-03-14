@@ -39,9 +39,13 @@ describe "ReservationManager class" do
       expect(reservation_manager.reservation_array[1].room).must_equal "1"
     end
     #WORKING ON THIS TEST
-    it "Raises an ArgumentError if the user tries to book a room that is blocked for a certain date range" do
+    it "Raises an ArgumentError if the user tries to book a room that is blocked for a certain date range if it has the normal cost of 200 (not reduced block cost)" do
       reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100)
       expect { reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "18") }.must_raise ArgumentError
+    end
+    it "Allows user to book a room that is blocked for a certain date range if it has the reduced block price (any price less than 200)" do
+      reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100)
+      expect (reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "18", cost: 199)).must_be_instance_of Reservation
     end
     it "Raises an ArgumentError if you try to reserve a room that is unavailable for a given date range (same dates)" do
       reservation_manager.make_reservation(start_date: "1st Jan 2019", end_date: "3rd Jan 2019", room: "1")
@@ -65,7 +69,7 @@ describe "ReservationManager class" do
     it "Returns an array" do
       expect(reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100).length).must_equal 3
     end
-    it "Array containsb booked rooms" do
+    it "Array contains booked rooms" do
       expect(reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100).first).must_equal "18"
     end
     it "raises an exception if the user tries to book a block including a room that is booked during the date range" do

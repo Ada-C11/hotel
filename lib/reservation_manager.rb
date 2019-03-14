@@ -12,11 +12,12 @@ class ReservationManager
     @rooms = ("1".."20").to_a
   end
 
-  def make_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0")
+  def make_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200)
     @start_date = start_date
     @end_date = end_date
     @room = room
-    new_reservation = Reservation.new(start_date: @start_date, end_date: @end_date, room: @room)
+    @cost = cost
+    new_reservation = Reservation.new(start_date: @start_date, end_date: @end_date, room: @room, cost: @cost)
 
     date_range = new_reservation.reservation_dates
     # booked_rooms = []
@@ -32,7 +33,7 @@ class ReservationManager
     if @booked_rooms.include?(new_reservation.room)
       # binding.pry
       raise ArgumentError, "That room is not availble, choose another room"
-    elsif @blocked_rooms_array.include?(new_reservation.room)
+    elsif @blocked_rooms_array.include?(new_reservation.room) && new_reservation.total_cost / new_reservation.duration == 200 #don't allow block to be booked unless they are part of that block (cost would be less)
       raise ArgumentError, "That room is blocked, choose another room"
     else
       @reservation_array << new_reservation
