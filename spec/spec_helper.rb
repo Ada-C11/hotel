@@ -1,3 +1,5 @@
+require "simplecov"
+SimpleCov.start
 # Add simplecov
 require "minitest"
 require "minitest/autorun"
