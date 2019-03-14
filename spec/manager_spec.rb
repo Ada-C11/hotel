@@ -59,6 +59,11 @@ describe "Manager class" do
     it "can assign a unique id to the new reservation" do
       expect(@reservation.id).must_equal(@previous + 1)
     end
+
+    it "allows you to select a room" do
+      reservation = @manager.reserve_room("2019-3-20", "2019-3-21", room_selection: 3)
+      expect(reservation.room.room_number).must_equal 3
+    end
   end
 
   describe "list_reservations_on method" do

@@ -17,11 +17,19 @@ module Hotel
       @reservations = []
     end
 
-    def reserve_room(check_in, check_out, room: nil)
+    def reserve_room(check_in, check_out, room_selection: nil)
       available_room_list = list_available_rooms(check_in, check_out)
 
       if available_room_list == []
-        return "Try again!"
+        return available_room_list
+      elsif room_selection != nil
+        available_room = ""
+        available_room_list.each do |room|
+          available_room = room if room.room_number == room_selection
+        end
+        if available_room == ""
+          raise ArgumentError, "Room ##{room_selection} is unavailable between #{check_in} and #{check_out}."
+        end
       else
         available_room = available_room_list[0]
       end
