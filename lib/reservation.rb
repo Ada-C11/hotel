@@ -1,12 +1,14 @@
 require "pry"
 require "date"
 
+#CHECK THAT BLOCK AVAILABILITY STATUS IS VALID?
+
 module Hotel
   class Reservation
     attr_reader :name, :checkin_date, :num_of_nights
-    attr_accessor :room_num, :cost, :checkout_date, :reserved_nights, :block_reference
+    attr_accessor :room_num, :cost, :checkout_date, :reserved_nights, :block_reference, :block_availability
 
-    def initialize(name, checkin_date, num_of_nights, block_reference: "CLASSIC")
+    def initialize(name, checkin_date, num_of_nights, block_reference: "CLASSIC", block_availability: :AVAILABLE)
       @name = name
       @checkin_date = Date.parse(checkin_date)
 
@@ -20,6 +22,7 @@ module Hotel
       @reserved_nights = calculate_reserved_nights
       @room_num = nil
       @block_reference = block_reference
+      @block_availability = :AVAILABLE
     end
 
     def calculate_reserved_nights

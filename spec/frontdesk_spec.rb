@@ -97,6 +97,7 @@ describe "Frontdesk request_block" do
     expect(@blocked_rooms.length).must_equal 5
     expect(@frontdesk.find_available_rooms(@dates).length).must_equal 15
     expect(@frontdesk.find_reservation_by_date(date).length).must_equal 5
+    expect(@frontdesk.block_reservations.length).must_equal 1
     expect(@block_res.block_reference).must_equal "WIZARD PARTY"
   end
   it "raises an ArgumentError when user requests more than 5 rooms" do
@@ -110,15 +111,30 @@ describe "Frontdesk request_block" do
     @frontdesk.request_block(block_res_2, 5)
     @frontdesk.request_block(block_res_3, 5)
     @frontdesk.request_block(block_res_4, 3)
+    expect(@frontdesk.block_reservations.length).must_equal 4
     expect { @frontdesk.request_block(block_res_5, 3) }.must_raise ArgumentError
   end
   it "allows reservations to be made by those with block access" do
     block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
     expect(block_res_2.cost).must_equal 450
-    #expects user can see if given block has any rooms available
     #expect that given the right 'password', user can book a blocked room
     #expect that the available rooms in that block decrease by one
     #expect user can only book for those precise block dates
-    #expect cost should be adjusted for block price
+  end
+end
+
+describe "find_available_block_rooms" do
+  before do
+    @frontdesk = Hotel::Frontdesk.new
+    @block_res = Hotel::Reservation.new("Ursula Le Guin", "2019-07-08", 3, block_reference: "WIZARD PARTY")
+    @blocked_rooms = @frontdesk.request_block(@block_res, 5)
+    @dates = @block_res.reserved_nights
+  end
+  it "returns only available rooms in the block" do
+    reservation = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "WIZARD PARTY")
+    @frontdesk.request_reservation(reservation)
+    expect { @frontdesk.find_available_block_rooms("DRAGON PARTY") }.must_raise ArgumentError
+    expect(@frontdesk.find_available_block_rooms("WIZARD PARTY")).must_be_instance_of Array
+    expect(@frontdesk.find_available_block_rooms("WIZARD PARTY").length).must_equal 5
   end
 end

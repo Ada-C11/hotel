@@ -3,16 +3,21 @@ require "pry"
 
 module Hotel
   class Frontdesk
-    attr_accessor :rooms, :reservations, :block_reference
+    attr_accessor :rooms, :reservations, :block_reservations
 
     def initialize
       @rooms = Frontdesk.create_rooms(20)
       @reservations = []
-      @block_reservations = []
+      @block_reservations = {}
     end
 
-    def find_available_rooms(dates, block_reference: "CLASSIC")
-      # if block_reference != nil
+    def request_reservation(reservation)
+      assign_room_number(reservation)
+      @reservations << reservation
+      return reservation
+    end
+
+    def find_available_rooms(dates)
       available_rooms = []
       @rooms.each do |room|
         overlap = room.availability & dates
@@ -43,33 +48,54 @@ module Hotel
       end
     end
 
-    def request_reservation(reservation)
-      assign_room_number(reservation)
-      @reservations << reservation
-      return reservation
-    end
-
     def request_block(reservation, num_of_rooms)
       if num_of_rooms > 5
-        raise ArgumentError, "You can reserve a maximum of 5 rooms in a block"
-      else
-        blocked_rooms = []
+        raise ArgumentError, "You can reserve a maximum of 5 available rooms in a block"
+      end
+      available_rooms = find_available_rooms(reservation.reserved_nights)
+      if available_rooms.length >= num_of_rooms
+        pending_block = []
+        i = 1
         num_of_rooms.times do
-          assign_room_number(reservation)
-          blocked_rooms << reservation
+          index_val = reservation.clone
+          pending_block << instance_variable_set("@block_res_#{i}", index_val)
+          i += 1
         end
-        blocked_rooms.each do |room|
+        blocked_rooms = []
+        pending_block.each do |room|
+          assign_room_number(room)
+          blocked_rooms << room
           @reservations << room
         end
+        @block_reservations.merge!(reservation.block_reference => blocked_rooms)
       end
       return blocked_rooms
+    else
+      raise ArgumentError, "There aren't enough rooms available."
+    end
+
+    def find_available_block_rooms(block_reference)
+      if @block_reservations.has_key?(block_reference)
+        available_rooms = []
+        @block_reservations.each do |key, value|
+          if key == block_reference
+            value.each do |block_res|
+              if block_res.block_availability == :AVAILABLE
+                available_rooms << block_res
+              end
+            end
+          end
+        end
+        return available_rooms
+      else
+        raise ArgumentError, "There is no block with that reference id."
+      end
     end
 
     #expects user can see if given block has any rooms available
     #expect that given the right 'password', user can book a blocked room
     #expect that the available rooms in that block decrease by one
     #expect user can only book for those precise block dates
-    #expect cost should be adjusted for block price
 
     private
 
