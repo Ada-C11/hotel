@@ -125,7 +125,7 @@ describe "Hotel class" do
       @rooms = HotelSystem::Room.make_set(20, 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
-      @avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
+      @avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020")
       @total_rooms = @new_hotel.rooms.length
     end
     it "returns an array of rooms" do
@@ -140,13 +140,32 @@ describe "Hotel class" do
       expect(@avail_rooms).wont_include reserved_room
       expect(@avail_rooms.length).must_equal (@total_rooms - 1)
     end
+
+    it "excludes reserved rooms for date ranges" do
+      reserved_room = @new_hotel.find_room_by_id(1)
+      avail_rooms_range = @new_hotel.list_available_rooms(date: "04 Feb 2020", end_date: "12 Feb 2020")
+      expect(avail_rooms_range).wont_include reserved_room
+      expect(avail_rooms_range.length).must_equal (@total_rooms - 1)
+    end
     it "excludes blocked rooms if exclude_blocked parameter is true" do
       @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
                                      end_date: "10 Feb 2020",
                                      discount_rate: 180)
       blocked_room = @new_hotel.find_room_by_id(3)
 
-      avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020")
+      avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020")
+
+      expect(avail_rooms).wont_include blocked_room
+      expect(avail_rooms.length).must_equal (@total_rooms - 4)
+    end
+
+    it "excludes blocked rooms for date ranges if exclude_blocked parameter is true" do
+      @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
+                                     end_date: "10 Feb 2020",
+                                     discount_rate: 180)
+      blocked_room = @new_hotel.find_room_by_id(3)
+
+      avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020", end_date: "12 Feb 2020")
 
       expect(avail_rooms).wont_include blocked_room
       expect(avail_rooms.length).must_equal (@total_rooms - 4)
@@ -156,7 +175,17 @@ describe "Hotel class" do
                                      end_date: "10 Feb 2020",
                                      discount_rate: 180)
       blocked_room = @new_hotel.find_room_by_id(3)
-      avail_rooms = @new_hotel.list_available_rooms("04 Feb 2020", exclude_blocked = false)
+      avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020", exclude_blocked: false)
+
+      expect(avail_rooms).must_include blocked_room
+      expect(avail_rooms.length).must_equal (@total_rooms - 1)
+    end
+    it "includes blocked rooms if exclude_blocked parameter is false for a date range" do
+      @new_hotel.make_block(3, 4, 5, start_date: "01 Feb 2020",
+                                     end_date: "10 Feb 2020",
+                                     discount_rate: 180)
+      blocked_room = @new_hotel.find_room_by_id(3)
+      avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020", end_date: "12 Feb 2020", exclude_blocked: false)
 
       expect(avail_rooms).must_include blocked_room
       expect(avail_rooms.length).must_equal (@total_rooms - 1)

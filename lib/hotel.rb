@@ -113,12 +113,20 @@ module HotelSystem
 
     # Other management methods:
 
-    def list_available_rooms(date, exclude_blocked = true)
-      reserved = reservations_by_date(date).map { |reservation| reservation.room }
-      available_rooms = rooms - reserved
-      if exclude_blocked
-        blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
-        available_rooms = available_rooms - blocked
+    def list_available_rooms(date:, end_date: nil, exclude_blocked: true)
+      if end_date
+        date_range = HotelFactory.date_range(date, end_date)
+        available_rooms = rooms.reject { |room| room.is_reserved?(date_range) }
+        if exclude_blocked
+          available_rooms.reject! { |room| room.is_blocked?(date_range) }
+        end
+      else
+        reserved = reservations_by_date(date).map { |reservation| reservation.room }
+        available_rooms = rooms - reserved
+        if exclude_blocked
+          blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
+          available_rooms = available_rooms - blocked
+        end
       end
       return available_rooms
     end
