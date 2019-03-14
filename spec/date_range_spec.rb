@@ -3,7 +3,7 @@ require_relative "../lib/date_range.rb"
 
 describe "date range class" do
   before do
-    @dates = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 1)
+    @dates = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 1, num_nights: 3)
   end
 
   describe "initialization" do
@@ -68,7 +68,8 @@ describe "date range class" do
     end
 
     it "returns a length of 1 if num_nights is nil" do
-      expect(@dates.date_list.length).must_equal 1
+      dates = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 1)
+      expect(dates.date_list.length).must_equal 1
     end
 
     it "length of returned array is equal to number of nights + 1" do
@@ -98,9 +99,32 @@ describe "date range class" do
 
   describe "include? method" do
     it "raises an ArgumentError if the input isn't a Date" do
-      expect{
+      expect {
         @dates.include?("cat")
       }.must_raise ArgumentError
+    end
+  end
+
+  describe "overlap? method" do
+    it "will return true if there is an overlap in the date ranges" do
+      dates2 = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 2, num_nights: 2)
+
+      result = @dates.overlap?(dates2)
+      expect(result).must_equal true
+    end
+
+    it "will return false if there is not an overlap" do
+      dates2 = HotelSystem::DateRange.new(start_year: 2019, start_month: 5, start_day: 2, num_nights: 2)
+
+      result = @dates.overlap?(dates2)
+      expect(result).must_equal false
+    end
+
+    it "will return false if one reservation begins on the day of another reservation's checkout" do
+      dates2 = HotelSystem::DateRange.new(start_year: 2019, start_month: 1, start_day: 4, num_nights: 2)
+
+      result = @dates.overlap?(dates2)
+      expect(result).must_equal false
     end
   end
 end
