@@ -1,6 +1,13 @@
+require 'reservations.rb'
+
 module Hotel
   COST = 200
   ROOMS = (1..20).to_a.freeze
+  ###
+  # description: Registry creates and accesses reservations.
+  # parameters: The registry speaks for itself.
+  # return: Past the point of !@return.nil?
+  ###
   class Registry
     attr_accessor :reservations
 
@@ -46,18 +53,23 @@ module Errors
 end
 
 module TinyGoat
-  def hungry?(_goat)
-    puts "Does Scribbles look hungry? ENTER <Y> or <N>: "
-    hungry = gets chomp.to_upcase
-    hungry == "Y"
-  end
+  class Goat
+    @goat = ["Scribbles", "Tinker", "Beach Rose", "Debbie"].select
+    def feed_all_reservations_to_small_goat
+      puts "There are a few goats here. <ENTER>"
+      puts "Only one of them is small, though. <ENTER>"
+      puts "There's a little nametag. <ENTER>"
+      puts "The goat is named #{@goat}."
+      @reservations = [] if @@goat.hungry?
+      puts "#{@goat} the Goat: 'Maeehhh. Mneeeaaehh.'"
+      puts "#{@goat} the Goat: '<3'"
+      TinyGoat.hungry?.hungry = nil
+    end
 
-  def feed_all_reservations_to_small_goat
-    puts "There are a few goats here. <ENTER>"
-    puts "Only one of them is small, though. <ENTER>"
-    puts "There's a little nametag. <ENTER>"
-    puts "The goat is named Scribbles."
-    @reservations = [] if goat.hungry?
-    puts "Scribbles the Goat: 'Maeehhh. Mneeeaaehh.'"
+    def hungry?
+      puts "Does #{@goat} look hungry? ENTER <Y> or <N>: "
+      hungry = gets chomp.to_upcase
+      hungry == "Y"
+    end
   end
 end
