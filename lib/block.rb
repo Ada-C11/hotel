@@ -7,6 +7,8 @@ module HotelSystem
       raise ArgumentError, "Blocks can have a max of #{MAX_ROOMS} rooms." if rooms.length > MAX_ROOMS
       @rooms = rooms
 
+      raise ArgumentError, "discount must be between 0 and 1" if discount < 0 || discount > 1
+
       @first_day = first_day
       @last_day = last_day
       @discount = discount

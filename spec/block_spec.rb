@@ -30,6 +30,18 @@ describe "Block" do
       expect(@new_block.first_day).must_equal @first_day
       expect(@new_block.discount).must_equal @discount
     end
+
+    it "raises an ArgumentError if passed in a nevative discount" do
+      expect {
+        create_block(2, @first_day, @last_day, -0.5)
+      }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if passed in a number over 1" do
+      expect {
+        create_block(2, @first_day, @last_day, 1.1)
+      }.must_raise ArgumentError
+    end
   end
   describe "Block check room avalibility" do
     before do
