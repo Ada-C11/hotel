@@ -18,7 +18,7 @@ module HotelBooking
 
     def find_booking_by_date(start_date, end_date)
       bookings = @hotel.bookings.select do |b|
-        b.start_date <= start_date && b.end_date >= end_date
+        b.overlaps?(start_date, end_date)
       end
       bookings
     end

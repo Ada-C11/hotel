@@ -25,8 +25,8 @@ describe 'Booking class' do
         price: 200
         )
       expect(booking.room).must_be_kind_of HotelBooking::Room
-      expect(booking.start_date).must_be_kind_of Date
-      expect(booking.end_date).must_be_kind_of Date
+      expect(booking.start_date).must_be_kind_of String
+      expect(booking.end_date).must_be_kind_of String
       expect(booking.price).must_equal 200
     end
   end

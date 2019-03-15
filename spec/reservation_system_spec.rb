@@ -23,7 +23,6 @@ describe "ReservationSystem class" do
       expect(room).wont_equal nil
     end
 
-
     it "can find booking by room number" do
       reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
 
@@ -43,30 +42,25 @@ describe "ReservationSystem class" do
     end
   end
 
-
   describe 'Get available rooms' do
-    it "Returns an array of available rooms" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
-
-      expect(bookings).must_be_kind_of Array
+    before do
+      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+    end
+    
+    it "Returns an array of 20 available rooms" do
+      rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+      expect(rooms.length).must_equal 20
     end
 
-    it "Throws an error if there are no reservations" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+    it "Includes rooms that start before range and ends before range" do
+      booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
+      rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
 
-      expect(bookings).must_be_kind_of Array
+      expect(rooms.include?(booking)).must_equal false
+      expect(rooms.length).must_equal 19
     end
 
-    it "Does includes rooms that start before range and ends before range" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
-
-      expect(bookings).must_be_kind_of Array
-    end
-
-    it "Does includes rooms that start before range and ends in range" do
+    it "Includes rooms that start after range" do
       reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
       bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
 
