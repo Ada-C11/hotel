@@ -9,10 +9,6 @@ module HotelSystem
       @reservations = []
     end
 
-    # def add_reservation(reservation)
-    #   @reservations << reservation
-    # end
-
     def date_available?(possible_start_date, possible_end_date)
       @reservations.each do |reservation|
         if possible_start_date == reservation.start_date

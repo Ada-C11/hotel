@@ -3,13 +3,14 @@ require "date"
 
 describe "Reservation class" do
   describe "initialize" do
-    
     it "is an instance of a reservation" do
       room = HotelSystem::Room.new(1)
-      reservation = HotelSystem::Reservation.new(room: room,
-                                                 start_date: Date.new(2019, 3, 11),
-                                                 end_date: Date.new(2019, 3, 14),
-                                                 guest: "Sam")
+      reservation = HotelSystem::Reservation.new(
+        room: room,
+        start_date: Date.new(2019, 3, 11),
+        end_date: Date.new(2019, 3, 14),
+        guest: "Sam",
+      )
       expect(reservation).must_be_kind_of HotelSystem::Reservation
     end
 
