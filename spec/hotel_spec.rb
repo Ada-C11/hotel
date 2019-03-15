@@ -3,6 +3,8 @@ require_relative 'spec_helper'
 describe 'Hotel class' do
   before do
     @hotel = HotelBooking::Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 20)
+    @hotel.rooms = []
+    @hotel.bookings = []
   end
 
   describe 'Hotel instantiation' do
@@ -19,6 +21,7 @@ describe 'Hotel class' do
 
     it 'sets rooms to an empty array if not provided' do
       hotel = HotelBooking::Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 0)
+      hotel.rooms = []  
       expect(hotel.rooms).must_be_kind_of Array
       expect(hotel.rooms.length).must_equal 0
     end
