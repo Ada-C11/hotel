@@ -14,6 +14,9 @@ describe "Reservation.new" do
   it "raises an ArgumentError for invalid dates" do
     expect { Hotel::Reservation.new("Amy Martinsen", "2015-05-20", 0) }.must_raise ArgumentError
   end
+  it "has a block_reference default status of :UNAVAILABLE" do
+    expect(@reservation.block_availability).must_equal :UNAVAILABLE
+  end
 end
 
 describe "calucate_reserved_nights" do

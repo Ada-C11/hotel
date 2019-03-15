@@ -1,6 +1,5 @@
 require "date"
 require_relative "spec_helper"
-require "pry"
 
 describe "Frontdesk.new" do
   before do
@@ -37,6 +36,26 @@ describe "Frontdesk request_reservation" do
         @frontdesk.request_reservation(reservation_2)
       end
     }.must_raise ArgumentError
+  end
+end
+
+describe "Frontdesk request_reservation with block_reference" do
+  before do
+    @frontdesk = Hotel::Frontdesk.new
+    @block_res = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @frontdesk.request_block(@block_res, 5)
+    @reservation3 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @frontdesk.request_reservation(@reservation3)
+    @reservation4 = Hotel::Reservation.new("Mollie Bullis", "2019-07-08", 2, block_reference: "SCIFI PARTY")
+  end
+  it "adjusts the reservation cost based on blocked status" do
+    expect(@block_res.cost).must_equal 450
+  end
+  it "changes reservations block status to :UNAVAILABLE" do
+    expect(@reservation3.block_availability).must_equal :UNAVAILABLE
+  end
+  it "returns ArgumentError if block reservation doesn't have the correct dates" do
+    expect { @frontdesk.request_reservation(@reservation4) }.must_raise ArgumentError
   end
 end
 
@@ -99,11 +118,12 @@ describe "Frontdesk request_block" do
     expect(@frontdesk.find_reservation_by_date(date).length).must_equal 5
     expect(@frontdesk.block_reservations.length).must_equal 1
     expect(@block_res.block_reference).must_equal "WIZARD PARTY"
+    expect(@blocked_rooms[0].block_availability).must_equal :AVAILABLE
   end
   it "raises an ArgumentError when user requests more than 5 rooms" do
     expect { @frontdesk.request_block(@block_res, 6) }.must_raise ArgumentError
   end
-  it "raises an ArgumentError when no rooms are available to reserve" do
+  it "raises an ArgumentError when no rooms are available" do
     block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
     block_res_3 = Hotel::Reservation.new("Agatha Christie", "2019-07-08", 3, block_reference: "MYSTERY PARTY")
     block_res_4 = Hotel::Reservation.new("Sally Rooney", "2019-07-08", 3, block_reference: "FICTION PARTY")
@@ -114,13 +134,6 @@ describe "Frontdesk request_block" do
     expect(@frontdesk.block_reservations.length).must_equal 4
     expect { @frontdesk.request_block(block_res_5, 3) }.must_raise ArgumentError
   end
-  it "allows reservations to be made by those with block access" do
-    block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
-    expect(block_res_2.cost).must_equal 450
-    #expect that given the right 'password', user can book a blocked room
-    #expect that the available rooms in that block decrease by one
-    #expect user can only book for those precise block dates
-  end
 end
 
 describe "find_available_block_rooms" do
@@ -128,13 +141,14 @@ describe "find_available_block_rooms" do
     @frontdesk = Hotel::Frontdesk.new
     @block_res = Hotel::Reservation.new("Ursula Le Guin", "2019-07-08", 3, block_reference: "WIZARD PARTY")
     @blocked_rooms = @frontdesk.request_block(@block_res, 5)
-    @dates = @block_res.reserved_nights
+    @block_res2 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "WIZARD PARTY")
+    @frontdesk.request_reservation(@block_res2)
   end
   it "returns only available rooms in the block" do
-    reservation = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "WIZARD PARTY")
-    @frontdesk.request_reservation(reservation)
-    expect { @frontdesk.find_available_block_rooms("DRAGON PARTY") }.must_raise ArgumentError
     expect(@frontdesk.find_available_block_rooms("WIZARD PARTY")).must_be_instance_of Array
-    expect(@frontdesk.find_available_block_rooms("WIZARD PARTY").length).must_equal 5
+    expect(@frontdesk.find_available_block_rooms("WIZARD PARTY").length).must_equal 4
+  end
+  it "raises an ArgumentError if block reference doesn't exist" do
+    expect { @frontdesk.find_available_block_rooms("DRAGON PARTY") }.must_raise ArgumentError
   end
 end

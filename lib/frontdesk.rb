@@ -1,5 +1,4 @@
 require "date"
-require "pry"
 
 module Hotel
   class Frontdesk
@@ -12,9 +11,23 @@ module Hotel
     end
 
     def request_reservation(reservation)
-      assign_room_number(reservation)
-      @reservations << reservation
-      return reservation
+      if reservation.block_reference == "CLASSIC"
+        assign_room_number(reservation)
+        @reservations << reservation
+        return reservation
+      else
+        @reservations.each do |res|
+          if res.block_reference.eql?(reservation.block_reference) && res.block_availability.eql?(:AVAILABLE)
+            if res.reserved_nights != reservation.reserved_nights
+              raise ArgumentError, "You must book your room for #{res.block_reference} for #{res.checkin_date}, to #{res.checkout_date}."
+            else
+              res.instance_variable_set(:@block_availability, :UNAVAILABLE)
+              res.instance_variable_set(:@name, reservation.name)
+              return reservation
+            end
+          end
+        end
+      end
     end
 
     def find_available_rooms(dates)
@@ -63,15 +76,16 @@ module Hotel
         end
         blocked_rooms = []
         pending_block.each do |room|
+          room.instance_variable_set(:@block_availability, :AVAILABLE)
           assign_room_number(room)
           blocked_rooms << room
           @reservations << room
         end
         @block_reservations.merge!(reservation.block_reference => blocked_rooms)
+        return blocked_rooms
+      else
+        raise ArgumentError, "There aren't enough rooms available."
       end
-      return blocked_rooms
-    else
-      raise ArgumentError, "There aren't enough rooms available."
     end
 
     def find_available_block_rooms(block_reference)
@@ -91,11 +105,6 @@ module Hotel
         raise ArgumentError, "There is no block with that reference id."
       end
     end
-
-    #expects user can see if given block has any rooms available
-    #expect that given the right 'password', user can book a blocked room
-    #expect that the available rooms in that block decrease by one
-    #expect user can only book for those precise block dates
 
     private
 
