@@ -139,22 +139,87 @@ describe "ReservationManager class" do
   end
 
   describe "#request_block" do
+    before do
+      @manager = Hotel::ReservationManager.new
+    end
+
     it "raises an ArgumentError if argument for number_of_rooms is greater than 5, or less than 0" do
+      expect {
+        [-2, 0, 1, 6, 9].each do |num|
+          @manager.request_block(check_in: "Feb1",
+                                 check_out: "Feb2",
+                                 number_of_rooms: num,
+                                 discount: 120,
+                                 name: "Bob")
+        end
+      }.must_raise ArgumentError
     end
 
-    it "raises an ArgumentError if there are no available rooms for any given day" do
+    it "does not add any part of the block to reservations unless all dates available" do
+      19.times { @manager.request_reservation("Feb 1, 2019", "Feb 2, 2019", booking_name: "Val") }
+
+      expect {
+        @manager.request_block(check_in: "Jan30",
+                               check_out: "Feb3",
+                               number_of_rooms: 2,
+                               discount: 120,
+                               name: "Bob")
+      }.must_raise ArgumentError
+      expect(@manager.reservations.length).must_equal 19
     end
 
-    it "does not add reservations unless all rooms/days are available" do
+    it "adds each block reservation to the ReservationManger reservations" do
+      # Jan, Mar, May, July, August, October, December
+      @manager.request_block(check_in: "May2",
+                             check_out: "June1",
+                             number_of_rooms: 5,
+                             discount: 120,
+                             name: "Bob")
+
+      expect(@manager.reservations.length).must_equal 5
     end
 
     it "adds all reservations to correct Rooms" do
+      @manager.request_block(check_in: "May2",
+                             check_out: "June1",
+                             number_of_rooms: 5,
+                             discount: 120,
+                             name: "Bob")
+
+      (0..4).each do |index|
+        expect(@manager.rooms[index].reservations.first).must_be_kind_of Hotel::Reservation
+      end
     end
 
     it "adds all reservations to ReservationManager" do
+      @manager.request_block(check_in: "feb2", check_out: "feb3", number_of_rooms: 3, discount: 120, name: "Bob")
+      expect(@manager.reservations.length).must_equal 3
     end
 
     it "applies discount rate to total_cost of room" do
+      @manager.request_block(check_in: "Jan30",
+                             check_out: "Feb3",
+                             number_of_rooms: 2,
+                             discount: 120,
+                             name: "Bob")
+
+      expect(@manager.reservations.first.total_cost).must_equal 120.0
+    end
+  end
+
+  describe "#available_rooms_in_block" do
+    before do
+      @manager = Hotel::ReservationManager.new
+      @manager.request_block(check_in: "feb2", check_out: "feb3", number_of_rooms: 4, discount: 150, name: "Sally")
+      @available_rooms = @manager.available_rooms_in_block(block_name: "Sally")
+    end
+
+    it "returns an array" do
+      expect(@available_rooms).must_be_kind_of Array
+    end
+
+    it "returns an array of the correct length" do
+      expect(@available_rooms.length).must_equal 4
     end
   end
 end

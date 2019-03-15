@@ -24,8 +24,8 @@ describe "Reservation Class" do
     end
 
     it "Raises an ArgumentError for invalid check-out date" do
-      reservation = {check_in: "2018-03-09",
-                     check_out: "2018-03-08",
+      reservation = {check_in: "Feb4",
+                     check_out: "Feb3",
                      room: Hotel::Room.new(number: 2),
                      booking_name: "Kim"}
 
