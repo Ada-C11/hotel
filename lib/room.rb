@@ -1,11 +1,17 @@
 module HotelSystem
   class Room
     attr_reader :room_number, :reservations
+    attr_writer :in_block
 
     def initialize(number)
       self.class.valid_room_number(number)
       @room_number = number
       @reservations = []
+      @in_block = false
+    end
+
+    def in_block?
+      return @in_block
     end
 
     def self.valid_room_number(number)
