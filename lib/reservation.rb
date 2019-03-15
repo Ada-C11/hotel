@@ -1,22 +1,17 @@
-require 'date'
-
 class Reservation
-  attr_reader :time_interval, :id
-  COST_PER_NIGHT = 200.00.freeze
-  DISCOUNT_RATE = (COST_PER_NIGHT * 0.8).freeze
-  private_constant :COST_PER_NIGHT, :DISCOUNT_RATE
+  attr_reader :room_id, :total_cost
 
-  def initialize(time_interval)
-    @time_interval = time_interval
-  end
-  # check there's a reservation on a specific date
-  def includes_date?(date)
-    date = Date.parse(date)
-    return date >= @time_interval.check_in && date <= @time_interval.check_out
+  def initialize(time_interval, room_id, room_rate)
+    @reserved_dates = time_interval
+    @room_id = room_id
+    @total_cost = (@reserved_dates.check_out - @reserved_dates.check_in) * room_rate
   end
 
-  def get_total_cost
-    duration = @time_interval.check_out - @time_interval.check_in
-    return duration * COST_PER_NIGHT
+  def overlap?(time_interval)
+    return @reserved_dates.overlap?(time_interval)
+  end
+
+  def has_date?(date)
+    return @reserved_dates.has_date?(date)
   end
 end

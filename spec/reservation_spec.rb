@@ -1,36 +1,41 @@
 require 'spec_helper.rb'
+require 'date'
 
 describe "Reservation class" do
-  before do
-    check_in = "2019/09/17"
-    check_out = "2019/09/20"
-    duration = Time_Interval.new(check_in, check_out)
-    @r1 = Reservation.new(duration)
-  end
 
   describe "initialize" do
     it "returns an instance of reservation object" do
-      expect(@r1).must_be_instance_of Reservation
+      check_in = Date.parse("2019/09/17")
+      check_out = Date.parse("2019/09/18")
+      duration = Time_Interval.new(check_in, check_out)
+      expect(Reservation.new(duration, 1, 1)).must_be_instance_of Reservation
     end
   end
 
-  describe "includes_date method" do
-    it "returns true when a specified date falls into the duration of booking" do
-      expect(@r1.includes_date?("2019-09-18")).must_equal true
+  describe "has_date method" do
+    before do
+      check_in = Date.parse("2019/09/17")
+      check_out = Date.parse("2019/09/18")
+      duration = Time_Interval.new(check_in, check_out)
+      @r = Reservation.new(duration, 1, 1)
     end
 
-    it "returns false when a specified date falls into the duration of booking" do
-      expect(@r1.includes_date?("2019-09-21")).must_equal false
+    it "returns true when a specified date falls into the duration of booking" do
+      expect(@r.has_date?(Date.parse("2019-09-17"))).must_equal true
+    end
+
+    it "returns false when a specified date does not into the duration of booking" do
+      expect(@r.has_date?(Date.parse("2019-09-21"))).must_equal false
     end
   end
 
   describe "get_total_cost method" do
-    it "returns a float" do
-      expect(@r1.get_total_cost).must_be_kind_of Float
-    end
-
     it "returns accurate total costs for a single room" do
-      expect(@r1.get_total_cost).must_be_close_to 600.00
+      check_in = Date.parse("2019/09/17")
+      check_out = Date.parse("2019/09/20")
+      duration = Time_Interval.new(check_in, check_out)
+      r = Reservation.new(duration, 1, 200)
+      expect(r.total_cost).must_equal 600
     end
   end
 end
