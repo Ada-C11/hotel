@@ -4,22 +4,18 @@ module HotelBooking
       @hotel = Hotel.new(hotel_name: hotel_name, number_of_rooms: number_of_rooms)
     end
 
-    # Can find specific room if provided the booking number
     def find_room_by_booking_number(booking_number)
       @hotel.bookings.find { |b| b.reference_number == booking_number }
     end
 
-    # Can find specific bookings if provided the room number
     def find_bookings_by_room_number(room_number)
       @hotel.bookings.select { |b| b.room.number == room_number }
     end
 
-    # Can find room by room number
     def find_room_by_room_number(room_number)
       @hotel.rooms.find { |r| r.number == room_number }
     end
 
-    # Can find specific bookings for a date when provided date
     def find_booking_by_date(start_date, end_date)
       bookings = @hotel.bookings.select do |b|
         b.start_date <= start_date && b.end_date >= end_date
@@ -27,21 +23,15 @@ module HotelBooking
       bookings
     end
 
-    # Can find available rooms if given a start and end date
     def get_available_rooms(start_date, end_date)
       unavailable_bookings = find_booking_by_date(start_date, end_date)
-      
       occpuied_rooms = unavailable_bookings.map { |booking| booking.room }
-      
       @hotel.rooms.reject { |room| occpuied_rooms.include?(room) }
     end
 
-    # Returns true or false if specific room is available for given date
     def available?(start_date, end_date, room_number)
       rooms_available = get_available_rooms(start_date, end_date)
-
       room_numbers = rooms_available.map { |room| room.number }
-
       room_numbers.include?(room_number)
     end
 
@@ -49,7 +39,7 @@ module HotelBooking
       selected_room = nil
 
       if start_date > end_date
-        raise ArgumentError.new("Invalid date range")
+        raise ArgumentError.new('Invalid date range')
       end
 
       if room_number.nil?
@@ -58,7 +48,7 @@ module HotelBooking
       elsif available?(start_date, end_date, room_number)
         selected_room = find_room_by_room_number(room_number)
       else
-        raise ArgumentError.new("Room is not available")
+        raise ArgumentError.new('Room is not available')
       end
 
       booking_details = {

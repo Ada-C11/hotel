@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe "ReservationSystem class" do
-  describe 'Rooms and bookings methods' do
+  describe 'Find room and booking methods' do
 
     it "can find room by booking number" do
       reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
@@ -12,6 +12,17 @@ describe "ReservationSystem class" do
 
       expect(room).wont_equal nil
     end
+
+    it "can find room by room number" do
+      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+
+      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
+
+      room = reservation_system.find_room_by_room_number(booking.room.number)
+
+      expect(room).wont_equal nil
+    end
+
 
     it "can find booking by room number" do
       reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
