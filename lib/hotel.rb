@@ -26,6 +26,14 @@ module HotelSystem
       return this_dates_reservations
     end
 
+    def see_available_rooms_by_date(possible_start_date, possible_end_date)
+      these_dates_available_rooms = []
+      @all_rooms.each do |room|
+        these_dates_available_rooms << room if room.date_available?(possible_start_date, possible_end_date)
+      end
+      return these_dates_available_rooms
+    end
+
     def reserve_room(room, start_date, end_date, guest)
       if room.date_available?(start_date, end_date)
         available_room = room

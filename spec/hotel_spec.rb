@@ -24,22 +24,22 @@ describe "Hotel class" do
     end
   end
 
-  describe "see_reservations_by_date" do
+  describe "see_reservations_by_date method" do
     before do
       @hotel = HotelSystem::Hotel.new
       @room = @hotel.all_rooms[0]
       5.times do
         @hotel.reserve_room(@room,
-                           Date.new(2019, 3, 11),
-                           Date.new(2019, 3, 14),
-                           "Sam")
+                            Date.new(2019, 3, 11),
+                            Date.new(2019, 3, 14),
+                            "Sam")
       end
 
       3.times do
         @hotel.reserve_room(@room,
-                           Date.new(2019, 3, 12),
-                           Date.new(2019, 3, 14),
-                           "Sam")
+                            Date.new(2019, 3, 12),
+                            Date.new(2019, 3, 14),
+                            "Sam")
       end
     end
 
@@ -48,6 +48,37 @@ describe "Hotel class" do
       expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 11)).length).must_equal 5
       expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 12)).length).must_equal 3
       expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 13)).length).must_equal 0
+    end
+  end
+
+  describe "see_available_rooms_by_date method" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @room = @hotel.all_rooms[0]
+
+      @hotel.reserve_room(@room,
+                          Date.new(2019, 3, 11),
+                          Date.new(2019, 3, 14),
+                          "Sam")
+      @hotel.reserve_room(@room,
+                          Date.new(2019, 3, 11),
+                          Date.new(2019, 3, 14),
+                          "Sam")
+      @hotel.reserve_room(@room,
+                          Date.new(2019, 3, 11),
+                          Date.new(2019, 3, 14),
+                          "Sam")
+    end
+
+    it "returns an array" do
+      expect(@hotel.see_available_rooms_by_date(Date.new(2019, 3, 11), Date.new(2019, 3, 14))).must_be_kind_of Array
+    end
+
+    it "returns the correct rooms" do
+      expect(@hotel.see_available_rooms_by_date(Date.new(2019, 3, 11), Date.new(2019, 3, 14)).length).must_equal 17
+      expect(@hotel.see_available_rooms_by_date(Date.new(2019, 3, 11), Date.new(2019, 3, 14)).first.number).must_equal 4
+      expect(@hotel.see_available_rooms_by_date(Date.new(2019, 3, 11), Date.new(2019, 3, 14)).last.number).must_equal 20
+      expect(@hotel.see_available_rooms_by_date(Date.new(2019, 3, 11), Date.new(2019, 3, 14))[0].number).must_equal 4
     end
   end
 
