@@ -4,7 +4,7 @@ describe "Hotel::Reservation" do
     Hotel::Room.new(1)
   }
   let (:reservation) {
-    reservation = Hotel::Reservation.new(check_in_date: "2019-03-12", check_out_date: "2019-03-15", room: room, room_id: 1)
+    reservation = Hotel::Reservation.new(reservation_id: 1, check_in_date: "2019-03-12", check_out_date: "2019-03-15", room: room, room_id: 1)
   }
 
   describe "initialize" do

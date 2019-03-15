@@ -1,8 +1,9 @@
 require_relative "reservation"
 require_relative "room"
+require "awesome_print"
 
 module Hotel
-  class RoomManager
+  class ReservationManager
     attr_reader :rooms, :reservations
 
     def initialize
@@ -15,7 +16,8 @@ module Hotel
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      # reservation_id = @reservations.length + 1
+      # check_in_date = Date.parse(check_in_date)
+      # check_out_date = Date.parse(check_out_date)
       new_reservation = Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -34,7 +36,21 @@ module Hotel
       return reservations
     end
 
-    def find_avaialable_rooms(check_in_date, check_out_date)
+    def find_available_rooms(check_in_date, check_out_date)
+      self.class.validate_date(check_in_date)
+      self.class.validate_date(check_out_date)
+      self.class.validate_date_range(check_in_date, check_out_date)
+      check_in_date = Date.parse(check_in_date)
+      check_out_date = Date.parse(check_out_date)
+      non_available = @reservations.select do |reservation|
+        check_in_date < reservation.check_out_date && check_in_date >= reservation.check_in_date ||
+        check_out_date > reservation.check_in_date && check_out_date < reservation.check_out_date ||
+        check_in_date < reservation.check_in_date && check_out_date > reservation.check_out_date
+      end
+      non_available_room_ids = (non_available.map { |reservation| reservation.room_id }).uniq
+      return Room.load_all.reject do |room|
+               non_available_room_ids.include?(room.room_id)
+             end
     end
 
     def find_room(room_id)
@@ -67,3 +83,5 @@ module Hotel
     end
   end
 end
+
+# ap Hotel::ReservationManager.new

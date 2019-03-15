@@ -4,11 +4,15 @@ module Hotel
   class Room
     attr_reader :room_id, :cost, :reservations
 
-    def initialize(room_id, cost: 200.0, reservations: nil)
+    def initialize(room_id, cost: self.class.default_cost, reservations: nil)
       self.class.validate_room_id(room_id)
       @room_id = room_id
       @cost = cost
       @reservations = reservations || []
+    end
+
+    def self.default_cost
+      return 200.0
     end
 
     def self.validate_room_id(room_id)
