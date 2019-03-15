@@ -7,7 +7,7 @@ module HotelSystem
       @room = room
       @date_range = date_range
       @block = block
-      update_reservation_listings
+      update_reservation_listings(room, block)
     end
 
     # Calculation methods
@@ -24,16 +24,6 @@ module HotelSystem
       return date_range.length
     end
 
-    # room interaction methods
-    def add_res_to_room
-      room.add_reservation(self)
-    end
-
-    # block interaction methods
-    def add_res_to_block
-      block.add_reservation(self) if block
-    end
-
     # Date interaction methods
 
     def includes_date?(date)
@@ -46,9 +36,8 @@ module HotelSystem
 
     # helpers
 
-    def update_reservation_listings
-      add_res_to_room
-      add_res_to_block
+    def update_reservation_listings(*objects)
+      objects.each { |object| object.add_reservation(self) if object }
     end
   end
 end
