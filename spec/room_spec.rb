@@ -15,6 +15,19 @@ describe "Room class" do
     it "default cost is $200" do
       expect(@room.cost).must_equal 200
     end
+    it "raises an error if cost is not a valid input" do
+      expect {
+        Hotel::Room.new(
+          id: 1, cost: -200,
+        )
+      }.must_raise ArgumentError
+
+      expect {
+        Hotel::Room.new(
+          id: 1, cost: "something",
+        )
+      }.must_raise NoMethodError
+    end
 
     it "sets reservations to an empty array if not provided" do
       expect(@room.reservations.length).must_equal 0
