@@ -93,5 +93,21 @@ describe "Reservation_manager" do
   end
 
   describe "reserve_hotel_block" do
+    it "returns an array for block" do
+      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      expect(this_block).must_be_instance_of Array
+    end
+
+    it "contains Reservation instances for as many rooms as was requested" do
+      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      expect(this_block.length).must_equal 5
+    end
+
+    it "raises an error if a block conflicts with reservations already created" do
+      res_manager.make_reservation(9, check_in_time: "2nd April 2020", check_out_time: "10th April 2020")
+      res_manager.make_reservation(4, check_in_time: "4th June 2020", check_out_time: "11th June 2020")
+
+      expect { res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25) }.must_raise ArgumentError
+    end
   end
 end

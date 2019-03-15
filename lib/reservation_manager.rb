@@ -37,24 +37,23 @@ class Reservation_manager
     return new_reservation
   end
 
-  # def reserve_hotel_block(check_in, check_out, array_of_rooms, discounted_room_rate)
-  #   if array_of_rooms < 1 || array_of_rooms > 5
-  #     raise ArgumentError, "Hotel blocks cannot be reserved for more than 5 rooms"
-  #   else
-  #     block = array_of_rooms.map do |block_room_number|
-  #       make_reservation(block_room_number, check_in_time: check_in, check_out_time: check_out)
-  #     end
-  #   end
-  #   return block
-  # end
-
-  # def reserve_hotel_block(checkin, checkout, rooms, discounted_room_rate)
-  #     check if these rooms are available for these dates (if they are not, raise error)
-  #     if they are available:
-  #       make these rooms unavailable for the general public (they will not be in array of available rooms)
-  #       change the price of these rooms to the discounted rate
-  #       allow them to be reserved if allowed (maybe add "part_of_block: false" to Reservation.new)
-  # end 
+  def reserve_hotel_block(block_id, check_in, check_out, array_of_rooms, discounted_room_rate)
+    list_of_available_rooms = find_available_rooms(check_in, check_out)
+    block = []
+    if array_of_rooms.length < 1 || array_of_rooms.length > 5
+      raise ArgumentError, "Hotel blocks cannot be reserved for more than 5 rooms"
+    else
+      if (list_of_available_rooms + array_of_rooms).uniq == list_of_available_rooms
+        array_of_rooms.each do |block_room_number|
+          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out)
+          block << block_spot
+        end
+      else
+        raise ArgumentError, "This block conflicts with reservations already in the books"
+      end
+    end
+    return block
+  end
 
   def find_reservations(date)
     date = Date.parse(date)
