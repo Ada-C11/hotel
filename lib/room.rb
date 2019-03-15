@@ -1,7 +1,8 @@
 require_relative "reservation"
+require_relative "csv_record"
 
 module HotelGroup
-  class Room
+  class Room < CsvRecord
     attr_accessor :number, :price, :reservations, :unavailable_dates, :blocks
 
     def initialize(number, price)
