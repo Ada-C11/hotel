@@ -33,13 +33,108 @@ describe "ReservationSystem class" do
     end
   end
 
-  # describe 'Requesting trips method' do
-  #   it "if requests a trip based on a given date" do
-  #     hotel = Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 0)
-  #     room = Room.new(1)
+  describe 'Get available rooms' do
+    it "Returns an array of available rooms" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
 
-  #     hotel.add_room(room)
-  #     expect(hotel.rooms.first).must_equal room
-  #   end
-  # end
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Throws an error if there are no reservations" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does includes rooms that start before range and ends before range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does includes rooms that start before range and ends in range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+
+
+    it "Does not include rooms that start before start date and end during range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start during range and ends after range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that overlap with range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start before range and ends in range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start in range and ends after range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start and end anywhere in range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start before range and ends after range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start in range and ends in range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+    it "Does not include rooms that start in range and ends in range" do
+      reservation_system = HotelBooking::ReservationSystem.new
+      bookings = reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+
+      expect(bookings).must_be_kind_of Array
+    end
+
+
+
+
+
+
+
+
+
+
+  end
 end

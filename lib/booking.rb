@@ -10,7 +10,7 @@ module HotelBooking
       @end_date = Date.parse(end_date.to_s)
       @price = price
     end
-
+    #block flag
     def booking_duration
       duration = @end_date - @start_date
       duration.to_i

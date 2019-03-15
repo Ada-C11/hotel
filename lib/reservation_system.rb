@@ -7,13 +7,13 @@ module HotelBooking
 
     # Can find specific room if provided the booking number
     def find_room_by_booking_number(booking_number)
-      room = @hotel.bookings.find { |booking| booking.reference_number == booking_number }
+      room = @hotel.bookings.find { |booking| booking.reference_number == booking_number}
       return room
     end
 
     # Can find specific bookings if provided the room number
     def find_bookings_by_room_number(room_number)
-      bookings = @hotel.bookings.select { |booking| booking.room.number == room_number }
+      bookings = @hotel.bookings.select { |booking| booking.room.number == room_number}
       return bookings
     end
 
@@ -58,7 +58,11 @@ module HotelBooking
       end
     end
 
+    # maybe make a booking block
+
     # Makes your booking when given date range
+    # add number of rooms and price set default unless its is block
+
     def make_booking(start_date, end_date)
 
       if start_date > end_date
