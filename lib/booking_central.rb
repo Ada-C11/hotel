@@ -15,16 +15,6 @@ class BookingCentral
     end
   end
 
-  # def assign_room
-  #   if @all_reservations.length == 0
-  #     assigned_room = @rooms.sample
-  #   else
-  #     available_rooms = @all_reservations.reject{ |k,v| k.room }
-  #     assigned_room = available_rooms.sample
-  #   end
-  #   return assigned_room
-  # end
-
   def reservations_by_date(check_in, check_out)
     asking_date = DateRange.generate_date_range(check_in, check_out)
     matching_reservations = @all_reservations.select { |reservation, details| reservation if DateRange.dates_overlap?(reservation.date_range, asking_date) }
@@ -42,15 +32,21 @@ class BookingCentral
     return random_available_room
   end
 
+
   def reserve_room(check_in:, check_out:, room: assign_room(check_in, check_out))
-    new_reservation = Reservation.new(check_in: check_in, check_out: check_out, room: assign_room(check_in, check_out))
-    @all_reservations << new_reservation
-    return new_reservation
+    
+    if list_available_rooms(check_in, check_out) == []
+      raise ArgumentError, "There is no availability for the dates provided."
+    else
+      new_reservation = Reservation.new(check_in: check_in, check_out: check_out, room: assign_room(check_in, check_out))
+      @all_reservations << new_reservation
+      return new_reservation
+    end
   end
 
   # bookings = BookingCentral.new
   # new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
-  # bookings.list_available_rooms('2019-01-03', '2019-01-04')
+  # puts (bookings.assign_room('2019-01-03', '2019-01-04')).number
 end
 
 
