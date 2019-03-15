@@ -1,10 +1,9 @@
 require "date"
 require_relative "room"
-require_relative "date_range"
 
 class Reservation
   ROOM_RATE = 200.00
-  include DateRange
+
   attr_reader :id, :check_in, :check_out, :room_booked, :total_cost, :dates_booked
 
   def initialize(id: nil, check_in: nil, check_out: nil, room_booked: nil, total_cost: nil)
@@ -12,8 +11,8 @@ class Reservation
     valid_date?(check_out)
     date_range_valid?(check_in, check_out)
 
-    @check_in = check_in
-    @check_out = check_out
+    @check_in = Date.parse(check_in)
+    @check_out = Date.parse(check_out)
     @id = id
     @room_booked = room_booked # get from room available
     @total_cost = count_nights(check_in, check_out) * ROOM_RATE
@@ -34,16 +33,29 @@ class Reservation
   end
 
   def dates_booked
-    return (Date.parse(@check_in)...Date.parse(@check_out))
-  end
-
-  def valid_date?(date)
-    super
+    return (@check_in...@check_out)
   end
 
   def date_range_valid?(check_in, check_out)
-    super
+    if check_out < check_in
+      raise ArgumentError, "Check out date cannot occur before check in date"
+    end
+    return true
   end
 
-  private
+  def dates_ovelap?(date1, date2)
+    #TBD used in conjunction with Room.bookings
+  end
+
+  def valid_date?(date_str)
+    begin
+      date = Date.parse(date_str)
+    rescue ArgumentError
+      puts "Invalid date given, #{date_str}"
+    end
+
+    if Date.today > date
+      raise ArgumentError, "Date cannot occur before current date, given: #{date_str}"
+    end
+  end
 end

@@ -6,7 +6,7 @@ require_relative "reserve"
 require_relative "date_range"
 
 class RoomBooker
-  attr_reader :check_in, :check_out, :list_all_rooms, :reservations, :rooms
+  attr_reader :check_in, :check_out, :list_all_rooms, :reservations, :rooms, :reservation_cost
 
   def initialize
     @rooms = hotel_rooms
@@ -16,7 +16,7 @@ class RoomBooker
   def make_reservation(check_in:, check_out:)
     room = find_available_room
     reserved = Reservation.new(id: @reservations.length + 1, check_in: check_in, check_out: check_out, room_booked: room)
-    room.booked_on((Date.parse(check_in)..Date.parse(check_out))) #adds this res date to array of booked res for specific room
+    room.booked_on((Date.parse(check_in)..Date.parse(check_out)))
     @reservations << reserved
   end
 
@@ -42,7 +42,7 @@ class RoomBooker
     end
   end
 
-  def search_completed_reservations(date) #to look up a res by a specific date
+  def search_completed_reservations(date)
     n_date = Date.parse(date)
     find_by_dates = []
     @reservations.each do |res_dates|
@@ -58,10 +58,10 @@ class RoomBooker
     end
   end
 
-  def reservation_cost(id)
+  def find_cost(id)
     @reservations.each do |res|
       if res.id == id
-      puts res.total_cost
+        return "#{res.total_cost}"
       end
     end
     return nil
