@@ -92,5 +92,14 @@ module HotelGroup
     def print_nicely
       return "Room #{number}: $#{format("%.2f", price)} per night"
     end
+
+    private
+
+    def self.from_csv(record)
+      return self.new(
+               record[:number],
+               record[:price],
+             )
+    end
   end
 end

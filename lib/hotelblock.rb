@@ -1,12 +1,14 @@
 require_relative "reservation"
 require_relative "room"
+require_relative "csv_record"
+require_relative "hotel"
 
 module HotelGroup
-  class HotelBlock
+  class HotelBlock < CsvRecord
     attr_reader :discount, :id, :start_time, :end_time, :rooms
 
-    def initialize(id, start_time, end_time, rooms)
-      @discount = 0.2
+    def initialize(id, start_time, end_time, rooms, discount)
+      @discount = discount
       @id = id
       @start_time = start_time
       @end_time = end_time
@@ -14,12 +16,14 @@ module HotelGroup
       if rooms.count > 5
         raise ArgumentError, "Maximum of 5 rooms allowed in a block"
       end
-      rooms.each do |room|
-        room.apply_discount(@discount)
-        room.add_block_id(@id)
-        room.set_unavailable(@start_time, @end_time)
-      end
+
       @rooms = rooms
+    end
+
+    def connect(rooms_array)
+      rooms_array.each.with_index do |room, index|
+        @rooms[index] = room
+      end
     end
 
     def print_nicely(start_time, end_time)
@@ -38,6 +42,23 @@ module HotelGroup
         end
       end
       return results
+    end
+
+    private
+
+    def self.from_csv(record)
+      rooms = record[:rooms].split(";")
+      rooms.each do |r|
+        r.to_i
+      end
+
+      return self.new(
+               record[:id],
+               Date.parse(record[:start_date]),
+               Date.parse(record[:end_date]),
+               rooms,
+               record[:discount]
+             )
     end
   end
 end
