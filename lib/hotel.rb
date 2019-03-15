@@ -2,7 +2,7 @@ require_relative "reservation"
 require_relative "room"
 
 class Hotel
-  attr_reader :name, :rooms
+  attr_reader :name, :rooms, :reservations
 
   def initialize
     @name = name
@@ -18,10 +18,11 @@ class Hotel
 
   def make_reservation(start_date, end_date)
     id = @reservations.length + 1
+    # raise ArgumentEror if the available rooms is empty
     room = load_availables(start_date, end_date).sample
     reservation = Reservation.new(id, room, start_date, end_date)
     @reservations.push(reservation)
-    # room.add_reservation
+    room.reservations.push(reservation)
     return reservation
   end
 
@@ -41,13 +42,13 @@ class Hotel
         available_rooms << reservation.room
       end
     end
-    all_available = available_rooms + free_rooms
+    all_available = (available_rooms + free_rooms).uniq
     return all_available
   end
 
-  # def self.load_rooms
-  #   return @rooms
-  # end
+  def self.load_rooms
+    return @rooms
+  end
 
   def load_reservation(date)
     all_reservations = []

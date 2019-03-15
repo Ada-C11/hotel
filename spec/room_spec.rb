@@ -7,8 +7,7 @@ describe Room do
       expect(room).must_be_kind_of Room
     end
   end
-  describe "add reservation method" do
-    it "adds the date of each reservation to the room reservation array" do
-    end
-  end
+  # describe "add reservation method" do
+  #   it "adds the date of each reservation to the room reservation array" do
+  #   end
 end

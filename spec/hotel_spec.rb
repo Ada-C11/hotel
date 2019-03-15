@@ -19,12 +19,27 @@ describe Hotel do
     end
   end
 
-  describe "add reservation method" do
+  describe "make reservation method" do
+    before do
+      start_date1 = Date.new(2018, 3, 5)
+      end_date1 = start_date1 + 3
+      @reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      start_date2 = Date.new(2018, 3, 5)
+      end_date2 = start_date2 + 3
+      @reservation2 = @hotel.make_reservation(start_date2, end_date2)
+    end
     it "can make a new reservation for given dates" do
-      start_date = Date.new(2018, 3, 5)
-      end_date = start_date + 3
-      reservation = @hotel.make_reservation(start_date, end_date)
-      expect(reservation).must_be_instance_of Reservation
+      expect(@reservation1).must_be_instance_of Reservation
+    end
+    it "adds the reservation to the array of reservatios in hotel" do
+      expect(@hotel.reservations.length).must_equal 2
+    end
+    it "adds the reservation to the array of reservation for the room" do
+      room = @reservation1.room
+      expect(room.reservations.length).must_equal 1
+      expect(room.reservations[0]).must_be_instance_of Reservation
+      expect(room.reservations[0].id).must_be_kind_of Integer
+      expect(room.reservations[0].room.price).must_equal 200
     end
   end
   describe "load_reservation" do
@@ -52,20 +67,51 @@ describe Hotel do
       expect(reservations3.length).must_equal 1
     end
   end
+
   describe "load availables method" do
     before do
       start_date1 = Date.new(2018, 3, 5)
       end_date1 = start_date1 + 3
-      @hotel.make_reservation(start_date1, end_date1)
+      @reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      start_date2 = Date.new(2018, 3, 5)
+      end_date2 = start_date2 + 3
+      @reservation2 = @hotel.make_reservation(start_date2, end_date2)
+      start_date3 = Date.new(2018, 3, 5)
+      end_date3 = start_date3 + 3
+      @reservation3 = @hotel.make_reservation(start_date3, end_date3)
     end
     it "return an array of all the available rooms" do
-      start_date = Date.new(2018, 5, 2)
+      start_date = Date.new(2018, 3, 7)
       end_date = start_date + 3
-      #availables1 = load_availables(start_date, end_date)
       expect(@hotel.load_availables(start_date, end_date).length).must_equal 20
+      start_date = Date.new(2018, 3, 2)
+      end_date = start_date + 3
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 20
+      start_date = Date.new(2018, 3, 5)
+      end_date = start_date + 3
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
+      start_date = Date.new(2018, 3, 6)
+      end_date = start_date + 3
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
       start_date = Date.new(2018, 3, 4)
       end_date = start_date + 3
-      expect(@hotel.load_availables(start_date, end_date).length).must_equal 19
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
+
+      start_date = Date.new(2018, 3, 2)
+      end_date = start_date + 2
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 20
+      start_date = Date.new(2018, 3, 8)
+      end_date = start_date + 2
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 20
+      start_date = Date.new(2018, 3, 2)
+      end_date = start_date + 6
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
+      start_date = Date.new(2018, 3, 5)
+      end_date = start_date + 6
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
+      start_date = Date.new(2018, 3, 6)
+      end_date = start_date + 1
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
     end
   end
 end

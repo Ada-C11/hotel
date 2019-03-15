@@ -1,3 +1,5 @@
+require_relative "room"
+
 require "date"
 
 class Reservation
