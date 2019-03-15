@@ -1,3 +1,5 @@
+require "date"
+
 require_relative "room"
 require_relative "reservation"
 require_relative "reservation_block"
@@ -7,7 +9,8 @@ module Hotel
     attr_reader :all_rooms
 
     def initialize
-      @all_rooms = 1..20
+      @all_rooms = [*(1..20)]
+      @reservations = []
       # @all_rooms.map! do |number|
       #   Room.new(number)
       # end
@@ -15,6 +18,11 @@ module Hotel
 
     def list_all_rooms
       return @all_rooms
+    end
+
+    def make_a_reservation(phone_number, number_of_rooms, start_date, end_date)
+      reservation = Hotel::Reservation.new(phone_number, number_of_rooms, start_date, end_date)
+      @reservations << reservation
     end
 
     #   @reservations = Reservation.list_all(date)
@@ -28,9 +36,3 @@ module Hotel
     #   end
   end
 end
-
-# list_all_rooms = Hotel::Hotel_ledger.new.list_all
-
-# list_all_rooms.each do |room|
-#   puts "#{room.room_number}"
-# end
