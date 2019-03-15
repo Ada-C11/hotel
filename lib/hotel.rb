@@ -18,13 +18,13 @@ module HotelSystem
       end
     end
 
-    # def see_reservations_by_date(date)
-    #   this_dates_reservations = []
-    #   @all_reservations.each do |reservation|
-    #     this_dates_reservations << reservation if reservation.start_date == date
-    #   end
-    #   return this_dates_reservations
-    # end
+    def see_reservations_by_date(date)
+      this_dates_reservations = []
+      @all_reservations.each do |reservation|
+        this_dates_reservations << reservation if reservation.start_date == date
+      end
+      return this_dates_reservations
+    end
 
     def reserve_room(room, start_date, end_date, guest)
       if room.date_available?(start_date, end_date)
@@ -32,7 +32,7 @@ module HotelSystem
       else
         available_room = room_available?(start_date, end_date)
       end
-      
+
       if !available_room
         raise ArgumentError, "There are no available rooms at this time. Please try again later."
       else

@@ -24,6 +24,33 @@ describe "Hotel class" do
     end
   end
 
+  describe "see_reservations_by_date" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @room = @hotel.all_rooms[0]
+      5.times do
+        @hotel.reserve_room(@room,
+                           Date.new(2019, 3, 11),
+                           Date.new(2019, 3, 14),
+                           "Sam")
+      end
+
+      3.times do
+        @hotel.reserve_room(@room,
+                           Date.new(2019, 3, 12),
+                           Date.new(2019, 3, 14),
+                           "Sam")
+      end
+    end
+
+    it "returns only the reservations with the specified start date" do
+      expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 11))).must_be_kind_of Array
+      expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 11)).length).must_equal 5
+      expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 12)).length).must_equal 3
+      expect(@hotel.see_reservations_by_date(Date.new(2019, 3, 13)).length).must_equal 0
+    end
+  end
+
   describe "reserve_room method" do
     let (:hotel) { HotelSystem::Hotel.new }
     let (:room) { hotel.all_rooms[0] }
