@@ -211,89 +211,90 @@ describe "hotel class" do
 
       expect(status).must_equal true
     end
-
-    describe "reservations_by_date method" do
-      before do
-        3.times do
-          @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
-        end
-      end
-
-      it "will return an array" do
-        reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
-        
-        expect(reservations).must_be_kind_of Array
-      end
-
-      it "each index in the returned array will hold a hash with the reservation information" do
-        reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
-        
-        expect(reservations[0]).must_be_kind_of HotelSystem::Reservation
-      end
-
-      it "will raise ArgumentError for invalid date entry" do
-        expect{
-          @hotel.reservations_by_date(year: 2019, month: 2, day: 30)
-        }.must_raise ArgumentError
-      end
-    end
-
-    describe "available_rooms_by_date method" do
-      before do
-        @avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
-      end
-      
-      it "will return an array if there are available rooms" do
-        expect(@avail_rooms).must_be_kind_of Array
-      end
-
-      it "will return an array of Room instances" do
-        expect(@avail_rooms[0]).must_be_kind_of HotelSystem::Room
-      end
-
-      it "will return an array of all the rooms in the hotel if all rooms are available" do
-        expect(@avail_rooms.length).must_equal 20
-      end
-
-      it "will not include a room if it gets booked for a date range including the given day" do
-        @hotel.reserve_room(start_year: 2019, start_month: 6, start_day: 14, num_nights: 3)
-        avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
-
-        room1 = @hotel.rooms[0]
-        status = avail_rooms.include?(room1)
-        expect(status).must_equal false
-      end
-    end
-
-    describe "create_block method" do
-      before do
-        @hotel.reserve_room(start_year: 2019, start_month: 9, start_day: 20, num_nights: 5)
-        @hotel.create_block(start_year: 2019, start_month: 4, start_day: 20, num_nights: 5, room_nums: [4, 5, 6], block_rate: 150)
-      end
-      
-      it "will create a new HotelBlock and add it to the hotel's blocks array" do
-        expect(@hotel.blocks[0]).must_be_kind_of HotelSystem::HotelBlock
-        expect(@hotel.blocks.length).must_equal 1
-      end
-
-      it "will raise an exception if at least 1 room is unavailable for given date range" do
-        expect{
-          @hotel.create_block(start_year: 2019, start_month: 9, start_day: 22, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
-        }.must_raise NotImplementedError
-      end
-
-      it "will not raise an exception if the block starts on the checkout day of another reservation" do
-        @hotel.create_block(start_year: 2019, start_month: 9, start_day: 25, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
-        
-        expect(@hotel.blocks[1]).wont_be_nil
-      end
-
-      it "will set the in_block attribute of each block room to true" do
-        status = @hotel.blocks[0].rooms[0].in_block?
-        
-        expect(status).must_equal true
-      end
-    end
-
   end
+
+  describe "reservations_by_date method" do
+    before do
+      3.times do
+        @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
+      end
+    end
+
+    it "will return an array" do
+      reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
+        
+      expect(reservations).must_be_kind_of Array
+    end
+
+    it "each index in the returned array will hold a hash with the reservation information" do
+      reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
+        
+      expect(reservations[0]).must_be_kind_of HotelSystem::Reservation
+    end
+
+    it "will raise ArgumentError for invalid date entry" do
+      expect{
+        @hotel.reservations_by_date(year: 2019, month: 2, day: 30)
+      }.must_raise ArgumentError
+    end
+  end
+
+  describe "available_rooms_by_date method" do
+    before do
+      @avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
+    end
+      
+    it "will return an array if there are available rooms" do
+      expect(@avail_rooms).must_be_kind_of Array
+    end
+
+    it "will return an array of Room instances" do
+      expect(@avail_rooms[0]).must_be_kind_of HotelSystem::Room
+    end
+
+    it "will return an array of all the rooms in the hotel if all rooms are available" do
+     expect(@avail_rooms.length).must_equal 20
+    end
+
+    it "will not include a room if it gets booked for a date range including the given day" do
+      @hotel.reserve_room(start_year: 2019, start_month: 6, start_day: 14, num_nights: 3)
+      avail_rooms = @hotel.available_rooms_by_date(year: 2019, month: 6, day: 15)
+
+      room1 = @hotel.rooms[0]
+      status = avail_rooms.include?(room1)
+      expect(status).must_equal false
+    end
+  end
+
+  describe "create_block method" do
+    before do
+      @hotel.reserve_room(start_year: 2019, start_month: 9, start_day: 20, num_nights: 5)
+      @hotel.create_block(start_year: 2019, start_month: 4, start_day: 20, num_nights: 5, room_nums: [4, 5, 6], block_rate: 150)
+    end
+      
+    it "will create a new HotelBlock and add it to the hotel's blocks array" do
+      expect(@hotel.blocks[0]).must_be_kind_of HotelSystem::HotelBlock
+      expect(@hotel.blocks.length).must_equal 1
+    end
+
+    it "will raise an exception if at least 1 room is unavailable for given date range" do
+      expect{
+        @hotel.create_block(start_year: 2019, start_month: 9, start_day: 22, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
+      }.must_raise NotImplementedError
+    end
+
+    it "will not raise an exception if the block starts on the checkout day of another reservation" do
+      @hotel.create_block(start_year: 2019, start_month: 9, start_day: 25, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
+        
+      expect(@hotel.blocks[1]).wont_be_nil
+    end
+
+    it "will add the block dates to the room's block_nights array" do
+      status = @hotel.blocks[0].rooms[0].in_block?(year: 2019, month: 4, day: 22)
+      april23 = Date.new(2019, 4, 23)
+        
+      expect(status).must_equal true
+      expect(@hotel.rooms[3].block_nights.include?(april23)).must_equal true
+    end
+  end 
 end

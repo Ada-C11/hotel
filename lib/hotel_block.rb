@@ -7,5 +7,7 @@ module HotelSystem
       @rooms = rooms
       @room_rate = room_rate
     end
+
+    
   end
 end
