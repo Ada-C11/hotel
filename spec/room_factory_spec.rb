@@ -3,7 +3,7 @@ HOTEL_SIZE = 20
 COST = 200.00
 describe "Room class" do
   before do
-    input = {rm_id: "Room #150", cost: COST}
+    input = { rm_id: "Room #150", cost: COST }
     @room = Hotel::Room.new(input)
   end
 
@@ -11,7 +11,6 @@ describe "Room class" do
     it "is an instance of Room" do
       expect(@room).must_be_kind_of Hotel::Room
     end
-
 
     it "has good types" do
       expect(@room.rm_id).must_be_kind_of String

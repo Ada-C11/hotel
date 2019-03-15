@@ -1,7 +1,6 @@
-
 module Hotel
   COST = 200
-  ROOMS = [*1..20]
+  ROOMS = (1..20).to_a.freeze
   class Registry
     attr_accessor :reservations
 
@@ -15,7 +14,7 @@ module Hotel
         request.room = @open_rms.first
         @reservations << request
       else
-      raise Errors::BookingConflict, "Request includes unavailable dates."
+        raise Errors::BookingConflict, "Request includes unavailable dates."
       end
     end
 
@@ -30,6 +29,7 @@ module Hotel
           conflict.room == room[:room]
         end
       end
+      !@open_rooms.empty?
     end
 
     def find_in_range(request)
@@ -39,19 +39,17 @@ module Hotel
       in_range
     end
 
-    def find_by_date(date)
-      date = Date.parse(date)
-      by_date = @reservations.select do |entry|
-        entry.date.find_in_range(date)
-      end
-      by_date
-    end
-  end
-end
+#     def find_by_date(date)
+#       date = Date.parse(date)
+#       by_date = @reservations.select do |entry|
+#         entry.date.find_in_range(date)
+#       end
+#       by_date
+#     end
+#   end
+# end
 
 module Errors
-
-class BookingConflict < StandardError; end
-class ValidationError < StandardError; end
-
+  class BookingConflict < StandardError; end
+  class ValidationError < StandardError; end
 end
