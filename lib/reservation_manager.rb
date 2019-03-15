@@ -4,6 +4,7 @@ require "pry"
 
 module Hotel
   class ReservationManager
+    #add constant for room numbers
     def initialize
       @reservations = []
     end
@@ -13,7 +14,8 @@ module Hotel
       return rooms
     end
 
-    def make_reservation(room_number, check_in, check_out)
+    def make_reservation(check_in, check_out)
+      room_number = available_rooms(check_in, check_out).first
       new_reservation = Hotel::Reservation.new(room_number,
                                                check_in,
                                                check_out)
@@ -38,6 +40,7 @@ module Hotel
           #Right now checkout day is not included because you can check-in on that day
         end
       end
+
       return reservations_by_date
     end
 
