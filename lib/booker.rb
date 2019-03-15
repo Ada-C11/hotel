@@ -42,7 +42,7 @@ class RoomBooker
     end
   end
 
-  def search_completed_reservations(date)
+  def date_query(date)
     n_date = Date.parse(date)
     find_by_dates = []
     @reservations.each do |res_dates|
@@ -52,10 +52,10 @@ class RoomBooker
     end
 
     if find_by_dates.empty?
-      puts "No dates "
-    else
-      return find_by_dates
+      return nil
     end
+
+    return find_by_dates
   end
 
   def find_cost(id)
