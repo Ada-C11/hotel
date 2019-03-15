@@ -1,22 +1,38 @@
 class Room
-  attr_reader :id, :bookings
-  
-  def initialize(id)
-    @id = id
-    @bookings = Array.new
+  attr_reader :room_id, :reservations
+  RATE = 200.freeze
+  private_constant :RATE
+
+  def initialize(room_id)
+    @room_id = room_id
+    @reservations = Array.new
   end
 
-  def reserve(time_interval)
-    @bookings << time_interval
+  def reserve(reserved_dates)
+    r = Reservation.new(reserved_dates, @room_id, RATE)
+    if is_available?(reserved_dates)
+      reservations << r
+    else
+      raise ArgumentError, "The room you want to reserve is not available."
+    end
   end
 
-  def overlap?(time_interval)
-    if @bookings.empty?
-      return false
+  def is_available?(time_interval)
+    @reservations.each do |reservation|
+      if reservation.overlap?(time_interval)
+        return false
+      end
     end
+    return true
+  end
 
-    @bookings.each do |booking|
-      return booking.overlap?(time_interval)
+  def get_reservations_on_date(date)
+    list = Array.new
+    @reservations.each do |reservation|
+      if reservation.has_date?(date)
+        list << reservation
+      end
     end
+    return list
   end
 end
