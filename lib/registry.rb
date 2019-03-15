@@ -22,11 +22,11 @@ module Hotel
     private
 
     @open_rms = []
-    @conflicts = find_in_range(date_range)
 
-    def available?(check_out, check_out)
+    def available?(date_range)
       @open_rms << ROOMS.reject do |room|
-        @conflicts.find do |conflict|
+        conflicts = find_in_range(date_range)
+        conflicts.find do |conflict|
           conflict.room == room[:room]
         end
       end
