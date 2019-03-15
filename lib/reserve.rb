@@ -43,10 +43,6 @@ class Reservation
     return true
   end
 
-  def dates_ovelap?(date1, date2)
-    #TBD used in conjunction with Room.bookings
-  end
-
   def valid_date?(date_str)
     begin
       date = Date.parse(date_str)
