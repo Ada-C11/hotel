@@ -34,13 +34,13 @@ class ReservationManager
   end
 
   # need this code, not sure where to use it @blocked_reservation_array.each { |reservation| reservation.reservation_dates == new_reservation.reservation_dates }
-  def hotel_block(start_date: Date.today.to_s, end_date: (Date.today +1).to_s, cost: 100, rooms_array: ["0"])
+  def hotel_block(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, cost: 100, rooms_array: ["0"])
     start_date = start_date
     end_date = end_date
     cost = cost
     rooms_array = rooms_array
     rooms_array.each do |room|
-      @reservation_array.each do |reservation|
+      @reservation_array.each do |reservation| #this only checks rooms, not rooms & dates
         if reservation.room.include?(room)
           raise ArgumentError, "A room in your desired block is booked during that time period"
         end
@@ -51,8 +51,10 @@ class ReservationManager
     end
     rooms_array.each do |block_room|
       block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
+      # binding.pry
       @blocked_rooms_array << block_reservation.room
       @blocked_reservation_array << block_reservation
+      # binding.pry
     end
     return @blocked_rooms_array
   end
@@ -67,6 +69,7 @@ class ReservationManager
     @reservation_array.each do |reservation|
       if reservation.reservation_dates.include?(parsed_date)
         reservations_matching_date << reservation
+        # binding.pry
       end
     end
     return reservations_matching_date
