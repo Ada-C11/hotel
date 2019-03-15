@@ -37,6 +37,25 @@ class Reservation_manager
     return new_reservation
   end
 
+  # def reserve_hotel_block(check_in, check_out, array_of_rooms, discounted_room_rate)
+  #   if array_of_rooms < 1 || array_of_rooms > 5
+  #     raise ArgumentError, "Hotel blocks cannot be reserved for more than 5 rooms"
+  #   else
+  #     block = array_of_rooms.map do |block_room_number|
+  #       make_reservation(block_room_number, check_in_time: check_in, check_out_time: check_out)
+  #     end
+  #   end
+  #   return block
+  # end
+
+  # def reserve_hotel_block(checkin, checkout, rooms, discounted_room_rate)
+  #     check if these rooms are available for these dates (if they are not, raise error)
+  #     if they are available:
+  #       make these rooms unavailable for the general public (they will not be in array of available rooms)
+  #       change the price of these rooms to the discounted rate
+  #       allow them to be reserved if allowed (maybe add "part_of_block: false" to Reservation.new)
+  # end 
+
   def find_reservations(date)
     date = Date.parse(date)
     reservations_with_date = @reservations.select do |reservation|

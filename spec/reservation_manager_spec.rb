@@ -89,6 +89,9 @@ describe "Reservation_manager" do
       res_manager.make_reservation(1, check_in_time: "10th april 2019", check_out_time: "21st april 2019")
 
       expect(res_manager.reservations.length).must_equal 2
-    end 
+    end
+  end
+
+  describe "reserve_hotel_block" do
   end
 end

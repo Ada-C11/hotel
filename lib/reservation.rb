@@ -1,7 +1,7 @@
 require_relative "reservation_manager"
 
 class Reservation
-  attr_reader :reservation_id, :check_in_time, :check_out_time, :duration_of_stay, :total_cost, :all_rooms, :room_number
+  attr_reader :reservation_id, :check_in_time, :check_out_time, :total_cost, :all_rooms, :room_number
 
   COST_PER_NIGHT = 200
 
@@ -12,22 +12,16 @@ class Reservation
       @room_number = room_number
     end
     @reservation_id = reservation_id
-    @check_in_time = Date.parse(check_in_time)
-    @check_out_time = Date.parse(check_out_time)
-  end
-
-  # this could be moved to initialize!
-  def duration_of_stay
-    duration = (check_out_time - check_in_time).to_i
-
-    if duration < 1
-      raise ArgumentError, "Check out time cannot be before or during check in time"
+    if (Date.parse(check_out_time) - Date.parse(check_in_time)).to_i < 1
+      raise ArgumentError, "Check out time cannot be before check in time"
     else
-      return duration
+      @check_in_time = Date.parse(check_in_time)
+      @check_out_time = Date.parse(check_out_time)
     end
   end
 
   def calculate_total_cost
+    duration_of_stay = (@check_out_time - @check_in_time).to_i
     total_cost = COST_PER_NIGHT * duration_of_stay
     return total_cost
   end
