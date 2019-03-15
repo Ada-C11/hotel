@@ -31,6 +31,10 @@ describe "Reservation class" do
       @reservation.end_date.must_be_kind_of Date
     end
 
+    it "returns a reservation's total cost accurately" do
+      expect(@reservation.total_cost).must_equal @room.cost * (@reservation.end_date - @reservation.start_date).to_i
+    end
+
     it "raises an error for an invalid date range" do
       @room = Hotel::Room.new(
         id: 2,
@@ -44,32 +48,6 @@ describe "Reservation class" do
           room: @room,
         )
       }.must_raise ArgumentError
-    end
-  end
-
-  describe "Total cost" do
-    before do
-      @rooms = []
-      20.times do |k|
-        @rooms << Hotel::Room.new(id: k)
-      end
-      @hotel = Hotel::Hotel.new(
-        id: 1,
-        rooms: @rooms,
-        reservations: [],
-      )
-      @room = Hotel::Room.new(
-        id: 1,
-      )
-      @reservation = Hotel::Reservation.new(
-        id: 1,
-        start_date: Date.new(2001, 2, 3),
-        end_date: Date.new(2001, 2, 5),
-        room: @room,
-      )
-    end
-    it "calculates a reservation's total cost accurately" do
-      expect(@reservation.total_cost).must_equal 400
     end
   end
 end
