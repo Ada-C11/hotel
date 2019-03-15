@@ -39,6 +39,28 @@ describe "Block class" do
     end
   end
 
+  describe "room_collection_blockable? method" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @room = @hotel.all_rooms[0]
+
+      3.times do
+        @hotel.reserve_room(@room,
+                            Date.new(2019, 3, 12),
+                            Date.new(2019, 3, 14),
+                            "Sam")
+      end
+    end
+
+    it "throwns an error if the rooms in the room collection are not available during the specified block dates" do
+      expect do
+        @block = HotelSystem::Block.new(start_date: Date.new(2019, 3, 12),
+                                      end_date: Date.new(2019, 3, 14),
+                                      room_collection: [@hotel.all_rooms[2], @hotel.all_rooms[3], @hotel.all_rooms[4]])
+      end.must_raise ArgumentError
+    end
+  end
+
   describe "block_room_available? method" do
     before do
       @hotel = HotelSystem::Hotel.new

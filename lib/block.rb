@@ -1,5 +1,6 @@
 require "date"
 
+
 module HotelSystem
   class Block
     attr_reader :start_date, :end_date, :room_collection, :block_id, :price_per_room, :discount_rate, :reservations
@@ -13,7 +14,14 @@ module HotelSystem
       @price_per_room = 200
       @discount_rate = 0.22
 
+      room_collection_blockable?(room_collection)
       raise ArgumentError, "Must enter at least 2 rooms. 5 max" if room_collection.length < 2 || room_collection.length > 5
+    end
+
+    def room_collection_blockable?(room_collection)
+      room_collection.each do |room|
+        raise ArgumentError, "One of the rooms you entered is already reserved during the specified dates" if !room.date_available?(@start_date, @end_date)
+      end
     end
 
     def room_available?
