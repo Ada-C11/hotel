@@ -258,5 +258,29 @@ describe "hotel class" do
       end
     end
 
+    describe "create_block method" do
+      before do
+        @hotel.reserve_room(start_year: 2019, start_month: 9, start_day: 20, num_nights: 5)
+        @hotel.create_block(start_year: 2019, start_month: 4, start_day: 20, num_nights: 5, room_nums: [4, 5, 6], block_rate: 150)
+      end
+      
+      it "will create a new HotelBlock and add it to the hotel's blocks array" do
+        expect(@hotel.blocks[0]).must_be_kind_of HotelSystem::HotelBlock
+        expect(@hotel.blocks.length).must_equal 1
+      end
+
+      it "will raise an exception if at least 1 room is unavailable for given date range" do
+        expect{
+          @hotel.create_block(start_year: 2019, start_month: 9, start_day: 22, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
+        }.must_raise NotImplementedError
+      end
+
+      it "will not raise an exception if the block starts on the checkout day of another reservation" do
+        @hotel.create_block(start_year: 2019, start_month: 9, start_day: 25, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
+        
+        expect{@hotel.blocks[1]}.wont_be_nil
+      end
+    end
+
   end
 end

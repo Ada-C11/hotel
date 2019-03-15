@@ -1,11 +1,12 @@
 require_relative "room"
 require_relative "reservation"
-require_relative "date_range.rb"
+require_relative "date_range"
+require_relative "hotel_block"
 require "date"
 
 module HotelSystem
   class Hotel
-    attr_reader :rooms
+    attr_reader :rooms, :blocks
     attr_accessor :reservations
 
     def initialize(number_of_rooms)
@@ -120,15 +121,22 @@ module HotelSystem
       end
     end
 
-    def create_block(block_dates:, block_rooms:, block_rate:)
+    def create_block(start_year:, start_month:, start_day:, num_nights:, room_nums:, block_rate:)
+      valid_date_entry?(start_year, start_month, start_day)
+      block_dates = create_date_range(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
+      if room_nums.class != Array
+        raise ArgumentError, "Please enter an array of room numbers for room_nums, even if it has only one room number."
+      end
+      block_rooms = room_nums.map { |num| find_room(num)}
       block_rooms.each do |room|
         room.reservations.each do |reservation|
-          if block_dates.overlap?(reservation.date_range)
+          overlap = reservation.date_range.overlap?(block_dates)
+          if overlap == true
             raise NotImplementedError, "Block can't be created, room #{room.room_number} is already booked during those dates."
           end
         end
       end
-      block = HotelSystem::HotelBlock.new(date_rage: date_range, rooms: rooms, room_rate: room_rate)
+      block = HotelSystem::HotelBlock.new(date_range: block_dates, rooms: block_rooms, room_rate: block_rate)
       @blocks << block
     end
 
