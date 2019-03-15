@@ -9,14 +9,22 @@ module Hotel
       @hotel_blocks = []
     end
 
-    def reserve_room(id, start_date, end_date, room_id)
+    def reserve_room(start_date, end_date, room_id)
       #check if room available during those days
       rooms_available = available_rooms(start_date, end_date)
       raise ArgumentError if !(rooms_available.include?(room_id))
       # find room object with room ID
       room = find_room(room_id)
-      #
-      return Reservation.new(id: id, start_date: start_date, end_date: end_date, room: room)
+      new_reservation = Reservation.new(id: create_reservation_id, start_date: start_date, end_date: end_date, room: room)
+      add_reservation(new_reservation)
+      room.add_reservation(new_reservation)
+
+      return new_reservation
+    end
+
+    def create_reservation_id
+      reservation_id = reservations.length + 1
+      return reservation_id
     end
 
     def find_room(room_ID)
@@ -33,30 +41,27 @@ module Hotel
     end
 
     def available_rooms(start_date, end_date)
+      # for reservation purposes, to check if that room can be reserved
       avail_rooms = []
-      @rooms.each do |room|
-        if room.reservations == []
-          avail_rooms << room
-        else
-          # could also use previous method #access_reservations here, loop through
-          #reservations by date, and exclude rooms reserved on one of those dates
-
-          check_avail = room.reservations.select do |reservation|
-            !(reservation.start_date...reservation.end_date).include?(start_date) &&
-            !(reservation.start_date..reservation.end_date).include?(end_date)
-          end
-          #   p "#{room.id}: #{check_avail}"
-          avail_rooms << room if check_avail.length > 0
-        end
+      rooms.each do |room|
+        avail_rooms << room if room.isAvailable?(start_date, end_date)
       end
       return avail_rooms.map { |room| room.id } #return object?
     end
 
     def reserve_hotel_block(id, start_date, end_date, collection_rooms, discounted_rate)
       collection_rooms.each do |room|
-        raise ArgumentError if !(available_rooms(start_date, end_date).include?(room.id))
+        raise ArgumentError if !room.isAvailable?(start_date, end_date)
       end
       return Block.new(id: id, start_date: start_date, end_date: end_date, collection_rooms: collection_rooms, discounted_rate: discounted_rate)
+    end
+
+    def available_rooms_block(start_date, end_date, block_id)
+      available_rooms = []
+      block = find_block(block_id)
+      block.collection_rooms.each do |room|
+        available_rooms << room if !available_rooms.include?(room.id)
+      end
     end
 
     def add_hotel_block(block)
