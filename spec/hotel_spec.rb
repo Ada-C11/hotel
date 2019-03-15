@@ -38,7 +38,7 @@ describe "hotel class" do
     end
 
     it "generates an id for the new reservation" do
-      expect(@hotel.create_res_id).must_equal 1
+      expect(@hotel.create_res_id).must_equal 5
     end
 
     it "creates new HotelGroup::Reservation objects and adds them to reservations array" do
@@ -46,7 +46,7 @@ describe "hotel class" do
 
       @hotel.make_reservation(@start_time2, @end_time2)
 
-      expect(@hotel.reservations.count).must_equal 2
+      expect(@hotel.reservations.count).must_equal 6
       expect(@hotel.reservations[0]).must_be_kind_of HotelGroup::Reservation
       expect(@hotel.reservations[1].id).must_equal 2
     end
@@ -163,6 +163,13 @@ describe "hotel class" do
 
         expect(@block_room.reservations.count).must_equal 1
       end
+    end
+  end
+  describe "read from CSV" do
+    before do
+    end
+    it "gets the correct number of reservations" do
+      expect(@hotel.reservations.count).must_equal 4
     end
   end
 end

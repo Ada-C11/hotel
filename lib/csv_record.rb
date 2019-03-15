@@ -18,7 +18,7 @@ module HotelGroup
                full_path,
                headers: true,
                header_converters: :symbol,
-               converters: :numeric,
+               converters: :all,
              ).map { |record| from_csv(record) }
     end
 

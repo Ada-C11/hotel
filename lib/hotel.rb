@@ -7,11 +7,33 @@ module HotelGroup
   class Hotel
     attr_accessor :id, :rooms, :reservations, :blocks
 
-    def initialize
+    def initialize(directory: "./csv")
       @id = 1
       @rooms = Room.make_rooms_list(20, 200)
-      @reservations = []
+      @reservations = Reservation.load_all(directory: directory)
       @blocks = []
+
+      connect_reservations
+    end
+
+    def connect_reservations
+      reservations.each do |res|
+        room = find_room(res.room)
+        res.connect(room)
+        room.connect(res)
+      end
+
+      return reservations
+    end
+
+    def find_reservation(id)
+      Reservation.validate_id(id)
+      return @reservations.find { |res| res.id == id }
+    end
+
+    def find_room(id)
+      Room.validate_id(id)
+      return @rooms.find { |room| room.number == id }
     end
 
     def list_rooms

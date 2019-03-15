@@ -38,4 +38,21 @@ describe "reservation class" do
       expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total cost: $600.00"
     end
   end
+
+  describe "it loads data from csv file" do
+    before do
+      @file_path = "spec/test_data/reservations.csv"
+
+      @res_list = HotelGroup::Reservation.load_all(full_path: @file_path)
+    end
+
+    it "gets the list of reservations" do
+      expect(@res_list.count).must_equal 4
+    end
+
+    it "reads the reservations accurately" do
+      expect(@res_list[0].room).must_equal 1
+      expect(@res_list.last.room).must_equal 3
+    end
+  end
 end

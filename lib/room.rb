@@ -23,6 +23,11 @@ module HotelGroup
       return rooms
     end
 
+    def connect(res)
+      reservations << res
+      return self
+    end
+
     def add_reservation(res)
       if has_reservation?(res.start_time, res.end_time)
         raise ArgumentError, "Room #{number} is already reserved for this date range"
