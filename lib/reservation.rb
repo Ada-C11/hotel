@@ -2,7 +2,7 @@ require "date"
 require "pry"
 
 class Reservation
-  attr_reader :start_date, :end_date, :rooms, :reservation_dates, :duration, :total_cost, :reservation_durations_array, :room, :cost
+  attr_reader :start_date, :end_date, :room, :cost, :rooms
 
   def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200)
     @start_date = start_date

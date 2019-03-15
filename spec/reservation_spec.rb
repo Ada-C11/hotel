@@ -1,5 +1,6 @@
 require_relative "spec_helper"
 require "date"
+require "pry"
 
 describe "Reservation class" do
   let (:reservation) do
