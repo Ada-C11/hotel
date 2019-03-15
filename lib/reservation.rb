@@ -8,6 +8,10 @@ module Hotel
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
 
+      if @check_out < @check_in
+        raise ArgumentError, "Check-out date cannot be before check-in date"
+      end
+
       if @check_in == @check_out
         @all_dates = [@check_in]
       else
@@ -19,14 +23,10 @@ module Hotel
       @block_name = block_name
       @booking_name = booking_name
       @discount = discount
-
-      if check_out < check_in
-        raise ArgumentError, "Check-out date cannot be before check-in date"
-      end
     end
 
     def total_cost
-      discount != nil ? discount : all_dates.length * room.rate
+      discount != nil ? discount.to_f : all_dates.length * room.rate
     end
   end
 end

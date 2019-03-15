@@ -11,7 +11,7 @@ module Hotel
       @reservations = []
     end
 
-    def request_reservation(check_in, check_out, block_name: nil, booking_name:)
+    def request_reservation(check_in, check_out, block_name: nil, booking_name:, discount: nil)
       rooms = available_rooms(check_in, check_out)
 
       raise ArgumentError, "No available rooms" if rooms.length == 0
@@ -20,21 +20,14 @@ module Hotel
                                            check_out: check_out,
                                            room: rooms.first,
                                            block_name: block_name,
-                                           booking_name: booking_name)
-
-      # if block applies a discount to the room
-      # if reservation.room.block == true
+                                           booking_name: booking_name,
+                                           discount: discount)
 
       reservations << reservation
       # could get rid of this method...
       rooms.first.add_reservation(reservation)
-      # find_room(reservation.room_number).add_reservation(reservation)
       return reservation
     end
-
-    # def find_room(room_number)
-    #   rooms.find { |room| room.number == room_number }
-    # end
 
     def reservations_by_date(date)
       reservations.find_all { |reservation| reservation.all_dates.include?(Date.parse(date)) }
@@ -69,8 +62,9 @@ module Hotel
       return available
     end
 
+    # can I combine this method with request_reservation?
     def request_block(check_in:, check_out:, number_of_rooms:, discount:, name:)
-      if number_of_rooms > 5
+      if number_of_rooms > 5 || number_of_rooms < 2
         raise ArgumentError, "A block cannot have more than 5 rooms"
       end
       if available_rooms(check_in, check_out).length < number_of_rooms
@@ -78,16 +72,27 @@ module Hotel
       end
 
       number_of_rooms.times do
-        block_reservation = request_reservation(check_in: check_in,
-                                                check_out: check_out,
+        block_reservation = request_reservation(check_in,
+                                                check_out,
                                                 block_name: name,
                                                 booking_name: nil,
                                                 discount: discount)
       end
     end
 
-    #   # def available_rooms(date)
+    def available_rooms_in_block(block_name:)
+      available = reservations.find_all do |reservation|
+        reservation.block_name == block_name && reservation.booking_name == nil
+      end
 
-    #   # end
+      return available
+    end
+
+    # def request_reservation_from_block(block_name:, booking_name:)
+    #   block_reservations = reservations.find_all { |reservation| reservation.block_name == block_name }
+
+    #   block_reservations.first.booking_name = booking_name
+    #   block_reservation.booking_name = booking_name
+    # end
   end
 end
