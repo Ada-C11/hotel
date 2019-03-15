@@ -3,8 +3,8 @@ class Scheduler
 
   def initialize
     @room_map = Hash.new
-    20.times do
-      room_id = rand(1...100)
+    20.times do |i|
+      room_id = i + 1
       @room_map[room_id] = Room.new(room_id)
     end
   end
