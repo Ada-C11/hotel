@@ -1,6 +1,8 @@
-1. Refactor overlap methods in block and reservation to handle both dates and date ranges
-2. Many classes have similar methods. Try to implement an inheritance relationship with an abstract class.
-3. Find more class-specific methods (like add_res_to_block and add_res_to_room) that I can combine with duck typing
-4. Convert things to keyword args when possible
-5. See where I can make composition one-way (most of my composition relationships are currently 2-way)
-6. Try to implement CSV capabilities? (optional prompt #2)
+1. ADD MORE TESTS.
+2. Refactor existing tests.
+3. Refactor overlap methods in block and reservation to handle both dates and date ranges
+4. Many classes have similar methods. Try to implement an inheritance relationship with an abstract class.
+5. Find more class-specific methods (like add_res_to_block and add_res_to_room) that I can combine with duck typing
+6. Convert things to keyword args when possible
+7. See where I can make composition one-way (most of my composition relationships are currently 2-way)
+8. Try to implement CSV capabilities? (optional prompt #2)
