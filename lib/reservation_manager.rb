@@ -11,23 +11,25 @@ module Hotel
       @reservations = []
     end
 
-    def request_reservation(check_in_date, check_out_date)
+    def request_reservation(check_in_date, check_out_date, block: false)
       rooms = available_rooms(check_in_date, check_out_date)
 
       raise ArgumentError, "No available rooms" if rooms.length == 0
 
       reservation = Hotel::Reservation.new(check_in_date: check_in_date,
                                            check_out_date: check_out_date,
-                                           room_number: rooms.first.number)
+                                           room: rooms.first,
+                                           block: block)
 
       reservations << reservation
-      find_room(reservation.room_number).add_reservation(reservation)
+      rooms.first.add_reservation(reservation)
+      # find_room(reservation.room_number).add_reservation(reservation)
       return reservation
     end
 
-    def find_room(room_number)
-      rooms.find { |room| room.number == room_number }
-    end
+    # def find_room(room_number)
+    #   rooms.find { |room| room.number == room_number }
+    # end
 
     def reservations_by_date(date)
       reservations.find_all { |reservation| reservation.all_dates.include?(Date.parse(date)) }
@@ -62,8 +64,10 @@ module Hotel
       return available
     end
 
-    # def available_rooms(date)
+    #   def request_block(number_of_rooms:, )
 
-    # end
+    #   # def available_rooms(date)
+
+    #   # end
   end
 end

@@ -40,8 +40,9 @@ describe "ReservationManager class" do
       expect(first_reservation.all_dates).must_be_kind_of Array
       expect(first_reservation.all_dates.length).must_equal 3
       expect(first_reservation.all_dates[0]).must_equal Date.parse("2018-03-12)")
-      expect(first_reservation.room_number).must_be :<=, 20
-      expect(first_reservation.room_number).must_be :>, 0
+      expect(first_reservation.room.number).must_be :<=, 20
+      expect(first_reservation.room.number).must_be :>, 0
+      expect(first_reservation.block).must_equal false
     end
 
     it "adds the reservation to the room" do
@@ -50,24 +51,24 @@ describe "ReservationManager class" do
     end
   end
 
-  describe "#find_room" do
-    let (:manager) do
-      manager = Hotel::ReservationManager.new
-    end
+  # describe "#find_room" do
+  #   let (:manager) do
+  #     manager = Hotel::ReservationManager.new
+  #   end
 
-    it "returns an instance of a room" do
-      expect(manager.find_room(5)).must_be_kind_of Hotel::Room
-    end
+  #   it "returns an instance of a room" do
+  #     expect(manager.find_room(5)).must_be_kind_of Hotel::Room
+  #   end
 
-    it "returns the correct instance of a room" do
-      room_one = manager.find_room(4)
-      room_two = manager.find_room(20)
-      expect(room_one.number).must_equal 4
-      expect(room_two.number).must_equal 20
-      expect(room_one.rate).must_equal 200
-      expect(room_two.rate).must_equal 200
-    end
-  end
+  #   it "returns the correct instance of a room" do
+  #     room_one = manager.find_room(4)
+  #     room_two = manager.find_room(20)
+  #     expect(room_one.number).must_equal 4
+  #     expect(room_two.number).must_equal 20
+  #     expect(room_one.rate).must_equal 200
+  #     expect(room_two.rate).must_equal 200
+  #   end
+  # end
 
   describe "#reservations_by_date" do
     before do
@@ -128,7 +129,6 @@ describe "ReservationManager class" do
       20.times { manager.request_reservation("Feb 1, 2019", "Feb 2, 2019") }
       updated_rooms = manager.available_rooms("Feb 1, 2019", "Feb 2, 2019")
       different_rooms = manager.available_rooms("Feb 4, 2019", "Feb 4, 2019")
-      # reservation = manager.request_reservation("Feb 1, 2019", "Feb 1, 2019")
       expect(rooms.length).must_equal 20
       expect(updated_rooms.length).must_equal 0
       expect {
