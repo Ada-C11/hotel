@@ -200,7 +200,7 @@ describe "Hotel class" do
                                                 end_date: "10 Feb 2020",
                                                 discount_rate: 180)
       @room = @block.rooms[0]
-      @block_reservation = @hotel.reserve_from_block(@block.id, 1, "Ada")
+      @block_reservation = @hotel.reserve_from_block(@block.id, 1)
     end
     it "will return a new reservation for a room within the block" do
       expect(@block_reservation).must_be_instance_of HotelSystem::Reservation
@@ -225,13 +225,13 @@ describe "Hotel class" do
 
     it "will raise an exception if reserving a room that is not within the block" do
       expect {
-        @hotel.reserve_from_block(@block.id, 7, "Ada")
+        @hotel.reserve_from_block(@block.id, 7)
       }.must_raise BlockError
     end
 
     it "will raise an exception if reserving a room that is reserved for the date" do
       expect {
-        @hotel.reserve_from_block(@block.id, 1, "Ada")
+        @hotel.reserve_from_block(@block.id, 1)
       }.must_raise ReservationError
     end
   end

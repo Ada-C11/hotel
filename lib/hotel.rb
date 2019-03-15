@@ -100,7 +100,7 @@ module HotelSystem
       return new_block
     end
 
-    def reserve_from_block(block_id, room_id, name)
+    def reserve_from_block(block_id, room_id)
       room = find_room_by_id(room_id)
       block = find_block_by_id(block_id)
       dates = block.date_range

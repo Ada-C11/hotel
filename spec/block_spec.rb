@@ -38,7 +38,7 @@ describe "Block class" do
       expect(@block.date_range).must_be_instance_of HotelSystem::DateRange
     end
     it "will apply the discount to reservations made from it" do
-      new_res = @hotel.reserve_from_block(@block.id, 1, "Ada")
+      new_res = @hotel.reserve_from_block(@block.id, 1)
       expect(new_res.rate).must_equal @block.discount_rate
     end
     it "will add the block to each room's collection of blocks" do
@@ -49,7 +49,7 @@ describe "Block class" do
     it "can check whether it has any rooms available" do
       expect(@block.has_available_rooms?).must_equal true
       (1..3).each do |id|
-        @hotel.reserve_from_block(@block.id, id, "Ada")
+        @hotel.reserve_from_block(@block.id, id)
       end
       expect(@block.has_available_rooms?).must_equal false
     end
@@ -59,9 +59,20 @@ describe "Block class" do
         expect(room).must_be_instance_of HotelSystem::Room
       end
       (1..3).each do |id|
-        @hotel.reserve_from_block(@block.id, id, "Ada")
+        @hotel.reserve_from_block(@block.id, id)
       end
       expect(@block.list_available_rooms.length).must_equal 0
+    end
+    it "can return a list of reservations" do
+      expect(@block.all_reservations.length).must_equal 0
+
+      (1..3).each do |id|
+        @hotel.reserve_from_block(@block.id, id)
+      end
+      expect(@block.all_reservations.length).must_equal 3
+      @block.all_reservations.each do |res|
+        expect(res).must_be_instance_of HotelSystem::Reservation
+      end
     end
   end
 end
