@@ -1,71 +1,73 @@
 require_relative "spec_helper"
 
 describe "Booker Class" do
+
     describe "Booker Class Wave 1" do
-    let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
+        
+        let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
 
-     describe "Initialization of booker" do
+        describe "Initialization of booker" do
 
-        it "is an instance of Booker" do
-            expect(booker).must_be_kind_of Hotel::Booker
-        end
+            it "is an instance of Booker" do
+                expect(booker).must_be_kind_of Hotel::Booker
+            end
 
-        it "lists all rooms" do
-            expect(booker.rooms).must_be_kind_of Array
-            expect(booker.rooms[0]).must_be_kind_of Hotel::Room
-            expect(booker.rooms.length).must_equal 20
-        end
+            it "lists all rooms" do
+                expect(booker.rooms).must_be_kind_of Array
+                expect(booker.rooms[0]).must_be_kind_of Hotel::Room
+                 expect(booker.rooms.length).must_equal 20
+            end
     
-        it "lists all reservations" do
-            expect(booker.reservations).must_be_kind_of Array
+            it "lists all reservations" do
+                expect(booker.reservations).must_be_kind_of Array
+            end
+
         end
 
-    end
+        describe "book_room method" do
 
-    describe "book_room method" do
+            let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
 
-        let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
+            it "adds new reservation to reservation list in Booker" do
+                call_book_room
+                expect(booker.reservations[0]).must_be_kind_of Hotel::Reservation
+                expect(booker.reservations.length).must_equal 1
+            end
 
-        it "adds new reservation to reservation list in Booker" do
-            call_book_room
-            expect(booker.reservations[0]).must_be_kind_of Hotel::Reservation
-            expect(booker.reservations.length).must_equal 1
-        end
+            it "adds new reservation to reservation list in Room" do
+                expect(call_book_room.room.reservations[0]).must_be_kind_of Hotel::Reservation
+                expect(call_book_room.room.reservations.length).must_equal 1
+            end
 
-        it "adds new reservation to reservation list in Room" do
-            expect(call_book_room.room.reservations[0]).must_be_kind_of Hotel::Reservation
-            expect(call_book_room.room.reservations.length).must_equal 1
-        end
+            it "accruately loads the dates for the reservation" do
+                expect(call_book_room.date_range).must_be_kind_of Array
+                expect(call_book_room.date_range[0]).must_be_kind_of Date
+            end
 
-        it "accruately loads the dates for the reservation" do
-            expect(call_book_room.date_range).must_be_kind_of Array
-            expect(call_book_room.date_range[0]).must_be_kind_of Date
-        end
+        end 
 
-    end 
-
-    describe "view_reservations method" do
-        let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
+        describe "view_reservations method" do
+            let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
         
-        it "returns an array with all reservations on a given date" do
-            call_book_room
-            expect(booker.view_reservations(20190313)).must_be_kind_of Array
-            expect(booker.view_reservations(20190313)[0]).must_be_kind_of Hotel::Reservation
+            it "returns an array with all reservations on a given date" do
+                call_book_room
+                expect(booker.view_reservations(20190313)).must_be_kind_of Array
+                expect(booker.view_reservations(20190313)[0]).must_be_kind_of Hotel::Reservation
+            end
+
         end
 
-    end
-
-    describe "available_rooms method" do
-        let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
+        describe "available_rooms method" do
+            let(:call_book_room) {booker.book_room(start_date: 20190313, end_date: 20190316)}
         
-        it "returns an array with available rooms on a given date" do
-            call_book_room
-            expect(booker.available_rooms(20190313)).must_be_kind_of Array
-            expect(booker.available_rooms(20190313)[0]).must_be_kind_of Hotel::Room
-            expect(booker.available_rooms(20190313).length).must_equal 19
-        end
+            it "returns an array with available rooms on a given date" do
+                call_book_room
+                expect(booker.available_rooms(20190313)).must_be_kind_of Array
+                expect(booker.available_rooms(20190313)[0]).must_be_kind_of Hotel::Room
+                expect(booker.available_rooms(20190313).length).must_equal 19
+            end
 
-    end
+        end
 
     end
 
@@ -155,6 +157,23 @@ describe "Booker Class" do
             expect{request_block}.must_raise ArgumentError
         end
 
+        it "creates block for specified rooms" do
+            room3 = booker.rooms[2]
+            room4 = booker.rooms[3]
+            2.times do 
+                booker.book_room(start_date: 20190313, end_date: 20190316)
+            end
+            expect(booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room3, room4], cost: 100)).must_be_kind_of Hotel::Block
+        end
+
+        it "raises exception when one room is available and the other isn't" do
+            1.times do 
+                booker.book_room(start_date: 20190313, end_date: 20190316)
+            end
+            expect{request_block}.must_raise ArgumentError
+        end
+      
+
         it "raises exception for requesting more than 5 rooms in a block" do
             test_rooms = []
             6.times do |i|
@@ -191,9 +210,38 @@ describe "Booker Class" do
             expect(room2.reservations[0]).must_be_kind_of Hotel::Block_Reservation
         end
 
+        it "reserves room from a block" do
+            new_block = request_block
+            block_reservation = booker.reservations[0]
+            booker.reserve_room_in_block(block: new_block, block_reservation: block_reservation)
+            expect(new_block.block_reservations[block_reservation]).must_equal :unavailable
+        end
+
+        it "lists available rooms from a block" do
+            new_block = request_block
+            expect(new_block.list_available_rooms).must_be_kind_of Hash
+            expect(new_block.list_available_rooms.length).must_equal 2
+        end
+
+        it "lists available rooms from a block when one room is unavailable" do
+            new_block = request_block
+            block_reservation = booker.reservations[0]
+            booker.reserve_room_in_block(block: new_block, block_reservation: block_reservation)
+            expect(booker.view_available_rooms_in_block(new_block)).must_be_kind_of Hash
+            expect(booker.view_available_rooms_in_block(new_block).length).must_equal 1
+        end
+
+        it "raises exception when trying to reserve a room in a block and it is already reserved" do
+            new_block = request_block
+            block_reservation1 = booker.reservations[0]
+            booker.reserve_room_in_block(block: new_block, block_reservation: block_reservation1)
+            expect{booker.reserve_room_in_block(block: new_block, block_reservation: block_reservation1)}.must_raise ArgumentError
+        end
 
 
     end
+
+
 
 
 

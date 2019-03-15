@@ -77,7 +77,7 @@ module Hotel
 
             rooms.each do |room|
                 range.each do |date|
-                    raise ArgumentError, "There are no available rooms for this request!" if room.available?(date) == false
+                    raise ArgumentError, "Those rooms are not available for those dates!" if room.available?(date) == false
                 end
             end
 
@@ -97,6 +97,16 @@ module Hotel
             return new_block
         end
 
+        def reserve_room_in_block(block:, block_reservation:)
+            status = block.reserve_block_room(block_reservation)
+            raise ArgumentError, "This room is already reserved!" if status == false
+        end
+
+        def view_available_rooms_in_block(block)
+            list = block.list_available_rooms
+            raise ArgumentError, "There are no available rooms in this block!" if list == []
+            return list
+        end
 
     end
 end
