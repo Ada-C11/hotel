@@ -33,8 +33,8 @@ describe "Hotel class" do
     it "will find a room when given a number between 1 and 20" do
       expect (@new_hotel.find_room_by_id(1)).must_be_instance_of HotelSystem::Room
     end
-    it "will return nil if given an id that isn't between 1 and 20" do
-      expect (@new_hotel.find_room_by_id(21)).must_be_nil
+    it "will raise an exception if given an id that isn't between 1 and 20" do
+      expect { @new_hotel.find_room_by_id(21) }.must_raise RoomError
     end
   end
   describe "make reservation" do

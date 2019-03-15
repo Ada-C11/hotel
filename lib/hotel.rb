@@ -17,7 +17,9 @@ module HotelSystem
     # 'Find' methods
 
     def find_room_by_id(room_id)
-      return rooms.find { |room| room.id == room_id }
+      room = rooms.find { |room| room.id == room_id }
+      (raise RoomError, "Room with id #{room_id} does not exist!") if !room
+      return room
     end
 
     def find_res_by_id(id)
@@ -66,7 +68,6 @@ module HotelSystem
 
     def make_reservation(room_id:, start_date:, end_date:)
       room = find_room_by_id(room_id)
-      (raise RoomError, "Room with id #{room_id} does not exist!") if !room
 
       request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
