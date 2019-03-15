@@ -3,41 +3,40 @@ require_relative "spec_helper"
 describe "Room Class" do
   describe "Room initializer" do
     before do
-      @room = Hotel::Room.new(
+      @room = Room.new(
         id: 1,
-        status: :VACANT,
       )
     end
     it "is an instance of Room" do
-      expect(@room).must_be_kind_of Hotel::Room
+      expect(@room).must_be_kind_of Room
     end
 
-    it "has a default vacancy of :VACANT" do
-      expect(Hotel::Room.new(id: 3).status).must_equal :VACANT
-    end
+    # it "has a default vacancy of :VACANT" do
+    #   expect(Room.new(id: 3).status).must_equal :VACANT
+    # end
 
-    it "throws an ArgumentError if status is invalid" do
-      expect do
-        Hotel::Room.new(id: 4, status: :IDK)
-      end.must_raise ArgumentError
-    end
+    # it "throws an ArgumentError if status is invalid" do
+    #   expect do
+    #     HRoom.new(id: 4, status: :IDK)
+    #   end.must_raise ArgumentError
+    # end
     # expect(@room.id).must_be_kind_of Integer
     # expect(@room.status).must_be_kind_of Symbol
   end
 
   # describe "add_trip method" do
   #   before do
-  #     pass = Hotel::Passenger.new(
+  #     pass = Passenger.new(
   #       id: 1,
   #       name: "Test Passenger",
   #       phone_number: "412-432-7640",
   #     )
-  #     @driver = Hotel::Room.new(
+  #     @driver = Room.new(
   #       id: 3,
   #       name: "Test Driver",
   #       vin: "12345678912345678",
   #     )
-  #     @trip = Hotel::Room.new(
+  #     @trip = Room.new(
   #       id: 8,
   #       driver: @driver,
   #       passenger: pass,
