@@ -60,7 +60,8 @@ module HotelSystem
       valid_date_entry?(start_year, start_month, start_day)
       @rooms.each do |hotel_room|
         reserved = room_reserved?(room_number: hotel_room.room_number, year: start_year, month: start_month, day: start_day)
-        if reserved == false
+        block_status = hotel_room.in_block?
+        if reserved == false && block_status == false
           return hotel_room
         end
       end
@@ -135,6 +136,7 @@ module HotelSystem
             raise NotImplementedError, "Block can't be created, room #{room.room_number} is already booked during those dates."
           end
         end
+        room.in_block = true
       end
       block = HotelSystem::HotelBlock.new(date_range: block_dates, rooms: block_rooms, room_rate: block_rate)
       @blocks << block

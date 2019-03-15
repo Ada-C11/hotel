@@ -145,6 +145,13 @@ describe "hotel class" do
       room = @hotel.find_available_room(start_year: 2019, start_month: 7, start_day: 9)
       expect(room.room_number).must_equal 1
     end
+
+    it "will not return a room that is in a block" do
+      @hotel.create_block(start_year: 2019, start_month: 03, start_day: 17, num_nights: 17, room_nums: [1, 2, 3], block_rate: 150)
+
+      avail_room = @hotel.find_available_room(start_year: 2019, start_month: 03, start_day: 17)
+      expect(avail_room.room_number).must_equal 4
+    end
   end
 
   describe "create_reservation_id method" do
@@ -278,7 +285,13 @@ describe "hotel class" do
       it "will not raise an exception if the block starts on the checkout day of another reservation" do
         @hotel.create_block(start_year: 2019, start_month: 9, start_day: 25, num_nights: 1, room_nums: [1, 2, 3], block_rate: 150)
         
-        expect{@hotel.blocks[1]}.wont_be_nil
+        expect(@hotel.blocks[1]).wont_be_nil
+      end
+
+      it "will set the in_block attribute of each block room to true" do
+        status = @hotel.blocks[0].rooms[0].in_block?
+        
+        expect(status).must_equal true
       end
     end
 
