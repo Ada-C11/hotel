@@ -38,7 +38,7 @@ module HotelSystem
     def checkout
       return self.date_list.last
     end
-    
+
     def include?(date)
       if date.class != Date
         raise ArgumentError, "Please enter an instance of the Date class."
@@ -54,13 +54,19 @@ module HotelSystem
       if range.class != self.class && range.class != Date
         raise ArgumentError, "Please enter an instance of Date or DateRange."
       end
-      range.date_list.each do |date|
-        if self.include?(date) && (date != self.checkout)
+      if range.class == HotelSystem::DateRange
+        range.date_list.each do |date|
+          if self.include?(date) && (date != self.checkout)
             return true
           end
+        end
+      elsif range.class == Date
+        if self.include?(range) && (range != self.checkout)
+          return true
+        end
       end
       return false
     end
-
+    
   end
 end
