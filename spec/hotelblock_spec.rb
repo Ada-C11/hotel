@@ -41,4 +41,26 @@ describe "HotelGroup::HotelBlock class" do
       expect(@block_list.first.id).must_equal 1
     end
   end
+
+  describe "outputs csv file of all blocks" do
+    before do
+      @hotel = HotelGroup::Hotel.new
+    end
+
+    it "creates a csv file" do
+      full_path = "spec/test_data/blocks_test.csv"
+
+      HotelGroup::HotelBlock.save(full_path, @hotel.blocks)
+    end
+
+    it "adds a block to the CSV file when a new one is created" do
+      room = @hotel.rooms[0].number
+      block = @hotel.create_hotel_block(Date.new(2016, 8, 8), Date.new(2016, 8, 16), [room], discount: 0.4)
+
+      full_path = "spec/test_data/blocks_test.csv"
+
+      puts @hotel.blocks.count
+      HotelGroup::HotelBlock.save(full_path, @hotel.blocks)
+    end
+  end
 end

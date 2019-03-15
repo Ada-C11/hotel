@@ -55,4 +55,25 @@ describe "reservation class" do
       expect(@res_list.last.room).must_equal 3
     end
   end
+
+  describe "writes CSV files" do
+    before do
+      @hotel = HotelGroup::Hotel.new
+    end
+    it "creates a csv file" do
+      full_path = "spec/test_data/reservations_test.csv"
+
+      HotelGroup::Reservation.save(full_path, @hotel.reservations)
+    end
+
+    it "adds a block to the CSV file when a new one is created" do
+      room = @hotel.rooms[0]
+      res = @hotel.make_reservation(Date.new(2016, 4, 4), Date.new(2016, 4, 10), room: room)
+
+      full_path = "spec/test_data/reservations_test.csv"
+
+      puts @hotel.blocks.count
+      HotelGroup::Reservation.save(full_path, @hotel.reservations)
+    end
+  end
 end

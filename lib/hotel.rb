@@ -107,10 +107,10 @@ module HotelGroup
       return available_rooms
     end
 
-    def create_hotel_block(id, start_time, end_time, rooms)
+    def create_hotel_block(start_time, end_time, rooms, discount: nil)
       id ||= create_block_id
-      discount = 0.2
-      room_ids = []
+      discount ||= 0.2
+      rooms_array = []
       rooms.each do |room_id|
         room = find_room(room_id)
 
@@ -122,9 +122,12 @@ module HotelGroup
         room.add_block_id(id)
 
         room.set_unavailable(start_time, end_time)
-        room_ids << room_id
+        rooms_array << room
       end
-      hotel_block = HotelBlock.new(id, start_time, end_time, room_ids, discount)
+      hotel_block = HotelBlock.new(id, start_time, end_time, rooms, discount)
+
+      hotel_block.rooms = rooms_array
+      @blocks << hotel_block
 
       return hotel_block
     end

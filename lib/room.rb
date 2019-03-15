@@ -41,7 +41,6 @@ module HotelGroup
         return true
       end
       unavailable_dates.each do |date_array|
-        # if !(date_array[0] >= end_time || date_array[1] <= start_time)
         res_start = date_array[0]
         res_end = date_array[1]
 
@@ -76,11 +75,13 @@ module HotelGroup
       end
 
       reservations.each do |res|
-        if !(res.start_time >= end_time || res.end_time <= start_time)
-          return true
+        if !(res.start_time...res.end_time).include?(start_time) && !(res.start_time + 1..res.end_time).include?(end_time) &&
+           !(start_time...end_time).include?(res.start_time) &&
+           !(start_time + 1..end_time).include?(res.end_time)
+          return false
         end
       end
-      return false
+      return true
     end
 
     def is_in_block?(block)

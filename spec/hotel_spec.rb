@@ -110,17 +110,17 @@ describe "hotel class" do
     end
 
     it "raises an error if one of the rooms is unavailable for the given date range" do
-      expect { @hotel.create_hotel_block(0, @start_time, @end_time, [@hotel.reservations[2].room.number]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(@start_time, @end_time, [@hotel.reservations[2].room.number]) }.must_raise ArgumentError
     end
 
     it "creates HotelGroup::HotelBlock object if rooms are available" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
       expect(block).must_be_kind_of HotelGroup::HotelBlock
     end
 
     it "won't reserve a room that is already part of a block" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
       room = @hotel.rooms[0]
 
@@ -128,20 +128,20 @@ describe "hotel class" do
     end
 
     it "won't create a block if a room is already part of another block" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
-      expect { @hotel.create_hotel_block(1, @start_time4, @end_time4, [@hotel.rooms[0].number]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number]) }.must_raise ArgumentError
     end
 
     describe "reserve_block_room" do
       before do
         @block_room = @hotel.rooms[8]
-        @block = @hotel.create_hotel_block(8, @start_time4, @end_time4, [@block_room.number])
+        @block = @hotel.create_hotel_block(@start_time4, @end_time4, [@block_room.number])
       end
       it "reserves a block room" do
         @hotel.reserve_block_room(@block_room, @block)
 
-        expect(@hotel.blocks.count).must_equal 5
+        expect(@hotel.blocks.count).must_equal 6
 
         expect(@hotel.blocks[0]).must_be_kind_of HotelGroup::HotelBlock
       end

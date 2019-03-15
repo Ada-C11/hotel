@@ -5,7 +5,9 @@ require_relative "hotel"
 
 module HotelGroup
   class HotelBlock < CsvRecord
-    attr_reader :discount, :id, :start_time, :end_time, :rooms
+    attr_reader :discount, :id, :start_time, :end_time
+
+    attr_accessor :rooms
 
     def initialize(id, start_time, end_time, rooms, discount)
       @discount = discount
@@ -61,6 +63,26 @@ module HotelGroup
                final_rooms,
                record[:discount]
              )
+    end
+
+    def self.save(full_path, all_blocks)
+      CSV.open(full_path, "w") do |file|
+        header_row = ["id", "start_date", "end_date", "rooms", "discount"]
+        file << header_row
+        all_blocks.each do |b|
+          start_date = "#{b.start_time.year}-#{b.start_time.month}-#{b.start_time.day}"
+
+          end_date = "#{b.end_time.year}-#{b.end_time.month}-#{b.end_time.day}"
+
+          room_string = ""
+          b.rooms.each do |r|
+            room_string << "#{r.number}:"
+          end
+
+          new_line = ["#{b.id}", "#{start_date}", "#{end_date}", "#{room_string.chomp}", "#{b.discount}"]
+          file << new_line
+        end
+      end
     end
   end
 end

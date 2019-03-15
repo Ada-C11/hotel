@@ -28,6 +28,10 @@ module HotelGroup
       end
     end
 
+    def self.save(full_path)
+      raise NotImplementedError, "Implement me in a child class"
+    end
+
     private
 
     def self.from_csv(record)

@@ -43,5 +43,22 @@ module HotelGroup
                record[:room],
              )
     end
+
+    def self.save(full_path, all_reservations)
+      CSV.open(full_path, "w") do |file|
+        header_row = ["id", "start_date", "end_date", "room"]
+        file << header_row
+        all_reservations.each do |r|
+          start_date = "#{r.start_time.year}-#{r.start_time.month}-#{r.start_time.day}"
+
+          end_date = "#{r.end_time.year}-#{r.end_time.month}-#{r.end_time.day}"
+
+          room_string = "#{r.room.number}"
+
+          new_line = ["#{r.id}", "#{start_date}", "#{end_date}", "#{room_string}"]
+          file << new_line
+        end
+      end
+    end
   end
 end

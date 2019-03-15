@@ -129,7 +129,7 @@ describe "room class" do
       start_time = Date.new(2019, 6, 6)
       end_time = Date.new(2019, 6, 9)
       room = @hotel.rooms[8]
-      new_block = @hotel.create_hotel_block(1, start_time, end_time, [room.number])
+      new_block = @hotel.create_hotel_block(start_time, end_time, [room.number])
 
       expect(room.is_in_block?(new_block)).must_equal true
     end
@@ -139,7 +139,7 @@ describe "room class" do
       end_time = Date.new(2019, 6, 9)
       room = @hotel.rooms[8]
       room2 = @hotel.rooms[1]
-      new_block = @hotel.create_hotel_block(1, start_time, end_time, [room.number])
+      new_block = @hotel.create_hotel_block(start_time, end_time, [room.number])
 
       expect(room2.is_in_block?(new_block)).must_equal false
     end
