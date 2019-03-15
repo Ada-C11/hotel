@@ -56,5 +56,21 @@ end
       expect(booking.booking_cost).must_equal 800
     end
   end
+
+  describe 'overlap?' do
+    it "parse string into date object" do
+      booking = HotelBooking::Booking.new(
+        reference_number: 1,
+        room: HotelBooking::Room.new(1),
+        start_date: '2001-02-03',
+        end_date: '2001-02-07',
+        price: 200
+        )
+
+        result = booking.overlaps?('2001-02-03', '2001-02-07')
+      expect(result).must_equal true
+    end
+  end
+
 end
 
