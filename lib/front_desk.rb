@@ -39,15 +39,18 @@ module Hotel
       return reservation
     end
 
-    def reserve_room_in_block(block_id:, room: nil)
+    def reserve_room_in_block(block_id:, room_number: nil)
       block = find_block_by_id(block_id: block_id)
 
-      unless block.rooms.available?
+      unless block.available?
         raise ArgumentError, "No rooms available in block"
       end
 
-      if room && !block.rooms.include?(room)
-        raise ArgumentError, "That room is already booked or not in block"
+      if room_number
+        room_number = find_room_by_number(room_number: room_number)
+        unless block.rooms.include?(room_number)
+          raise ArgumentError, "That room is already booked or not in block"
+        end
       end
 
       nights = block.range
@@ -67,7 +70,9 @@ module Hotel
     end
 
     def find_block_by_id(block_id:)
-      blocks.select { |block| block.block_id == block_id }
+      block = blocks.find { |block| block.block_id == block_id }
+      raise ArgumentError, "Block doesn't exist" unless block
+      return block
     end
 
     def find_reservations_by_date(date:)
@@ -92,7 +97,7 @@ module Hotel
       rooms.select { |room| room.available?(range: nights) }
     end
 
-    def reserve_block(range:, room_collection:, room_rate:)
+    def create_block(range:, room_collection:, room_rate:)
       # ASSUME FOR NOW THAT:
       ### range is an array of Dates, check-in to check-out
       ### room_collection is an array of room numbers
@@ -110,9 +115,12 @@ module Hotel
 
       range.pop
 
+      block_id = blocks.length + 1
+
       block = Hotel::Block.new(range: range,
                                room_collection: rooms,
-                               room_rate: room_rate)
+                               room_rate: room_rate,
+                               block_id: block_id)
 
       blocks << block
 
@@ -151,7 +159,7 @@ module Hotel
     def assign_room(nights:)
       open = open_rooms(nights: nights)
 
-      if open == []
+      if open.empty?
         raise ArgumentError, "No rooms available for those dates"
       else
         return open.first

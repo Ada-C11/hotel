@@ -299,13 +299,13 @@ describe "FrontDesk class" do
     let(:room_collection2) { [4, 5, 6] }
     let(:room_rate) { 160 }
     let(:block) {
-      frontdesk.reserve_block(
+      frontdesk.create_block(
         range: range, room_collection: room_collection, room_rate: room_rate,
       )
     }
 
     it "is able to create a block" do
-      # block = frontdesk.reserve_block(range: range, room_collection: room_collection, room_rate: room_rate)
+      # block = frontdesk.create_block(range: range, room_collection: room_collection, room_rate: room_rate)
       expect(block).must_be_kind_of Hotel::Block
     end
 
@@ -333,7 +333,7 @@ describe "FrontDesk class" do
 
     it "can reserve block when another block is booked for different rooms on date" do
       block
-      expect(frontdesk.reserve_block(
+      expect(frontdesk.create_block(
         range: range, room_collection: room_collection2, room_rate: room_rate,
       )).must_be_kind_of Hotel::Block
     end
@@ -341,25 +341,77 @@ describe "FrontDesk class" do
     it "cannot reserve block that is set aside for another block on date" do
       block
       expect {
-        frontdesk.reserve_block(
+        frontdesk.create_block(
           range: range, room_collection: room_collection, room_rate: room_rate,
         )
       }.must_raise ArgumentError
     end
 
     it "can check if any rooms are available in a specific block" do
+      block
       expect(block.available?).must_equal true
+
+      frontdesk.reserve_room_in_block(block_id: 1)
+      expect(block.available?).must_equal true
+
+      frontdesk.reserve_room_in_block(block_id: 1)
+      expect(block.available?).must_equal true
+
+      frontdesk.reserve_room_in_block(block_id: 1)
+      expect(block.available?).must_equal false
     end
+  end
+
+  describe "find block by id" do
   end
 
   describe "Reserve room in block" do
+    let(:range) { [Date.new(2019, 2, 4), Date.new(2019, 2, 5)] }
+    let(:room_collection) { [1, 2, 3] }
+    let(:room_collection2) { [4, 5, 6] }
+    let(:room_rate) { 160 }
+    let(:block) {
+      frontdesk.create_block(
+        range: range, room_collection: room_collection, room_rate: room_rate,
+      )
+    }
+
     it "raises error or something if no rooms are available in a specific block" do
+      block
+      frontdesk.reserve_room_in_block(block_id: 1)
+      frontdesk.reserve_room_in_block(block_id: 1)
+      frontdesk.reserve_room_in_block(block_id: 1)
+      expect { frontdesk.reserve_room_in_block(block_id: 1) }.must_raise ArgumentError
+    end
+
+    it "can reserve a room from a hotel block" do
+      block
+      expect(frontdesk.reserve_room_in_block(block_id: 1)).must_be_kind_of Hotel::Reservation
     end
 
     it "can reserve a specific room from a hotel block" do
-    end
-  end
+      block
 
-  describe "Find block by id" do
+      expect(frontdesk.reserve_room_in_block(room_number: 1, block_id: 1)).must_be_kind_of Hotel::Reservation
+      expect { frontdesk.reserve_room_in_block(room_number: 1, block_id: 1) }.must_raise ArgumentError
+
+      expect(frontdesk.reserve_room_in_block(room_number: 2, block_id: 1)).must_be_kind_of Hotel::Reservation
+      expect { frontdesk.reserve_room_in_block(room_number: 2, block_id: 1) }.must_raise ArgumentError
+
+      expect(frontdesk.reserve_room_in_block(room_number: 3, block_id: 1)).must_be_kind_of Hotel::Reservation
+      expect { frontdesk.reserve_room_in_block(room_number: 3, block_id: 1) }.must_raise ArgumentError
+    end
+
+    it "can't reserve a room that's not in block" do
+      block
+
+      expect { frontdesk.reserve_room_in_block(room_number: 4, block_id: 1) }.must_raise ArgumentError
+    end
+
+    it "can find block by id" do
+      this_block = block
+      expect(frontdesk.blocks.first).must_equal this_block
+      expect(frontdesk.find_block_by_id(block_id: 1)).must_equal this_block
+    end
   end
 end
