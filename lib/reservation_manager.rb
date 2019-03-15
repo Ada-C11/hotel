@@ -88,11 +88,12 @@ module Hotel
       return available
     end
 
-    # def request_reservation_from_block(block_name:, booking_name:)
-    #   block_reservations = reservations.find_all { |reservation| reservation.block_name == block_name }
+    def request_reservation_from_block(block_name:, booking_name:)
+      available = available_rooms_in_block(block_name: block_name)
 
-    #   block_reservations.first.booking_name = booking_name
-    #   block_reservation.booking_name = booking_name
-    # end
+      raise ArgumentError, "No available rooms remaining in block" if available.length == 0
+
+      available.first.booking_name = booking_name
+    end
   end
 end
