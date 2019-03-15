@@ -293,7 +293,7 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "Reserve block" do
+  describe "Create block" do
     let(:range) { [Date.new(2019, 2, 4), Date.new(2019, 2, 5)] }
     let(:room_collection) { [1, 2, 3] }
     let(:room_collection2) { [4, 5, 6] }
@@ -314,6 +314,18 @@ describe "FrontDesk class" do
         check_in: "feb4", check_out: "feb7", room_number: 1,
       )
       expect { block }.must_raise ArgumentError
+    end
+
+    it "does not raise an argument error if they try to book 5 rooms for block" do
+      expect(frontdesk.create_block(range: range, room_collection: [1, 2, 3, 4, 5], room_rate: room_rate)).must_be_kind_of Hotel::Block
+    end
+
+    it "raises an argument error if they try to book more than 5 rooms for block" do
+      expect {
+        frontdesk.create_block(
+          range: range, room_collection: [1, 2, 3, 4, 5, 6], room_rate: room_rate,
+        )
+      }.must_raise ArgumentError
     end
 
     it "can reserve room that is not in rooms set aside for block on date" do

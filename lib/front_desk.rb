@@ -102,6 +102,7 @@ module Hotel
       ### range is an array of Dates, check-in to check-out
       ### room_collection is an array of room numbers
       ### room_rate is an integer price per night
+      raise ArgumentError, "Block can contain maximum of 5 rooms" if room_collection.length > 5
 
       rooms = room_collection.map do |room_number|
         find_room_by_number(room_number: room_number)
@@ -109,7 +110,7 @@ module Hotel
 
       rooms.each do |room|
         unless room.available?(range: range)
-          raise ArgumentError, "Rooms are available for that date range"
+          raise ArgumentError, "Rooms are unavailable for that date range"
         end
       end
 
