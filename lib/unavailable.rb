@@ -24,6 +24,10 @@ module Hotel
       return (check_in...check_out)
     end
 
+    def date_unavailable?(date)
+      return date_range.include?(date)
+    end
+
     private
 
     def generate_confirmation_id(prefix: "")
