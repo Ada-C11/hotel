@@ -37,7 +37,10 @@ class BookingCentral
     if list_available_rooms(check_in, check_out) == []
       raise ArgumentError, "There is no availability for the dates provided."
     else
-      new_reservation = Reservation.new(check_in: check_in, check_out: check_out, room: assign_room(check_in, check_out))
+      new_reservation = Reservation.new(
+        check_in: check_in, 
+        check_out: check_out, 
+        room: assign_room(check_in, check_out))
       @all_reservations << new_reservation
       return new_reservation
     end
@@ -45,22 +48,33 @@ class BookingCentral
 
   def block_rooms(check_in:, check_out:, number_of_rooms:, rooms:, discount_rate:)
     available_rooms = list_available_rooms(check_in, check_out)
+
+    rooms = []
+      number_of_rooms.times do |i|
+        room = assign_room(check_in, check_out)
+        rooms << room
+      end
+
     if available_rooms.count < number_of_rooms
       raise ArgumentError, "There are not enough rooms for the dates provided."
+    elsif !available_rooms.include?(rooms)
+      raise ArgumentError, "Selected rooms are not available."
+    elsif number_of_rooms > 5
+      raise ArgumentError, "No more than 5 rooms can be blocked."
     else
       new_block = Block.new(
         check_in: check_in, 
         check_out: check_out, 
         number_of_rooms: number_of_rooms,
-        rooms: number_of_rooms.times{assign_room(check_in, check_out)}, 
+        rooms: rooms, 
         discount_rate: 180
         )
     end
   end
 
-  bookings = BookingCentral.new
-  blocked = bookings.block_rooms(check_in: '2019-04-01', check_out:'2019-04-02', number_of_rooms: 3, rooms: [], discount_rate: 180)
-  puts blocked.rooms.class
+  # bookings = BookingCentral.new
+  # blocked = bookings.block_rooms(check_in: '2019-04-01', check_out:'2019-04-02', number_of_rooms: 3, rooms: [], discount_rate: 180)
+  # puts blocked.rooms.map{|r| r.class}
   # new_reservation = bookings.reserve_room(check_in: '2019-04-01', check_out:'2019-04-02', room: bookings.assign_room('2019-04-01', '2019-04-02'))
   # puts new_reservation.room.number  
   # puts bookings.list_available_rooms('2019-04-01', '2019-04-02').map{|r| r.number}
