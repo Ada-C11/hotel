@@ -8,7 +8,6 @@ require './spec/spec_helper.rb'
 describe "initialize Registry" do
   before do
     @test_registry = Hotel::Registry.new
-    @test_registry.registrations = []
   end
 
   it "is an instance of registry and contains an empty reservations array" do
@@ -18,27 +17,30 @@ describe "initialize Registry" do
 
   describe "reserve_room" do
     before do
-    @test_registry = Hotel::Registry.new
-      Hotel::Registry.reserve_room("7/19/2019", 4)
-      Hotel::Registry.reserve_room("7/24/2019", 2)
+      @test_registry = Hotel::Registry.new
+      @test_registry.reserve_room("2019/07/19", 4)
+      @test_registry.reserve_room("2019/07/19", 2)
     end
 
     it "reservations array contains all bookings" do
-      expect(@test_reservations.size).must_equal 2
+      expect(@test_reservations.length).must_equal(2)
     end
 
     it "returns empty array if no reservations during date" do
       expect(@test_registry.find_by_date(Date.parse("1066.10.14"))).must_equal([])
     end
 
-    it "contains the correct object types"
-    @test_reservations.each do |reservation|
-      expect(reservation).must_be_instance_of(Hotel::Reservation)
+    it "contains the correct object types" do
+      @test_registry.reservations.each do |reservation|
+        expect(reservation).must_be_instance_of(Hotel::Reservation)
+      end
     end
+  end
+end
 
-    describe "TinyGoat"
-    it 'clears all records from reservations array'
-    @test_registry.TinyGoat::Goat.feed_all_records_to_small_goat
-    expect(@test_reservations).must_equal []
+describe "tiny_goat" do
+  it 'clears all records from reservations array' do
+    @test_registry.tiny_goat.feed_all_records_to_small_goat(@reservations)
+    expect(@test_registry.reservations).must_equal []
   end
 end
