@@ -17,7 +17,7 @@ module Hotel
 
     def reserve_room(check_in, duration)
       request = Hotel::Reservation.new(check_in, duration)
-      if request.available?(range)
+      if request.available?(request.range)
         request.room = @open_rms.first
         @reservations << request
       else
@@ -37,7 +37,7 @@ module Hotel
     end
 
     def find_in_range(request)
-      in_range = @reservations.@range.select do |range|
+      in_range = @reservations.select do |range|
         request.check_in.during?(range) || request.check_out.during?(range)
       end
       in_range

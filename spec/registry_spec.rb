@@ -32,7 +32,7 @@ describe "initialize Registry" do
 
     it "contains the correct object types" do
       @test_registry.reservations.each do |reservation|
-        expect(reservation).must_be_instance_of(Hotel::Reservation)
+        expect(@reservation).must_be_instance_of(Hotel::Reservation)
       end
     end
   end

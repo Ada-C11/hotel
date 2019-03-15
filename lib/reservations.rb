@@ -1,5 +1,4 @@
 require 'date'
-require 'registry.rb'
 module Hotel
   ###
   # description: Reservations contains a constructor for reservations.
@@ -18,7 +17,7 @@ module Hotel
       @room = room
     end
 
-    def available?
+    def available?(range)
       conflicts = find_in_range(@request.range)
       @open_rms = []
       @open_rms << ROOMS.reject do |room|
@@ -29,7 +28,7 @@ module Hotel
       !@open_rooms.empty?
     end
 
-    def find_in_range(*)
+    def find_in_range(range)
       in_range = @reservations.range.select do |range|
         @request.check_in.during?(range) || @request.check_out.during?(range)
       end
