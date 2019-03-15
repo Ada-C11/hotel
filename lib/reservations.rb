@@ -1,14 +1,13 @@
-require "room_factory.rb"
 require "datespans.rb"
 
 module Hotel
   class Reservation
-    attr_reader :rm_id, :total, :check_in, :check_out
+    attr_reader :total, :check_in, :duration
 
-    def initialize(**input)
-      @room = ""
-      @date_range = DateRanges.new(input[:check_in], input[:check_out])
-      @total = COST * @date_range.span
+    def initialize(check_in, duration)
+      @date_range = DateRanges.new(check_in) + @duration
+      @duration = duration
+      @total = COST * @duration
     end
   end
 end
