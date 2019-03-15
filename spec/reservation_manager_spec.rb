@@ -100,6 +100,26 @@ describe "Reservation_manager" do
 
       expect(res_manager.reservations.length).must_equal 2
     end
+
+    it "allows someone to reserve a room that's part of a block if they're part of that block group" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      block_res = res_manager.make_reservation(5, check_in_time: "7th June 2020", check_out_time: "12th June 2020", part_of_block: true)
+
+      expect(res_manager.reservations).must_include block_res
+    end
+
+    it "should raise error if someone tries to reserve a room that's part of a block (and they're not)" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      expect { res_manager.make_reservation(5, check_in_time: "7th June 2020", check_out_time: "12th June 2020", part_of_block: false) }.must_raise ArgumentError
+    end
+
+    it "if reservation is part of a block, it must have a room number that is part of block" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+    end
+
+    it "if reservation is part of a block, it must have the same dates as the block" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+    end
   end
 
   describe "reserve_hotel_block" do
@@ -119,5 +139,11 @@ describe "Reservation_manager" do
 
       expect { res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25) }.must_raise ArgumentError
     end
+
+    it "raises an error if there is already a block for these rooms and dates" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+
+      expect { res_manager.reserve_hotel_block(2, "5th June 2020", "11th June 2020") }.must_raise ArgumentError
+    end 
   end
 end
