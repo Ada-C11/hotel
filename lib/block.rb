@@ -1,17 +1,21 @@
 
 module Hotel
   class Block
-    attr_reader :rooms, :block_id, :range, :room_rate
+    attr_reader :rooms, :id, :nights, :room_rate
 
-    def initialize(range:, room_collection:, room_rate:, block_id:)
-      @range = range
+    def initialize(nights:, room_collection:, room_rate:, id:)
+      @nights = nights
       @rooms = room_collection
       @room_rate = room_rate
-      @block_id = block_id
+      @id = id
     end
 
-    def available?
+    def has_available_rooms?
       rooms.length > 0
+    end
+
+    def book(room:)
+      rooms.delete(room)
     end
   end
 end

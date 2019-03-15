@@ -9,16 +9,17 @@ module Hotel
       @booked_nights = []
     end
 
-    def available?(night: nil, range: nil)
-      if range
-        range.each do |n|
-          return false if booked_nights.include?(n)
-        end
-
+    def available?(night: nil, nights: nil)
+      if nights
+        nights.each { |n| return false if booked_nights.include?(n) }
         return true
       elsif night
         return booked_nights.include?(night) ? false : true
       end
+    end
+
+    def book(nights:)
+      booked_nights.concat(nights)
     end
   end
 end
