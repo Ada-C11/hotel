@@ -13,10 +13,10 @@ describe "Room" do
       expect(room.reservations).must_be_kind_of Array
     end
 
-    it "validates id" do
-      expect { Hotel::Room.new(0) }.must_raise ArgumentError
-      expect { Hotel::Room.new(-1) }.must_raise ArgumentError
-      expect { Hotel::Room.new(21) }.must_raise ArgumentError
-    end
+    # it "validates id" do
+    #   expect { Hotel::Room.new(0) }.must_raise ArgumentError
+    #   expect { Hotel::Room.new(-1) }.must_raise ArgumentError
+    #   expect { Hotel::Room.new(21) }.must_raise ArgumentError
+    # end
   end
 end

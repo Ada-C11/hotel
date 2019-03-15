@@ -5,7 +5,6 @@ module Hotel
     attr_reader :room_id, :cost, :reservations
 
     def initialize(room_id, cost: self.class.default_cost, reservations: nil)
-      self.class.validate_room_id(room_id)
       @room_id = room_id
       @cost = cost
       @reservations = reservations || []
@@ -15,10 +14,8 @@ module Hotel
       return 200.0
     end
 
-    def self.validate_room_id(room_id)
-      if room_id.nil? || room_id <= 0 || room_id > 20
-        raise ArgumentError, "ID cannot be blank, less than zero or larger than 20."
-      end
+    def self.num_rooms
+      return 20
     end
 
     def self.load_all

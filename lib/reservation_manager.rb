@@ -13,11 +13,12 @@ module Hotel
     end
 
     def reserve(room_id, check_in_date, check_out_date)
+      self.class.validate_room_id(room_id)
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      # check_in_date = Date.parse(check_in_date)
-      # check_out_date = Date.parse(check_out_date)
+      available_room_ids = find_available_rooms(check_in_date, check_out_date).map { |room| room.room_id }
+      raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
       new_reservation = Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -53,8 +54,14 @@ module Hotel
              end
     end
 
+    def self.validate_room_id(room_id)
+      if room_id.nil? || room_id <= 0 || room_id.class != Integer || room_id > Room.num_rooms
+        raise ArgumentError, "ID must be an integer and cannot be blank, less than zero or larger than #{Room.num_rooms}"
+      end
+    end
+
     def find_room(room_id)
-      Room.validate_room_id(room_id)
+      self.class.validate_room_id(room_id)
       return @rooms.find { |room| room.room_id == room_id }
     end
 
