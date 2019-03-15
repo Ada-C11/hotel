@@ -1,5 +1,7 @@
 require_relative 'spec_helper'
-
+#TODO: EVERYTHING OH THE HUMANITY FIX IT FIX IT FIX IT KAAAAATE WHAT HAVE YOU DONE!?
+#TODO: DISASTERS!
+#TODO: THE HOTEL IS ON FIRE?
 describe "Registry class" do
 
   describe "initialize" do

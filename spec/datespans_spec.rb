@@ -1,12 +1,14 @@
 require_relative "spec_helper"
-
+#TODO: EVERYTHING OH THE HUMANITY FIX IT FIX IT FIX IT KAAAAATE WHAT HAVE YOU DONE!?
+#TODO: DISASTERS!
+#TODO: THE HOTEL IS ON FIRE?
 describe "initialize" do
   before do
-    @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
+    @dates = Hotel::DateRange.new("2019-07-19", "2019-07-21")
   end
 
-  it "is an instance of datespan" do
-    expect(@dates).must_be_kind_of Hotel::DateSpan
+  it "is an instance of DateRange" do
+    expect(@dates).must_be_kind_of Hotel::DateRange
   end
 
   it "takes check_in, check_out args" do
@@ -15,7 +17,7 @@ describe "initialize" do
   end
 
   it "raises an ArgumentError if check-out is before check-in" do
-    expect { Hotel::DateSpan.new("07-19", "07-16") }.must_raise ArgumentError
+    expect { Hotel::DateRange.new("07-19", "07-16") }.must_raise ArgumentError
   end
 
   it "makes sure dates are instances of Date" do
@@ -26,8 +28,8 @@ end
 
 describe "tests the overlaps? method" do
   before do
-    @dates = Hotel::DateSpan.new("2019-07-19", "2019-07-21")
-    @dates2 = Hotel::DateSpan.new("2019-07-22", "2019-07-24")
+    @dates = Hotel::DateRange.new("2019-07-19", "2019-07-21")
+    @dates2 = Hotel::DateRange.new("2019-07-22", "2019-07-24")
   end
 
   it "finds if date ranges overlap" do
