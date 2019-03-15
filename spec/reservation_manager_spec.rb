@@ -59,17 +59,18 @@ describe "ReservationManager" do
   it "finds reservations by date" do
     reservation_generator
 
-    expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-13 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
-    expect(manager_new.find_reservation_by_date(date: Time.parse("2019-02-27 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
-    # puts ">>>>>>>>#{manager_new.find_reservation(date: Time.parse("2019-03-13 14:08:45 -0700"))}"
-    expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-21 14:08:45 -0700"))).must_be_kind_of Array
-    # puts "@@@@#{manager_new.find_reservation(date: Time.parse("2019-03-21 14:08:45 -0700"))}"
+    expect(manager_new.find_reservation_by_date(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))).must_be_kind_of Array
+    # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-13 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
+    # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-02-27 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
+    # # puts ">>>>>>>>#{manager_new.find_reservation(date: Time.parse("2019-03-13 14:08:45 -0700"))}"
+    # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-21 14:08:45 -0700"))).must_be_kind_of Array
+    # # puts "@@@@#{manager_new.find_reservation(date: Time.parse("2019-03-21 14:08:45 -0700"))}"
 
   end
 
   it "raises ArgumentError when there are no reservations for date" do
     reservation_generator
-    expect { manager_new.find_reservation_by_date(date: Time.parse("2019-01-01 14:08:45 -0700")) }.must_raise ArgumentError
+    expect { manager_new.find_reservation_by_date(Time.parse("2019-01-01 14:08:45 -0700")) }.must_raise ArgumentError
   end
 
   it "returns the total cost per reservation" do
@@ -79,7 +80,13 @@ describe "ReservationManager" do
     expect(manager_new.find_reservation_by_id(id: 3).total_cost).must_equal 200
     expect(manager_new.find_reservation_by_id(id: 2).total_cost).must_equal 400
     expect(manager_new.find_reservation_by_id(id: 4).total_cost).must_equal 400
-    expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-12 14:08:45 -0700")).total_cost).must_equal 800
-    expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-21 14:08:45 -0700"))).must_be_kind_of Array # HOW DO I CHECK THE TOTAL COST FOR EACH ITEM IN THE ARRAY WITHOUT ACCESING THE ARRAY... HASH??
+    # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-12 14:08:45 -0700")).total_cost).must_equal 800
+    # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-21 14:08:45 -0700"))).must_be_kind_of Array # HOW DO I CHECK THE TOTAL COST FOR EACH ITEM IN THE ARRAY WITHOUT ACCESING THE ARRAY... HASH??
+  end
+
+  it "finds available rooms" do
+    reservation_generator
+    puts "HERE #{manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))}"
+    expect(manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))).must_be_kind_of Array
   end
 end
