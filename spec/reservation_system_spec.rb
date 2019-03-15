@@ -105,4 +105,29 @@ describe "ReservationSystem class" do
       expect(rooms.length).must_equal 19
     end
   end
+  
+  describe 'available?' do
+    before do
+      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+    end
+
+    it "Returns true if room is available for date range" do
+      booking = @reservation_system.make_booking('2001-02-02', '2001-02-09')
+      rooms = @reservation_system.get_available_rooms('2001-02-02', '2001-02-09')
+
+      expect(rooms.include?(booking.room.number)).must_equal false
+    end
+  end
+
+  describe 'Make booking?' do
+    before do
+      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+    end
+
+    it "Returns an array of 20 available rooms" do
+      rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
+      expect(rooms.length).must_equal 20
+    end
+  end
+
 end
