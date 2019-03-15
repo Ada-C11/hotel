@@ -3,6 +3,8 @@ require_relative "date_range"
 require_relative "reservation"
 # require_relative "block"
 
+require "pry"
+
 module Hotel
   class Booker
     attr_reader :rooms, :reservations
@@ -16,12 +18,15 @@ module Hotel
       reservations.push(reservation)
     end
 
-    def reserve(id:, start_date:, end_date:, price: 200)
+    binding.pry
+
+    def reserve(start_date:, end_date:, price: 200)
+      id = assign_id(reservations)
       date_range = date_range(start_date, end_date)
-      open_rooms = avaialable_rooms(date_range)
-      raise ArgumentError, "No rooms avaialable" if open_rooms == []
-      room = open_rooms[0]
+      room = open_room(date_range)
+      raise ArgumentError, "No rooms avaialable" if room == nil
       reservation = reservation_wrapper(id, date_range, room, price)
+      binding.pry
       add_reservation(reservation)
       room.add_reservation(reservation)
       return reservation
@@ -31,15 +36,29 @@ module Hotel
     #   return rooms.find { |room| room.id == room_id }
     # end
 
-    def avaialable_rooms(date_range)
+    def available_rooms(date_range)
       return rooms.select do |room|
                room.is_available?(date_range)
+             end
+    end
+
+    def open_room(date_range)
+      return available_rooms(date_range).find { |room| room }
+    end
+
+    def reservation_by_date(date_range)
+      return reservations.select do |reservation|
+               reservation.match?(date_range)
              end
     end
 
     private
 
     # factory/wrapper methods
+    def assign_id(objects)
+      id = objects.count + 1
+    end
+
     def create_rooms(number_of_rooms)
       rooms = (1..number_of_rooms).map do |number|
         Hotel::Room.new(id: number)

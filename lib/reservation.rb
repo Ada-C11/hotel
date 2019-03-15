@@ -5,7 +5,7 @@ module Hotel
   class Reservation
     attr_reader :id, :date_range, :room, :price, :room_id
 
-    def initialize(id:, room:, date_range:, price:)
+    def initialize(id:, room:, date_range:, price: 200)
       @id = id
       @room = room
       @room_id = room.id
@@ -19,6 +19,10 @@ module Hotel
 
     def overlap?(another_date_range)
       return date_range.overlap?(another_date_range)
+    end
+
+    def match_date(another_date_range)
+      return (date_range.start_date == another_date_range.start_date) && (date_range.end_date == another_date_range.end_date)
     end
   end
 end
