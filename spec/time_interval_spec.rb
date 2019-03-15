@@ -93,5 +93,27 @@ describe "time_interval class" do
       end
     end
   end
+
+  describe "has_date method" do
+    let(:i) {
+      Time_Interval.new("2019-08-20", "2019-08-25")
+    }
+
+    it "returns true when a given date falls within the time interval" do
+      expect(i.has_date?("2019-08-23")).must_equal true
+    end
+
+    it "returns true when a given date is on the check in time" do
+      expect(i.has_date?("2019-08-20")).must_equal true
+    end
+
+    it "returns false when a given date is on the check out time" do
+      expect(i.has_date?("2019-08-25")).must_equal false
+    end
+
+    it "returns false when a given date does not fall within the time interval" do
+      expect(i.has_date?("2019-09-01")).must_equal false
+    end
+  end
 end
 

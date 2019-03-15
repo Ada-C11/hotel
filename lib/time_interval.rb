@@ -27,4 +27,9 @@ class Time_Interval
 
     return false
   end
+
+  def has_date?(date)
+    date = Date.parse(date)
+    return date >= @check_in && date < @check_out
+  end
 end
