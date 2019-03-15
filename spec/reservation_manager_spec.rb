@@ -28,25 +28,25 @@ describe "ReservationManager class" do
 
     it "adds a reservation to the reservations array" do
       before_res = manager.reservations.length
-      new_reservation = manager.request_reservation("2018-03-12", "2018-03-15")
+      new_reservation = manager.request_reservation("2018-03-12", "2018-03-15", booking_name: "Kim")
       expect(manager.reservations.length).must_equal before_res + 1
     end
 
     it "accurately loads a reservation into the reservations array" do
-      new_reservation = manager.request_reservation("2018-03-12", "2018-03-15")
+      new_reservation = manager.request_reservation("2018-03-12", "2018-03-15", booking_name: "Kim")
       first_reservation = manager.reservations.first
-      expect(first_reservation.check_in_date).must_equal Date.parse("2018-03-12")
-      expect(first_reservation.check_out_date).must_equal Date.parse("2018-03-15")
+      expect(first_reservation.check_in).must_equal Date.parse("2018-03-12")
+      expect(first_reservation.check_out).must_equal Date.parse("2018-03-15")
       expect(first_reservation.all_dates).must_be_kind_of Array
       expect(first_reservation.all_dates.length).must_equal 3
-      expect(first_reservation.all_dates[0]).must_equal Date.parse("2018-03-12)")
+      expect(first_reservation.all_dates[0]).must_equal Date.parse("2018-03-12")
       expect(first_reservation.room.number).must_be :<=, 20
       expect(first_reservation.room.number).must_be :>, 0
-      expect(first_reservation.block).must_equal false
+      expect(first_reservation.block_name).must_equal nil
     end
 
     it "adds the reservation to the room" do
-      new_reservation = manager.request_reservation("2018-03-12", "2018-03-12")
+      new_reservation = manager.request_reservation("2018-03-12", "2018-03-12", booking_name: "Kim")
       expect(manager.rooms.first.reservations.length).must_equal 1
     end
   end
@@ -73,10 +73,10 @@ describe "ReservationManager class" do
   describe "#reservations_by_date" do
     before do
       @manager = Hotel::ReservationManager.new
-      @first_reservation = @manager.request_reservation("2018-03-12", "2018-03-15")
-      @second_reservation = @manager.request_reservation("2018-03-12", "2018-03-12")
-      @third_reservation = @manager.request_reservation("2018-03-14", "2018-03-15")
-      @fourth_reservation = @manager.request_reservation("2018-03-13", "2018-03-14")
+      @first_reservation = @manager.request_reservation("2018-03-12", "2018-03-15", booking_name: "Kim")
+      @second_reservation = @manager.request_reservation("2018-03-12", "2018-03-12", booking_name: "AJ")
+      @third_reservation = @manager.request_reservation("2018-03-14", "2018-03-15", booking_name: "Dee")
+      @fourth_reservation = @manager.request_reservation("2018-03-13", "2018-03-14", booking_name: "Chris")
     end
 
     it "returns an array" do
@@ -107,7 +107,7 @@ describe "ReservationManager class" do
 
     it "returns an array that does not contain unavailable rooms" do
       rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
-      3.times { manager.request_reservation("Feb 12, 2019", "Feb 13, 2019") }
+      3.times { manager.request_reservation("Feb 12, 2019", "Feb 13, 2019", booking_name: "Dan") }
       updated_rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
       other_dates = manager.available_rooms("Feb 13, 2019", "Feb 13, 2019")
       expect(rooms.length).must_equal 20
@@ -118,7 +118,7 @@ describe "ReservationManager class" do
 
     it "returns an array of the correct length for check-in date not available" do
       rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
-      reservation_one = manager.request_reservation("Feb 12, 2019", "Feb 13, 2019")
+      reservation_one = manager.request_reservation("Feb 12, 2019", "Feb 13, 2019", booking_name: "Devin")
       updated_rooms = manager.available_rooms("Feb 12, 2019", "Feb 14, 2019")
       expect(rooms.length).must_equal 20
       expect(updated_rooms.length).must_equal 19
@@ -126,15 +126,35 @@ describe "ReservationManager class" do
 
     it "returns an empty array when no rooms are available" do
       rooms = manager.available_rooms("Feb 1, 2019", "Feb 2, 2019")
-      20.times { manager.request_reservation("Feb 1, 2019", "Feb 2, 2019") }
+      20.times { manager.request_reservation("Feb 1, 2019", "Feb 2, 2019", booking_name: "Val") }
       updated_rooms = manager.available_rooms("Feb 1, 2019", "Feb 2, 2019")
       different_rooms = manager.available_rooms("Feb 4, 2019", "Feb 4, 2019")
       expect(rooms.length).must_equal 20
       expect(updated_rooms.length).must_equal 0
       expect {
-        manager.request_reservation("feb1", "feb1")
+        manager.request_reservation("feb1", "feb1", booking_name: "George")
       }.must_raise ArgumentError
       expect(different_rooms.length).must_equal 20
+    end
+  end
+
+  describe "#request_block" do
+    it "raises an ArgumentError if argument for number_of_rooms is greater than 5, or less than 0" do
+    end
+
+    it "raises an ArgumentError if there are no available rooms for any given day" do
+    end
+
+    it "does not add reservations unless all rooms/days are available" do
+    end
+
+    it "adds all reservations to correct Rooms" do
+    end
+
+    it "adds all reservations to ReservationManager" do
+    end
+
+    it "applies discount rate to total_cost of room" do
     end
   end
 end

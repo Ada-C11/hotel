@@ -15,7 +15,7 @@ describe "Room Class" do
     # might want to move this test into ReservationManager#request_reservation
     it "Stores an instance of a reservation" do
       manager = Hotel::ReservationManager.new
-      reservation = manager.request_reservation("feb5", "feb7")
+      reservation = manager.request_reservation("feb5", "feb7", booking_name: "Fancy Feast")
       expect(manager.rooms.first.reservations.length).must_equal 1
       expect(manager.rooms.first.reservations.first).must_be_kind_of Hotel::Reservation
     end

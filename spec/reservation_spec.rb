@@ -3,9 +3,10 @@ require_relative "spec_helper"
 describe "Reservation Class" do
   describe "Initialize" do
     let (:reservation) {
-      Hotel::Reservation.new(check_in_date: "2018-03-09",
-                             check_out_date: "2018-03-12",
-                             room: Hotel::Room.new(number: 2))
+      Hotel::Reservation.new(check_in: "2018-03-09",
+                             check_out: "2018-03-12",
+                             room: Hotel::Room.new(number: 2),
+                             booking_name: "Kim")
     }
 
     it "Is an instance of Reservation" do
@@ -23,9 +24,10 @@ describe "Reservation Class" do
     end
 
     it "Raises an ArgumentError for invalid check-out date" do
-      reservation = {check_in_date: "2018-03-09",
-                     check_out_date: "2018-03-08",
-                     room: Hotel::Room.new(number: 2)}
+      reservation = {check_in: "2018-03-09",
+                     check_out: "2018-03-08",
+                     room: Hotel::Room.new(number: 2),
+                     booking_name: "Kim"}
 
       expect {
         Hotel::Reservation.new(reservation)
@@ -35,9 +37,10 @@ describe "Reservation Class" do
 
   describe "#total_cost" do
     let (:reservation) {
-      Hotel::Reservation.new(check_in_date: "2018-03-09",
-                             check_out_date: "2018-03-12",
-                             room: Hotel::Room.new(number: 2))
+      Hotel::Reservation.new(check_in: "2018-03-09",
+                             check_out: "2018-03-12",
+                             room: Hotel::Room.new(number: 2),
+                             booking_name: "Kim")
     }
 
     it "must return a float" do
@@ -49,9 +52,10 @@ describe "Reservation Class" do
     end
 
     it "returns the correct total for a single day reservation" do
-      reservation = Hotel::Reservation.new(check_in_date: "2018-03-09",
-                                           check_out_date: "2018-03-09",
-                                           room: Hotel::Room.new(number: 2))
+      reservation = Hotel::Reservation.new(check_in: "2018-03-09",
+                                           check_out: "2018-03-09",
+                                           room: Hotel::Room.new(number: 2),
+                                           booking_name: "Kim")
       expect(reservation.total_cost).must_equal (1 * 200.0)
     end
   end
