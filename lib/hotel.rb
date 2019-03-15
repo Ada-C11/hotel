@@ -18,14 +18,31 @@ class Hotel
 
   def make_reservation(start_date, end_date)
     id = @reservations.length + 1
-    room = @rooms.sample
-    reservation = Reservation.new(id, room.id, start_date, end_date)
-    #@reservations.push(reservation)
-    room.add_reservation
+    room = load_availables(start_date, end_date).sample
+    reservation = Reservation.new(id, room, start_date, end_date)
+    @reservations.push(reservation)
+    # room.add_reservation
     return reservation
   end
 
+  def free_rooms
+    reserved_rooms = []
+    @reservations.each do |reservation|
+      reserved_rooms << reservation.room
+    end
+    return @rooms - reserved_rooms.uniq
+  end
+
   def load_availables(start_date, end_date)
+    available_rooms = []
+    all_available = []
+    @reservations.each do |reservation|
+      if start_date >= reservation.dates.last || end_date <= reservation.dates.first
+        available_rooms << reservation.room
+      end
+    end
+    all_available = available_rooms + free_rooms
+    return all_available
   end
 
   # def self.load_rooms

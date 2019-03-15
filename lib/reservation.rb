@@ -1,24 +1,29 @@
 require "date"
 
 class Reservation
-  attr_reader :id, :room_id, :start_date, :end_date, :dates, :cost
+  attr_reader :id, :room, :start_date, :end_date, :dates, :cost
 
   def initialize(id, room, start_date, end_date)
     @id = id
     @start_date = start_date
     @end_date = end_date
-    @room_id = room_id
+    @room = room
     if @start_date > @end_date
       raise ArgumentError, "start_date must be before end_date"
     end
-    @dates = []
-    date_range = (@end_date - @start_date).to_i
+    @dates = date_range
+    @cost = ((@dates.length) - 1) * 200
+  end
+
+  def date_range
+    dates = []
+    number_of_dates = (@end_date - @start_date).to_i
     i = 0
-    date_range.times do
+    number_of_dates.times do
       date = @start_date + i
-      @dates.push(date)
+      dates.push(date)
       i += 1
     end
-    @cost = ((date_range.to_i) - 1) * 200
+    return dates
   end
 end

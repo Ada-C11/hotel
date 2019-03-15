@@ -52,8 +52,20 @@ describe Hotel do
       expect(reservations3.length).must_equal 1
     end
   end
-  describe "load available method" do
+  describe "load availables method" do
+    before do
+      start_date1 = Date.new(2018, 3, 5)
+      end_date1 = start_date1 + 3
+      @hotel.make_reservation(start_date1, end_date1)
+    end
     it "return an array of all the available rooms" do
+      start_date = Date.new(2018, 5, 2)
+      end_date = start_date + 3
+      #availables1 = load_availables(start_date, end_date)
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 20
+      start_date = Date.new(2018, 3, 4)
+      end_date = start_date + 3
+      expect(@hotel.load_availables(start_date, end_date).length).must_equal 19
     end
   end
 end
