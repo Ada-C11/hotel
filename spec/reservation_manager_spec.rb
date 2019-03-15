@@ -221,5 +221,16 @@ describe "ReservationManager class" do
     it "returns an array of the correct length" do
       expect(@available_rooms.length).must_equal 4
     end
+
+    it "returns an empty array if no available rooms in block" do
+      non_existent_block = @manager.available_rooms_in_block(block_name: "Fran")
+      expect(non_existent_block).must_be_kind_of Array
+      expect(non_existent_block.length).must_equal 0
+    end
+  end
+
+  describe "#request_reservation_from_block" do
+    it "updates existing reservation to include a booking name" do
+    end
   end
 end
