@@ -53,5 +53,15 @@ describe "Block class" do
       end
       expect(@block.has_available_rooms?).must_equal false
     end
+    it "can return a list of available rooms" do
+      expect(@block.list_available_rooms.length).must_equal 3
+      @block.list_available_rooms.each do |room|
+        expect(room).must_be_instance_of HotelSystem::Room
+      end
+      (1..3).each do |id|
+        @hotel.reserve_from_block(@block.id, id, "Ada")
+      end
+      expect(@block.list_available_rooms.length).must_equal 0
+    end
   end
 end

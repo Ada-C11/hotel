@@ -27,6 +27,10 @@ module HotelSystem
       return rooms.any? { |room| !room.is_reserved?(date_range) }
     end
 
+    def list_available_rooms
+      return rooms.select { |room| !room.is_reserved?(date_range) }
+    end
+
     def has_room?(room)
       return rooms.include?(room)
     end
