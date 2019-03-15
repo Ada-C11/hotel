@@ -67,12 +67,16 @@ module HotelSystem
     def make_reservation(room_id:, start_date:, end_date:)
       room = find_room_by_id(room_id)
       (raise RoomError, "Room with id #{room_id} does not exist!") if !room
+
       request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
+
       check_room(room: room, date_range: request_range)
+
       new_res = HotelFactory.reservation(date_range: request_range,
                                          room: room,
                                          id: id)
+
       self.add_reservation(new_res)
       return new_res
     end
@@ -81,13 +85,16 @@ module HotelSystem
       rooms = room_ids.map { |id| find_room_by_id(id) }
       request_range = HotelFactory.date_range(start_date, end_date)
       id = generate_id.to_sym
+
       rooms.each do |room|
         check_room(room: room, date_range: request_range)
       end
+
       new_block = HotelFactory.block(rooms: rooms,
                                      date_range: request_range,
                                      discount_rate: discount_rate,
                                      id: id)
+
       self.add_block(new_block)
       return new_block
     end
@@ -117,12 +124,14 @@ module HotelSystem
       if end_date
         date_range = HotelFactory.date_range(date, end_date)
         available_rooms = rooms.reject { |room| room.is_reserved?(date_range) }
+
         if exclude_blocked
           available_rooms.reject! { |room| room.is_blocked?(date_range) }
         end
       else
         reserved = reservations_by_date(date).map { |reservation| reservation.room }
         available_rooms = rooms - reserved
+
         if exclude_blocked
           blocked = blocks_by_date(date).reduce([]) { |rooms, block| rooms += block.rooms }
           available_rooms = available_rooms - blocked

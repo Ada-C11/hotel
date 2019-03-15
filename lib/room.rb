@@ -22,7 +22,7 @@ module HotelSystem
     # Availability check methods:
 
     def is_reserved?(new_date_range)
-      reservations.each do |name, reservation|
+      all_reservations.each do |reservation|
         return true if reservation.overlap?(new_date_range)
       end
       return false
