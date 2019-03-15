@@ -3,32 +3,22 @@ require_relative "date_range"
 
 module Hotel
   class Reservation
-    attr_reader :id, :date_range, :room, :room_id, :price, :hotel_block
+    attr_reader :id, :date_range, :room, :price, :room_id
 
-    def initialize(id:, date_range:, room: nil,
-                   room_id: nil, price: 200)
+    def initialize(id:, room:, date_range:, price:)
       @id = id
+      @room = room
+      @room_id = room.id
       @date_range = date_range
       @price = price
-      @hotel_block = hotel_block
-
-      if room
-        @room = room
-        @room_id = room.id
-      elsif room_id
-        @room_id = room
-      else
-        raise ArgumentError, "Room or room id is required"
-      end
     end
 
     def total_price
       price * date_range.duration
     end
 
-    # def add_room(self)
-    #     room.reservations.push(self)
-    # end
-
+    def overlap?(another_date_range)
+      return date_range.overlap?(another_date_range)
+    end
   end
 end

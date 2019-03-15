@@ -9,11 +9,15 @@ module Hotel
       @reservations = reservations || []
     end
 
-    def room_available?(date)
-      @reservations.each do |reservation|
-        return false if reservation.date_range.overlap?(date)
+    def is_available?(date_range)
+      reservations.each do |reservation|
+        return false if reservation.overlap?(date_range)
       end
       return true
+    end
+
+    def add_reservation(reservation)
+      @reservations.push(reservation)
     end
   end
 end

@@ -24,19 +24,18 @@ describe "Room" do
     end
   end
 
-  describe "room_available? method" do
+  describe "is_available? method" do
     before do
-      date_range = Hotel::DateRange.new("03-04-2019", "05-04-2019")
-      reservations = [Hotel::Reservation.new(date_range: date_range, id: 1, room_id: 1)]
+      reservations = [Hotel::Reservation.new(start_date: "03-04-2019", end_date: "05-04-2019", id: 1, room_id: 1)]
       @room = Hotel::Room.new(id: 1, reservations: reservations)
     end
 
-    it "method returns available for an available date" do
-      expect(@room.room_available?("07-11-2019")).must_equal true
+    it "method returns true for an available date" do
+      expect(@room.is_available?("07-11-2019")).must_equal true
     end
 
-    it "method returns unavailable for an unavailable date" do
-      expect(@room.room_available?("04-04-2019")).must_equal true
+    it "method returns false for an unavailable date" do
+      expect(@room.is_available?("04-04-2019")).must_equal false
     end
   end
 end

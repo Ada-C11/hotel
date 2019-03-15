@@ -7,7 +7,7 @@ describe "Booker class" do
       @rooms = @booker.rooms
     end
 
-    it "creates an array of all rooms" do
+    it "rooms is an array of rooms" do
       @rooms.each.with_index(1) do |room, i|
         expect(room).must_be_instance_of Hotel::Room
         expect(room.id).must_equal i
@@ -17,20 +17,34 @@ describe "Booker class" do
     end
   end
 
-  describe "reservation" do
+  describe "reserve method" do
     before do
       @booker = Hotel::Booker.new
-      date_range = Hotel::DateRange.new("03-04-2019", "06-04-2019")
-      @reservation = @booker.reserve(id: 8, date_range: date_range, room_id: 1)
-      @reservations = @booker.reservations
+      @reservation = @booker.reserve(
+        id: 1,
+        start_date: "03-04-2019",
+        end_date: "05-04-2019",
+      )
     end
 
-    it "is an instance of reservation" do
+    it "is creates a reservation" do
       expect(@reservation).must_be_instance_of Hotel::Reservation
     end
 
     it "reservation is in reservations array" do
-      expect(@reservations.include?(@reservation)).must_equal true
+      expect(@booker.reservations.include?(@reservation)).must_equal true
+    end
+  end
+
+  describe "available_rooms" do
+    before do
+      @booker = Hotel::Booker.new
+    end
+
+    it "returns an array" do
+    end
+
+    it "returns all avaialbe rooms" do
     end
   end
 end

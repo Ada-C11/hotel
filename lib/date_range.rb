@@ -16,8 +16,16 @@ module Hotel
       return range.count
     end
 
-    def overlap?(date)
-      return range.include?(date)
+    def overlap?(date_range)
+      date_range = date_range.range
+      date_range.each do |date|
+        return true if range.include?(date)
+      end
+      return false
     end
+  end
+
+  def inspect
+    return "[Date range #{start_date} to #{end_date}]"
   end
 end
