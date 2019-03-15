@@ -64,6 +64,16 @@ describe "Reservation_manager" do
       end
       expect(res_manager.find_available_rooms("1st April 2019", "4th April 2019").length).must_equal 0
     end
+
+    it "rooms are unavailable if they are part of a block" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+
+      rooms_free_to_book = res_manager.find_available_rooms("7th June 2020", "10th June 2020")
+
+      [2, 3, 4, 5, 6].each do |room_num|
+        expect(rooms_free_to_book).wont_include room_num
+      end
+    end
   end
 
   describe "make_reservation" do

@@ -2,10 +2,11 @@ require_relative "reservation"
 require "pry"
 
 class Reservation_manager
-  attr_reader :reservations, :all_rooms, :make_reservation, :find_available_rooms
+  attr_reader :reservations, :pending_reservations_for_blocks
 
   def initialize
     @reservations = []
+    @pending_reservations_for_blocks = []
   end
 
   def find_available_rooms(check_in_time, check_out_time)
@@ -23,6 +24,16 @@ class Reservation_manager
         available_rooms.delete(reservation.room_number)
       end
     end
+
+    @pending_reservations_for_blocks.each do |pending_block_reservation|
+      date_range = (pending_block_reservation.check_in_time...pending_block_reservation.check_out_time).to_a
+      combined_range = date_range + date_range_of_interest
+
+      if combined_range.length != combined_range.uniq.length
+        available_rooms.delete(pending_block_reservation.room_number)
+      end
+    end
+
     return available_rooms
   end
 
@@ -40,6 +51,7 @@ class Reservation_manager
   def reserve_hotel_block(block_id, check_in, check_out, array_of_rooms, discounted_room_rate)
     list_of_available_rooms = find_available_rooms(check_in, check_out)
     block = []
+
     if array_of_rooms.length < 1 || array_of_rooms.length > 5
       raise ArgumentError, "Hotel blocks cannot be reserved for more than 5 rooms"
     else
@@ -47,6 +59,7 @@ class Reservation_manager
         array_of_rooms.each do |block_room_number|
           block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out)
           block << block_spot
+          @pending_reservations_for_blocks << block_spot
         end
       else
         raise ArgumentError, "This block conflicts with reservations already in the books"
