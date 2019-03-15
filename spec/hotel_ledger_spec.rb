@@ -13,15 +13,15 @@ describe "Hotel Ledger class" do
     expect(@rooms.list_all_rooms.length).must_equal 20
   end
 
-  describe "must make a reservation" do
-    booking = Hotel::Hotel_ledger.new
-    expect(
-      booking.make_a_reservation(
-      phone_number: 1234567890,
-      number_of_rooms: 1,
-      start_date: Date.new(2019, 3, 13),
-      end_date: Date.new(2019, 3, 14)
-      )
-  end
+  # describe "must make a reservation" do
+  #   booking = Hotel::Hotel_ledger.new
+  #   expect(
+  #     booking.make_a_reservation(
+  #     phone_number: 1234567890,
+  #     number_of_rooms: 1,
+  #     start_date: Date.new(2019, 3, 13),
+  #     end_date: Date.new(2019, 3, 14)
+  #     )
+  # end
   # make a before block, test that array gets larger, .length = elements in array
 end

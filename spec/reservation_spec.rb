@@ -10,7 +10,7 @@ describe "Reservation class instatiations" do
     )
   end
 
-  it "can make a reservation" do
+  it "is an instance of reservation" do
     expect(@new_reservation).must_be_kind_of Hotel::Reservation
   end
 
