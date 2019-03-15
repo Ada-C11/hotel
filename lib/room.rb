@@ -14,8 +14,8 @@ module Hotel
 
         def available?(date)
             desired_date = Date.iso8601(date.to_s)
-            reserved_dates = @reservations.map{|reservation| reservation.date_range}
-            reserved_dates.include?(desired_date) ? status == false : status = true
+            reserved_dates = @reservations.map{|reservation| reservation.date_range}.flatten
+            reserved_dates.include?(desired_date) == true ? status = false : status = true
             return status
         end
 
