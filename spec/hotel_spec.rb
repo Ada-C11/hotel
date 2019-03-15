@@ -106,48 +106,48 @@ describe "hotel class" do
       @hotel.make_reservation(@start_time3, @end_time3)
     end
     it "generates a block id" do
-      expect(@hotel.create_block_id).must_equal 1
+      expect(@hotel.create_block_id).must_equal 5
     end
 
     it "raises an error if one of the rooms is unavailable for the given date range" do
-      expect { @hotel.create_hotel_block(0, @start_time, @end_time, [@hotel.reservations[2].room]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(0, @start_time, @end_time, [@hotel.reservations[2].room.number]) }.must_raise ArgumentError
     end
 
     it "creates HotelGroup::HotelBlock object if rooms are available" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
       expect(block).must_be_kind_of HotelGroup::HotelBlock
     end
 
     it "won't reserve a room that is already part of a block" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
-      room = @hotel.reservations[0].room
+      room = @hotel.rooms[0]
 
       expect { @hotel.make_reservation(@start_time4, @end_time4, room: room) }.must_raise ArgumentError
     end
 
     it "won't create a block if a room is already part of another block" do
-      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.reservations[0].room, @hotel.reservations[1].room])
+      block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
 
-      expect { @hotel.create_hotel_block(1, @start_time4, @end_time4, [@hotel.reservations[0].room]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(1, @start_time4, @end_time4, [@hotel.rooms[0].number]) }.must_raise ArgumentError
     end
 
     describe "reserve_block_room" do
       before do
-        @block_room = HotelGroup::Room.new(7, 200)
-        @block = @hotel.create_hotel_block(0, @start_time4, @end_time4, [@block_room])
+        @block_room = @hotel.rooms[8]
+        @block = @hotel.create_hotel_block(8, @start_time4, @end_time4, [@block_room.number])
       end
       it "reserves a block room" do
         @hotel.reserve_block_room(@block_room, @block)
 
-        expect(@hotel.blocks.count).must_equal 1
+        expect(@hotel.blocks.count).must_equal 5
 
         expect(@hotel.blocks[0]).must_be_kind_of HotelGroup::HotelBlock
       end
 
       it "won't reserve_block_room a room that isn't part of the block" do
-        non_block_room = HotelGroup::Room.new(9, 200)
+        non_block_room = @hotel.rooms[9]
 
         expect { @hotel.reserve_block_room(non_block_room, @block) }.must_raise ArgumentError
       end

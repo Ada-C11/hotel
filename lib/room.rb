@@ -13,15 +13,15 @@ module HotelGroup
       @blocks = []
     end
 
-    def self.make_rooms_list(number, price)
-      rooms = []
-      number.times do |n|
-        room = Room.new(n + 1, price)
+    # def self.make_rooms_list(number, price)
+    #   rooms = []
+    #   number.times do |n|
+    #     room = Room.new(n + 1, price)
 
-        rooms << room
-      end
-      return rooms
-    end
+    #     rooms << room
+    #   end
+    #   return rooms
+    # end
 
     def connect(res)
       reservations << res
@@ -59,7 +59,10 @@ module HotelGroup
     end
 
     def add_block_id(id)
-      blocks << id
+      if !blocks.include?(id)
+        @blocks << id
+      end
+      return self
     end
 
     def apply_discount(discount)
@@ -81,6 +84,7 @@ module HotelGroup
     end
 
     def is_in_block?(block)
+      puts blocks.length
       blocks.each do |id|
         if id == block.id
           return true

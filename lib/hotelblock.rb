@@ -23,6 +23,7 @@ module HotelGroup
     def connect(rooms_array)
       rooms_array.each.with_index do |room, index|
         @rooms[index] = room
+        room.add_block_id(@id)
       end
     end
 
@@ -48,15 +49,16 @@ module HotelGroup
 
     def self.from_csv(record)
       rooms = record[:rooms].split(";")
+      final_rooms = []
       rooms.each do |r|
-        r.to_i
+        final_rooms << r.to_i
       end
 
       return self.new(
                record[:id],
                Date.parse(record[:start_date]),
                Date.parse(record[:end_date]),
-               rooms,
+               final_rooms,
                record[:discount]
              )
     end

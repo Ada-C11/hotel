@@ -9,7 +9,7 @@ module HotelGroup
 
     def initialize(directory: "./csv")
       @id = 1
-      @rooms = Room.make_rooms_list(20, 200)
+      @rooms = Room.load_all(directory: directory)
       @reservations = Reservation.load_all(directory: directory)
       @blocks = HotelBlock.load_all(directory: directory)
 
@@ -21,12 +21,11 @@ module HotelGroup
       blocks.each do |block|
         room_array = []
         block.rooms.each do |room_id|
-          puts room_id
           room_obj = find_room(room_id)
           room_array << room_obj
+          room_obj.add_block_id(block.id)
         end
         block.connect(room_array)
-        room.connect(block)
       end
       return blocks
     end
@@ -109,17 +108,23 @@ module HotelGroup
     end
 
     def create_hotel_block(id, start_time, end_time, rooms)
-      id = create_block_id
+      id ||= create_block_id
       discount = 0.2
-      rooms.each do |room|
+      room_ids = []
+      rooms.each do |room_id|
+        room = find_room(room_id)
+
         if !room.is_available?(start_time, end_time)
           raise ArgumentError, "Room #{room.number} is not available on the given dates:#{start_time} #{end_time}"
         end
         room.apply_discount(discount)
+
         room.add_block_id(id)
+
         room.set_unavailable(start_time, end_time)
+        room_ids << room_id
       end
-      hotel_block = HotelBlock.new(id, start_time, end_time, rooms, discount)
+      hotel_block = HotelBlock.new(id, start_time, end_time, room_ids, discount)
 
       return hotel_block
     end
