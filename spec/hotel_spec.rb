@@ -4,7 +4,7 @@ describe 'Hotel class' do
   before do
     @hotel = HotelBooking::Hotel.new(hotel_name: 'Wyndham', number_of_rooms: 20)
   end
-  
+
   describe 'Hotel instantiation' do
     it 'creates an instance of hotel' do
       expect(@hotel).must_be_kind_of HotelBooking::Hotel

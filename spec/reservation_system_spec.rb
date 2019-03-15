@@ -2,42 +2,31 @@ require_relative "spec_helper"
 
 describe "ReservationSystem class" do
   describe 'Find room and booking methods' do
-
+    before do
+      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+    end
+  
     it "Can find room by booking number" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-
-      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
-
-      room = reservation_system.find_room_by_booking_number(booking.reference_number)
-
+      booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
+      room = @reservation_system.find_room_by_booking_number(booking.reference_number)
       expect(room).wont_equal nil
     end
 
     it "Can find room by room number" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-
-      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
-
-      room = reservation_system.find_room_by_room_number(booking.room.number)
-
+      booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
+      room = @reservation_system.find_room_by_room_number(booking.room.number)
       expect(room).wont_equal nil
     end
 
     it "Can find booking by room number" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-
-      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
-      bookings = reservation_system.find_bookings_by_room_number(booking.room.number)
-
+      booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
+      bookings = @reservation_system.find_bookings_by_room_number(booking.room.number)
       expect(bookings).must_equal [booking]
     end
 
     it "Can find bookings by date" do
-      reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
-      booking = reservation_system.make_booking('2001-02-03', '2001-02-07')
-
-      bookings = reservation_system.find_booking_by_date(booking.start_date, booking.end_date)
-
+      booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
+      bookings = @reservation_system.find_booking_by_date(booking.start_date, booking.end_date)
       expect(bookings).must_equal [booking]
     end
   end
