@@ -40,4 +40,24 @@ describe "BlockReservation" do
       expect(@block_reservation.status).must_equal :AVAILABLE
     end
   end
+  describe "calc_total_cost" do
+    before do
+      @block_reservation = HotelSystem::BlockReservation.new(
+        room: @room,
+        arrive_day: @arrive_day,
+        depart_day: @depart_day,
+        block: @new_block,
+        discount: @discount,
+      )
+
+      @total_cost = @block_reservation.calc_total_cost
+    end
+    it "accuratly adds the total cost for a normal reservation" do
+      expect(@total_cost).must_equal 800.0
+    end
+
+    it "Saves total cost to total_cost instance variable" do
+      expect(@block_reservation.total_cost).must_equal 800
+    end
+  end
 end
