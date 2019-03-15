@@ -48,12 +48,8 @@ module HotelSystem
         return false
       end
       res_room.reservations.each do |res|
-        if res.date_range.include?(date)
-          if date == res.date_range.checkout
-            return false
-          else
-            return true
-          end
+        if res.date_range.overlap?(date)
+          return true
         end
       end
       return false
