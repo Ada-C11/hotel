@@ -32,9 +32,7 @@ class BookingCentral
     return random_available_room
   end
 
-
   def reserve_room(check_in:, check_out:, room: assign_room(check_in, check_out))
-    
     if list_available_rooms(check_in, check_out) == []
       raise ArgumentError, "There is no availability for the dates provided."
     else
@@ -44,7 +42,10 @@ class BookingCentral
     end
   end
 
-  # bookings = BookingCentral.new
+  bookings = BookingCentral.new
+  new_reservation = bookings.reserve_room(check_in: '2019-04-01', check_out:'2019-04-02', room: bookings.assign_room('2019-04-01', '2019-04-02'))
+  puts new_reservation.room.number  
+  puts bookings.list_available_rooms('2019-04-01', '2019-04-02').map{|r| r.number}
   # new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
   # puts (bookings.assign_room('2019-01-03', '2019-01-04')).number
 end
