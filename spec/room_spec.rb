@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "Room class" do
-  describe "initialize" do
+  describe "Room#initialize" do
     before do
       @room = Room.new(room_id: 2)
     end

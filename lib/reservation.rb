@@ -1,12 +1,27 @@
-class Reservation
-  attr_accessor
+require "pry"
+require "date"
 
-  def initialize(name, room_no, start_date, end_date)
+class Reservation
+  attr_accessor :name, :room_id, :start_date, :end_date, :total_cost,
+                ROOM_RATE = 200
+
+  def initialize(name:, room_id:, start_date:, end_date:)
     @name = name
-    @room_no = room_no
-    @start_date = start_date
-    @end_date = end_date
+    @room_id = room_id
+    @start_date = Date.parse(start_date)
+    @end_date = Date.parse(end_date)
+    if @start_date > @end_date
+      raise ArgumentError, "start_date or end_date has not been enterred or the start_date is after the end_date"
+    end
+
     @total_cost = total_cost
-    @reservations = []
+  end
+
+  def total_cost
+    date_range = (@end_date - @start_date)
+    total_cost = date_range.to_i * ROOM_RATE
+    return total_cost
   end
 end
+
+# binding.pry
