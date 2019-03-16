@@ -25,7 +25,7 @@ module Hotel
 end
 
 # ^^^^^ write code here ^^^^^
-
+=begin
 start_date = Date.new(2018, 6, 3)
 end_date = Date.new(2018, 6, 7)
 
@@ -35,3 +35,4 @@ range = (start_date..end_date).map(&:to_s)
 p range
 
 puts Date.parse(range[0])
+=end

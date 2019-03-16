@@ -29,11 +29,11 @@ describe "Hotel Manager Setup" do
     new_res1 = this_manager.make_res_for_room(check_in1, check_out1, room1)
 
     check_in2 = Date.new(2019, 06, 05)
-    check_out2 = Date.new(2019, 06, 06)
+    check_out2 = Date.new(2019, 06, 10)
     room2 = 8
     new_res2 = this_manager.make_res_for_room(check_in2, check_out2, room2)
 
-    date_to_check = Date.new(2019, 06, 05)
+    date_to_check = Date.new(2019, 06, 06)
 
     res_on_date = this_manager.list_reservations_for_date(date_to_check)
 

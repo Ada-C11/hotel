@@ -34,14 +34,13 @@ module Hotel
         reservations.each do |res|
           if res.date_range_string_array.include? (date.to_s)
             this_rooms_reservations = [room]
-            this_rooms_reservations << res.date_range_string_array
+            this_rooms_reservations << (res.date_range_string_array.first + " through " + res.date_range_string_array.last)
           end
           res_on_date << this_rooms_reservations
         end
       end
-
+      #   binding.pry
       return res_on_date #array with room and reservations
-      binding.pry
     end
 
     def find_avail_rooms_for_dates(ckin, ckout)
