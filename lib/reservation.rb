@@ -1,22 +1,20 @@
-require "date"
-
 module Hotel
   class Reservation
-    attr_reader :id, :number_of_rooms, :start_date, :end_date, :number_of_nights, :total_cost
+    attr_reader :id, :number_of_rooms, :in_date, :out_date, :number_of_nights, :total_cost
 
     COST = 200.00
 
-    def initialize(phone_number:, number_of_rooms:, start_date:, end_date:)
+    def initialize(phone_number:, in_date:, out_date:)
       # do i really need number of rooms?
       # date could be date range?
       @id = phone_number.to_s
       raise ArgumentError, "Invalid ID length" if @id.length < 10
 
-      @number_of_rooms = number_of_rooms
-      @start_date = start_date
-      @end_date = end_date
+      # @number_of_rooms = number_of_rooms
+      @in_date = in_date
+      @out_date = out_date
 
-      if @start_date >= @end_date
+      if @in_date >= @out_date
         raise ArgumentError, "End date cannot be before start date."
       end
     end
@@ -27,9 +25,14 @@ module Hotel
     # end
 
     def total_cost
-      trip_total_cost = (@end_date - @start_date) * COST
+      trip_total_cost = (@out_date - @in_date) * COST
       return trip_total_cost.round(2)
     end
+
+    # def make_a_reservation(start_date, end_date)
+    #   reservation = Hotel::Reservation.new(phone_number, number_of_rooms, start_date, end_date)
+    #   @reservations << reservation
+    # end
 
     # number_of_nights = (( - 1)
 

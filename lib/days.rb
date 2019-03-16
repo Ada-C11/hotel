@@ -8,6 +8,7 @@ module Hotel
     end
 
     # def is_available?
+
     # end
   end
 end

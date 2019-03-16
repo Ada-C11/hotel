@@ -1,8 +1,5 @@
-require "date"
-
 require_relative "room"
 require_relative "reservation"
-require_relative "reservation_block"
 
 module Hotel
   class Hotel_ledger
@@ -14,15 +11,30 @@ module Hotel
       # @all_rooms.map! do |number|
       #   Room.new(number)
       # end
+      # @phone_number = phone_number
+      # @in_date = in_date
+      # @out_date = out_date
     end
 
     def list_all_rooms
       return @all_rooms
     end
 
-    def make_a_reservation(phone_number, number_of_rooms, start_date, end_date)
-      reservation = Hotel::Reservation.new(phone_number, number_of_rooms, start_date, end_date)
-      @reservations << reservation
+    def list_all_reservations
+      return @reservations
+    end
+
+    def make_reservation(phone_number, in_date, out_date)
+      reservation = Hotel::Reservation.new(
+        phone_number: phone_number,
+        in_date: in_date,
+        out_date: out_date,
+      )
+      return reservation
+    end
+
+    def find_available_room(in_date, out_date)
+      return room
     end
 
     #   @reservations = Reservation.list_all(date)

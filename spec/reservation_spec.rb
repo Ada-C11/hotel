@@ -4,9 +4,9 @@ describe "Reservation class instatiations" do
   before do
     @new_reservation = Hotel::Reservation.new(
       phone_number: 1234567890,
-      number_of_rooms: 1,
-      start_date: Date.new(2019, 3, 13),
-      end_date: Date.new(2019, 3, 16),
+      # number_of_rooms: 1,
+      in_date: Date.new(2019, 3, 13),
+      out_date: Date.new(2019, 3, 16),
     )
   end
 
@@ -18,20 +18,20 @@ describe "Reservation class instatiations" do
     expect do
       Hotel::Reservation.new(
         phone_number: 123456789,
-        number_of_rooms: 1,
-        start_date: Date.new(2019, 3, 13),
-        end_date: Date.new(2019, 3, 14),
+        # number_of_rooms: 1,
+        in_date: Date.new(2019, 3, 13),
+        out_date: Date.new(2019, 3, 14),
       )
     end.must_raise ArgumentError
   end
 
-  it "cannot have an end date that is before the start date" do
+  it "cannot have an out date that is before the in date" do
     expect do
       Hotel::Reservation.new(
         phone_number: 1234567890,
-        number_of_rooms: 1,
-        start_date: Date.new(2019, 3, 14),
-        end_date: Date.new(2019, 3, 13),
+        # number_of_rooms: 1,
+        in_date: Date.new(2019, 3, 14),
+        out_date: Date.new(2019, 3, 13),
       )
     end.must_raise ArgumentError
   end
@@ -39,8 +39,4 @@ describe "Reservation class instatiations" do
   # it "can calculate the number of nights" do
   #   expect(@new_reservation.total_number_of_nights).must_equal 3
   # end
-
-  it "will return the total cost of a reservation" do
-    expect(@new_reservation.total_cost).must_equal 600.00
-  end
 end
