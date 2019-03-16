@@ -39,12 +39,18 @@ class Reservation_manager
 
   def find_available_rooms_in_a_block(block_id)
     available_rooms_in_block = []
-    @pending_reservations_for_blocks.each do |pending_block_reservation|
-      if pending_block_reservation.reservation_id == block_id && !@reservations.include?(pending_block_reservation)
-        available_rooms_in_block << pending_block_reservation.room_number
+
+    @pending_reservations_for_blocks.each do |pending_reservation|
+      if pending_reservation.reservation_id == block_id
+        available_rooms_in_block << pending_reservation.room_number
       end
     end
-    # binding.pry
+    @reservations.each do |already_made_reservation|
+      if already_made_reservation.reservation_id == block_id
+        available_rooms_in_block.delete(already_made_reservation.room_number)
+      end
+    end
+
     return available_rooms_in_block
   end
 
@@ -61,23 +67,24 @@ class Reservation_manager
   end
 
   def make_reservation_from_block(block_id)
-    # list_of_available_rooms_in_block = find_available_rooms_in_a_block(block_id)
+    rooms_available_in_block = find_available_rooms_in_a_block(block_id)
 
-    available_rooms_in_block = []
-    @pending_reservations_for_blocks.each do |pending_block_reservation|
-      if pending_block_reservation.reservation_id == block_id
-        available_rooms_in_block << pending_block_reservation
+    possible_reservations = []
+
+    if rooms_available_in_block.length > 0
+      @pending_reservations_for_blocks.each do |possible_res|
+        if possible_res.reservation_id == block_id
+          if rooms_available_in_block.include?(possible_res.room_number)
+            possible_reservations << possible_res
+          end
+        end
       end
+      chosen_reservation = possible_reservations.sample
+      @reservations << chosen_reservation
+      return chosen_reservation
+    else
+      raise ArgumentError, "There are no available rooms left for this block."
     end
-
-    #   # if available_rooms_in_block.empty?
-    #   #   raise ArgumentError, "You cannot book a room from this hotel block"
-    #   # end
-
-    booked_from_block = available_rooms_in_block.sample
-    @reservations << booked_from_block
-
-    return booked_from_block
   end
 
   def reserve_hotel_block(block_id, check_in, check_out, array_of_rooms, discounted_room_rate)
@@ -97,7 +104,6 @@ class Reservation_manager
         raise ArgumentError, "Some or all of these rooms are unavailable for this date range"
       end
     end
-    # binding.pry
     return block
   end
 

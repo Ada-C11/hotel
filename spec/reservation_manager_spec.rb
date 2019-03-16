@@ -100,29 +100,6 @@ describe "Reservation_manager" do
 
       expect(res_manager.reservations.length).must_equal 2
     end
-
-    # it "allows someone to reserve a room that's part of a block if they're part of that block group" do
-    #   res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-    #   block_res = res_manager.make_reservation(5, check_in_time: "7th June 2020", check_out_time: "12th June 2020", part_of_block: true)
-
-    #   expect(res_manager.reservations).must_include block_res
-    # end
-
-    # it "should raise error if someone tries to reserve a room that's part of a block (and they're not)" do
-    #   res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-    #   expect { res_manager.make_reservation(5, check_in_time: "7th June 2020", check_out_time: "12th June 2020", part_of_block: false) }.must_raise ArgumentError
-    # end
-
-    # it "if reservation is part of a block, it must have a room number that is part of block" do
-    #   # res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-    # end
-
-    # it "if reservation is part of a block, it must have the same dates as the block" do
-    #   # res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-    # end
-
-    # it "if reservation is part of block, it's reservation_id must match block_id" do
-    # end
   end
 
   describe "find_available_rooms_in_a_block method" do
@@ -153,26 +130,39 @@ describe "Reservation_manager" do
 
   describe "make_reservation_from_block method" do
     it "allows someone to reserve a room that's part of a block if block_id is present in pending reservations for blocks" do
-      # res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-      # block_res = res_manager.make_reservation_from_block(1)
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      block_res = res_manager.make_reservation_from_block(1)
 
-      # expect(res_manager.reservations).must_include block_res
+      expect(res_manager.reservations).must_include block_res
     end
 
-    # it "should raise error if someone tries to reserve a room that's part of a block (and they're not)" do
-    #   res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
-    #   expect { res_manager.make_reservation(5, check_in_time: "7th June 2020", check_out_time: "12th June 2020", part_of_block: false) }.must_raise ArgumentError
-    # end
+    it "should raise error if there are no more available rooms in a block" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      5.times do |res|
+        res_manager.make_reservation_from_block(7)
+      end
+      expect { res_manager.make_reservation_from_block(7) }.must_raise ArgumentError
+    end
 
     it "if reservation is part of a block, it must have a room number that is part of block" do
-      # res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      hotel_block = res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect([2, 3, 4, 5, 6]).must_include res_in_block.room_number
     end
 
     it "if reservation is part of a block, it must have the same dates as the block" do
-      # res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      hotel_block = res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_in_block.check_in_time).must_equal Date.parse("7th June 2020")
     end
 
     it "if reservation is part of block, it's reservation_id must match block_id" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_in_block.reservation_id).must_equal 7
     end
   end
 
