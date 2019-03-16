@@ -91,7 +91,6 @@ describe "RESERVATION MANAGER TESTS" do
 
     ### THIS IS NOT WORKINGGGGGG!!!!!
     it "can find reservations made via regular and hotel block reservation" do
-      skip
       test_manager = Reservation_Manager.new
       # check_in = Date.parse("2019-3-15")
       # check_out = Date.parse("2019-3-20")
@@ -99,7 +98,7 @@ describe "RESERVATION MANAGER TESTS" do
       puts "I'M HEREEEEEEE!"
       room_num = 5
       block_id = 7
-      test_manager.make_hotel_block(rand(1..6), "2019-3-15", "2019-3-20", room_num)
+      test_manager.make_hotel_block(7, "2019-3-15", "2019-3-20", room_num)
       test_manager.make_reservation("2019-3-15", "2019-3-20")
       test_manager.make_reservation("2019-3-15", "2019-3-20", is_hotel_blocker: true, block_id: block_id)
 
@@ -139,6 +138,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "returns list of available rooms - check in and check out day are the same" do
+      # skip
       test_manager = Reservation_Manager.new
       check_in = "2019-4-5"
       check_out = "2019-4-5"
@@ -152,6 +152,7 @@ describe "RESERVATION MANAGER TESTS" do
 
   describe "hotel block management" do
     it "returns dates that are available only to hotel block users" do
+      # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"
@@ -166,6 +167,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "updates all_blocks to include the block rooms created" do
+      # skip
       test_manager = Reservation_Manager.new
       check_in = "2019-4-5"
       check_out = "2019-4-10"
@@ -181,6 +183,7 @@ describe "RESERVATION MANAGER TESTS" do
       expect(test_manager.all_block_reservations.length).must_equal 10
     end
     it "removes the blocked rooms from the list of available rooms" do
+      # skip
       test_manager = Reservation_Manager.new
       check_in = "2019-4-5"
       check_out = "2019-4-10"
@@ -200,6 +203,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "cannot make a reservation for hotel block room when not part of that party" do
+      # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"
@@ -217,6 +221,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "will raise argument error if hotel blocks have taken up all rooms and outsider tries to reserve" do
+      # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"
@@ -232,6 +237,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "will raise argument error if not enough rooms for hotel block" do
+      # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"
@@ -249,6 +255,7 @@ describe "RESERVATION MANAGER TESTS" do
 
   describe "make reservation for hotel blocked room" do
     it "cannot make a reservation for hotel blocked room if not part of block" do
+      # skip
       test_manager = Reservation_Manager.new
 
       #assign a hotel block
@@ -264,6 +271,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "can make a reservation for hotel blocked room if part of block" do
+      # skip
       test_manager = Reservation_Manager.new
 
       #assign a hotel block
@@ -279,6 +287,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "will have a discounted total rate if room booked is part of hotel block" do
+      # skip
       test_manager = Reservation_Manager.new
 
       #assign a hotel block
@@ -299,6 +308,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "will reassign the dates of hotel blocker to set duration regardless of their input" do
+      # skip
       test_manager = Reservation_Manager.new
 
       #assign a hotel block
@@ -323,6 +333,7 @@ describe "RESERVATION MANAGER TESTS" do
     end
 
     it "will reassign the room of hotel blocker to available room" do
+      # skip
       test_manager = Reservation_Manager.new
 
       #assign a hotel block
@@ -356,7 +367,8 @@ describe "RESERVATION MANAGER TESTS" do
     end
   end
   describe "finding block availability" do
-    it "returns pending reservations for block" do
+    it "returns pending reservations for block by date" do
+      # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"

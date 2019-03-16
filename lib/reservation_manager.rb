@@ -34,6 +34,7 @@ class Reservation_Manager
       # find the hotel block date range user is trying to reserve for
       # reassign checkin/checkout date to match block dates
       all_block_reservations.each do |block_reservation|
+        # binding.pry
         if block_id == block_reservation.reservation_id
           reservation.check_in = block_reservation.check_in
           reservation.check_out = block_reservation.check_out
@@ -167,6 +168,7 @@ class Reservation_Manager
       day_in = reservation.check_in
       day_out = reservation.check_out
       reserve_date_range = (day_in...day_out).to_a
+      # binding.pry
       if given_date_range == reserve_date_range
         found_reservations << reservation
       end
