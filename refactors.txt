@@ -1,0 +1,22 @@
+In that file, make a short list of the changes that you could make, such as naming conventions, etc.
+These notes will be used by you in a few weeks, so make sure that they are detailed enough that someone else could understand your thinking and follow your directions
+Commit and push this file to your project repo
+
+Possible changes to this project for future use:
+-   Make tests much cleaner (I decided to use a bunch of different dates throughout my test
+    cases when really I would have been just fine repeating the same ones and using a single 
+    "let" statement)
+-   I think my Reservation_manager class has too many responsibilities. Perhaps next time I 
+    should implement a "Block_manager" class to simplify the responsibilities a bit. This 
+    class would have these methods: find_available_rooms_in_a_block, reserve_hotel_block, 
+    and make_reservation_from_block. 
+-   When creating a hotel block, I would rather have a keyword argument for the array of
+    rooms, because as this time I add an array every time, which can be a bit confusing 
+    if you don't remember what that array represents. 
+-   I'm not sure I like having default values for check_in_day and check_out_day. I would 
+    rather not let someone make a reservation if they don't put in specific days (instead
+    of what it does now - if you make a reservation and don't specify days, it will 
+    automatically assign today's date and tomorrow's date). 
+-   I want to add more usage to reservation_id, because as it is now it only matters what
+    the reservation_id is if it is part of a block. Maybe in future use I would require a 
+    reservation_id and make sure different reservations do not have the same id. 
