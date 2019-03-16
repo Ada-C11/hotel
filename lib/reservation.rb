@@ -17,7 +17,7 @@ module HotelGroup
 
     def total_price
       number_of_days = end_time - start_time
-      return format("%.2f", room.price * number_of_days)
+      return "Total price for reservation #{id}: $#{format("%.2f", room.price * number_of_days)}"
     end
 
     def includes_date?(date)
@@ -25,7 +25,11 @@ module HotelGroup
     end
 
     def print_nicely
-      return "Reservation #{id}: Room #{room.number} from #{start_time} to #{end_time}. Total cost: $#{total_price}"
+      if self.id
+        return "Reservation #{id}: Room #{room.number} from #{start_time} to #{end_time}. Total cost: $#{total_price}"
+      else
+        return "Reservation not found"
+      end
     end
 
     def connect(room)

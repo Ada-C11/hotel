@@ -12,7 +12,7 @@ describe "reservation class" do
 
     it "finds total price based on number of days in reservation" do
       @res.room = HotelGroup::Room.new(21, 200)
-      expect(@res.total_price).must_equal "400.00"
+      expect(@res.total_price).must_equal "Total price for reservation 1: $400.00"
     end
   end
 
@@ -35,7 +35,7 @@ describe "reservation class" do
     end
 
     it "prints itself nicely" do
-      expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total cost: $600.00"
+      expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total cost: $Total price for reservation 1: $600.00"
     end
   end
 

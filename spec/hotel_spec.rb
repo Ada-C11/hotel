@@ -16,17 +16,6 @@ describe "hotel class" do
     end
   end
 
-  describe "list rooms and reservations" do
-    before do
-      @hotel = HotelGroup::Hotel.new
-      @hotel.rooms = [HotelGroup::Room.new(3, 900)]
-    end
-
-    it "returns a formatted room" do
-      expect(@hotel.list_rooms).must_equal "Room 3: $900.00 per night"
-    end
-  end
-
   describe "creates new reservation" do
     before do
       @hotel = HotelGroup::Hotel.new

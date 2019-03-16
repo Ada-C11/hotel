@@ -52,7 +52,7 @@ module HotelGroup
 
     def list_rooms
       rooms.each do |room|
-        return room.print_nicely
+        puts room.print_nicely
       end
     end
 
