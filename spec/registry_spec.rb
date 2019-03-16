@@ -5,6 +5,8 @@ require './spec/spec_helper.rb'
 # TripAdvisor Rating: 0.000001 star
 # There are sharks in the pool.
 # Rm. 16 smells like burnt hair
+# Ghosts are camping in the elevator.
+# No keys. Use a bobby pin.
 describe "initialize Registry" do
   before do
     @test_registry = Hotel::Registry.new
@@ -14,33 +16,40 @@ describe "initialize Registry" do
     expect(@test_registry).must_be_kind_of Hotel::Registry
     expect(@test_registry.reservations).must_be_kind_of Array
   end
+end
 
-  describe "reserve_room" do
+describe "book_room" do
+  before do
+    @test_registry = Hotel::Registry.new
+    @test_registry.book_room("2019/07/19", "2019/07/25")
+    @test_registry.book_room("2019/07/11", "2019/07/14")
+  end
+
+  it "reservations array contains all bookings" do
+    expect(@test_registry.reservations.length).must_equal(2)
+  end
+
+  it "contains the correct object types" do
+    @test_registry.reservations.each do |reservation|
+      expect(reservation).must_be_instance_of(Hotel::Reservation)
+    end
+  end
+
+  it "returns empty array when no reservations during dates" do
+    expect(@test_registry.concurrences("1066/10/14", "1066/10/15")).empty?(true)
+  end
+
+end
+
+describe "Tiny goat outside the hotel" do
     before do
       @test_registry = Hotel::Registry.new
-      @test_registry.reserve_room("2019/07/19", 4)
-      @test_registry.reserve_room("2019/07/19", 2)
+      @test_registry.book_room("2019/07/19", "2019/07/25")
+      @test_registry.book_room("2019/07/11", "2019/07/14")
     end
 
-    it "reservations array contains all bookings" do
-      expect(@test_reservations.length).must_equal(2)
-    end
-
-    it "returns empty array if no reservations during date" do
-      expect(@test_registry.find_by_date(Date.parse("1066.10.14"))).must_equal([])
-    end
-
-    it "contains the correct object types" do
-      @test_registry.reservations.each do |reservation|
-        expect(@reservation).must_be_instance_of(Hotel::Reservation)
-      end
-    end
-  end
-end
-
-describe "tiny_goat" do
-  it 'clears all records from reservations array' do
-    @test_registry.tiny_goat.feed_all_records_to_small_goat(@reservations)
+    it 'tiny goat correctly devours records' do
+    @test_registry.feed_all_reservations_to_small_goat
     expect(@test_registry.reservations).must_equal []
+    end
   end
-end

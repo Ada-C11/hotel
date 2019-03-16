@@ -3,7 +3,7 @@ require 'pry'
 
 describe "Reservation class" do
   before do
-    @test_reservation = Hotel::Reservation.new(Date.today.to_s, 5)
+    @test_reservation = Hotel::Reservation.new("2019/05/05", "2019/05/12")
   end
 
   describe "initialize" do
