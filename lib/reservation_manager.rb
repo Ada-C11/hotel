@@ -9,6 +9,14 @@ class Reservation_manager
     @pending_reservations_for_blocks = []
   end
 
+  def all_rooms
+    @all_rooms = []
+    20.times do |number|
+      @all_rooms << number + 1
+    end
+    return @all_rooms
+  end
+
   def find_available_rooms(check_in_time, check_out_time)
     available_rooms = (1..20).to_a
     check_in = Date.parse(check_in_time)
@@ -66,6 +74,26 @@ class Reservation_manager
     return new_reservation
   end
 
+  def reserve_hotel_block(block_id, check_in, check_out, array_of_rooms, discounted_room_rate)
+    list_of_available_rooms = find_available_rooms(check_in, check_out)
+    block = []
+
+    if array_of_rooms.length < 2 || array_of_rooms.length > 5
+      raise ArgumentError, "Hotel blocks cannot be reserved for less than 2 rooms or more than 5 rooms"
+    else
+      if (list_of_available_rooms + array_of_rooms).uniq == list_of_available_rooms
+        array_of_rooms.each do |block_room_number|
+          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out, room_rate: discounted_room_rate)
+          block << block_spot
+          @pending_reservations_for_blocks << block_spot
+        end
+      else
+        raise ArgumentError, "Some or all of these rooms are unavailable for this date range"
+      end
+    end
+    return block
+  end
+
   def make_reservation_from_block(block_id)
     rooms_available_in_block = find_available_rooms_in_a_block(block_id)
 
@@ -81,30 +109,11 @@ class Reservation_manager
       end
       chosen_reservation = possible_reservations.sample
       @reservations << chosen_reservation
+      # binding.pry
       return chosen_reservation
     else
       raise ArgumentError, "There are no available rooms left for this block."
     end
-  end
-
-  def reserve_hotel_block(block_id, check_in, check_out, array_of_rooms, discounted_room_rate)
-    list_of_available_rooms = find_available_rooms(check_in, check_out)
-    block = []
-
-    if array_of_rooms.length < 1 || array_of_rooms.length > 5
-      raise ArgumentError, "Hotel blocks cannot be reserved for more than 5 rooms"
-    else
-      if (list_of_available_rooms + array_of_rooms).uniq == list_of_available_rooms
-        array_of_rooms.each do |block_room_number|
-          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out)
-          block << block_spot
-          @pending_reservations_for_blocks << block_spot
-        end
-      else
-        raise ArgumentError, "Some or all of these rooms are unavailable for this date range"
-      end
-    end
-    return block
   end
 
   def find_reservations(date)

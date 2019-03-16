@@ -8,19 +8,29 @@ describe "Reservation_manager" do
     expect(res_manager).must_be_instance_of Reservation_manager
   end
 
+  describe "all rooms" do
+    it "has 20 rooms" do
+      expect(res_manager.all_rooms.length).must_equal 20
+    end
+    it "has rooms 1-20 in ascending order" do
+      expect(res_manager.all_rooms.first).must_equal 1
+      expect(res_manager.all_rooms.last).must_equal 20
+    end
+  end
+
   describe "find_reservation" do
     it "returns an array of reservations" do
-      res_manager.make_reservation(1, reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
-      res_manager.make_reservation(2, reservation_id: 2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
-      res_manager.make_reservation(3, reservation_id: 7, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
+      res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
+      res_manager.make_reservation(2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
+      res_manager.make_reservation(3, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
 
       expect(res_manager.find_reservations("4th April 2019")).must_be_instance_of Array
     end
 
     it "includes array of reservations that only include the specified date" do
-      res_manager.make_reservation(1, reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
-      res_manager.make_reservation(2, reservation_id: 2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
-      res_manager.make_reservation(3, reservation_id: 7, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
+      res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
+      res_manager.make_reservation(2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
+      res_manager.make_reservation(3, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
 
       expect(res_manager.find_reservations("4th April 2019").length).must_equal 2
     end
@@ -66,7 +76,7 @@ describe "Reservation_manager" do
     end
 
     it "rooms are unavailable if they are part of a block" do
-      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
 
       rooms_free_to_book = res_manager.find_available_rooms("7th June 2020", "10th June 2020")
 
@@ -78,12 +88,12 @@ describe "Reservation_manager" do
 
   describe "make_reservation" do
     it "returns an instance of Reservation" do
-      expect(res_manager.make_reservation(1, reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")).must_be_instance_of Reservation
+      expect(res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")).must_be_instance_of Reservation
     end
 
     it "adds reservations to list of reservations" do
-      res_manager.make_reservation(1, reservation_id: 1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
-      res_manager.make_reservation(2, reservation_id: 2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
+      res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
+      res_manager.make_reservation(2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
 
       expect(res_manager.reservations.length).must_equal 2
     end
@@ -100,12 +110,17 @@ describe "Reservation_manager" do
 
       expect(res_manager.reservations.length).must_equal 2
     end
+
+    it "should raise an error if you try to book a room that is set aside for a block" do
+      res_manager.reserve_hotel_block(1, "6th July 2020", "16th July 2020", [1, 2, 3, 4], 150)
+
+      expect { res_manager.make_reservation(4, check_in_time: "14th July 2020", check_out_time: "21st July 2020") }.must_raise ArgumentError
+    end
   end
 
   describe "find_available_rooms_in_a_block method" do
     it "should return an array of rooms" do
       res_manager.reserve_hotel_block(1, "6th July 2020", "16th July 2020", [1, 2, 3, 4], 150)
-      res_manager.reserve_hotel_block(2, "2nd July 2020", "7th July 2020", [14, 15, 16, 17, 18], 150)
 
       expect(res_manager.find_available_rooms_in_a_block(1)).must_be_instance_of Array
     end
@@ -123,21 +138,30 @@ describe "Reservation_manager" do
       3.times do |res|
         res_manager.make_reservation_from_block(1)
       end
-      puts res_manager.find_available_rooms_in_a_block(1)
+
       expect(res_manager.find_available_rooms_in_a_block(1).length).must_equal 1
+    end
+
+    it "should return an empty array if there are no available rooms in the block" do
+      res_manager.reserve_hotel_block(1, "6th July 2020", "16th July 2020", [1, 2, 3, 4], 150)
+      4.times do |res|
+        res_manager.make_reservation_from_block(1)
+      end
+      expect(res_manager.find_available_rooms_in_a_block(1).length).must_equal 0
+      expect(res_manager.find_available_rooms_in_a_block(1)).must_be_instance_of Array
     end
   end
 
   describe "make_reservation_from_block method" do
     it "allows someone to reserve a room that's part of a block if block_id is present in pending reservations for blocks" do
-      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       block_res = res_manager.make_reservation_from_block(1)
 
       expect(res_manager.reservations).must_include block_res
     end
 
     it "should raise error if there are no more available rooms in a block" do
-      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       5.times do |res|
         res_manager.make_reservation_from_block(7)
       end
@@ -145,35 +169,56 @@ describe "Reservation_manager" do
     end
 
     it "if reservation is part of a block, it must have a room number that is part of block" do
-      hotel_block = res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       res_in_block = res_manager.make_reservation_from_block(7)
 
       expect([2, 3, 4, 5, 6]).must_include res_in_block.room_number
     end
 
     it "if reservation is part of a block, it must have the same dates as the block" do
-      hotel_block = res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       res_in_block = res_manager.make_reservation_from_block(7)
 
       expect(res_in_block.check_in_time).must_equal Date.parse("7th June 2020")
     end
 
     it "if reservation is part of block, it's reservation_id must match block_id" do
-      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       res_in_block = res_manager.make_reservation_from_block(7)
 
       expect(res_in_block.reservation_id).must_equal 7
+    end
+
+    it "should be in list of reservations for hotel" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_manager.reservations).must_include res_in_block
+    end
+
+    it "should be able to be found from find_reservations(date) method" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_manager.find_reservations("10th June 2020")).must_include res_in_block
+    end
+
+    it "should reflect discounted room rate" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_in_block.calculate_total_cost).must_equal 750
     end
   end
 
   describe "reserve_hotel_block" do
     it "returns an array for block" do
-      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       expect(this_block).must_be_instance_of Array
     end
 
     it "contains Reservation instances for as many rooms as was requested" do
-      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      this_block = res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
       expect(this_block.length).must_equal 5
     end
 
@@ -181,13 +226,43 @@ describe "Reservation_manager" do
       res_manager.make_reservation(9, check_in_time: "2nd April 2020", check_out_time: "10th April 2020")
       res_manager.make_reservation(4, check_in_time: "4th June 2020", check_out_time: "11th June 2020")
 
-      expect { res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25) }.must_raise ArgumentError
+      expect { res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150) }.must_raise ArgumentError
     end
 
     it "raises an error if there is already a block for these rooms and dates" do
-      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 0.25)
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
 
-      expect { res_manager.reserve_hotel_block(2, "5th June 2020", "11th June 2020") }.must_raise ArgumentError
+      expect { res_manager.reserve_hotel_block(2, "5th June 2020", "11th June 2020", [6, 7, 8, 9], 150) }.must_raise ArgumentError
+    end
+
+    it "raises an error if there are too many rooms in a block" do
+      expect { res_manager.reserve_hotel_block(3, "5th June 2020", "11th June 2020", [13, 14, 15, 16, 17, 18], 150) }.must_raise ArgumentError
+    end
+
+    it "raises an error if there are not enough rooms in a block" do
+      expect { res_manager.reserve_hotel_block(5, "13th September 2019", "23rd September 2019", [3], 150) }.must_raise ArgumentError
+    end
+
+    it "raises an error if check-in/out times are invalid" do
+      expect { res_manager.reserve_hotel_block(7, "23rd September 2019", "13th September 2019", [3, 4, 5], 150) }.must_raise ArgumentError
+    end
+  end
+
+  describe "pending_reservations_for_blocks" do
+    it "should be an array of Reservation instances" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      expect(res_manager.pending_reservations_for_blocks.first).must_be_instance_of Reservation
+    end
+
+    it "length should be contingent on number of blocks and their rooms" do
+      res_manager.reserve_hotel_block(1, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      res_manager.reserve_hotel_block(2, "7th June 2020", "12th June 2020", [14, 15, 16, 17], 150)
+      expect(res_manager.pending_reservations_for_blocks.length).must_equal 9
+    end
+
+    it "should be empty if no blocks have been created" do
+      res_manager.make_reservation(1, check_in_time: "2nd April 2019", check_out_time: "10th April 2019")
+      expect(res_manager.pending_reservations_for_blocks.length).must_equal 0
     end
   end
 end

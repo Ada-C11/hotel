@@ -6,10 +6,11 @@ describe "Reservation" do
   }
   describe "initialize method" do
     it "initializes a reservation when no keyword arguments are given" do
-      test_rez = Reservation.new(1)
-      expect(test_rez.reservation_id).must_equal 0
-      expect(test_rez.check_in_time).must_equal Date.today
-      expect(test_rez.check_out_time).must_equal (Date.today + 1)
+      test_res = Reservation.new(1)
+      expect(test_res.reservation_id).must_equal 0
+      expect(test_res.check_in_time).must_equal Date.today
+      expect(test_res.check_out_time).must_equal (Date.today + 1)
+      expect(test_res.room_rate).must_equal 200
     end
 
     it "gives a room number" do
@@ -36,15 +37,10 @@ describe "Reservation" do
     it "returns a valid cost that does not include last day of stay" do
       expect(my_res.calculate_total_cost).must_equal 1400
     end
-  end
 
-  describe "all rooms" do
-    it "has 20 rooms" do
-      expect(my_res.all_rooms.length).must_equal 20
-    end
-    it "has rooms 1-20 in ascending order" do
-      expect(my_res.all_rooms.first).must_equal 1
-      expect(my_res.all_rooms.last).must_equal 20
+    it "should reflect discounted room rate" do
+      discounted_res = Reservation.new(2, reservation_id: 4, check_in_time: "10th August 2019", check_out_time: "20th August 2019", room_rate: 150)
+      expect(discounted_res.calculate_total_cost).must_equal 1500
     end
   end
 end
