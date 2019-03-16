@@ -6,10 +6,10 @@ module Hotel
 
     def initialize(rooms_aready_set_up: nil, rooms_to_set_up: [{ cost_per_night: 200, number_of_rooms: 20 }])
       @rooms = rooms_aready_set_up || []
-      set_up_rooms(rooms_to_set_up)
+      setup_rooms(rooms_to_set_up)
     end
 
-    def set_up_rooms(rooms_to_set_up)
+    def setup_rooms(rooms_to_set_up)
       rooms_to_set_up.each do |group_rooms|
         group_rooms[:number_of_rooms].times do
           add_room_to_rooms(cost_per_night: group_rooms[:cost_per_night])

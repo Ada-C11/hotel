@@ -20,7 +20,34 @@ describe "Manifest" do
       end
     end
   end
-  describe "Manifest#add_rooms_to_rooms" do
+
+  describe "Manifest#setup_rooms" do
+    it "will setup rooms (called in constructor)" do
+      new_manifest = Hotel::Manifest.new(rooms_to_set_up: [{ cost_per_night: 1.11, number_of_rooms: 7 }])
+      expect(new_manifest.rooms.length).must_equal 7
+      new_manifest.rooms.each do |room|
+        expect(room.cost_per_night).must_equal 1.11
+      end
+    end
+    it "will setup rooms with of multiple groupings" do
+      multi_manifest = Hotel::Manifest.new(rooms_to_set_up: [{ cost_per_night: 200, number_of_rooms: 3 },
+                                                             { cost_per_night: 230, number_of_rooms: 5 }])
+      number_rooms_created = multi_manifest.rooms.length
+      expect(number_rooms_created).must_equal 8
+      cost_array = [200, 200, 200, 230, 230, 230, 230, 230, 230]
+      number_rooms_created.times do |i|
+        expect(multi_manifest.rooms[i].cost_per_night == cost_array[i]).must_equal true
+      end
+    end
+  end
+  describe "Manifest#add_room_to_rooms" do
+    it "will add new room to rooms" do
+      old_last_room = manifest.rooms[-1]
+      manifest.add_room_to_rooms(cost_per_night: 333.33)
+      new_last_room = manifest.rooms[-1]
+      expect(new_last_room.cost_per_night).must_equal 333.33
+      expect(old_last_room != new_last_room).must_equal true
+    end
   end
 
   describe "Manifest#find_room" do
