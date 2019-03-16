@@ -119,7 +119,7 @@ describe "Manifest" do
     end
 
     it "returns an empty Array if all rooms reserved for given date" do
-      (1..20).each do |id|
+      (1..@manifest_unavailable.rooms.length).each do |id|
         room = @manifest_unavailable.find_room(id: id)
         @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
       end
