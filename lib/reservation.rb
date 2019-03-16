@@ -2,7 +2,7 @@ require "date"
 
 module Hotel
   class Reservation
-    attr_reader :room_number, :check_in, :check_out
+    attr_reader :ROOM_RATE, :room_number, :check_in, :check_out
     ROOM_RATE = 200
 
     def initialize(room_number, check_in, check_out)
@@ -17,6 +17,10 @@ module Hotel
 
     def reservation_cost
       (check_out - check_in) * ROOM_RATE
+    end
+
+    def block_room_cost
+      (check_out - check_in) * ROOM_RATE * 0.8
     end
   end
 end
