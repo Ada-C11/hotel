@@ -5,6 +5,8 @@ require_relative "lib/room"
 def main
   hotel = HotelGroup::Hotel.new
 
+  date_match = /\d{2}\/\d{2}\/\d{4}/
+
   instructions = ["\n\nChoose an option: ", "1: Print all rooms", "2: View all reservations for a specific date", "3: Get the total cost of a reservation", "4: View the list of available rooms for a specific date", "5: View a list of hotel blocks", "6: Create a reservation", "q: Quit"]
   input = nil
   while input != "q".to_i
@@ -19,9 +21,9 @@ def main
       hotel.list_rooms
     when 2
       print "Enter a date (MM/DD/YYYY): "
-      match = /\d{2}\/\d{2}\/\d{4}/
+
       input = gets.chomp
-      if !input.match(match)
+      if !input.match(date_match)
         puts "Invalid date entered."
       else
         date_split = input.split("/")
@@ -48,13 +50,30 @@ def main
         puts res.total_price
       end
     when 4
-      print "Enter a date (MM/DD/YYYY): "
-      match = /\d{2}\/\d{2}\/\d{4}/
-      input = gets.chomp
-      if !input.match(match)
+      print "Enter a start date (MM/DD/YYYY): "
+
+      start_date = gets.chomp
+      if !start_date.match(date_match)
         puts "Invalid date entered."
       else
-        puts "nice work"
+        print "Enter an end date (MM/DD/YYYY): "
+
+        end_date = gets.chomp
+        if !end_date.match(date_match)
+          puts "Invalid date entered."
+        else
+          start_date_split = start_date.split("/")
+          start_date = Date.new(start_date_split[2].to_i, start_date_split[0].to_i, start_date_split[1].to_i)
+
+          end_date_split = end_date.split("/")
+          end_date = Date.new(end_date_split[2].to_i, end_date_split[0].to_i, end_date_split[1].to_i)
+
+          rooms_list = hotel.find_available_rooms(start_date, end_date)
+
+          rooms_list.each do |room|
+            puts room.print_nicely
+          end
+        end
       end
     when "q".to_i
     else

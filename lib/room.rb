@@ -25,6 +25,7 @@ module HotelGroup
 
     def connect(res)
       reservations << res
+      set_unavailable(res.start_time, res.end_time)
       return self
     end
 
@@ -33,7 +34,7 @@ module HotelGroup
         raise ArgumentError, "Room #{number} is already reserved for this date range"
       end
       reservations << res
-      unavailable_dates << [res.start_time, res.end_time]
+      set_unavailable(res.start_time, res.end_time)
     end
 
     def is_available?(start_time, end_time)
