@@ -100,6 +100,25 @@ module Hotel
 
     end
 
+    def check_rooms_in_blocks(block_id)
+      block = @blocks.find { |current_block| current_block.block_id == block_id }
+      raise ArgumentError, "No block found" if block == nil
+      return block.room_ids
+    end
+
+    def reserve_from_block(room_id: nil, block_id: nil)
+      raise ArgumentError, "room_id is required" if room_id == nil
+      raise ArgumentError, "block is required" if block_id == nil
+      block = @blocks.find { |block| block.block_id == block_id }
+      new_reservation = Hotel::Reservation.new(
+        reservation_id: @reservations.length + 1,
+        room_id: room_id,
+        check_in_date: block.check_in_date,
+        check_out_date: block.check_out_date,
+      )
+      @reservations << new_reservation
+    end
+
     # def get_na(object)
 
     # end

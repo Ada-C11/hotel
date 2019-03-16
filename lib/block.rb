@@ -3,7 +3,7 @@ module Hotel
   class Block
     attr_reader :block_id, :room_ids, :check_in_date, :check_out_date
 
-    def initialize(block_id:, room_ids:, check_in_date:, check_out_date:, discount_rate:)
+    def initialize(block_id:, room_ids: nil, check_in_date: nil, check_out_date: nil, discount_rate: nil)
       @block_id = block_id
       @room_ids = room_ids
       #   @room_ids = []

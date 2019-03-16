@@ -144,6 +144,27 @@ describe "ReservationManager" do
       expect { reservation_manager.create_block([3], "2019-03-10", "2019-03-15", 0.10) }.must_raise ArgumentError
     end
   end
+
+  describe "check_rooms_in_blocks" do
+    it "can check room availabity in a given block" do
+      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
+      expect(reservation_manager.check_rooms_in_blocks(1).length).must_equal 2
+    end
+
+    it "raises ArgumentError if no block is found" do
+      expect { reservation_manager.check_rooms_in_blocks(1) }.must_raise ArgumentError
+    end
+  end
+
+  describe "reserve_from_block" do
+    it "can reserve from the block" do
+      reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
+      before_reserve = reservation_manager.reservations.length
+      reservation_manager.reserve_from_block(room_id: 1, block_id: 1)
+      after_reserve = reservation_manager.reservations.length
+      expect(after_reserve - before_reserve).must_equal 1
+    end
+  end
   # might remove?
   # describe "find_room method" do
   #   it "can find an instance of Room" do
