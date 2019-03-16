@@ -1,5 +1,3 @@
-require_relative "reservation_manager"
-
 class Reservation
   attr_reader :reservation_id, :check_in_time, :check_out_time, :room_number, :room_rate
 

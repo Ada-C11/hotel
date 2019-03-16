@@ -9,7 +9,7 @@ describe "Reservation_manager" do
   end
 
   describe "all rooms" do
-    it "has 20 rooms" do
+    it "can access a list of all the rooms in the hotel" do
       expect(res_manager.all_rooms.length).must_equal 20
     end
     it "has rooms 1-20 in ascending order" do
@@ -18,7 +18,7 @@ describe "Reservation_manager" do
     end
   end
 
-  describe "find_reservation" do
+  describe "find_reservation(date) method" do
     it "returns an array of reservations" do
       res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
       res_manager.make_reservation(2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
@@ -28,11 +28,19 @@ describe "Reservation_manager" do
     end
 
     it "includes array of reservations that only include the specified date" do
-      res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
+      res_one = res_manager.make_reservation(1, check_in_time: "3rd April 2019", check_out_time: "10th April 2019")
       res_manager.make_reservation(2, check_in_time: "11th April 2019", check_out_time: "2nd May 2019")
       res_manager.make_reservation(3, check_in_time: "22nd March 2019", check_out_time: "5th April 2019")
 
+      expect(res_manager.find_reservations("4th April 2019")).must_include res_one
       expect(res_manager.find_reservations("4th April 2019").length).must_equal 2
+    end
+
+    it "should include reservations that are part of a block" do
+      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
+      res_in_block = res_manager.make_reservation_from_block(7)
+
+      expect(res_manager.find_reservations("10th June 2020")).must_include res_in_block
     end
   end
 
@@ -194,13 +202,6 @@ describe "Reservation_manager" do
       res_in_block = res_manager.make_reservation_from_block(7)
 
       expect(res_manager.reservations).must_include res_in_block
-    end
-
-    it "should be able to be found from find_reservations(date) method" do
-      res_manager.reserve_hotel_block(7, "7th June 2020", "12th June 2020", [2, 3, 4, 5, 6], 150)
-      res_in_block = res_manager.make_reservation_from_block(7)
-
-      expect(res_manager.find_reservations("10th June 2020")).must_include res_in_block
     end
 
     it "should reflect discounted room rate" do

@@ -1,5 +1,4 @@
 require_relative "reservation"
-require "pry"
 
 class Reservation_manager
   attr_reader :reservations, :pending_reservations_for_blocks
@@ -69,7 +68,7 @@ class Reservation_manager
       new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time)
       @reservations << new_reservation
     else
-      raise ArgumentError, "You cannot book this room for this date range because it conflicts with another reservation"
+      raise ArgumentError, "This reservation conflicts with an existing reservation."
     end
     return new_reservation
   end
@@ -109,7 +108,6 @@ class Reservation_manager
       end
       chosen_reservation = possible_reservations.sample
       @reservations << chosen_reservation
-      # binding.pry
       return chosen_reservation
     else
       raise ArgumentError, "There are no available rooms left for this block."
