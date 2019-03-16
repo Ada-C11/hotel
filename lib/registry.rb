@@ -1,6 +1,7 @@
 require 'date'
 require './spec/spec_helper.rb'
-
+require 'pry'
+ROOMS = (1..20).to_a
 module Hotel
   ###
   # description: Registry creates and accesses reservations.
@@ -12,47 +13,36 @@ module Hotel
 
     def initialize
       @reservations = []
+      @okay_rooms = []
     end
 
     def available?(check_in, check_out)
-      other_folks = concurrences(check_in, check_out)
-      @okay_rooms = []
-      @okay_rooms << ROOMS.reject do |room|
-        other_folks.find do |booked|
-          booked[:room] == room[:room]
-        end
+      booked = concurrences(check_in, check_out).map do |reservation|
+        reservation.room
       end
-      !okay_rooms.empty?
+      @okay_rooms = ROOMS - booked
+      !@okay_rooms.empty?
     end
 
     def concurrences(check_in, check_out)
+      inquery = Date.parse(check_in)
+      outquery = Date.parse(check_out)
       concurrences = @reservations.select do |res|
-        check_in.between?(res.range) || check_out.between?(res.range)
+        inquery.between?(res.check_in, res.check_out) || outquery.between?(res.check_in, res.check_out)
       end
       concurrences
     end
 
     def book_room(check_in, check_out)
-       if available?(check_in, check_out)
-      certainly_our_finest_room = okay_rooms.first
-      @reservations << Hotel::Reservation.new(check_in, check_out, certainly_our_finest_room)
-      @reservations
-       else
+      if available?(check_in, check_out)
+        certainly_our_finest_room = okay_rooms.first
+        @reservations << Hotel::Reservation.new(check_in, check_out, certainly_our_finest_room)
+        @reservations
+      else
         raise Errors::BookingConflict
-    end
-
-    def feed_all_reservations_to_small_goat
-      goat = ["Scribbles", "Tinker", "Beach Rose", "Deb"].shuffle.first
-      puts "There are a few goats here."
-      puts "Only one of them is small, though."
-      puts "The goat is named #{goat}."
-      print "Does #{goat} look hungry? ENTER <Y> or <N>: "
-      hungry = gets.chomp.to_upcase
-      @reservations.clear if hungry == "Y"
-      puts "#{goat} the Goat: 'Maeehhh. Mneeeaaehh.'"
-      puts "#{goat} the Goat: '<3'"
-    end
+   end
   end
+end
 end
 
 module Errors

@@ -1,7 +1,6 @@
 require 'date'
 require_relative "registry.rb"
 COST = 200
-ROOMS = (1..20).to_a
 module Hotel
   ###
   # description: Reservations contains a constructor for reservations.
