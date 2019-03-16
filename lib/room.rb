@@ -4,15 +4,12 @@ module Hotel
   class Room
     attr_reader :room_id, :cost
     # , :reservations
+    COST = 200.0
 
-    def initialize(room_id, cost: self.class.default_cost, reservations: nil)
+    def initialize(room_id, cost: COST, reservations: nil)
       @room_id = room_id
       @cost = cost
       # @reservations = reservations || []
-    end
-
-    def self.default_cost
-      return 200.0
     end
 
     def self.num_rooms
@@ -21,8 +18,8 @@ module Hotel
 
     def self.load_all
       @all_rooms = []
-      20.times do |id|
-        room = self.new(id + 1, cost: 200.0, reservations: nil)
+      self.num_rooms.times do |id|
+        room = self.new(id + 1, cost: COST, reservations: nil)
         @all_rooms << room
       end
       return @all_rooms

@@ -37,7 +37,7 @@ module Hotel
 
     def cost
       num_nights = @check_out_date - @check_in_date
-      return Room.default_cost * num_nights
+      return Room.new(1).cost * num_nights
     end
 
     def self.load_all

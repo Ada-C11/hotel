@@ -22,6 +22,7 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       available_room_ids = find_available_rooms(check_in_date, check_out_date).map { |room| room.room_id }
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
+      # new_reservation(room_id, check_in_date, check_out_date)
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -29,6 +30,7 @@ module Hotel
         check_out_date: check_out_date,
       )
       @reservations << new_reservation
+      # @reservations << new_reservation
     end
 
     def list_reservations(date)
@@ -46,16 +48,8 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       check_in_date = Date.parse(check_in_date)
       check_out_date = Date.parse(check_out_date)
-      na_reservations = @reservations.select do |reservation|
-        check_in_date < reservation.check_out_date && check_in_date >= reservation.check_in_date ||
-        check_out_date > reservation.check_in_date && check_out_date < reservation.check_out_date ||
-        check_in_date < reservation.check_in_date && check_out_date > reservation.check_out_date
-      end
-      na_blocks = @blocks.select do |block|
-        check_in_date < block.check_out_date && check_in_date >= block.check_in_date ||
-        check_out_date > block.check_in_date && check_out_date < block.check_out_date ||
-        check_in_date < block.check_in_date && check_out_date > block.check_out_date
-      end
+      na_reservations = get_na_objects(@reservations, check_in_date, check_out_date)
+      na_blocks = get_na_objects(@blocks, check_in_date, check_out_date)
       na_room_ids_blocks = []
       na_blocks.each do |block|
         block.each do |i|
@@ -73,8 +67,6 @@ module Hotel
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      # check_in_date = Date.parse(check_in_date)
-      # check_out_date = Date.parse(check_out_date)
       available_rooms = find_available_rooms(check_in_date, check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
       room_ids.each do |room_id|
@@ -88,16 +80,6 @@ module Hotel
         discount_rate: discount_rate,
       )
       @blocks << new_block
-
-      # room_ids.each do |room_id|
-
-      # end
-      # room_ids[:1st] = nil
-      # room_ids[:2nd] = nil
-      # room_ids[:3rd] = nil
-      # room_ids[:4th] = nil
-      # room_ids[:5th] = nil
-
     end
 
     def check_rooms_in_blocks(block_id)
@@ -118,10 +100,6 @@ module Hotel
       )
       @reservations << new_reservation
     end
-
-    # def get_na(object)
-
-    # end
 
     def self.validate_room_id(room_id)
       if room_id.nil? || room_id <= 0 || room_id.class != Integer || room_id > Room.num_rooms
@@ -150,7 +128,24 @@ module Hotel
       raise ArgumentError, "Check_out_date must be after check_in_date" if end_date < start_date
     end
 
-    # private
+    private
+
+    def get_na_objects(array_object, check_in_date, check_out_date)
+      return array = array_object.select do |object|
+               check_in_date < object.check_out_date && check_in_date >= object.check_in_date ||
+               check_out_date > object.check_in_date && check_out_date < object.check_out_date ||
+               check_in_date < object.check_in_date && check_out_date > object.check_out_date
+             end
+    end
+
+    def new_reservation(room_id, check_in_date, check_out_date)
+      Hotel::Reservation.new(
+        reservation_id: @reservations.length + 1,
+        room_id: room_id,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date,
+      )
+    end
 
     # def connect_reservations
     #   @reservations.each do |reservation|
@@ -161,5 +156,5 @@ module Hotel
   end
 end
 
-rm = Hotel::ReservationManager.new
-p rm.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
+# rm = Hotel::ReservationManager.new
+# p rm.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
