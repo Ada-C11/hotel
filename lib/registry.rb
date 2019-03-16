@@ -12,10 +12,9 @@ module Hotel
 
     def initialize
       @reservations = []
-      @okay_rooms = []
     end
 
-    def available?(check_in, *check_out)
+    def available?(check_in, check_out)
       other_folks = concurrences(check_in, check_out)
       @okay_rooms = []
       @okay_rooms << ROOMS.reject do |room|
@@ -23,7 +22,7 @@ module Hotel
           booked[:room] == room[:room]
         end
       end
-      !@okay_rooms.empty?
+      !okay_rooms.empty?
     end
 
     def concurrences(check_in, check_out)
@@ -34,8 +33,12 @@ module Hotel
     end
 
     def book_room(check_in, check_out)
-      certainly_our_finest_room = @okay_rooms.first
+       if available?(check_in, check_out)
+      certainly_our_finest_room = okay_rooms.first
       @reservations << Hotel::Reservation.new(check_in, check_out, certainly_our_finest_room)
+      @reservations
+       else
+        raise Errors::BookingConflict
     end
 
     def feed_all_reservations_to_small_goat

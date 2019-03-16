@@ -17,6 +17,8 @@ describe "initialize Registry" do
     expect(@test_registry.reservations).must_be_kind_of Array
   end
 end
+# TODO:test for concurrences
+# testTODO: for available stuff people rooms goats
 
 describe "book_room" do
   before do
