@@ -21,19 +21,34 @@ describe "Frontdesk request_reservation" do
   before do
     @frontdesk = Hotel::Frontdesk.new
     @reservation = Hotel::Reservation.new("Agatha Christie", "2019-05-20", 2)
+    @reservation_2 = Hotel::Reservation.new("Leni Zumas", "2019-05-23", 2)
+    @reservation_3 = Hotel::Reservation.new("Nnedi Okorafor", "2019-05-18", 2)
+    @reservation_4 = Hotel::Reservation.new("Justin Martinsen", "2019-05-17", 10)
     @frontdesk.request_reservation(@reservation)
+    @frontdesk.request_reservation(@reservation_2)
+    @frontdesk.request_reservation(@reservation_3)
+    @frontdesk.request_reservation(@reservation_4)
   end
   it "adds reservation to reservation list" do
     expect(@frontdesk.reservations[0]).must_be_instance_of Hotel::Reservation
   end
   it "assigns an available room to the reservation" do
-    expect(@reservation.room_num).must_be_instance_of Integer
+    expect(@reservation.room_num).must_equal 1
+  end
+  it "allows a new reservations checkin date to fall on a previous reservations checkout date" do
+    expect(@reservation_2.room_num).must_equal 1
+  end
+  it "allows a new reservations checkout date to fall on another reservations checkin date" do
+    expect(@reservation_3.room_num).must_equal 1
+  end
+  it "a new reservations can't completely overlap another" do
+    expect(@reservation_4.room_num).must_equal 2
   end
   it "raises and argument error if no rooms are available for that date" do
-    reservation_2 = Hotel::Reservation.new("Agatha Christie", "2019-05-20", 2)
+    reservation_5 = Hotel::Reservation.new("Agatha Christie", "2019-05-20", 2)
     expect {
-      20.times do
-        @frontdesk.request_reservation(reservation_2)
+      19.times do
+        @frontdesk.request_reservation(reservation_5)
       end
     }.must_raise ArgumentError
   end
@@ -73,7 +88,7 @@ describe "Frontdesk find_reservation_by_date" do
     expect(known_reservation).must_be_instance_of Array
     expect(known_reservation[0]).must_be_instance_of Hotel::Reservation
     expect(known_reservation[0].name).must_equal "Agatha Christie"
-    expect(no_reservations).must_be_nil
+    expect(no_reservations.length).must_equal 0
   end
 end
 
@@ -109,13 +124,14 @@ describe "Frontdesk request_block" do
     @blocked_rooms = @frontdesk.request_block(@block_res, 5)
     @dates = @block_res.reserved_nights
   end
-  it "reserves a block of rooms" do
+  it "reserves the correct number of blocked rooms" do
     date = (@dates[0]).to_s
     expect(@blocked_rooms).must_be_instance_of Array
     expect(@blocked_rooms[2]).must_be_instance_of Hotel::Reservation
     expect(@blocked_rooms.length).must_equal 5
     expect(@frontdesk.find_available_rooms(@dates).length).must_equal 15
     expect(@frontdesk.find_reservation_by_date(date).length).must_equal 5
+    expect(@frontdesk.block_reservations).must_be_instance_of Hash
     expect(@frontdesk.block_reservations.length).must_equal 1
     expect(@block_res.block_reference).must_equal "WIZARD PARTY"
     expect(@blocked_rooms[0].block_availability).must_equal :AVAILABLE
@@ -144,7 +160,7 @@ describe "find_available_block_rooms" do
     @block_res2 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "WIZARD PARTY")
     @frontdesk.request_reservation(@block_res2)
   end
-  it "returns only available rooms in the block" do
+  it "returns only :AVAILABLE rooms in the block" do
     expect(@frontdesk.find_available_block_rooms("WIZARD PARTY")).must_be_instance_of Array
     expect(@frontdesk.find_available_block_rooms("WIZARD PARTY").length).must_equal 4
   end

@@ -5,13 +5,13 @@ module Hotel
     attr_accessor :rooms, :reservations, :block_reservations
 
     def initialize
-      @rooms = Frontdesk.create_rooms(20)
+      @rooms = create_rooms(20)
       @reservations = []
       @block_reservations = {}
     end
 
     def request_reservation(reservation)
-      if reservation.block_reference == "CLASSIC"
+      if reservation.block_reference == "N/A"
         assign_room_number(reservation)
         @reservations << reservation
         return reservation
@@ -19,7 +19,7 @@ module Hotel
         @reservations.each do |res|
           if res.block_reference.eql?(reservation.block_reference) && res.block_availability.eql?(:AVAILABLE)
             if res.reserved_nights != reservation.reserved_nights
-              raise ArgumentError, "You must book your room for #{res.block_reference} for #{res.checkin_date}, to #{res.checkout_date}."
+              raise ArgumentError, "Reservations for #{res.block_reference} must be booked from #{res.checkin_date} to #{res.checkout_date}."
             else
               res.instance_variable_set(:@block_availability, :UNAVAILABLE)
               res.instance_variable_set(:@name, reservation.name)
@@ -54,11 +54,6 @@ module Hotel
 
     def find_reservation_by_date(date)
       reservations_by_date = @reservations.find_all { |reservation| reservation.reserved_nights.include?(Date.parse(date)) }
-      if reservations_by_date.length == 0
-        return nil
-      else
-        return reservations_by_date
-      end
     end
 
     def request_block(reservation, num_of_rooms)
@@ -108,7 +103,7 @@ module Hotel
 
     private
 
-    def self.create_rooms(number_of_rooms)
+    def create_rooms(number_of_rooms)
       room_list = []
       counter = 0
       number_of_rooms.times do

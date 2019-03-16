@@ -2,10 +2,10 @@ require "date"
 
 module Hotel
   class Reservation
-    attr_reader :name, :checkin_date, :num_of_nights
-    attr_accessor :room_num, :cost, :checkout_date, :reserved_nights, :block_reference, :block_availability
+    attr_reader :checkin_date, :num_of_nights
+    attr_accessor :name, :room_num, :checkout_date, :reserved_nights, :block_reference, :block_availability
 
-    def initialize(name, checkin_date, num_of_nights, block_reference: "CLASSIC", block_availability: :UNAVAILABLE)
+    def initialize(name, checkin_date, num_of_nights, block_reference: "N/A", block_availability: :UNAVAILABLE)
       @name = name
       @checkin_date = Date.parse(checkin_date)
 
@@ -19,7 +19,7 @@ module Hotel
       @reserved_nights = calculate_reserved_nights
       @room_num = nil
       @block_reference = block_reference
-      @block_availability = :UNAVAILABLE
+      @block_availability = block_availability
     end
 
     def calculate_reserved_nights
@@ -34,11 +34,7 @@ module Hotel
     end
 
     def cost
-      if @block_reference == "CLASSIC"
-        return @num_of_nights * 200
-      else
-        return @num_of_nights * 150
-      end
+      return @block_reference == "N/A" ? @num_of_nights * 200 : @num_of_nights * 150
     end
   end
 end
