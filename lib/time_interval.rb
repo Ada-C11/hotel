@@ -1,23 +1,24 @@
 require 'date'
+module Hotel
+  class Time_Interval
+    attr_reader :check_in, :check_out
 
-class Time_Interval
-  attr_reader :check_in, :check_out
+    def initialize(check_in, check_out)
+      if check_in >= check_out
+        raise ArgumentError.new("Check in time cannot be greater than or equal to check out time")
+      end
 
-  def initialize(check_in, check_out)
-    if check_in >= check_out
-      raise ArgumentError.new("Check in time cannot be greater than or equal to check out time")
+      @check_in = check_in
+      @check_out = check_out
     end
 
-    @check_in = check_in
-    @check_out = check_out
-  end
+    def overlap?(time_interval)
+      return !(time_interval.check_out <= @check_in || 
+              @check_out <= time_interval.check_in)
+    end
 
-  def overlap?(time_interval)
-    return !(time_interval.check_out <= @check_in || 
-             @check_out <= time_interval.check_in)
-  end
-
-  def has_date?(date)
-    return date >= @check_in && date < @check_out
+    def has_date?(date)
+      return date >= @check_in && date < @check_out
+    end
   end
 end

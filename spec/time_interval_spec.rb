@@ -6,14 +6,14 @@ describe "time_interval class" do
     it "returns an instance of time_interval object" do
       check_in = Date.parse("2019-05-12")
       check_out = Date.parse("2019-05-16")
-      expect(Time_Interval.new(check_in, check_out)).must_be_instance_of Time_Interval
+      expect(Hotel::Time_Interval.new(check_in, check_out)).must_be_instance_of Hotel::Time_Interval
     end
 
     it "raises an argument error if check in time is after check out time" do
       check_in = Date.parse("2019/05/12")
       check_out = Date.parse("2019/05/10")
       expect {
-        Time_Interval.new(check_in, check_out)
+        Hotel::Time_Interval.new(check_in, check_out)
       }.must_raise ArgumentError
     end
 
@@ -21,7 +21,7 @@ describe "time_interval class" do
       check_in = Date.parse("2019/05/12")
       check_out = Date.parse("2019/05/12")
       expect {
-        Time_Interval.new(check_in, check_out)
+        Hotel::Time_Interval.new(check_in, check_out)
       }.must_raise ArgumentError
     end
   end
@@ -31,8 +31,8 @@ describe "time_interval class" do
       # x-------x
       # x-------x
       it "two long identical intervals" do
-        i1 = Time_Interval.new(Date.parse("2019-06-15"), Date.parse("2019-07-15"))
-        i2 = Time_Interval.new(Date.parse("2019-06-15"), Date.parse("2019-07-15"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-06-15"), Date.parse("2019-07-15"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-06-15"), Date.parse("2019-07-15"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -40,8 +40,8 @@ describe "time_interval class" do
       # x-x
       # x-x
       it "two short identical intervals" do
-        i1 = Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
-        i2 = Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -49,8 +49,8 @@ describe "time_interval class" do
       # x---------x
       #         x-x
       it "one long interval and one short interval with same check_out time" do
-        i1 = Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-12-15"))
-        i2 = Time_Interval.new(Date.parse("2019-12-14"), Date.parse("2019-12-15"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-12-15"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-12-14"), Date.parse("2019-12-15"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -58,8 +58,8 @@ describe "time_interval class" do
       # x---------x
       #     x-x
       it "one short interval falls within a long interval" do
-        i1 = Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
-        i2 = Time_Interval.new(Date.parse("2019-04-15"), Date.parse("2019-12-15"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-09-15"), Date.parse("2019-09-16"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-04-15"), Date.parse("2019-12-15"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -67,8 +67,8 @@ describe "time_interval class" do
       # x---------x
       #   x---x
       it "a medium length interval falls within a long interval" do
-        i1 = Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-09-15"))
-        i2 = Time_Interval.new(Date.parse("2019-04-15"), Date.parse("2019-12-15"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-09-15"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-04-15"), Date.parse("2019-12-15"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -76,8 +76,8 @@ describe "time_interval class" do
       # x---------x
       #      x---------x
       it "two similar length intervals with one's check_in time before the other's check_out time" do
-        i1 = Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
-        i2 = Time_Interval.new(Date.parse("2019-08-20"), Date.parse("2019-08-30"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-08-20"), Date.parse("2019-08-30"))
         expect(i1.overlap?(i2)).must_equal true
         expect(i2.overlap?(i1)).must_equal true
       end
@@ -88,8 +88,8 @@ describe "time_interval class" do
       # x---------x
       #           x---------x
       it "two similar length intervals with one's check_out time equals the other's check_in time" do
-        i1 = Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
-        i2 = Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-30"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-30"))
         expect(i1.overlap?(i2)).must_equal false
         expect(i2.overlap?(i1)).must_equal false
       end
@@ -97,8 +97,8 @@ describe "time_interval class" do
       # x---------x
       #           x-x
       it "one long interval with check_out time collides with check_in time of a very short interval" do
-        i1 = Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
-        i2 = Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-26"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-25"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-26"))
         expect(i1.overlap?(i2)).must_equal false
         expect(i2.overlap?(i1)).must_equal false
       end
@@ -106,8 +106,8 @@ describe "time_interval class" do
       # x---------x
       #              x----------x
       it "two intervals whose boundaries don't collide" do
-        i1 = Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-20"))
-        i2 = Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-30"))
+        i1 = Hotel::Time_Interval.new(Date.parse("2019-08-15"), Date.parse("2019-08-20"))
+        i2 = Hotel::Time_Interval.new(Date.parse("2019-08-25"), Date.parse("2019-08-30"))
         expect(i1.overlap?(i2)).must_equal false
         expect(i2.overlap?(i1)).must_equal false
       end
@@ -116,7 +116,7 @@ describe "time_interval class" do
 
   describe "has_date method" do
     let(:i) {
-      Time_Interval.new(Date.parse("2019-08-20"), Date.parse("2019-08-25"))
+      Hotel::Time_Interval.new(Date.parse("2019-08-20"), Date.parse("2019-08-25"))
     }
 
     it "returns true when a given date falls within the time interval" do
