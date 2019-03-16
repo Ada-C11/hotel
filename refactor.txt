@@ -1,0 +1,5 @@
+Refactoring Suggestions
+- make sure date is inputed as YYYYMMDD throughout all classes
+- have block reservations class inherit from reservations class
+- add more edge cases to tests
+- try adding in feature to assign different costs to different rooms

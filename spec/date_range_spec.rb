@@ -16,11 +16,6 @@ describe "Date Range Class" do
         expect(dates.end_date).must_be_kind_of Date
     end
 
-    # it "raises an exception for invalid calendar date" do
-    #     bad_date = Hotel::Date_Range.new(start_date: 19940940, end_date: 19960716)
-    #     expect {bad_date}.must_raise ArgumentError
-    # end
-
     it "raises an exception for end date before start date" do
         expect{Hotel::Date_Range.new(start_date: 19960716, end_date: 19940904)}.must_raise ArgumentError
     end

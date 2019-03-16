@@ -3,7 +3,7 @@ require_relative "spec_helper"
 describe "Booker Class" do
 
     describe "Booker Class Wave 1" do
-        
+
         let(:booker) {Hotel::Booker.new(Hotel::Room.load_rooms)}
 
         describe "Initialization of booker" do
@@ -181,14 +181,6 @@ describe "Booker Class" do
             end
             expect{booker.create_block(start_date: 20190313, end_date: 20190316, rooms: test_rooms, cost: 100)}.must_raise ArgumentError
         end
-
-        # it "does not raise an exception for requesting 5 rooms in a block" do
-        #     test_rooms = []
-        #     .times do |i|
-        #        test_rooms.push(booker.rooms[i])
-        #     end
-        #     expect{booker.create_block(start_date: 20190313, end_date: 20190316, rooms: test_rooms, cost: 100)}.must_raise ArgumentError
-        # end
 
         it "adds block to list of blocks in booker" do
             booker.create_block(start_date: 20190313, end_date: 20190316, rooms: [room1, room2], cost: 100)
