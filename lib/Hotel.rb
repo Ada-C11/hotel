@@ -1,37 +1,49 @@
 require_relative "Reservation"
 
 class Hotel
-  attr_reader :reservations
-  ROOMS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  attr_reader :reservations, :rooms
 
   def initialize
     @reservations = []
+    @rooms = (1..20).to_a
   end
 
-  #blergh, how do I store a room
-
-  def make_reservation(check_in:, check_out:)
-    #guess I best be adding rooms
-    reservation = Reservation.new(check_in: check_in, check_out: check_out)
+  def make_reservation(check_in:, check_out:, room: nil)
+    if room == nil
+      room = available_rooms(check_in: check_in, check_out: check_out).first
+    end
+    reservation = Reservation.new(check_in: check_in, check_out: check_out, room: room)
     @reservations << reservation
+    #add argument error if there is a booking already at that day
+
   end
 
   def list_rooms()
-    return ROOMS
+    return @rooms
   end
 
   def reservation_by_date(date)
-    # raise ArgumentError, "invalid date" if
-    # need to fix that
+    raise ArgumentError, "must pass in a Date object" if date.instance_of?(Date) == false
     res_by_date = @reservations.select do |x|
-      x.check_in <= date && date <= x.check_out
-      #it keeps check out as part of the resrvation, remember not to use this for adding a resrevation, or be aware last day is taken
+      x.check_in <= date && date < x.check_out
     end
-    #so its nil if its empty, but is that a valid response?
   end
 
   def available_rooms(check_in:, check_out:)
-    #see all available rooms for that date range
+    dates = (check_in..check_out - 1).to_a
+    booked_rooms = []
+    dates.each do |date|
+      reservation_by_date(date).each do |res|
+        booked_rooms << res.room
+      end
+    end
+    available_rooms = (@rooms - booked_rooms)
+    return available_rooms
+  end
 
+  def reserve_available_room(check_in:, check_out:)
+    available = available_rooms(check_in: check_in, check_out: check_out)
+    raise ArgumentError, "no available rooms" if available == nil
+    make_reservation(check_in: check_in, check_out: check_out, room: available.first)
   end
 end

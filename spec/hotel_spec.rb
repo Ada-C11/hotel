@@ -21,18 +21,39 @@ describe "Hotel class" do
       expect(hotel.reservations).must_be_kind_of Array
     end
 
+    #it throws an argument error if it tries to book something already reserved
+
     it "returns a list of rooms" do
       expect(hotel.list_rooms().length).must_equal 20
     end
 
     it "it returns reservations by date" do
       hotel.make_reservation(check_in: Date.new(2005, 2, 5), check_out: Date.new(2005, 2, 7))
-      hotel.make_reservation(check_in: Date.new(2005, 2, 2), check_out: Date.new(2005, 2, 3))
+      hotel.make_reservation(check_in: Date.new(2005, 2, 2), check_out: Date.new(2005, 2, 4))
       expect((hotel.reservation_by_date(Date.new(2005, 2, 3))).length).must_equal 2
+    end
+
+    it "throws argument error if not passed a Date" do
+      expect do
+        hotel.make_reservation("poop")
+      end.must_raise ArgumentError
     end
   end
 
-  #   it ""
+  describe "available room method" do
+    before do
+      hotel.reserve_available_room(check_in: Date.new(2005, 2, 3), check_out: Date.new(2005, 2, 9))
+      hotel.reserve_available_room(check_in: Date.new(2005, 2, 4), check_out: Date.new(2005, 2, 9))
+      hotel.reserve_available_room(check_in: Date.new(2005, 2, 3), check_out: Date.new(2005, 2, 6))
+      hotel.reserve_available_room(check_in: Date.new(2005, 2, 1), check_out: Date.new(2005, 2, 4))
+      hotel.reserve_available_room(check_in: Date.new(2005, 2, 6), check_out: Date.new(2005, 2, 8))
+    end
+    it "returns an array of available rooms" do
+      expect(hotel.available_rooms(check_in: Date.new(2005, 2, 4), check_out: Date.new(2005, 2, 6))).length.must_equal 16
+    end
+  end
+  #it returns an array of available rooms
+  #it throws an argument error if there is no available room
 
 end
 

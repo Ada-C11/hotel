@@ -18,4 +18,10 @@ describe "Reservation" do
       Reservation.new(check_in: Date.new(2005, 2, 2), check_out: Date.new(2005, 2, 2))
     end.must_raise ArgumentError
   end
+
+  it "throws argument error if not passed a Date" do
+    expect do
+      Reservation.new("poo", "poo")
+    end.must_raise ArgumentError
+  end
 end

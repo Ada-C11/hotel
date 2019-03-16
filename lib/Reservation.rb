@@ -1,16 +1,21 @@
 require "date"
 
 class Reservation
-  attr_reader :check_in, :check_out
+  attr_reader :check_in, :check_out, :room
 
   COST = 200
 
-  def initialize(check_in:, check_out:)
+  def initialize(check_in:, check_out:, room: nil)
     #guess I best be pairing rooms
     #maybe save id if we need to pair something later on, probably should delete
+
+    raise ArgumentError, "must pass in a Date object" if check_in.instance_of?(Date) == false
+
+    raise ArgumentError, "must pass in a Date object" if check_out.instance_of?(Date) == false
     @check_in = check_in
     @check_out = check_out
     raise ArgumentError, "invalid date range, check out must be after check in" if @check_out <= @check_in
+    @room = room
     #raise an argument if not date class
     #also probably should raise an argument that it needs to be in the future... but this could be some murakami style hotel
 
