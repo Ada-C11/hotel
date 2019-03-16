@@ -1,4 +1,5 @@
 module Hotel
+  # Abstract class, not intended to be intiated.
   class Unavailable
     attr_reader :check_in, :check_out, :id
     @@confirmation_number = 123000
