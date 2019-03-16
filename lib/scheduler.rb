@@ -14,10 +14,6 @@ class Scheduler
   end
 
   def reserve_room(room_id, date_range)
-    @room_map.each do |id, room|
-      if room_id = id
-        room.reserve(date_range)
-      end
-    end
+    @room_map[room_id].reserve(date_range)
   end
 end

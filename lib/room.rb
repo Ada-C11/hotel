@@ -1,5 +1,6 @@
 class Room
   attr_reader :room_id, :reservations
+
   RATE = 200.freeze
   private_constant :RATE
 
@@ -9,8 +10,8 @@ class Room
   end
 
   def reserve(reserved_dates)
-    r = Reservation.new(reserved_dates, @room_id, RATE)
     if is_available?(reserved_dates)
+      r = Reservation.new(reserved_dates, @room_id, RATE)
       reservations << r
     else
       raise ArgumentError, "The room you want to reserve is not available."
