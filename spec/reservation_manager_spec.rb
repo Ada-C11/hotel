@@ -138,6 +138,11 @@ describe "ReservationManager" do
       after_block = reservation_manager.blocks.length
       expect(after_block - before_block).must_equal 1
     end
+
+    it "cannot create a hotel block for a room already set in another block" do
+      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
+      expect { reservation_manager.create_block([3], "2019-03-10", "2019-03-15", 0.10) }.must_raise ArgumentError
+    end
   end
   # might remove?
   # describe "find_room method" do
