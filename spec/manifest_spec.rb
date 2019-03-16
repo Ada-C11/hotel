@@ -126,4 +126,10 @@ describe "Manifest" do
       expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
     end
   end
+
+  describe "Manifest#list_available_rooms_by_date_range" do
+    it "returns an Array" do
+      expect(@manifest_unavailable.list_available_rooms_by_date_range(check_in: @day1, check_out: @day2 - 1)).must_be_instance_of Array
+    end
+  end
 end
