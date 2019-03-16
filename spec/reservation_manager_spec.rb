@@ -142,7 +142,7 @@ describe "make_block method" do
   it "Can reserve a block of 5 rooms from available rooms" do
     reservation1
     reservation2
-    new_block = manager.make_block(5, "march 15, 2019", "march 20, 2019")
+    new_block = manager.make_block(5, "march 15, 2019", "march 20, 2019", block_id: 1)
     expect(new_block.length).must_equal 5
     expect(new_block).wont_include reservation1.room_number
     expect(new_block).wont_include reservation2.room_number
@@ -151,7 +151,9 @@ describe "make_block method" do
   it "Will not show blocked rooms as available" do
     reservation1
     reservation2
-    manager.make_block(4, "march 19, 2019", "march 23, 2019")
+    # block_id = 1
+    manager.make_block(4, "march 19, 2019", "march 23, 2019", block_id: 1)
+
     vacant_rooms = manager.available_rooms("march 19, 2019", "march 20, 2019")
     expect(vacant_rooms.length).must_equal 14
     expect(vacant_rooms).wont_include @block

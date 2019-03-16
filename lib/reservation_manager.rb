@@ -67,34 +67,20 @@ module Hotel
       return avail_rooms
     end
 
-    def make_block(total_rooms_in_block, check_in, check_out)
-      # room_number = available_rooms(check_in, check_out).first
+    def make_block(total_rooms_in_block, check_in, check_out, block_id)
       block_room_numbers = available_rooms(check_in, check_out).take(total_rooms_in_block)
 
       block_room_numbers.each do |room|
         room_number = room
-        # room_number = available_rooms(check_in, check_out).sample
+
         block_reservation = Hotel::Reservation.new(room_number,
                                                    check_in,
-                                                   check_out)
+                                                   check_out, block_id)
 
         @block << block_reservation.room_number
       end
 
       return @block
     end
-
-    # def reserve_block(start_date, end_date)
-    #   s_date = Date.parse(start_date)
-    #   e_date = Date.parse(end_date)
-    #   reservations_by_date = []
-    #   @reservations.each do |reservation|
-    #     if e_date > reservation.check_in && e_date <= reservation.check_out
-    #       reservations_by_date << reservation
-    #     elsif s_date >= reservation.check_in && s_date < reservation.check_out
-    #       reservations_by_date << reservation
-    #     elsif s_date <= reservation.check_in && e_date >= reservation.check_out
-    #       reservations_by_date << reservation
-    # end
   end
 end
