@@ -39,15 +39,15 @@ class Hotel
 
   def validate_date_range(start_date, end_date)
     # Test if date is after now (time.now).
-    raise "start date is before now" unless start_date > Time.now
+    # raise ArgumentError "start date is before now" unless start_date >= Time.now
     # If end date is before start date.
-    raise "the end date is before start date" unless end_date >= start_date
+    raise ArgumentError.new("the end date is before start date") unless end_date >= start_date
     # Check if dates are real ie 12/33 (raised_exception).
     # Research in rubys date gem? maybe time library.
   end
 
   def get_reservations_inclusive(date)
-    @reservations.find {|reservation| reservation.end_date >= date && reservation.start_date <= date}
+    @reservations.find_all {|reservation| reservation.end_date >= date && reservation.start_date <= date}
   end
 
 end
