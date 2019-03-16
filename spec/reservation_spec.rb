@@ -24,4 +24,13 @@ describe "Reservation class" do
       expect { Reservation.new(name: "Jane", room_id: 2, start_date: " ", end_date: "2019-04-14") }.must_raise ArgumentError
     end
   end
+
+  describe "Reservation#total_cost" do
+    before do
+      @res1 = Reservation.new(name: "Jane", room_id: 2, start_date: "2019-04-11", end_date: "2019-04-14")
+    end
+    it "return a correct total cost for a given reservation" do
+      expect (@res1.total_cost).must_equal 600
+    end
+  end
 end

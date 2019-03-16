@@ -2,8 +2,8 @@ require "pry"
 require "date"
 
 class Reservation
-  attr_accessor :name, :room_id, :start_date, :end_date, :total_cost,
-                ROOM_RATE = 200
+  ROOM_RATE = 200
+  attr_accessor :name, :room_id, :start_date, :end_date, :total_cost
 
   def initialize(name:, room_id:, start_date:, end_date:)
     @name = name
