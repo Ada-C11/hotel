@@ -115,6 +115,11 @@ describe "ReservationManager" do
       reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
       expect(reservation_manager.find_available_rooms("2019-03-12", "2019-03-14").length).must_equal 19
     end
+
+    it "cannot reserve a room set in the block" do
+      reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
+      expect { reservation_manager.reserve(1, "2019-03-10", "2019-03-15") }.must_raise ArgumentError
+    end
   end
 
   describe "create_block method" do

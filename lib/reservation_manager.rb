@@ -46,14 +46,26 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       check_in_date = Date.parse(check_in_date)
       check_out_date = Date.parse(check_out_date)
-      non_available = @reservations.select do |reservation|
+      na_reservations = @reservations.select do |reservation|
         check_in_date < reservation.check_out_date && check_in_date >= reservation.check_in_date ||
         check_out_date > reservation.check_in_date && check_out_date < reservation.check_out_date ||
         check_in_date < reservation.check_in_date && check_out_date > reservation.check_out_date
       end
-      non_available_room_ids = (non_available.map { |reservation| reservation.room_id }).uniq
+      na_blocks = @blocks.select do |block|
+        check_in_date < block.check_out_date && check_in_date >= block.check_in_date ||
+        check_out_date > block.check_in_date && check_out_date < block.check_out_date ||
+        check_in_date < block.check_in_date && check_out_date > block.check_out_date
+      end
+      na_room_ids_blocks = []
+      na_blocks.each do |block|
+        block.each do |i|
+          na_room_ids_blocks << i
+        end
+      end
+      na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
+      na_room_ids = (na_room_ids_blocks + na_room_ids_reservations).uniq
       return @rooms.reject do |room|
-               non_available_room_ids.include?(room.room_id)
+               na_room_ids.include?(room.room_id)
              end
     end
 
@@ -64,9 +76,7 @@ module Hotel
       # check_in_date = Date.parse(check_in_date)
       # check_out_date = Date.parse(check_out_date)
       available_rooms = find_available_rooms(check_in_date, check_out_date)
-      available_room_ids = available_rooms.map do |room|
-        room.room_id
-      end
+      available_room_ids = available_rooms.map { |room| room.room_id }
       room_ids.each do |room_id|
         raise ArgumentError, "Room #{room_id} is not available" if available_room_ids.include?(room_id) == false
       end
@@ -89,6 +99,10 @@ module Hotel
       # room_ids[:5th] = nil
 
     end
+
+    # def get_na(object)
+
+    # end
 
     def self.validate_room_id(room_id)
       if room_id.nil? || room_id <= 0 || room_id.class != Integer || room_id > Room.num_rooms
