@@ -28,12 +28,19 @@ module Hotel
       return all_room_numbers
     end
 
-    def list_reservations_by_date
+    def list_reservations_for_date(date)
       # write code here
     end
 
-    def find_avail_rooms_by_date
+    def find_avail_rooms_for_dates(ckin, ckout)
       # write code here
+    end
+
+    def make_res_for_room(ckin, ckout, room_num)
+      new_res = Reservation.new(ckin, ckout)
+
+      @rooms_reservations_hash[room_num] << new_res
+      #   binding.pry
     end
   end
 end

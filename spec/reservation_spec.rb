@@ -25,10 +25,12 @@ describe "Reservation Class" do
   it "Calculate and store base cost for a reservation" do
     expect(this_res.base_cost).must_equal 800
   end
+
   # TESTING DATE CONVERSION
   # INSTANCE OF DATE OBJECT TO STRING
   # it "Make Reservations" do
   #   apr4 = Date.new(2019, 4, 3)
   #   expect(apr4.to_s).must_equal "2019-04-03"
   # end
+
 end
