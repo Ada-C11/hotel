@@ -141,5 +141,9 @@ describe "ReservationSystem class" do
       }.must_raise ArgumentError
     end
 
+    it 'Uses room to make booking when provided' do
+      booking = @reservation_system.make_booking('2001-02-02', '2001-02-09', 5)
+      expect(booking.room.number).must_equal 5
+    end
   end
 end

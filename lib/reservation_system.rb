@@ -35,7 +35,7 @@ module HotelBooking
       room_numbers.include?(room_number)
     end
 
-    def make_booking(start_date, end_date, room_number: nil)
+    def make_booking(start_date, end_date, room_number = nil)
       selected_room = nil
 
       if start_date > end_date
