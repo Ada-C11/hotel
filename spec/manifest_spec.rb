@@ -20,6 +20,22 @@ describe "Manifest" do
       end
     end
   end
+  describe "Manifest#add_rooms_to_rooms" do
+  end
+
+  describe "Manifest#find_room" do
+    it "will return room" do
+      expect(manifest.find_room(id: 3)).must_be_instance_of Hotel::Room
+    end
+
+    it "return correct room if room is in rooms" do
+      expect(manifest.find_room(id: 3)).must_equal manifest.rooms[2]
+    end
+
+    it "returns nil if room is not in rooms" do
+      expect(manifest.find_room(id: manifest.rooms.length + 3)).must_be_nil
+    end
+  end
 
   describe "Manifest#list_rooms" do
     it "returns an array" do
@@ -34,6 +50,7 @@ describe "Manifest" do
       expect(manifest.list_rooms).must_equal manifest.rooms
     end
   end
+
   describe "Manifest#list_unavailable_rooms_by_date" do
     before do
       booker = Hotel::Booker.new
@@ -42,10 +59,9 @@ describe "Manifest" do
       @day2 = @day1 + 4
       @room_ids = [2, 10, 12]
       @room_ids.each do |id|
-        room = @manifest_unavailable.find_room(id)
+        room = @manifest_unavailable.find_room(id: id)
         booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
       end
-      # p @manifest_unavailable
     end
     it "returns an Array" do
       expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day1)).must_be_instance_of Array
@@ -53,7 +69,7 @@ describe "Manifest" do
 
     it "correctly selects unavailable rooms" do
       comparable_rooms = @room_ids.map do |id|
-        @manifest_unavailable.find_room(id)
+        @manifest_unavailable.find_room(id: id)
       end
       expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day1 + 1)).must_equal comparable_rooms
     end

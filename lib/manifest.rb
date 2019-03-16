@@ -25,7 +25,7 @@ module Hotel
       return rooms_to_list
     end
 
-    def find_room(id)
+    def find_room(id:)
       return rooms.find do |room|
                room.id == id
              end
@@ -35,9 +35,6 @@ module Hotel
       return rooms.reject do |room|
                room.room_available?(date: date)
              end
-    end
-
-    def next_available_room(check_in:, check_out:)
     end
   end
 
