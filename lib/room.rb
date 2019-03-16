@@ -10,9 +10,7 @@ module Hotel
     end
 
     def self.make_rooms(numbers)
-      rooms = numbers.map do |number|
-        Hotel::Room.new(number)
-      end
+      rooms = numbers.map { |number| Hotel::Room.new(number) }
       return rooms
     end
 
