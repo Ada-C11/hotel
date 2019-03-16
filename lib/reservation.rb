@@ -2,7 +2,11 @@ require "date"
 
 module Hotel
   class Reservation
-    def initialize
+    attr_reader :ckin_date, :ckout_date
+
+    def initialize(ckin_date, ckout_date)
+      # @check_in = Date.new(2019, 06, 03)
+      # @check_out = Date.new(2019, 06, 07)
       @ckin_date = ckin_date
       @ckout_date = ckout_date
     end
@@ -18,9 +22,5 @@ puts start_date <=> end_date
 
 range = (start_date..end_date).map(&:to_s)
 p range
-#   puts day
-# end
-# range2 = (start_date..end_date).map(&:mday)
-# p range2
 
 puts Date.parse(range[0])
