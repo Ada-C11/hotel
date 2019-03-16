@@ -22,19 +22,22 @@ describe "Hotel Manager Setup" do
     expect(this_manager.rooms_reservations_hash[1][0]).must_be_instance_of Hotel::Reservation
   end
 
-  #   it "Show list of reservations on a given date" do
-  #     check_in1 = Date.new(2019, 06, 03)
-  #     check_out1 = Date.new(2019, 06, 07)
-  #     room1 = 1
-  #     new_res1 = this_manager.make_res_for_room(check_in1, check_out1, room1)
+  it "Show a list of reservations on a given date" do
+    check_in1 = Date.new(2019, 06, 03)
+    check_out1 = Date.new(2019, 06, 07)
+    room1 = 1
+    new_res1 = this_manager.make_res_for_room(check_in1, check_out1, room1)
 
-  #     check_in2 = Date.new(2019, 06, 05)
-  #     check_out2 = Date.new(2019, 06, 06)
-  #     room2 = 8
-  #     new_res2 = this_manager.make_res_for_room(check_in2, check_out2, room2)
+    check_in2 = Date.new(2019, 06, 05)
+    check_out2 = Date.new(2019, 06, 06)
+    room2 = 8
+    new_res2 = this_manager.make_res_for_room(check_in2, check_out2, room2)
 
-  #     date_to_check = Date.new(2019, 06, 05)
-  #     list_reservations_for_date(date_to_check)
-  #     expect().must_include 1
-  #   end
+    date_to_check = Date.new(2019, 06, 05)
+
+    res_on_date = this_manager.list_reservations_for_date(date_to_check)
+
+    expect(res_on_date[0][0]).must_equal 1
+    expect(res_on_date[1][0]).must_equal 8
+  end
 end
