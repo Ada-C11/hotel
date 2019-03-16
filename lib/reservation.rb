@@ -5,7 +5,7 @@ class Reservation
 
   COST_PER_NIGHT = 200
 
-  def initialize(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s, part_of_block: false)
+  def initialize(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
     if room_number < 1 || room_number > 20
       raise ArgumentError, "Invaild room number. Room number must be between 1-20"
     else
@@ -18,7 +18,6 @@ class Reservation
       @check_in_time = Date.parse(check_in_time)
       @check_out_time = Date.parse(check_out_time)
     end
-    @part_of_block = part_of_block
   end
 
   def calculate_total_cost

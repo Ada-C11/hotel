@@ -54,11 +54,11 @@ class Reservation_manager
     return available_rooms_in_block
   end
 
-  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s, part_of_block: false)
+  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
     list_of_available_rooms = find_available_rooms(check_in_time, check_out_time)
 
     if list_of_available_rooms.include?(room_number)
-      new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time, part_of_block: part_of_block)
+      new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time)
       @reservations << new_reservation
     else
       raise ArgumentError, "You cannot book this room for this date range because it conflicts with another reservation"
@@ -96,7 +96,7 @@ class Reservation_manager
     else
       if (list_of_available_rooms + array_of_rooms).uniq == list_of_available_rooms
         array_of_rooms.each do |block_room_number|
-          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out, part_of_block: true)
+          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out)
           block << block_spot
           @pending_reservations_for_blocks << block_spot
         end
