@@ -21,6 +21,12 @@ describe "Reservation class" do
       expect(valid_reservation.check_out).must_equal Date.new(2020, 03, 27)
     end
 
+    it "instance variable cost is correct" do
+      expect(valid_reservation).must_respond_to :cost
+      valid_reservation.cost = 100.0
+      expect(valid_reservation.cost).must_equal 100.0
+    end
+
     it "will raise exception if invalid date range used" do
       date1 = (Time.new + 172800).to_date
       date2 = (Time.new + 172800 * 4).to_date
