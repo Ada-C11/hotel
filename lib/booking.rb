@@ -14,7 +14,11 @@ module HotelBooking
     def overlaps?(start_date, end_date)
       start_date_obj = Date.parse(start_date)
       end_date_obj = Date.parse(end_date)
-      Date.parse(@start_date) <= start_date_obj && Date.parse(@end_date) >= end_date_obj
+      booking_start_date = Date.parse(@start_date)
+      booking_end_date = Date.parse(@end_date)
+      (booking_start_date <= start_date_obj && booking_end_date >= end_date_obj) ||
+        (booking_start_date <= start_date_obj && booking_start_date >= end_date_obj) ||
+        (booking_end_date >= start_date_obj && booking_end_date <= end_date_obj)
     end
 
     def booking_duration

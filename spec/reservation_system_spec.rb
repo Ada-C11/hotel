@@ -45,7 +45,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-01', '2001-02-02')
 
-      expect(rooms.include?(booking)).must_equal false
+      expect(rooms.include?(booking.room)).must_equal true
       expect(rooms.length).must_equal 20
     end
 
@@ -53,7 +53,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-09', '2001-02-11')
 
-      expect(rooms.include?(booking)).must_equal false
+      expect(rooms.include?(booking.room)).must_equal true
       expect(rooms.length).must_equal 20
     end
 
@@ -61,7 +61,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-06')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
 
@@ -69,7 +69,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-02', '2001-02-06')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
 
@@ -77,7 +77,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-04', '2001-02-09')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
 
@@ -85,7 +85,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-04', '2001-02-06')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
 
@@ -93,7 +93,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
 
@@ -101,7 +101,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-03', '2001-02-07')
       rooms = @reservation_system.get_available_rooms('2001-02-02', '2001-02-09')
 
-      expect(rooms.include?(booking)).must_equal true
+      expect(rooms.include?(booking.room)).must_equal false
       expect(rooms.length).must_equal 19
     end
   end
@@ -115,7 +115,7 @@ describe "ReservationSystem class" do
       booking = @reservation_system.make_booking('2001-02-02', '2001-02-09')
       rooms = @reservation_system.get_available_rooms('2001-02-02', '2001-02-09')
 
-      expect(rooms.include?(booking.room.number)).must_equal false
+      expect(rooms.include?(booking.room)).must_equal false
     end
   end
 
