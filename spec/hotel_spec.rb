@@ -211,6 +211,26 @@ describe "hotel class" do
 
       expect(status).must_equal true
     end
+
+    it "will not reserve a room that is set aside for a block on the same day" do
+      @hotel.create_block(start_year: 2019, start_month: 3, start_day: 16, num_nights: 5, room_nums:[1,2,3], block_rate: 150)
+
+      @hotel.reserve_room(start_year: 2019, start_month: 3, start_day: 16, num_nights: 5)
+      march16res = @hotel.reservations_by_date(year: 2019, month: 3, day: 17)
+
+      expect(march16res.length).must_equal 1
+      expect(march16res[0].room_number).must_equal 4
+    end
+
+    it "will reserve a room that is set aside for a block if the date is the block's checkout day" do
+      @hotel.create_block(start_year: 2019, start_month: 3, start_day: 16, num_nights: 5, room_nums:[1,2,3], block_rate: 150)
+
+      @hotel.reserve_room(start_year: 2019, start_month: 3, start_day: 21, num_nights: 3)
+      march21res = @hotel.reservations_by_date(year: 2019, month: 3, day: 21)
+
+      expect(march21res.length).must_equal 1
+      expect(march21res[0].room_number).must_equal 1
+    end
   end
 
   describe "reservations_by_date method" do
