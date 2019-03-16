@@ -42,6 +42,10 @@ module Hotel
                room.room_available?(date: date)
              end
     end
+
+    def list_available_rooms_by_date_range(check_in:, check_out:)
+      return []
+    end
   end
 
   module RoomWrapper
