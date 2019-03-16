@@ -3,10 +3,12 @@ require_relative "spec_helper"
 describe "Reservation" do
   describe "instantiation" do
     before do
+      @room = Hotel::Room.new(id: 1)
+      @date_range = Hotel::DateRange.new("03-04-2019", "06-04-2019")
       @reservation = Hotel::Reservation.new(
         id: 1,
-        date_range: Hotel::DateRange.new("03-04-2019", "06-04-2019"),
-        room: Hotel::Room.new(id: 1),
+        date_range: @date_range,
+        room: @room,
         price: 200,
       )
     end
@@ -24,6 +26,40 @@ describe "Reservation" do
       expect(@reservation.date_range).must_be_instance_of Hotel::DateRange
       expect(@reservation.room).must_be_instance_of Hotel::Room
       expect(@reservation.price).must_be_kind_of Integer
+    end
+
+    it "rejects overlapping reservations" do
+      date_range = Hotel::DateRange.new("03-04-2019", "05-04-2019")
+      expect {
+        Hotel::Reservation.new(
+          id: 2,
+          date_range: date_range,
+          room: @room,
+          price: 200,
+        )
+      }.must_raise ArgumentError
+    end
+
+    it "allows reservation ending on start date of another reservation" do
+      date_range = Hotel::DateRange.new("01-04-2019", "03-04-2019")
+      reservation = Hotel::Reservation.new(
+        id: 3,
+        date_range: date_range,
+        room: @room,
+        price: 200,
+      )
+      expect(@room.reservations.include?(reservation)).must_equal true
+    end
+
+    it "allows reservation starting on end date of another reservation" do
+      date_range = Hotel::DateRange.new("06-04-2019", "07-04-2019")
+      reservation = Hotel::Reservation.new(
+        id: 3,
+        date_range: date_range,
+        room: @room,
+        price: 200,
+      )
+      expect(@room.reservations.include?(reservation)).must_equal true
     end
   end
 

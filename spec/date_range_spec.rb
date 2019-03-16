@@ -41,7 +41,7 @@ describe "DateRange class" do
     end
 
     it "calculates the duration in date range" do
-      expect(@date_range.duration).must_equal 3
+      expect(@date_range.duration).must_equal (@end_date - @start_date)
     end
 
     it "detects an overlapping date range" do

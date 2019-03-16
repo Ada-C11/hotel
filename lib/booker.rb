@@ -18,17 +18,13 @@ module Hotel
       reservations.push(reservation)
     end
 
-    binding.pry
-
     def reserve(start_date:, end_date:, price: 200)
       id = assign_id(reservations)
       date_range = date_range(start_date, end_date)
       room = open_room(date_range)
-      raise ArgumentError, "No rooms avaialable" if room == nil
       reservation = reservation_wrapper(id, date_range, room, price)
-      binding.pry
       add_reservation(reservation)
-      room.add_reservation(reservation)
+      # room.add_reservation(reservation)
       return reservation
     end
 
@@ -43,12 +39,14 @@ module Hotel
     end
 
     def open_room(date_range)
-      return available_rooms(date_range).find { |room| room }
+      room = available_rooms(date_range).find { |room| room }
+      raise ArgumentError, "No rooms avaialable" unless room
+      return room
     end
 
-    def reservation_by_date(date_range)
+    def reservations_by_date(date_range)
       return reservations.select do |reservation|
-               reservation.match?(date_range)
+               reservation.match_date(date_range)
              end
     end
 
