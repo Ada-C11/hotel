@@ -93,7 +93,9 @@ module Hotel
 
       raise ArgumentError, "No available rooms remaining in block" if available.length == 0
 
-      available.first.booking_name = booking_name
+      reservation = available.first
+      reservation.change_booking_name(booking_name: booking_name)
+      return reservation
     end
   end
 end

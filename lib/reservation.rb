@@ -3,6 +3,7 @@ require "Date"
 module Hotel
   class Reservation
     attr_reader :check_in, :check_out, :room, :all_dates, :block_name, :booking_name, :discount
+    # attr_writer :booking_name
 
     def initialize(check_in:, check_out:, room:, block_name: nil, booking_name:, discount: nil)
       @check_in = Date.parse(check_in)
@@ -27,6 +28,10 @@ module Hotel
 
     def total_cost
       discount != nil ? discount.to_f : all_dates.length * room.rate
+    end
+
+    def change_booking_name(booking_name:)
+      @booking_name = booking_name
     end
   end
 end
