@@ -36,6 +36,9 @@ module Hotel
           avail_rooms << room
         end
       end
+      if avail_rooms.empty? 
+        raise ArgumentError, "No rooms are available for those dates" 
+      end
       return avail_rooms
     end
 

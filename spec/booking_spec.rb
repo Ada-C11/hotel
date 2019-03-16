@@ -44,6 +44,14 @@ describe "Booking" do
       request = @booking.check_availability(["2019-04-01", "2019-04-02", "2019-04-03", "2019-04-04"])
       expect(request.first.id).must_equal 101
     end
+
+    it "Raises an error if there are no available rooms for a given date range" do
+      @booking.rooms = Hotel::Room.list_rooms(100, 1, 150)
+      @booking.request_reservation("April 1, 2019", "April 5, 2019")
+      expect {
+        @booking.check_availability(["2019-04-01", "2019-04-02", "2019-04-03", "2019-04-04"])
+      }.must_raise ArgumentError
+    end
   end
 
   describe "find_reservation" do
