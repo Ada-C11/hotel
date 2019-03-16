@@ -1,12 +1,14 @@
 module HotelSystem
   class Room
-    attr_reader :number, :price, :status
+    attr_reader :number, :price, :status, :block_id
     attr_accessor :reservations
 
-    def initialize(number)
+    def initialize(number:, status: :NOT_BLOCKED, block_id: nil)
       @number = number
       @price = 200.00
       @reservations = []
+      @status = status.to_sym
+      @block_id = block_id
     end
 
     def date_available?(possible_start_date, possible_end_date)

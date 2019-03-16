@@ -14,7 +14,7 @@ module HotelSystem
 
     def generate_rooms(number_of_rooms)
       number_of_rooms.times do |i|
-        @all_rooms << Room.new(i + 1)
+        @all_rooms << Room.new(number: i + 1)
       end
     end
 

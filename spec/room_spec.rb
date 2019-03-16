@@ -5,7 +5,7 @@ require_relative "spec_helper"
 describe "Room class" do
   describe "initialize" do
     before do
-      @room = HotelSystem::Room.new(1)
+      @room = HotelSystem::Room.new(number: 1)
     end
 
     it "is an instance of a room" do
@@ -15,7 +15,7 @@ describe "Room class" do
 
   describe "date_overlap method" do
     before do
-      @room = HotelSystem::Room.new(1)
+      @room = HotelSystem::Room.new(number: 1)
       @reservation = HotelSystem::Reservation.new(room: @room,
                                                  start_date: Date.new(2019, 3, 11),
                                                  end_date: Date.new(2019, 3, 14),

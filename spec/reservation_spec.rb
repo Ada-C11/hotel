@@ -4,7 +4,7 @@ require "date"
 describe "Reservation class" do
   describe "initialize" do
     it "is an instance of a reservation" do
-      room = HotelSystem::Room.new(1)
+      room = HotelSystem::Room.new(number: 1)
       reservation = HotelSystem::Reservation.new(
         room: room,
         start_date: Date.new(2019, 3, 11),
@@ -15,7 +15,7 @@ describe "Reservation class" do
     end
 
     it "raises an error if start date is before end date" do
-      room2 = HotelSystem::Room.new(2)
+      room2 = HotelSystem::Room.new(number: 2)
       expect {
         HotelSystem::Reservation.new(room: room2,
                                      start_date: Date.new(2019, 3, 14),
@@ -27,7 +27,7 @@ describe "Reservation class" do
 
   describe "calculate cost method" do
     before do
-      @room = HotelSystem::Room.new(1)
+      @room = HotelSystem::Room.new(number: 1)
       @reservation = HotelSystem::Reservation.new(room: @room,
                                                   start_date: Date.new(2019, 3, 11),
                                                   end_date: Date.new(2019, 3, 14),
