@@ -205,6 +205,18 @@ describe "ReservationManager class" do
 
       expect(@manager.reservations.first.total_cost).must_equal 120.0
     end
+
+    it "" do
+      @manager.request_block(check_in: "Jan30",
+                             check_out: "Feb3",
+                             number_of_rooms: 2,
+                             discount: 120,
+                             name: "Bob")
+
+      expect(@manager.reservations_by_date("Feb1").length).must_equal 2
+      expect(@manager.reservations_by_date("Feb1").first).must_be_kind_of Hotel::Reservation
+      expect(@manager.reservations_by_date("Feb1").last.block_name).must_equal "Bob"
+    end
   end
 
   describe "#available_rooms_in_block" do
@@ -230,7 +242,21 @@ describe "ReservationManager class" do
   end
 
   describe "#request_reservation_from_block" do
+    before do
+      @manager = Hotel::ReservationManager.new
+      @block = @manager.request_block(check_in: "jun20", check_out: "jun23", number_of_rooms: 5, discount: 170, name: "George")
+      @reservation = @manager.request_reservation_from_block(block_name: "George", booking_name: "Kaida")
+    end
+
     it "updates existing reservation to include a booking name" do
+      5.times do |index|
+        if index == 0
+          expect(@manager.reservations[index].booking_name).must_equal "Kaida"
+        else
+          expect(@manager.reservations.last.booking_name).must_equal nil
+        end
+      end
+      expect(@manager.reservations_by_date("jun22").first.booking_name).must_equal "Kaida"
     end
   end
 end
