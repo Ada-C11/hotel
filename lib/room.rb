@@ -1,9 +1,15 @@
 module Hotel
   class Room
     attr_reader :id, :cost
+    attr_accessor :reservations
     def initialize(id, cost)
       @id = id
       @cost = cost
+      @reservations = []
+    end
+
+    def add_reservation(reservation)
+      @reservations << reservation
     end
 
     def self.list_rooms(starting_id, num_rooms, cost)
