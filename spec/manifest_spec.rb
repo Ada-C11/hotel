@@ -111,11 +111,13 @@ describe "Manifest" do
       expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1)).must_be_instance_of Array
     end
 
-    # it "correctly selects available rooms" do
-    #   comparable_rooms =
-    #   end
-    #   expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal comparable_rooms
-    # end
+    it "correctly selects available rooms" do
+      comparable_rooms = @manifest_unavailable.rooms.select do |room|
+        !@room_ids.include?(room.id)
+      end
+
+      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal comparable_rooms
+    end
 
     # it "returns an empty Array if no rooms reserved for given date" do
     #   expect(@manifest_unavailable.list_available_rooms_by_date(date: @day2 + 5)).must_equal []
