@@ -16,15 +16,15 @@ class Reservation_manager
     return @all_rooms
   end
 
-  def find_available_rooms(check_in_time, check_out_time)
+  def find_available_rooms(check_in_day, check_out_day)
     available_rooms = (1..20).to_a
-    check_in = Date.parse(check_in_time)
-    check_out = Date.parse(check_out_time)
+    check_in = Date.parse(check_in_day)
+    check_out = Date.parse(check_out_day)
 
     date_range_of_interest = (check_in...check_out).to_a
 
     @reservations.each do |reservation|
-      date_range = (reservation.check_in_time...reservation.check_out_time).to_a
+      date_range = (reservation.check_in_day...reservation.check_out_day).to_a
       combined_range = date_range + date_range_of_interest
 
       if combined_range.length != combined_range.uniq.length
@@ -33,7 +33,7 @@ class Reservation_manager
     end
 
     @pending_reservations_for_blocks.each do |pending_block_reservation|
-      date_range = (pending_block_reservation.check_in_time...pending_block_reservation.check_out_time).to_a
+      date_range = (pending_block_reservation.check_in_day...pending_block_reservation.check_out_day).to_a
       combined_range = date_range + date_range_of_interest
 
       if combined_range.length != combined_range.uniq.length
@@ -61,11 +61,11 @@ class Reservation_manager
     return available_rooms_in_block
   end
 
-  def make_reservation(room_number, reservation_id: 0, check_in_time: Date.today.to_s, check_out_time: (Date.today + 1).to_s)
-    list_of_available_rooms = find_available_rooms(check_in_time, check_out_time)
+  def make_reservation(room_number, reservation_id: 0, check_in_day: Date.today.to_s, check_out_day: (Date.today + 1).to_s)
+    list_of_available_rooms = find_available_rooms(check_in_day, check_out_day)
 
     if list_of_available_rooms.include?(room_number)
-      new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_time: check_in_time, check_out_time: check_out_time)
+      new_reservation = Reservation.new(room_number, reservation_id: reservation_id, check_in_day: check_in_day, check_out_day: check_out_day)
       @reservations << new_reservation
     else
       raise ArgumentError, "This reservation conflicts with an existing reservation."
@@ -82,7 +82,7 @@ class Reservation_manager
     else
       if (list_of_available_rooms + array_of_rooms).uniq == list_of_available_rooms
         array_of_rooms.each do |block_room_number|
-          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_time: check_in, check_out_time: check_out, room_rate: discounted_room_rate)
+          block_spot = Reservation.new(block_room_number, reservation_id: block_id, check_in_day: check_in, check_out_day: check_out, room_rate: discounted_room_rate)
           block << block_spot
           @pending_reservations_for_blocks << block_spot
         end
@@ -117,7 +117,7 @@ class Reservation_manager
   def find_reservations(date)
     date = Date.parse(date)
     reservations_with_date = @reservations.select do |reservation|
-      if date.between?(reservation.check_in_time, reservation.check_out_time)
+      if date.between?(reservation.check_in_day, reservation.check_out_day)
         reservation
       end
     end
