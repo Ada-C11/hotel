@@ -128,6 +128,18 @@ describe "ReservationSystem class" do
       rooms = @reservation_system.get_available_rooms('2001-02-03', '2001-02-07')
       expect(rooms.length).must_equal 20
     end
-  end
 
+    it 'Raise argument for invalid date range' do
+      expect{
+        @reservation_system.make_booking('2001-02-09', '2001-02-02')
+      }.must_raise ArgumentError
+    end
+
+    it 'Raise argument if invalid room is provided' do
+      expect{
+        @reservation_system.make_booking('2001-02-02', '2001-02-09', 50)
+      }.must_raise ArgumentError
+    end
+
+  end
 end
