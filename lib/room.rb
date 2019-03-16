@@ -10,9 +10,9 @@ module Hotel
       @unavailable_list ||= []
     end
 
-    def room_available?(date)
+    def room_available?(date:)
       unavailable_list.each do |unavailable|
-        return false if unavailable.date_unavailable?(date)
+        return false if unavailable.date_unavailable?(date: date)
       end
       return true
     end
