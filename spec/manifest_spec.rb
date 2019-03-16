@@ -78,18 +78,18 @@ describe "Manifest" do
     end
   end
 
-  describe "Manifest#list_unavailable_rooms_by_date" do
-    before do
-      booker = Hotel::Booker.new
-      @manifest_unavailable = booker.manifest
-      @day1 = Time.now.to_date + 3
-      @day2 = @day1 + 4
-      @room_ids = [2, 10, 12]
-      @room_ids.each do |id|
-        room = @manifest_unavailable.find_room(id: id)
-        booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
-      end
+  before do
+    booker = Hotel::Booker.new
+    @manifest_unavailable = booker.manifest
+    @day1 = Time.now.to_date + 3
+    @day2 = @day1 + 4
+    @room_ids = [2, 10, 12]
+    @room_ids.each do |id|
+      room = @manifest_unavailable.find_room(id: id)
+      booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
     end
+  end
+  describe "Manifest#list_unavailable_rooms_by_date" do
     it "returns an Array" do
       expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day1)).must_be_instance_of Array
     end
@@ -104,5 +104,21 @@ describe "Manifest" do
     it "returns an empty Array if no rooms reserved for given date" do
       expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day2 + 5)).must_equal []
     end
+  end
+
+  describe "Manifest#list_available_rooms_by_date" do
+    it "returns an Array" do
+      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1)).must_be_instance_of Array
+    end
+
+    # it "correctly selects available rooms" do
+    #   comparable_rooms =
+    #   end
+    #   expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal comparable_rooms
+    # end
+
+    # it "returns an empty Array if no rooms reserved for given date" do
+    #   expect(@manifest_unavailable.list_available_rooms_by_date(date: @day2 + 5)).must_equal []
+    # end
   end
 end
