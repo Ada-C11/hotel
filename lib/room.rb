@@ -6,7 +6,7 @@ module Hotel
     # , :reservations
     COST = 200.0
 
-    def initialize(room_id, cost: COST, reservations: nil)
+    def initialize(room_id, cost: COST)
       @room_id = room_id
       @cost = cost
       # @reservations = reservations || []
@@ -19,7 +19,7 @@ module Hotel
     def self.load_all
       @all_rooms = []
       self.num_rooms.times do |id|
-        room = self.new(id + 1, cost: COST, reservations: nil)
+        room = self.new(id + 1, cost: COST)
         @all_rooms << room
       end
       return @all_rooms

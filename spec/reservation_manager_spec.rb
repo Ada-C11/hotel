@@ -32,122 +32,159 @@ describe "ReservationManager" do
   end
 
   describe "reserve method" do
+    let(:new_reservation) {
+      reservation_manager.reserve(room_id: 1,
+                                  check_in_date: "2019-03-12",
+                                  check_out_date: "2019-03-15")
+    }
     it "can reserve an available room and adds a new reservation to the list of reservations" do
       before_reserve = reservation_manager.reservations.length
-      reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
+      new_reservation
       after_reserve = reservation_manager.reservations.length
       expect(after_reserve - before_reserve).must_equal 1
     end
 
     it "cannot reserve unavailable rooms" do
-      reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
-      expect { reservation_manager.reserve(1, "2019-03-12", "2019-03-13") }.must_raise ArgumentError
+      new_reservation
+      expect { reservation_manager.reserve(new_reservation) }.must_raise ArgumentError
     end
   end
   # will refactor
   describe "list_reservations method" do
     it "returns an array" do
-      reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
-      reservation_manager.reserve(2, "2019-03-12", "2019-03-15")
-      expect(reservation_manager.list_reservations("2019-03-14")).must_be_kind_of Array
+      reservation_manager.reserve(room_id: 1,
+                                  check_in_date: "2019-03-12",
+                                  check_out_date: "2019-03-15")
+      reservation_manager.reserve(room_id: 2,
+                                  check_in_date: "2019-03-12",
+                                  check_out_date: "2019-03-15")
+      expect(reservation_manager.list_reservations(date: "2019-03-14")).must_be_kind_of Array
     end
 
-    it "lists all reservations with the right date " do
-      reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
-      reservation_manager.reserve(2, "2019-03-12", "2019-03-15")
-      reservation_manager.reserve(1, "2019-04-12", "2019-04-15")
-      expect(reservation_manager.list_reservations("2019-03-14").length).must_equal 2
-      expect(reservation_manager.list_reservations("2019-04-14").length).must_equal 1
+    it "lists the right reservations with the given date " do
+      reservation_manager.reserve(room_id: 1,
+                                  check_in_date: "2019-03-12",
+                                  check_out_date: "2019-03-15")
+      reservation_manager.reserve(room_id: 2,
+                                  check_in_date: "2019-03-12",
+                                  check_out_date: "2019-03-15")
+      reservation_manager.reserve(room_id: 2,
+                                  check_in_date: "2019-04-12",
+                                  check_out_date: "2019-04-15")
+      expect(reservation_manager.list_reservations(date: "2019-03-14").length).must_equal 2
+      expect(reservation_manager.list_reservations(date: "2019-04-14").length).must_equal 1
     end
   end
 
   describe "find_available_rooms" do
-    it "returns the right number of rooms given a date range" do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      reservation_manager.reserve(1, "2019-03-17", "2019-03-20")
-      reservation_manager.reserve(2, "2019-04-15", "2019-04-20")
+    let(:reserve_03_10_03_15) { reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-10", check_out_date: "2019-03-15") }
+    let(:reserve_03_17_03_20) { reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-17", check_out_date: "2019-03-20") }
+    let(:reserve_04_15_04_20) { reservation_manager.reserve(room_id: 2, check_in_date: "2019-04-15", check_out_date: "2019-04-20") }
 
-      expect(reservation_manager.find_available_rooms("2019-03-20", "2019-03-22").length).must_equal 20
-      expect(reservation_manager.find_available_rooms("2019-04-17", "2019-04-19").length).must_equal 19
-      expect(reservation_manager.find_available_rooms("2019-03-10", "2019-04-19").length).must_equal 18
+    it "returns the right number of rooms given a date range" do
+      reserve_03_10_03_15
+      reserve_03_17_03_20
+      reserve_04_15_04_20
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-20", check_out_date: "2019-03-22").length).must_equal 20
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-04-17", check_out_date: "2019-04-19").length).must_equal 19
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-10", check_out_date: "2019-04-19").length).must_equal 18
     end
 
     it "returns all the rooms if no room has been reserved" do
-      expect(reservation_manager.find_available_rooms("2019-03-20", "2019-03-22").length).must_equal 20
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-20", check_out_date: "2019-03-22").length).must_equal 20
     end
 
     it "returns 0 if all rooms have been reserved" do
-      20.times do |i|
-        reservation_manager.reserve(i + 1, "2019-03-10", "2019-03-15")
+      reservation_manager.rooms.length.times do |i|
+        reservation_manager.reserve(room_id: i + 1,
+                                    check_in_date: "2019-03-10",
+                                    check_out_date: "2019-03-15")
       end
 
-      expect(reservation_manager.find_available_rooms("2019-03-11", "2019-03-14").length).must_equal 0
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-11", check_out_date: "2019-03-14").length).must_equal 0
     end
 
     it "returns the right number of rooms when check_in_date is the same as the reserved check_out_date " do
-      reservation_manager.reserve(1, "2019-03-17", "2019-03-20")
-
-      expect(reservation_manager.find_available_rooms("2019-03-20", "2019-03-22").length).must_equal 20
+      reserve_03_17_03_20
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-20", check_out_date: "2019-03-22").length).must_equal 20
     end
 
     it "returns the right number of rooms when both check_in_date and check_out_date are within the reserved rate range " do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      expect(reservation_manager.find_available_rooms("2019-03-12", "2019-03-12").length).must_equal 19
+      reserve_03_10_03_15
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-12", check_out_date: "2019-03-12").length).must_equal 19
     end
 
     it "returns the right number of rooms when check_out_date is within the reserved rate range " do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      expect(reservation_manager.find_available_rooms("2019-03-09", "2019-03-11").length).must_equal 19
+      reserve_03_10_03_15
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-09", check_out_date: "2019-03-11").length).must_equal 19
     end
 
     it "returns the right number of rooms when check_in_date is within the reserved rate range " do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      expect(reservation_manager.find_available_rooms("2019-03-14", "2019-03-17").length).must_equal 19
+      reserve_03_10_03_15
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-14", check_out_date: "2019-03-17").length).must_equal 19
     end
 
     it "returns the right number of rooms when check_in_date and check_in_date range contains reserved rate range " do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      reservation_manager.reserve(1, "2019-03-17", "2019-03-20")
-      expect(reservation_manager.find_available_rooms("2019-03-08", "2019-03-22").length).must_equal 19
+      reserve_03_10_03_15
+      reserve_03_17_03_20
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-08", check_out_date: "2019-03-22").length).must_equal 19
     end
 
     it "returns the right number of rooms when check_in_date and check_out_date range is within reserved rate range " do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      expect(reservation_manager.find_available_rooms("2019-03-12", "2019-03-14").length).must_equal 19
+      reserve_03_10_03_15
+      expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-12", check_out_date: "2019-03-14").length).must_equal 19
     end
 
     it "cannot reserve a room set in the block" do
-      reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
-      expect { reservation_manager.reserve(1, "2019-03-10", "2019-03-15") }.must_raise ArgumentError
+      reservation_manager.create_block(room_ids: [1, 2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
+      expect { reserve_03_10_03_15 }.must_raise ArgumentError
     end
   end
 
   describe "create_block method" do
-    # it "will create a new instance of Block class " do
-    #   new_block = reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
-    #   expect(new_block).must_respond_to Hotel::Block
-    # end
     it "raises ArgumentError if at least one of the rooms is unavailable" do
-      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
-      expect { reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10) }.must_raise ArgumentError
+      reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-10", check_out_date: "2019-03-15")
+      expect {
+        reservation_manager.create_block(room_ids: [1, 2, 3],
+                                         check_in_date: "2019-03-10",
+                                         check_out_date: "2019-03-15",
+                                         discount_rate: 0.10)
+      }.must_raise ArgumentError
     end
 
     it "adds to the collection of blocks" do
       before_block = reservation_manager.blocks.length
-      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
+      reservation_manager.create_block(room_ids: [2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
       after_block = reservation_manager.blocks.length
       expect(after_block - before_block).must_equal 1
     end
 
     it "cannot create a hotel block for a room already set in another block" do
-      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
-      expect { reservation_manager.create_block([3], "2019-03-10", "2019-03-15", 0.10) }.must_raise ArgumentError
+      reservation_manager.create_block(room_ids: [2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
+      expect {
+        reservation_manager.create_block(room_ids: [3],
+                                         check_in_date: "2019-03-10",
+                                         check_out_date: "2019-03-15",
+                                         discount_rate: 0.10)
+      }.must_raise ArgumentError
     end
   end
 
   describe "check_rooms_in_blocks" do
     it "can check room availabity in a given block" do
-      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
+      reservation_manager.create_block(room_ids: [2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
       expect(reservation_manager.check_rooms_in_blocks(1).length).must_equal 2
     end
 
@@ -158,7 +195,10 @@ describe "ReservationManager" do
 
   describe "reserve_from_block" do
     it "can reserve from the block" do
-      reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
+      reservation_manager.create_block(room_ids: [1, 2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
       before_reserve = reservation_manager.reservations.length
       reservation_manager.reserve_from_block(room_id: 1, block_id: 1)
       after_reserve = reservation_manager.reservations.length
