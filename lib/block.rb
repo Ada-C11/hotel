@@ -14,6 +14,7 @@ module HotelSystem
       @discount = discount
       @reservations = []
       raise ArgumentError, "Not all rooms are available in this Block" unless all_rooms_available?
+      create_block_reservations
     end
 
     def all_rooms_available?

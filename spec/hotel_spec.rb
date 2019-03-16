@@ -53,43 +53,9 @@ describe "Hotel" do
       @arrive_day = "2019-02-10"
       @depart_day = "2019-02-14"
 
-      # @another_first_day = "2019-01-06"
-      # @another_second_day = "2019-02-10"
-
       @hotel.book_reservation(@room, @arrive_day, @depart_day)
       @hotel.book_reservation(@room_two, @arrive_day, @depart_day)
-      # @hotel.book_reservation(@room_three, @another_first_day, @another_second_day)
-      # @reservation = HotelSystem::Reservation.new(room: room, arrive_day: arrive_day, depart_day: depart_day)
     end
-    # describe "hotel#book_reservation" do
-    #   it "Adds reservation to reservations array" do
-    #     expect(@hotel.reservations.length).must_equal 2
-    #     expect(@hotel.reservations.first).must_be_kind_of HotelSystem::Reservation
-    #   end
-
-    #   it "Raises an ArgumentError if trying to book a room that is unavailable" do
-    #     expect {
-    #       @hotel.book_reservation(@room, @arrive_day, @depart_day)
-    #     }.must_raise ArgumentError
-    #   end
-
-    #   it "Accepts booking a room with a reservation that starts on the day another ends " do
-    #     hotel_reservation = @hotel.book_reservation(@room, @depart_day, "2019-02-18")
-    #     expect(@hotel.reservations).must_include hotel_reservation
-    #     expect(@room.reservations).must_include hotel_reservation
-    #   end
-
-    #   it "Accepts booking a room with a reservation that ends on the day another starts" do
-    #     hotel_reservation = @hotel.book_reservation(@room, "2019-02-01", @arrive_day)
-    #     expect(@hotel.reservations).must_include hotel_reservation
-    #     expect(@room.reservations).must_include hotel_reservation
-    #   end
-
-    #   it "Adds reservation to the rooms reservation array" do
-    #     expect(@room.reservations.length).must_equal 1
-    #     expect(@room.reservations.first).must_be_kind_of HotelSystem::Reservation
-    #   end
-    # end
 
     describe "#reservations_by_date" do
       before do
@@ -136,8 +102,7 @@ describe "Hotel" do
         reservation_list = @hotel.reservations_by_date("2019-02-10")
         expect(reservation_list.length).must_equal 4
         @block.reservations.each do |res|
-
-          #expect(reservation_list).must_include res
+          expect(reservation_list).must_include res
         end
       end
     end
@@ -160,7 +125,7 @@ describe "Hotel" do
       @hotel.book_reservation(@room, @start, @end)
     end
     it "Returns an array of Rooms" do
-      available_rooms = @hotel.get_available_rooms("2017-3-15", "2017-3-18")
+      available_rooms = @hotel.get_available_rooms(@way_before, @before)
       expect(available_rooms).must_be_kind_of Array
       expect(available_rooms.first).must_be_kind_of HotelSystem::Room
       expect(available_rooms.length).must_equal 1
@@ -256,6 +221,7 @@ describe "Hotel" do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
       @room_three = HotelSystem::Room.new(id: 3)
+      @room_array = [@room, @room_two, @room_three]
 
       @arrive_day = "2019-02-10"
       @depart_day = "2019-02-14"
@@ -267,28 +233,30 @@ describe "Hotel" do
         expect(@hotel).must_respond_to :create_block
       end
       it "creates an instance of a Block" do
-        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         expect(block).must_be_kind_of HotelSystem::Block
       end
 
       it "Adds the created block to the hotels blocks array" do
         expect(@hotel.blocks.length).must_equal 0
-        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         expect(@hotel.blocks.length).must_equal 1
         expect(@hotel.blocks.first).must_equal block
       end
 
       ### MAYBE MORE TESTS
-      it "reserves all rooms in the block for the time frame, so they cannot get booked through normal means" do
-        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
-        expect {
-          @hotel.book_reservation(@room, @arrive_day, @depart_day)
-        }.must_raise ArgumentError
+      it "Reserves all rooms in the block for the time frame, so they cannot get booked through normal means" do
+        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
+        @room_array.each do |room|
+          expect {
+            @hotel.book_reservation(@room, @arrive_day, @depart_day)
+          }.must_raise ArgumentError
+        end
       end
 
       #### MAYBE MORE TESTS
       it "cannot book another block that includes any rooms that are included in another block for the same night" do
-        block = @hotel.create_block([@room, @room_two, @room_three], @arrive_day, @depart_day, 0.2)
+        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         expect {
           @hotel.create_block([@room_two, @room_three], "2019-02-12", "2019-02-17", 0.2)
         }.must_raise ArgumentError

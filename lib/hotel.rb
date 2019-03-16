@@ -17,7 +17,6 @@ module HotelSystem
       @blocks = blocks
     end
 
-    #### NOT SURE IF I NEED THIS
     def list_rooms
       room_list = @rooms.map { |room| room.id }
       return room_list
@@ -64,8 +63,6 @@ module HotelSystem
     end
 
     def get_available_rooms(first_day, last_day)
-      # arrive_day = create_date_object(first_day)
-      # depart_day = create_date_object(last_day)
       available_rooms = @rooms.clone
       (first_day...last_day).each do |day|
         date = create_date_object(day)
@@ -76,7 +73,7 @@ module HotelSystem
 
     def create_block(rooms, first_day, last_day, discount)
       new_block = HotelSystem::Block.new(rooms: rooms, first_day: create_date_object(first_day), last_day: create_date_object(last_day), discount: discount)
-      new_block.create_block_reservations
+      # new_block.create_block_reservations
       new_block.reservations.each do |reservation|
         add_reservation(reservation)
       end
@@ -84,10 +81,10 @@ module HotelSystem
       return new_block
     end
 
-    def available_block_rooms(block)
-    end
+    # def available_block_rooms(block)
+    # end
 
-    def reserve_block_room(block, room)
-    end
+    # def reserve_block_room(block, room)
+    # end
   end
 end

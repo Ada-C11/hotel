@@ -106,23 +106,23 @@ describe "Block" do
     end
 
     it "Creates a reservation Array containing a reservation for each room in the block, of type BlockReservation" do
-      reservations = @block.create_block_reservations
-      expect(reservations.length).must_equal 3
-      expect(reservations).must_be_kind_of Array
-      expect(reservations.first).must_be_kind_of HotelSystem::BlockReservation
+      # reservations = @block.create_block_reservations
+      # expect(reservations.length).must_equal 3
+      expect(@block.reservations).must_be_kind_of Array
+      expect(@block.reservations.first).must_be_kind_of HotelSystem::BlockReservation
     end
 
     it "adds reservation to the blocks reservation array" do
-      expect(@block.reservations.length).must_equal 0
-      reservations = @block.create_block_reservations
+      # expect(@block.reservations.length).must_equal 0
+      # reservations = @block.create_block_reservations
       expect(@block.reservations.length).must_equal 3
     end
 
     it "adds each reservation to the corrosponding rooms reservation array" do
-      expect(@room.reservations.length).must_equal 0
-      reservations = @block.create_block_reservations
+      # expect(@room.reservations.length).must_equal 0
+      # reservations = @block.create_block_reservations
       expect(@room.reservations.length).must_equal 1
-      expect(reservations).must_include @room.reservations.first
+      expect(@block.reservations).must_include @room.reservations.first
       expect(@room.reservations.first.room.id).must_equal @room.id
     end
   end
@@ -130,7 +130,7 @@ describe "Block" do
     before do
       @number_of_rooms = 3
       @block = create_block(@number_of_rooms, Date.parse("2019-04-27"), Date.parse("2019-05-08"), 0.2)
-      @block.create_block_reservations
+      # @block.create_block_reservations
     end
 
     it "Can be called on a block" do
