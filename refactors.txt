@@ -1,6 +1,6 @@
-In that file, make a short list of the changes that you could make, such as naming conventions, etc.
-These notes will be used by you in a few weeks, so make sure that they are detailed enough that someone else could understand your thinking and follow your directions
-Commit and push this file to your project repo
+Make a short list of the changes that you could make, such as naming conventions, etc.
+These notes will be used by you in a few weeks, so make sure that they are detailed enough 
+that someone else could understand your thinking and follow your directions
 
 Possible changes to this project for future use:
 -   Make tests much cleaner (I decided to use a bunch of different dates throughout my test
