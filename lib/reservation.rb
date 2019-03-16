@@ -7,7 +7,7 @@ module Hotel
   class Reservation
     attr_reader :id, :room, :start_date, :end_date, :total_cost, :date_range
     
-    def initialize(id:, room:, start_date:, end_date:)
+    def initialize(id:, room:, start_date:, end_date:, date_range: nil)
       @id = id
       @room = room
       @start_date = start_date
@@ -20,14 +20,13 @@ module Hotel
     end
     
     
-    
     def date_range
       @date_range = DateRange.new(start_date: start_date, end_date: end_date)
     end
     
     def date_range=(date_range)
-      self.start_date = date_range.start_date
-      self.end_date = date_range.end_date
+      start_date = date_range.start_date
+      end_date = date_range.end_date
     end
     
     def include_date?(date)
@@ -37,8 +36,6 @@ module Hotel
         return false
       end
     end
-
-  
     
     def total_cost
       return ('%.2f' % (200.00 * duration)).to_f

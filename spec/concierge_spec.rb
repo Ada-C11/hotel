@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'pry'
 
 describe "Concierge class" do
 
@@ -47,13 +48,13 @@ describe "Concierge class" do
     
     it "selects an available room" do
      @reservation = @concierge.reserve_room("2019-01-01", "2019-01-03")
-      expect(@reservation.first.room.status).must_equal :AVAILABLE
+        expect(@reservation.first.room.status).must_equal :AVAILABLE
     end
     
     it "updates the Concierge Reservations array" do
       @res_count = @concierge.reservations.length
       @reservation1 = @concierge.reserve_room("2019-01-01", "2019-01-03")
-      expect{(@concierge.reservations.length).must_equal (res_count + 1)}
+        expect(@concierge.reservations.length).must_equal (@res_count + 1)
     end
     
     it "updates the Room's list of reservations" do
@@ -89,8 +90,35 @@ describe "Concierge class" do
       
       it "accurately returns all reservations for specified date range" do
         expect(@concierge.view_reservations_by_date("2020-1-20").length).must_equal 3
+      end    
+    end    
+    
+    describe "View Available Rooms method" do
+      before do 
+        @concierge = Hotel::Concierge.new
+        res1 = @concierge.reserve_room("2019-01-01", "2019-01-04")
+        # res3 = @concierge.reserve_room("2020-1-10", "2020-1-20")
       end
       
+      it "returns a list of available rooms" do
+        @date_range = DateRange.new(start_date: "2019-01-01", end_date: "2019-01-03")
+          expect(@concierge.view_available_rooms(@date_range)).must_be_kind_of Array
+      end
+      
+      it "returns the correct amount of available rooms" do
+        @date_range = DateRange.new(start_date: "2019-01-01", end_date: "2019-01-03")
+          expect(@concierge.view_available_rooms(@date_range).length).must_equal 19 
+      end
+      
+      it "displays only rooms available during the given date range" do
+        res1 = @concierge.reserve_room("2019-01-01", "2019-01-04")
+        res2 = @concierge.reserve_room("2020-3-1", "2020-3-2")
+        @date_range = DateRange.new(start_date: "2019-01-01", end_date: "2019-01-03")
+        
+          expect(@concierge.view_available_rooms(@date_range).length).must_equal 19
+          
+          expect((@concierge.reservations).length).must_equal 3
+      end
+    end
     
-  end    
 end    
