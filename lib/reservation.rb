@@ -15,7 +15,9 @@ class Reservation
     # add something to make sure date is not in past
 
     trip_duration = Date.parse(@end_date) - Date.parse(@start_date)
-    if trip_duration < 1
+    if Date.parse(@start_date) < Date.today
+      raise ArgumentError, "The start date cannot be in the past"
+    elsif trip_duration < 1
       raise ArgumentError, "The duration must be at least one day"
     else
       return trip_duration

@@ -70,6 +70,11 @@ describe "ReservationManager class" do
   end
 
   describe "hotel_block method" do
+    it "lets user create another multiple hotel blocks if the dates and rooms are unique" do
+      reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["7", "8", "9"], cost: 100)
+      reservation_manager.hotel_block(start_date: "2nd June 2019", end_date: "5th June 2019", rooms_array: ["7", "8", "9"], cost: 100)
+      expect (reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["10", "11", "12"], cost: 100).length).must_equal 9
+    end
     it "Returns an array" do
       expect(reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100).length).must_equal 3
     end
@@ -108,6 +113,11 @@ describe "ReservationManager class" do
       reservation_manager.make_reservation(start_date: "2nd July 2019", end_date: "5th July 2019", room: "1")
       reservation_manager.make_reservation(start_date: "2nd June 2019", end_date: "5th June 2019", room: "2")
       expect(reservation_manager.access_reservations_by_date("10th Jul 2019").length).must_equal 0
+    end
+    it "access_reservations_by_date method will show a reservation made from a hotel block" do
+      reservation_manager.hotel_block(start_date: "2nd Feb 2019", end_date: "5th Feb 2019", rooms_array: ["18", "19", "20"], cost: 100)
+      reservation_manager.make_reservation(start_date: "2nd Feb 2019", end_date: "5th Feb 2019", cost: 100, room: "18")
+      expect (reservation_manager.access_reservations_by_date("4th Feb 2019").length).must_equal 1
     end
   end
 
