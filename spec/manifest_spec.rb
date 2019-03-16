@@ -128,8 +128,18 @@ describe "Manifest" do
   end
 
   describe "Manifest#list_available_rooms_by_date_range" do
+    before do 
+      @comparable_rooms = @manifest_unavailable.rooms.select do |room|
+        !@room_ids.include?(room.id)
+      end
+    end
     it "returns an Array" do
       expect(@manifest_unavailable.list_available_rooms_by_date_range(check_in: @day1, check_out: @day2 - 1)).must_be_instance_of Array
+    end
+    describe "correctly selects available rooms" do
+      it "date_range checked is eqaul to a room reservations(same check-in/check-outs)" do 
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(check_in: @day1, check_out: @day2 - 1)).must_equal @comparable_rooms
+      end  
     end
   end
 end
