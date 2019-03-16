@@ -4,9 +4,10 @@ require_relative 'reservation'
 require_relative 'block'
 
 class BookingCentral 
-  attr_accessor :rooms, :all_reservations
+  attr_accessor :rooms, :all_reservations, :blocks
   
   def initialize
+    @blocks = []
     @rooms = []
     @all_reservations = []
 
@@ -18,13 +19,16 @@ class BookingCentral
 
   def reservations_by_date(check_in, check_out)
     asking_date = DateRange.generate_date_range(check_in, check_out)
-    matching_reservations = @all_reservations.select { |reservation, details| reservation if DateRange.dates_overlap?(reservation.date_range, asking_date) }
+    matching_reservations = @all_reservations.select { 
+      |reservation, details| reservation if DateRange.dates_overlap?(reservation.date_range, asking_date)
+    }
     return matching_reservations
   end
 
   def list_available_rooms(check_in, check_out)
     asking_date = DateRange.generate_date_range(check_in, check_out)
-    available_rooms = @rooms - (reservations_by_date(check_in, check_out)).map{ |reservation| reservation.room}
+    available_rooms = @rooms - (reservations_by_date(check_in, check_out)).map{ |reservation| reservation.room }
+    available_rooms -= @rooms.select{ |room| room.blocked == true }
     return available_rooms
   end
 
@@ -48,19 +52,18 @@ class BookingCentral
 
   def block_rooms(check_in:, check_out:, number_of_rooms:, rooms:, discount_rate:)
     available_rooms = list_available_rooms(check_in, check_out)
-
-    rooms = []
-      number_of_rooms.times do |i|
-        room = assign_room(check_in, check_out)
-        rooms << room
-      end
+    number_of_rooms.times do |i|
+      room = assign_room(check_in, check_out)
+      @rooms << room
+      @rooms.map{ |room| room.blocked == true }
+    end
 
     if available_rooms.count < number_of_rooms
-      raise ArgumentError, "There are not enough rooms for the dates provided."
-    elsif !available_rooms.include?(rooms)
-      raise ArgumentError, "Selected rooms are not available."
+      raise ArgumentError, "There aren't enough rooms for the dates provided."
+
     elsif number_of_rooms > 5
       raise ArgumentError, "No more than 5 rooms can be blocked."
+
     else
       new_block = Block.new(
         check_in: check_in, 
@@ -69,17 +72,21 @@ class BookingCentral
         rooms: rooms, 
         discount_rate: 180
         )
+
+        @blocks << new_block
+        return new_block
     end
   end
 
-  # bookings = BookingCentral.new
-  # blocked = bookings.block_rooms(check_in: '2019-04-01', check_out:'2019-04-02', number_of_rooms: 3, rooms: [], discount_rate: 180)
-  # puts blocked.rooms.map{|r| r.class}
-  # new_reservation = bookings.reserve_room(check_in: '2019-04-01', check_out:'2019-04-02', room: bookings.assign_room('2019-04-01', '2019-04-02'))
-  # puts new_reservation.room.number  
-  # puts bookings.list_available_rooms('2019-04-01', '2019-04-02').map{|r| r.number}
-  # new_booking = bookings.reserve_room(check_in: '2019-01-03', check_out: '2019-01-04', room: 1)
-  # puts (bookings.assign_room('2019-01-03', '2019-01-04')).number
+  def list_blocked_rooms
+    blocked_rooms = []
+    if blocks == []
+      raise ArgumentError, "There are no blocked rooms at the moment."
+    else
+      blocked_rooms = @rooms.select{ |room| room.blocked == true }
+    end
+    return blocked_rooms
+  end
 end
 
 

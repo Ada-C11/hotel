@@ -1,0 +1,2 @@
+# Make better use of the blocked status to reserve blocked rooms
+# Declutter method to create blocks

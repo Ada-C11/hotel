@@ -11,6 +11,3 @@ class Reservation
     @cost_of_stay = RATE * (date_range.length)
   end
 end
-
-# n = Reservation.new(check_in: '2019-04-01', check_out: '2019-04-02', room: 1)
-# puts n.room
