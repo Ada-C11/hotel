@@ -79,14 +79,14 @@ describe "Manifest" do
   end
 
   before do
-    booker = Hotel::Booker.new
-    @manifest_unavailable = booker.manifest
+    @booker = Hotel::Booker.new
+    @manifest_unavailable = @booker.manifest
     @day1 = Time.now.to_date + 3
     @day2 = @day1 + 4
     @room_ids = [2, 10, 12]
     @room_ids.each do |id|
       room = @manifest_unavailable.find_room(id: id)
-      booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
+      @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
     end
   end
   describe "Manifest#list_unavailable_rooms_by_date" do
@@ -115,12 +115,15 @@ describe "Manifest" do
       comparable_rooms = @manifest_unavailable.rooms.select do |room|
         !@room_ids.include?(room.id)
       end
-
       expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal comparable_rooms
     end
 
-    # it "returns an empty Array if no rooms reserved for given date" do
-    #   expect(@manifest_unavailable.list_available_rooms_by_date(date: @day2 + 5)).must_equal []
-    # end
+    it "returns an empty Array if all rooms reserved for given date" do
+      (1..20).each do |id|
+        room = @manifest_unavailable.find_room(id: id)
+        @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
+      end
+      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
+    end
   end
 end
