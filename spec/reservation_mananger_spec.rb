@@ -1,4 +1,5 @@
 require_relative "spec_helper"
+require "date"
 describe "RESERVATION MANAGER TESTS" do
   describe "Reservation Manager class initialization & set up" do
     it "will return an instance of Reservation_Manager" do
@@ -20,6 +21,16 @@ describe "RESERVATION MANAGER TESTS" do
 
       test_manager.make_reservation(check_in, check_out)
       expect(test_manager.all_reservations[0]).must_be_kind_of Reservation
+    end
+
+    it "return information on correct reservation made" do
+      # skip
+      test_manager = Reservation_Manager.new
+      check_in = "2019-3-15"
+      check_out = "2019-3-20"
+
+      test_reserve1 = test_manager.make_reservation(check_in, check_out)
+      expect(test_reserve1.check_in).must_equal Date.parse("2019-3-15")
     end
     it "one new reservation updates all_reservations" do
       # skip
@@ -89,25 +100,19 @@ describe "RESERVATION MANAGER TESTS" do
       expect(test_manager.find_available_rooms(check_in, check_out).length).must_equal 18
     end
 
-    ### THIS IS NOT WORKINGGGGGG!!!!!
     it "can find reservations made via regular and hotel block reservation" do
       test_manager = Reservation_Manager.new
-      # check_in = Date.parse("2019-3-15")
-      # check_out = Date.parse("2019-3-20")
 
-      puts "I'M HEREEEEEEE!"
       room_num = 5
       block_id = 7
       test_manager.make_hotel_block(7, "2019-3-15", "2019-3-20", room_num)
-      test_manager.make_reservation("2019-3-15", "2019-3-20")
-      test_manager.make_reservation("2019-3-15", "2019-3-20", is_hotel_blocker: true, block_id: block_id)
+      test_reserve1 = test_manager.make_reservation("2019-3-15", "2019-3-20")
+      test_reserve2 = test_manager.make_reservation("2019-3-15", "2019-3-20", is_hotel_blocker: true, block_id: block_id)
 
-      # test_manager.make_reservation("2019-3-15", "2019-3-20")
-
-      puts "This is all_reservations: #{test_manager.all_reservations}"
       expect(test_manager.find_reservation_date("2019-3-15", "2019-3-20").length).must_equal 2
+      expect(test_manager.find_reservation_date("2019-3-15", "2019-3-20").first).must_equal test_reserve1
+      expect(test_manager.find_reservation_date("2019-3-15", "2019-3-20").last).must_equal test_reserve2
     end
-    # TODO: think of more tests for #find_reservation?
   end
 
   describe "#find_available_rooms" do
@@ -151,17 +156,16 @@ describe "RESERVATION MANAGER TESTS" do
   end
 
   describe "hotel block management" do
-    it "returns dates that are available only to hotel block users" do
+    it "returns rooms that are available only to hotel block users" do
       # skip
       test_manager = Reservation_Manager.new
 
       check_in = "2019-4-5"
       check_out = "2019-4-5"
       room_num = 5
-      block_id = rand(1..6)
+      block_id = 7
       testing_block = test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
 
-      # puts "this is testing_block: #{testing_block}"
       expect(testing_block.length).must_equal 5
       expect(testing_block).must_be_kind_of Array
     end
@@ -182,6 +186,7 @@ describe "RESERVATION MANAGER TESTS" do
 
       expect(test_manager.all_block_reservations.length).must_equal 10
     end
+
     it "removes the blocked rooms from the list of available rooms" do
       # skip
       test_manager = Reservation_Manager.new
@@ -209,12 +214,12 @@ describe "RESERVATION MANAGER TESTS" do
       check_in = "2019-4-5"
       check_out = "2019-4-10"
       room_num = 1
-      block_id = rand(1..6)
+      block_id = 7
       test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
       check_in = "2019-3-5"
       check_out = "2019-3-10"
       room_num = 5
-      test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+      test_manager.make_hotel_block((block_id + 1), check_in, check_out, room_num)
 
       outsider_reservation = test_manager.make_reservation(check_in, check_out)
       expect(outsider_reservation).wont_equal test_manager.all_block_reservations[1].room
@@ -227,10 +232,11 @@ describe "RESERVATION MANAGER TESTS" do
       check_in = "2019-4-5"
       check_out = "2019-4-10"
       room_num = 5
-      block_id = rand(1..6)
+      block_id = 1
 
       4.times do
         test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+        block_id += 1
       end
 
       expect { test_manager.make_reservation("2019-4-9", "2019-4-11") }.must_raise ArgumentError
@@ -247,6 +253,7 @@ describe "RESERVATION MANAGER TESTS" do
 
       4.times do
         test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+        block_id += 1
       end
 
       expect { test_manager.make_hotel_block("2019-4-9", "2019-4-11") }.must_raise ArgumentError
@@ -262,9 +269,10 @@ describe "RESERVATION MANAGER TESTS" do
       check_in = "2019-4-5"
       check_out = "2019-4-10"
       room_num = 5
-      block_id = rand(1..6)
+      block_id = 1
       4.times do
         test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+        block_id += 1
       end
 
       expect { test_manager.make_reservation(check_in, check_out) }.must_raise ArgumentError
@@ -278,12 +286,15 @@ describe "RESERVATION MANAGER TESTS" do
       check_in = "2019-4-5"
       check_out = "2019-4-10"
       room_num = 5
+      block_id = 1
       3.times do
-        test_manager.make_hotel_block(rand(1..6), check_in, check_out, room_num)
+        test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+        block_id += 1
       end
       test_manager.make_hotel_block(7, check_in, check_out, room_num)
 
       expect(test_manager.make_reservation(check_in, check_out, is_hotel_blocker: true, block_id: 7)).must_be_kind_of Reservation
+      expect(test_manager.all_reservations.length).must_equal 1
     end
 
     it "will have a discounted total rate if room booked is part of hotel block" do
@@ -296,7 +307,8 @@ describe "RESERVATION MANAGER TESTS" do
       room_num = 5
       block_id = 7
       3.times do
-        test_manager.make_hotel_block(rand(1..6), check_in, check_out, room_num)
+        test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
+        block_id += 1
       end
       test_manager.make_hotel_block(block_id, check_in, check_out, room_num)
 
