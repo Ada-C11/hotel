@@ -1,15 +1,18 @@
 require_relative "reservation"
 require_relative "room"
+require_relative "block"
 require "awesome_print"
 
 module Hotel
   class ReservationManager
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @rooms = Hotel::Room.load_all
-      @reservations = reservations || Hotel::Reservation.load_all
-      connect_reservations
+      @reservations = Hotel::Reservation.load_all
+      @blocks = Hotel::Block.load_all
+      # @reservations = reservations || Hotel::Reservation.load_all
+      # connect_reservations
     end
 
     def reserve(room_id, check_in_date, check_out_date)
@@ -19,7 +22,7 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       available_room_ids = find_available_rooms(check_in_date, check_out_date).map { |room| room.room_id }
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
-      new_reservation = Reservation.new(
+      new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
         check_in_date: check_in_date,
@@ -49,9 +52,42 @@ module Hotel
         check_in_date < reservation.check_in_date && check_out_date > reservation.check_out_date
       end
       non_available_room_ids = (non_available.map { |reservation| reservation.room_id }).uniq
-      return Room.load_all.reject do |room|
+      return @rooms.reject do |room|
                non_available_room_ids.include?(room.room_id)
              end
+    end
+
+    def create_block(room_ids, check_in_date, check_out_date, discount_rate)
+      self.class.validate_date(check_in_date)
+      self.class.validate_date(check_out_date)
+      self.class.validate_date_range(check_in_date, check_out_date)
+      # check_in_date = Date.parse(check_in_date)
+      # check_out_date = Date.parse(check_out_date)
+      available_rooms = find_available_rooms(check_in_date, check_out_date)
+      available_room_ids = available_rooms.map do |room|
+        room.room_id
+      end
+      room_ids.each do |room_id|
+        raise ArgumentError, "Room #{room_id} is not available" if available_room_ids.include?(room_id) == false
+      end
+      new_block = Hotel::Block.new(
+        block_id: @blocks.length + 1,
+        room_ids: room_ids,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date,
+        discount_rate: discount_rate,
+      )
+      @blocks << new_block
+
+      # room_ids.each do |room_id|
+
+      # end
+      # room_ids[:1st] = nil
+      # room_ids[:2nd] = nil
+      # room_ids[:3rd] = nil
+      # room_ids[:4th] = nil
+      # room_ids[:5th] = nil
+
     end
 
     def self.validate_room_id(room_id)
@@ -60,11 +96,12 @@ module Hotel
       end
     end
 
-    def find_room(room_id)
-      self.class.validate_room_id(room_id)
-      return @rooms.find { |room| room.room_id == room_id }
-    end
+    # def find_room(room_id)
+    #   self.class.validate_room_id(room_id)
+    #   return @rooms.find { |room| room.room_id == room_id }
+    # end
 
+    # need to move into validate date range method
     def self.validate_date(date)
       raise ArgumentError, "Date cannot be nil" if date == nil
       raise ArgumentError, "Date must be a String" if date.class != String
@@ -80,15 +117,16 @@ module Hotel
       raise ArgumentError, "Check_out_date must be after check_in_date" if end_date < start_date
     end
 
-    private
+    # private
 
-    def connect_reservations
-      @reservations.each do |reservation|
-        room = find_room(reservation.room_id)
-        # reservation.connect(room)
-      end
-    end
+    # def connect_reservations
+    #   @reservations.each do |reservation|
+    #     room = find_room(reservation.room_id)
+    # reservation.connect(room)
+    # end
+    # end
   end
 end
 
-# ap Hotel::ReservationManager.new
+rm = Hotel::ReservationManager.new
+p rm.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)

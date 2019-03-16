@@ -10,7 +10,7 @@ describe "Room" do
       room = Hotel::Room.new(1)
       expect(room.room_id).must_be_kind_of Integer
       expect(room.cost).must_be_kind_of Float
-      expect(room.reservations).must_be_kind_of Array
+      # expect(room.reservations).must_be_kind_of Array
     end
 
     # it "validates id" do

@@ -22,13 +22,13 @@ describe "ReservationManager" do
       expect(reservation_manager.rooms.length).must_equal 20
     end
 
-    it "accurately connects reservations with rooms" do
-      reservation_manager.reservations.each do |reservation|
-        expect(reservation.room).wont_be_nil
-        expect(reservation.room.room_id).must_equal reservation.room_id
-        expect(reservation.room.reservations).must_include room
-      end
-    end
+    # it "accurately connects reservations with rooms" do
+    #   reservation_manager.reservations.each do |reservation|
+    #     expect(reservation.room).wont_be_nil
+    #     expect(reservation.room.room_id).must_equal reservation.room_id
+    #     expect(reservation.room.reservations).must_include room
+    #   end
+    # end
   end
 
   describe "reserve method" do
@@ -46,33 +46,18 @@ describe "ReservationManager" do
   end
   # will refactor
   describe "list_reservations method" do
+    it "returns an array" do
+      reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
+      reservation_manager.reserve(2, "2019-03-12", "2019-03-15")
+      expect(reservation_manager.list_reservations("2019-03-14")).must_be_kind_of Array
+    end
+
     it "lists all reservations with the right date " do
       reservation_manager.reserve(1, "2019-03-12", "2019-03-15")
       reservation_manager.reserve(2, "2019-03-12", "2019-03-15")
       reservation_manager.reserve(1, "2019-04-12", "2019-04-15")
-      expect(reservation_manager.list_reservations("2019-03-14")).must_be_kind_of Array
       expect(reservation_manager.list_reservations("2019-03-14").length).must_equal 2
       expect(reservation_manager.list_reservations("2019-04-14").length).must_equal 1
-    end
-
-    it "raises an ArgumentError if date is not a string" do
-      expect { reservation_manager.list_reservations(2019 - 03 - 13) }.must_raise ArgumentError
-    end
-
-    it "raises an ArgumentError if the date is not the right format" do
-      expect { reservation_manager.list_reservations("03/13/2019") }.must_raise ArgumentError
-    end
-
-    it "raises an ArgumentError if the date is nil" do
-      expect { reservation_manager.list_reservations(nil) }.must_raise ArgumentError
-    end
-
-    it "raises an ArgumentError if month is larger than 12" do
-      expect { reservation_manager.list_reservations("2019-13-14") }.must_raise ArgumentError
-    end
-
-    it "raises an ArgumentError if day is larger than 31" do
-      expect { reservation_manager.list_reservations("2019-03-32") }.must_raise ArgumentError
     end
   end
 
@@ -131,18 +116,36 @@ describe "ReservationManager" do
       expect(reservation_manager.find_available_rooms("2019-03-12", "2019-03-14").length).must_equal 19
     end
   end
-  # might remove?
-  describe "find_room method" do
-    it "can find an instance of Room" do
-      expect(reservation_manager.find_room(1)).must_be_instance_of Hotel::Room
+
+  describe "create_block method" do
+    # it "will create a new instance of Block class " do
+    #   new_block = reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10)
+    #   expect(new_block).must_respond_to Hotel::Block
+    # end
+    it "raises ArgumentError if at least one of the rooms is unavailable" do
+      reservation_manager.reserve(1, "2019-03-10", "2019-03-15")
+      expect { reservation_manager.create_block([1, 2, 3], "2019-03-10", "2019-03-15", 0.10) }.must_raise ArgumentError
     end
 
-    it "throws an ArgumentError for a bad room_id" do
-      expect { reservation_manager.find_room(0) }.must_raise ArgumentError
-      expect { reservation_manager.find_room(21) }.must_raise ArgumentError
-      expect { reservation_manager.find_room(nil) }.must_raise ArgumentError
+    it "adds to the collection of blocks" do
+      before_block = reservation_manager.blocks.length
+      reservation_manager.create_block([2, 3], "2019-03-10", "2019-03-15", 0.10)
+      after_block = reservation_manager.blocks.length
+      expect(after_block - before_block).must_equal 1
     end
   end
+  # might remove?
+  # describe "find_room method" do
+  #   it "can find an instance of Room" do
+  #     expect(reservation_manager.find_room(1)).must_be_instance_of Hotel::Room
+  #   end
+
+  #   it "throws an ArgumentError for a bad room_id" do
+  #     expect { reservation_manager.find_room(0) }.must_raise ArgumentError
+  #     expect { reservation_manager.find_room(21) }.must_raise ArgumentError
+  #     expect { reservation_manager.find_room(nil) }.must_raise ArgumentError
+  #   end
+  # end
 
   describe "validate date method" do
     it "raises an ArgumentError if date is not a string" do

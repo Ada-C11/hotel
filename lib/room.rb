@@ -2,12 +2,13 @@
 
 module Hotel
   class Room
-    attr_reader :room_id, :cost, :reservations
+    attr_reader :room_id, :cost
+    # , :reservations
 
     def initialize(room_id, cost: self.class.default_cost, reservations: nil)
       @room_id = room_id
       @cost = cost
-      @reservations = reservations || []
+      # @reservations = reservations || []
     end
 
     def self.default_cost

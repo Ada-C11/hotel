@@ -4,26 +4,28 @@ require "date"
 
 module Hotel
   class Reservation
-    attr_reader :reservation_id, :room, :room_id, :check_in_date, :check_out_date
+    attr_reader :reservation_id, :room_id, :check_in_date, :check_out_date
 
     def initialize(reservation_id:,
-                   room: nil,
-                   room_id: nil,
-                   check_in_date: "2019-12-25",
-                   check_out_date: "2019-12-30")
+                   room_id:,
+                   check_in_date:,
+                   check_out_date:)
       @reservation_id = reservation_id
-      if room
-        @room = room
-        @room_id = room.room_id
-      elsif room_id
-        @room_id = room_id
-      else
-        raise ArgumentError, "room or room_id is required"
-      end
+      # if room
+      #   @room = room
+      #   @room_id = room.room_id
+      # elsif room_id
+      @room_id = room_id
+      # else
+      raise ArgumentError, "room_id is required" if room_id == nil
+      # end
 
       @check_in_date = Date.parse(check_in_date)
+      raise ArgumentError, "check_in_date is required" if check_in_date == nil
+
       # @check_in_date = Date.parse(check_in_date)
       @check_out_date = Date.parse(check_out_date)
+      raise ArgumentError, "check_out_date is required" if check_out_date == nil
       # @check_out_date = Date.parse(check_out_date)
       # Hotel::ReservationManager.validate_date_range(check_in_date, check_out_date)
       # @reservation_id = Hotel::ReservationManager.new.reservations.length + 1
