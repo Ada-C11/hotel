@@ -42,12 +42,12 @@ describe "RESERVATION TESTS" do
   end
 
   describe "Room assignment and structure" do
-    # it "can return list of all 20 rooms - Array of Hashes" do
-    #   test_manager = Reservation_Manager.new
-    #   test_reserve = Reservation.new(1, check_in: "2019-3-15", check_out: "2019-3-20")
-    #   expect(test_reserve.all_rooms).must_be_kind_of Array
-    #   expect(test_reserve.all_rooms.length).must_equal 20
-    # end
+    it "can return list of all 20 rooms - Array of Hashes" do
+      test_manager = Reservation_Manager.new
+      test_reserve = Reservation.new(1, check_in: "2019-3-15", check_out: "2019-3-20")
+      expect(test_reserve.all_rooms).must_be_kind_of Array
+      expect(test_reserve.all_rooms.length).must_equal 20
+    end
 
     it "is assigned a room when created" do
       test_reserve = Reservation.new(1, check_in: "2019-3-15", check_out: "2019-3-20")
