@@ -34,8 +34,7 @@ module Hotel
     end
 
     def list_available_rooms(start_date, end_date)
-      start_date = Date.parse(start_date)
-      end_date = Date.parse(end_date)
+      start_date, end_date = parse_dates(start_date, end_date)
       available_rooms = @rooms
       reservations.each do |reservation|
         if reservation.start_date >= start_date && reservation.end_date <= end_date
@@ -48,6 +47,26 @@ module Hotel
     def find_room_by_number(num)
       @rooms.each do |room|
         return room if room.room_number == num
+      end
+    end
+
+    private
+
+    def self.validate_rooms(rooms)
+      unless rooms.length <= 5
+        raise ArgumentError, "The max number of rooms for a block is 5."
+      end
+    end
+
+    def parse_dates(start_date, end_date)
+      start_date = Date.parse(start_date)
+      end_date = Date.parse(end_date)
+      return start_date, end_date
+    end
+
+    def self.validate_dates(start_date, end_date)
+      unless end_date > start_date
+        raise ArgumentError, "End date must be after start date"
       end
     end
   end
