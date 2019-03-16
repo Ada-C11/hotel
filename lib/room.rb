@@ -3,11 +3,12 @@ require_relative "csv_record"
 
 module HotelGroup
   class Room < CsvRecord
-    attr_accessor :number, :price, :reservations, :unavailable_dates, :blocks
+    attr_accessor :number, :price, :reservations, :unavailable_dates, :blocks, :block_price
 
     def initialize(number, price)
       @number = number
       @price = price
+      @block_price = price * 0.8
       @unavailable_dates = []
       @reservations = []
       @blocks = []
@@ -62,11 +63,6 @@ module HotelGroup
       if !blocks.include?(id)
         @blocks << id
       end
-      return self
-    end
-
-    def apply_discount(discount)
-      self.price -= self.price * discount
       return self
     end
 

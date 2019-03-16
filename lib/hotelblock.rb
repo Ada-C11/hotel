@@ -26,13 +26,14 @@ module HotelGroup
       rooms_array.each.with_index do |room, index|
         @rooms[index] = room
         room.add_block_id(@id)
+        room.block_price = room.price - room.price * discount
       end
     end
 
-    def print_nicely(start_time, end_time)
+    def print_nicely
       formatted_rooms = ""
       rooms.each do |room|
-        formatted_rooms << "Room #{room.number}: Available = #{room.has_reservation?(start_time, end_time)}, price $#{format("%.2f", room.price)};\n"
+        formatted_rooms << "Room #{room.number}: Reserved = #{room.has_reservation?(start_time, end_time)}, price $#{format("%.2f", (room.block_price))};\n"
       end
       return "For #{start_time} to #{end_time} \nBlock #{id}: \n#{formatted_rooms}"
     end

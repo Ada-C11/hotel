@@ -7,7 +7,7 @@ def main
 
   date_match = /\d{2}\/\d{2}\/\d{4}/
 
-  instructions = ["\n\nChoose an option: ", "1: Print all rooms", "2: View all reservations for a specific date", "3: Get the total cost of a reservation", "4: View the list of available rooms for a specific date", "5: View a list of hotel blocks", "6: Create a reservation", "q: Quit"]
+  instructions = ["\n\nChoose an option: ", "1: Print all rooms", "2: View all reservations for a specific date", "3: Get the total cost of a reservation", "4: View the list of available rooms for a date range", "5: View a list of hotel blocks", "6: Create a reservation", "q: Quit"]
   input = nil
   while input != "q".to_i
     instructions.each do |i|
@@ -26,8 +26,7 @@ def main
       if !input.match(date_match)
         puts "Invalid date entered."
       else
-        date_split = input.split("/")
-        date_to_find = Date.new(date_split[2].to_i, date_split[0].to_i, date_split[1].to_i)
+        date_to_find = format_date(input)
         reservations = hotel.find_by_date(date_to_find)
 
         if reservations == []
@@ -62,11 +61,9 @@ def main
         if !end_date.match(date_match)
           puts "Invalid date entered."
         else
-          start_date_split = start_date.split("/")
-          start_date = Date.new(start_date_split[2].to_i, start_date_split[0].to_i, start_date_split[1].to_i)
+          start_date = format_date(start_date)
 
-          end_date_split = end_date.split("/")
-          end_date = Date.new(end_date_split[2].to_i, end_date_split[0].to_i, end_date_split[1].to_i)
+          end_date = format_date(end_date)
 
           rooms_list = hotel.find_available_rooms(start_date, end_date)
 
@@ -75,11 +72,34 @@ def main
           end
         end
       end
+    when 5
+      hotel.list_blocks
+    when 6
+      print "Enter a start date: "
+      start_date = gets.chomp
+      print "Enter an end date: "
+      end_date = gets.chomp
+      if !start_date.match(date_match) || !end_date.match(date_match)
+        puts "Invalid date entered."
+      else
+        start_date = format_date(start_date)
+        end_date = format_date(end_date)
+        hotel.make_reservation(start_date, end_date)
+        res = hotel.reservations.last
+        puts res.print_nicely
+      end
     when "q".to_i
     else
       puts "\nPlease enter a valid choice.\n\n"
     end
   end
+end
+
+def format_date(input)
+  date_split = input.split("/")
+  date = Date.new(date_split[2].to_i, date_split[0].to_i, date_split[1].to_i)
+
+  return date
 end
 
 main

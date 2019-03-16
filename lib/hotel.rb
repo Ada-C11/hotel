@@ -56,6 +56,12 @@ module HotelGroup
       end
     end
 
+    def list_blocks
+      blocks.each do |block|
+        puts block.print_nicely
+      end
+    end
+
     def create_res_id
       return reservations.count + 1
     end
@@ -78,10 +84,12 @@ module HotelGroup
       reservation = Reservation.new(create_res_id, start_time, end_time, room)
 
       room.add_reservation(reservation)
-      reservations << reservation
+
       if block
+        reservation.block_reservation = true
         blocks << block
       end
+      reservations << reservation
     end
 
     def find_by_date(date)
@@ -117,7 +125,6 @@ module HotelGroup
         if !room.is_available?(start_time, end_time)
           raise ArgumentError, "Room #{room.number} is not available on the given dates:#{start_time} #{end_time}"
         end
-        room.apply_discount(discount)
 
         room.add_block_id(id)
 

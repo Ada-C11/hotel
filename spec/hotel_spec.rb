@@ -45,6 +45,15 @@ describe "hotel class" do
 
       expect { @hotel.make_reservation(@start_time, @end_time_bad) }.must_raise ArgumentError
     end
+
+    it "finds a reservation" do
+      @hotel.make_reservation(@start_time, @end_time)
+
+      id = @hotel.reservations[0].id
+
+      res = @hotel.find_reservation(id)
+      expect(res).must_be_kind_of HotelGroup::Reservation
+    end
   end
 
   describe "finds reservations by date" do

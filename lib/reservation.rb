@@ -6,18 +6,24 @@ require_relative "room"
 
 module HotelGroup
   class Reservation < CsvRecord
-    attr_accessor :id, :room, :start_time, :end_time
+    attr_accessor :id, :room, :start_time, :end_time, :block_reservation
 
     def initialize(id, start_time, end_time, room)
       @start_time = start_time
       @end_time = end_time
       @room = room
       @id = id
+      @block_reservation = false
     end
 
     def total_price
       number_of_days = end_time - start_time
-      return "Total price for reservation #{id}: $#{format("%.2f", room.price * number_of_days)}"
+      if block_reservation
+        price = room.block_price
+      else
+        price = room.price
+      end
+      return "Total price for reservation #{id}: $#{format("%.2f", price * number_of_days)}"
     end
 
     def includes_date?(date)
@@ -26,7 +32,7 @@ module HotelGroup
 
     def print_nicely
       if self.id
-        return "Reservation #{id}: Room #{room.number} from #{start_time} to #{end_time}. Total cost: $#{total_price}"
+        return "Reservation #{id}: Room #{room.number} from #{start_time} to #{end_time}. #{total_price}"
       else
         return "Reservation not found"
       end

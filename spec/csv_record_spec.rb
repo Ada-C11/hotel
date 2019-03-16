@@ -31,6 +31,21 @@ describe HotelGroup::CsvRecord do
     end
   end
 
+  describe "save" do
+    it "raises an error if neither full_path nor directory is provided" do
+      expect {
+        HotelGroup::CsvRecord.save
+      }.must_raise ArgumentError
+    end
+
+    it "raises an error if invoked directly (without subclassing)" do
+      full_path = "spec/test_data/testrecords.csv"
+      expect {
+        HotelGroup::CsvRecord.save(full_path: full_path)
+      }.must_raise NotImplementedError
+    end
+  end
+
   describe "validate_id" do
     it "accepts natural numbers" do
       # Should not raise
