@@ -2,10 +2,10 @@ require "date"
 require "pry"
 
 class Reservation
-  attr_reader :reservation_id
-  attr_accessor :check_in, :check_out, :room
+  # attr_reader :reservation_id
+  attr_accessor :reservation_id, :check_in, :check_out, :room, :is_hotel_blocker
 
-  def initialize(reservation_id, check_in: nil, check_out: nil, room: nil)
+  def initialize(reservation_id, check_in: nil, check_out: nil, room: nil, is_hotel_blocker: false)
     @reservation_id = reservation_id
 
     if check_in == nil
@@ -21,8 +21,7 @@ class Reservation
     end
     #assign random room for wave 1
     @room = all_rooms.sample
-    # @room = ((1..20).map { |i| i }).sample
-    # @available_rooms = (1..20).map { |i| i }
+    @is_hotel_blocker = is_hotel_blocker
   end
 
   def duration
@@ -39,7 +38,12 @@ class Reservation
   end
 
   def cost(duration)
-    cost_per_room = 200
+    if is_hotel_blocker
+      cost_per_room = 150
+    else
+      cost_per_room = 200
+    end
+
     reservation_cost = cost_per_room * duration
     return reservation_cost
   end
