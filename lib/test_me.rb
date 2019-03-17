@@ -50,5 +50,5 @@ day1b = Date.parse("2012-02-04")
 day2 = Date.parse("2012-02-06")
 day2b = Date.parse("2012-02-10")
 
-puts test_room.room_available?(check_in: day1, check_out: day1b)
-puts test_room.room_available?(check_in: day2, check_out: day2b)
+puts day1 > day1b
+puts day1b < day1

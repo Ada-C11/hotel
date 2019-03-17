@@ -1,7 +1,7 @@
-require_relative 'spec_helper'
- 
-describe "DateRange" do 
-  let(:dates) { 
+require_relative "spec_helper"
+
+describe "DateRange" do
+  let(:dates) {
     DateRange.new(check_in: "March 21, 2022", check_out: "March 23rd, 2022")
   }
   let(:bogus) {
@@ -10,12 +10,12 @@ describe "DateRange" do
   let(:past) {
     "March 1st, 2019"
   }
-  
-  it "is an instance of DateRange" do 
+
+  it "is an instance of DateRange" do
     expect(dates).must_be_kind_of DateRange
   end
 
-  it "creates date objects from strings" do 
+  it "creates date objects from strings" do
     expect(dates.check_in).must_be_kind_of Date
     expect(dates.check_out).must_be_kind_of Date
   end
@@ -26,8 +26,8 @@ describe "DateRange" do
   end
 
   it "can validate that a check-in date occurs before check-out" do
-    expect{
-      DateRange.new(check_in: "March 23, 2022", check_out: "March 21rd, 2022")
+    expect {
+      DateRange.new(check_in: "September 15th 2023", check_out: "September 8th 2023")
     }.must_raise ArgumentError
   end
 

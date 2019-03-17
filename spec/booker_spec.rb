@@ -65,7 +65,6 @@ describe "RoomBooker" do
     before do
       @second_hotel = RoomBooker.new(rooms: Room.hotel_rooms)
       @first_reservation = @second_hotel.book_reservation(check_in: "September 1st 2023", check_out: "September 5th 2023")
-      @second_reservation = @second_hotel.book_reservation(check_in: "September 15th 2023", check_out: "September 8th 2023")
       # @third_reservation = @second_hotel.book_reservation(check_in: "September 21st 2023", check_out: "September 25th 2023")
     end
 
@@ -82,11 +81,17 @@ describe "RoomBooker" do
       expect(search).must_be_empty
     end
 
+    it "will not book a reservation for a check-in date that occurs after check-out date" do
+      expect {
+        @second_reservation = @second_hotel.book_reservation(check_in: "September 15th 2023", check_out: "September 8th 2023")
+      }.must_raise ArgumentError
+    end
+
     it "will not book a reservation with conflicting dates" do
       3.times do
         @second_hotel.book_reservation(check_in: "September 21st 2023", check_out: "September 25th 2023")
       end
-      ap @second_hotel.rooms # REMOVE ME BEFORE FINAL SUBMIT
+      # ap @second_hotel.rooms # REMOVE ME BEFORE FINAL SUBMIT
     end
   end
 

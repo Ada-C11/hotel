@@ -14,13 +14,13 @@ class RoomBooker < Date
   end
 
   def book_reservation(check_in:, check_out:)
-    date_request = request_dates(check_in: check_in, check_out: check_out) # validate dates
+    date_request = DateRange.new(check_in: check_in, check_out: check_out)
+    res_dates = date_request.dates_booked
     find_room = find_available_room(check_in: check_in, check_out: check_out) #find available room
     if find_room == nil
       raise ArgumentError, "No rooms are available for these dates"
     end
-    # only make reservation if room is available
-    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: date_request, room_booked: find_room)
+    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: res_dates, room_booked: find_room)
 
     find_room.booked_on(check_in: check_in, check_out: check_out)
     @reservations.push(reservation_request)
@@ -32,10 +32,10 @@ class RoomBooker < Date
     return reservation
   end
 
-  def request_dates(check_in:, check_out:)
-    date_range = DateRange.new(check_in: check_in, check_out: check_out).dates_booked
-    return date_range
-  end
+  # def request_dates(check_in:, check_out:)
+  #   date_range = DateRange.new(check_in: check_in, check_out: check_out)
+  #   return date_range.date_range
+  # end
 
   def find_room_id(id:)
     return rooms.find do |room|
