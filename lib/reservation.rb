@@ -19,9 +19,6 @@ module Hotel
       @base_cost = num_nights_of_stay * Room::COST_PER_NIGHT
 
       raise ArgumentError, "Check out date must be after check in date." if ckin_date >= ckout_date
-
-      # raise ArgumentError, "This room is not available on the dates entered." if !Hotel::Manager.is_available?
-      #  ~~~~~~ ^^^ WRITE THIS ^^^ ~~~~~~~~~
     end
   end
 

@@ -87,7 +87,19 @@ describe "Manager Spec" do
       res3 = this_manager.make_res_for_room(check_in3, check_out3, room3)
     }
 
-    # let (:test_dates) {}
+    let (:res4) {
+      check_in4 = Date.new(2019, 6, 8)
+      check_out4 = Date.new(2019, 6, 9)
+      room4 = 1
+      res4 = this_manager.make_res_for_room(check_in4, check_out4, room4)
+    }
+
+    let (:res5_overlap) {
+      check_in_test = Date.new(2019, 6, 8)
+      check_out_test = Date.new(2019, 6, 9)
+      roomZ = 1
+      res_test_same_date = this_manager.make_res_for_room(check_in_test, check_out_test, roomZ)
+    }
 
     it "Display a list of rooms not reserved on a given date range" do
 
@@ -109,7 +121,6 @@ describe "Manager Spec" do
     it "Add a new reservation to an available room's reservations array" do
       this_manager
       res1
-      res2
       res3
       check_in = Date.new(2019, 6, 8)
       check_out = Date.new(2019, 6, 9)
@@ -117,6 +128,19 @@ describe "Manager Spec" do
       this_manager.make_res_for_room(check_in, check_out, room)
       #   binding.pry
       expect(this_manager.rooms_reservations_hash[1][1].ckout_date.to_s).must_equal "2019-06-09"
+    end
+
+    it "Raise an argument error if the room is unavailable for the date - exact match" do
+      this_manager
+      res1
+      res3
+      res4
+      #   check_in = Date.new(2019, 6, 8)
+      #   check_out = Date.new(2019, 6, 9)
+      #   room = 1
+      #   res_with_overlap1 = this_manager.make_res_for_room(check_in, check_out, room)
+      #   binding.pry
+      expect(res5_overlap).must_raise ArgumentError
     end
   end
 end

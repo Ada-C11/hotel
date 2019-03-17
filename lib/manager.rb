@@ -41,16 +41,56 @@ module Hotel
       return res_on_date #array with room and reservations
     end
 
+    def ck_avail(ckin, ckout, room_num)
+      # check if specific room is available for this date range
+      # return true/false
+      res_array_to_check = @rooms_reservations_hash[room_num]
+      res_0 = res_array_to_check[0]
+      res_last = res_array_to_check.last
+
+      if res_array_to_check.length == 0
+        return true
+      elsif res_array_to_check.length == 1
+        (res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date) ? true : false
+        #   binding.pry
+      else
+        # ----->
+        return true if (ckout <= res_0.ckin_date)
+        return true if (res_last.ckout_date <= ckin)
+
+        i = 0
+        while i <= res_array_to_check.(length - 2)
+          res_a = res_array_to_check[i]
+          res_b = res_array_to_check[i + 1]
+          #   binding.pry
+          if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
+            return true
+          end
+          i += 1
+        end
+        return false
+
+        # ^^^^^^
+      end
+    end
+
     def find_avail_rooms_for_dates(ckin, ckout)
       avail_rooms = []
 
       @rooms_reservations_hash.each do |room, reservations|
         avail_rooms << room if reservations.empty?
+
+        if reservations.length == 1
+        end
+
+        # add check for before first item
+        # add check for after last item
+
         reservations.each_with_index do |res, index|
           res_a = res
           res_b = reservations[index + 1]
+          #   binding.pry
           if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
-            # binding.pry
             avail_rooms << room
           end
         end
@@ -66,13 +106,13 @@ module Hotel
       return avail_rooms
     end
 
-    def get_insert_index(res_hash, new_res)
+    def get_insert_index(res_array, new_res)
       insert_index = 0
-
-      res_hash.each do |res_in_hash|
+      # FIX THIS? CHANGED HASH TO ARRAY
+      res_array.each do |res_in_array|
         # DOES IT MAKE SENSE TO KEEP THIS IN ITS OWN METHOD?
         # IF NOT, MOVE TO #make_res_for_room
-        if (res_in_hash.ckin_date <=> new_res.ckin_date) == -1
+        if (res_in_array.ckin_date <=> new_res.ckin_date) == -1
           insert_index += 1
         end
       end
@@ -80,15 +120,15 @@ module Hotel
       return insert_index
     end
 
-    def ck_avail(ckin, ckout, room_num)
-      # DO WE NEED THIS METHOD? MAYBE NOT.
-      # check if specific room is available for this date range
-      # return true/false
-    end
-
     def make_res_for_room(ckin, ckout, room_num)
       # ck_avail
       # if true, continue; else return error
+      avail_rooms = find_avail_rooms_for_dates(ckin, ckout)
+
+      raise ArgumentError, "This room is not available on the dates entered." if !avail_rooms.include?(room_num)
+
+      #  ~~~~~~ ^^^ WRITE THIS ^^^ ~~~~~~~~~
+
       new_res = Reservation.new(ckin, ckout)
       at_index = get_insert_index(@rooms_reservations_hash[room_num], new_res)
       @rooms_reservations_hash[room_num].insert(at_index, new_res)
