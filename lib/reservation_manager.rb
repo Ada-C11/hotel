@@ -4,7 +4,13 @@ module Hotel
 
     def initialize
       @reservations = []
+      # activity(@reservations)
     end
+
+    # def activity(activity)
+    #   @activity = activity
+    #   puts @activity
+    # end
 
     def rooms
       @rooms = (1..20).to_a
@@ -12,11 +18,21 @@ module Hotel
     end
 
     def create_reservation(start_date, end_date, room_selected)
+      validate_date_range(start_date, end_date)
       room = validate_room_availability(start_date, end_date, room_selected)
       id = @reservations.length + 1
       new_reservation = Reservation.new(id, start_date, end_date, room)
       @reservations << new_reservation
       return new_reservation
+    end
+
+    def validate_date_range(start_date, end_date)
+      if start_date > end_date
+        raise ArgumentError, "Invalid date range"
+      else
+        @start_date = start_date
+        @end_date = end_date
+      end
     end
 
     def validate_room_availability(start_date, end_date, room_selected)
@@ -52,10 +68,10 @@ module Hotel
     end
 
     def find_reservation_by_date(start_date_find, end_date_find)
-      if start_date_find.class == Time ## DO I NEED TO VALIDATE THIS? IF SO, DO I NEED TO DO THAT HERE?
+      if start_date_find.class == Time && end_date_find.class == Time
         reservations_found = []
 
-        @reservations.each_with_index do |reservation, index|
+        @reservations.each do |reservation|
           unless reservation.start_date >= end_date_find || reservation.end_date <= start_date_find
             reservations_found << reservation
           end
@@ -72,8 +88,8 @@ module Hotel
     def find_available_rooms(start_date, end_date)
       reservations = find_reservation_by_date(start_date, end_date)
       reserved_rooms = []
-      reservations.each do |room|
-        reserved_rooms << room.room_number
+      reservations.each do |reservation|
+        reserved_rooms << reservation.room_number
       end
       available_rooms = rooms - reserved_rooms
       return available_rooms
