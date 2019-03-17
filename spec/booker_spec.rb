@@ -75,7 +75,7 @@ describe "Booker" do
       rooms_collect.each do |room|
         expect(room.unavailable_list[-1]).must_equal valid_block
       end
-    end
+    end`
 
     it "will raise expection if a room in block is not"
   end

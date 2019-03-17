@@ -10,31 +10,24 @@ module Hotel
       @manifest = manifest
     end
 
-    def book(unavailable_object:, room:, percent_discount: 0)
-      unless room.available_for_date_range?(date_range: unavailable_object.date_range)
+    def book(unavailable_object:, room)
+      unless room.available_for_date_range?(date_range: reservation.date_range)
         raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
       end
-      if unavailable_object.respond_to?(:cost)
-        calculate_cost_of_booking(reservation: unavailable_object, room: room, percent_discount: 0)
-      end
-      room.unavailable_list << unavailable_object
+      reservation.cost = calculate_cost_of_booking(reservation: reservation, room: room)
+      room.unavailable_list << reservation
       return room
     end
 
-    def set_aside_block(block:, rooms_collection:)
-      begin 
-      rooms_collection.each do |room|
-        book(unavailable_object: block, room: room, percent_discount: block.percent_discount)
-      rescue RoomNotAvailable
-      end
-
-    end
+    # def book_block(block, rooms_collection)
+    #   rooms_collection.each do |room|
+    #     book_
 
     def calculate_cost_of_booking(reservation:, room:, percent_discount: 0)
-      reservation.cost = room.cost_per_night.to_f * reservation.duration_in_days * ((100 - percent_discount) / 100)
+      return room.cost_per_night.to_f * reservation.duration_in_days * ((100 - percent_discount) / 100)
     end
 
-    def get_cost_of_booking(reservation:)
+    def get_cost_of_booking(reservation)
       return reservation.cost
     end
   end
