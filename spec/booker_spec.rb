@@ -100,18 +100,22 @@ describe "RoomBooker" do
       incoming_allowed = "March 1st 2021"
       outgoing_allowed = "March 2nd 2021"
       @another_hotel = RoomBooker.new(rooms: Room.hotel_rooms)
-      @another_hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
+      20.times do
+        @another_hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
+      end
     end
 
-    it "***********************" do
-      conflict_in = "06/01/20"
-      outgoing_2 = ""
+    it "will not double book a room, nor allow invalid booking dates" do
+      conflict_1 = "March 1st 2021"
+      conflict_2 = "March 2nd 2021"
 
-      expect { @another_hotel.book_reservation(check_in: conflict_in, check_out: outgoing_2) }.must_raise ArgumentError
+      pre_check_out = "January 15th 2021"
+      ok_checkout = "January 12th"
+
+      expect { @another_hotel.book_reservation(check_in: conflict_1, check_out: conflict_2) }.must_raise ArgumentError
+      expect { @another_hotel.book_reservation(check_in: pre_check_out, check_out: ok_checkout) }.must_raise ArgumentError
     end
 
-    it "will return false for a conflicting booking" do
-      # expect(bad_room).must_equal false
-    end
+  
   end
 end

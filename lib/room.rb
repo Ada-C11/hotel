@@ -26,8 +26,8 @@ class Room
   end
 
   def room_available?(check_in:, check_out:)
-   check_in = Date.parse(check_in)
-   check_out = Date.parse(check_out)
+    check_in = Date.parse(check_in)
+    check_out = Date.parse(check_out)
     @bookings.each do |booked|
       if booked == nil
         return true

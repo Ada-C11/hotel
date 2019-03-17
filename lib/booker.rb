@@ -64,4 +64,8 @@ class RoomBooker < Date
     end
     return nil
   end
+
+  def list_available_rooms(check_in:, check_out:)
+    open_rooms = rooms.map { |room| room.room_available?(check_in: check_in, check_out: check_out) }
+  end
 end

@@ -31,6 +31,7 @@ describe "Room class" do
       reservation = Reservation.new(id: 1, room_booked: @room, dates_booked: (Date.parse("03/03/2020")...Date.parse("03/05/2020)")))
       expect(@room).must_respond_to :booked_on
       expect(@room.bookings).must_be_kind_of Array
+      expect(@room).must_respond_to :bookings
     end
   end
 
@@ -42,14 +43,14 @@ describe "Room class" do
     end
 
     it "books a room that has no bookings" do
-      room = Room.new(id: 5)
+      new_room = Room.new(id: 5)
       start = "March 3 2020"
       out = "March 6th 2020"
 
-      expect(room.bookings.length).must_equal 0
-      expect(room.bookings.empty?).must_equal true
-      expect(room.room_available?(check_in: start, check_out: out)).must_equal true
-      expect(room.bookings[0]).must_be_nil
+      expect(new_room.bookings.length).must_equal 0
+      expect(new_room.bookings.empty?).must_equal true
+      expect(new_room.room_available?(check_in: start, check_out: out)).must_equal true
+      expect(new_room.bookings[0]).must_be_nil
     end
 
     it "allows you to book a room for an incoming date range that ends before any current bookings" do
@@ -112,6 +113,16 @@ describe "Room class" do
       out = "March 12th 2020"
 
       expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
+    end
+
+    it "will book a room who has no bookings" do
+      nil_bookings = Room.new(id: 13)
+      day1 = "2019-10-03"
+      day1b = "2019-10-04"
+
+      expect(nil_bookings.room_available?(check_in: day1, check_out: day1b)).must_equal true
+      nil_bookings.booked_on(check_in: day1, check_out: day1b)
+      expect(nil_bookings.room_available?(check_in: day1, check_out: day1b)).must_equal false
     end
   end
 end
