@@ -22,11 +22,11 @@ module Hotel
       end
 
       @check_in_date = Date.parse(check_in_date)
-      raise ArgumentError, "check_in_date is required" if check_in_date == nil
+      # raise ArgumentError, "check_in_date is required" if check_in_date == nil
 
       # @check_in_date = Date.parse(check_in_date)
       @check_out_date = Date.parse(check_out_date)
-      raise ArgumentError, "check_out_date is required" if check_out_date == nil
+      # raise ArgumentError, "check_out_date is required" if check_out_date == nil
       # @check_out_date = Date.parse(check_out_date)
       # Hotel::ReservationManager.validate_date_range(check_in_date, check_out_date)
       # @reservation_id = Hotel::ReservationManager.new.reservations.length + 1

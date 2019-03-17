@@ -26,8 +26,6 @@ module Hotel
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
-      # raise ArgumentError, "Room #{room.room_id} is not available for this date range!" if available_rooms.include?(room) == false
-      # new_reservation(room_id, check_in_date, check_out_date)
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -46,7 +44,7 @@ module Hotel
       return reservations
     end
 
-    def find_available_rooms(check_in_date: nil, check_out_date: nil)
+    def find_available_rooms(check_in_date:, check_out_date:)
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
@@ -54,15 +52,26 @@ module Hotel
       check_out_date = Date.parse(check_out_date)
       na_reservations = get_na_objects(@reservations, check_in_date, check_out_date)
       na_blocks = get_na_objects(@blocks, check_in_date, check_out_date)
+      # puts "this is na_blocks"
+      # p na_blocks
+      # if na_blocks.length != 0
       na_room_ids_blocks = []
       na_blocks.each do |block|
+        # p block
         block.room_ids.each do |i|
           na_room_ids_blocks << i
         end
       end
+      # else
+      # na_room_ids_blocks = []
+      # end
+
+      # if na_reservations.length != 0
       na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
+      # else
+      # na_room_ids_reservations = []
+      # end
       na_room_ids = (na_room_ids_blocks + na_room_ids_reservations).uniq
-      # na_rooms = (na_blocks + na_rooms_reservations).uniq
       return @rooms.reject do |room|
                na_room_ids.include?(room.room_id)
              end
@@ -77,9 +86,6 @@ module Hotel
       room_ids.each do |room_id|
         raise ArgumentError, "Room #{room_id} is not available" if available_room_ids.include?(room_id) == false
       end
-      # available_rooms.each do |room|
-      #   raise ArgumentError, "Room #{room.room_id} is not available" if available_rooms.include?(room) == false
-      # end
       new_block = Hotel::Block.new(
         block_id: @blocks.length + 1,
         room_ids: room_ids,
@@ -90,25 +96,36 @@ module Hotel
       @blocks << new_block
     end
 
-    def check_rooms_in_blocks(block_id)
+    # I can check whether a given block has any rooms availables
+    def check_available_rooms_in_blocks(block_id:)
       block = @blocks.find { |current_block| current_block.block_id == block_id }
-      raise ArgumentError, "No block found" if block == nil
-      return block.room_ids
+      raise ArgumentError, "Block #{block_id} is not found" if block == nil
+      return block.rooms_info.select do |room_id, status|
+               status == :AVAILABLE
+             end
     end
 
-    def reserve_from_block(room_id: nil, block_id: nil)
-      raise ArgumentError, "room_id is required" if room_id == nil
-      raise ArgumentError, "block is required" if block_id == nil
+    def reserve_from_block(room_id:, block_id:)
+      # raise ArgumentError, "room_id is required" if room_id == nil
+      # raise ArgumentError, "block is required" if block_id == nil
       block = @blocks.find { |block| block.block_id == block_id }
+      # p block
+      # room = find_room(room_id)
+      block.rooms_info.each do |current_room_id, status|
+        block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
+        # status = :UNAVAILABLE if current_room_id == room_id
+      end
+      # p block
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
-        check_in_date: block.check_in_date,
-        check_out_date: block.check_out_date,
+        check_in_date: block.check_in_date.to_s,
+        check_out_date: block.check_out_date.to_s,
       )
       add_reservation(new_reservation)
     end
 
+    # move to Room?
     def self.validate_room_id(room_id)
       if room_id.nil? || room_id <= 0 || room_id.class != Integer || room_id > Room.num_rooms
         raise ArgumentError, "ID must be an integer and cannot be blank, less than zero or larger than #{Room.num_rooms}"
@@ -132,6 +149,11 @@ module Hotel
     end
 
     private
+
+    # def find_room(room_id)
+    #   self.class.validate_room_id(room_id)
+    #   return @rooms.find { |room| room.room_id == room_id }
+    # end
 
     def get_na_objects(array_object, check_in_date, check_out_date)
       return array = array_object.select do |object|
@@ -163,5 +185,21 @@ module Hotel
   end
 end
 
-# rm = Hotel::ReservationManager.new
+# reservation_manager = Hotel::ReservationManager.new
+# reservation_manager.create_block(room_ids: [1, 2, 3],
+#                                  check_in_date: "2019-03-10",
+#                                  check_out_date: "2019-03-15",
+#                                  discount_rate: 0.10)
+# reservation_manager.reserve_from_block(room_id: 2, block_id: 1)
+# p block = reservation_manager.blocks.find { |block| block.block_id == 1 }
+# p reservation_manager.reservations
+
 # p rm.create_block([Hotel::Room.new(1), Hotel::Room.new(2), Hotel::Room.new(3)], "2019-03-10", "2019-03-15", 0.10)
+# reservation_manager.create_block(room_ids: [1, 2, 3],
+#                                  check_in_date: "2019-03-10",
+#                                  check_out_date: "2019-03-15",
+#                                  discount_rate: 0.10)
+
+# new_reservation = reservation_manager.reserve(room_id: 1,
+#                                               check_in_date: "2019-03-12",
+#                                               check_out_date: "2019-03-14")

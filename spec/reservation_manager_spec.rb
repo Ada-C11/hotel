@@ -10,25 +10,18 @@ describe "ReservationManager" do
     end
 
     it "establishes the base structures when instantiated" do
-      [:rooms, :reservations].each do |prop|
+      [:rooms, :reservations, :blocks].each do |prop|
         expect(reservation_manager).must_respond_to prop
       end
 
       expect(reservation_manager.rooms).must_be_kind_of Array
       expect(reservation_manager.reservations).must_be_kind_of Array
+      expect(reservation_manager.blocks).must_be_kind_of Array
     end
 
     it "has 20 rooms" do
       expect(reservation_manager.rooms.length).must_equal 20
     end
-
-    # it "accurately connects reservations with rooms" do
-    #   reservation_manager.reservations.each do |reservation|
-    #     expect(reservation.room).wont_be_nil
-    #     expect(reservation.room.room_id).must_equal reservation.room_id
-    #     expect(reservation.room.reservations).must_include room
-    #   end
-    # end
   end
 
   describe "reserve method" do
@@ -48,8 +41,20 @@ describe "ReservationManager" do
       new_reservation
       expect { reservation_manager.reserve(new_reservation) }.must_raise ArgumentError
     end
+
+    it "cannot reserve a room set in the block" do
+      reservation_manager.create_block(room_ids: [1, 2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
+      expect {
+        reservation_manager.reserve(room_id: 1,
+                                    check_in_date: "2019-03-12",
+                                    check_out_date: "2019-03-14")
+      }.must_raise ArgumentError
+    end
   end
-  # will refactor
+
   describe "list_reservations method" do
     it "returns an array" do
       reservation_manager.reserve(room_id: 1,
@@ -61,7 +66,7 @@ describe "ReservationManager" do
       expect(reservation_manager.list_reservations(date: "2019-03-14")).must_be_kind_of Array
     end
 
-    it "lists the right reservations with the given date " do
+    it "lists the right number of reservations with the given date " do
       reservation_manager.reserve(room_id: 1,
                                   check_in_date: "2019-03-12",
                                   check_out_date: "2019-03-15")
@@ -134,14 +139,6 @@ describe "ReservationManager" do
       reserve_03_10_03_15
       expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-12", check_out_date: "2019-03-14").length).must_equal 19
     end
-
-    it "cannot reserve a room set in the block" do
-      reservation_manager.create_block(room_ids: [1, 2, 3],
-                                       check_in_date: "2019-03-10",
-                                       check_out_date: "2019-03-15",
-                                       discount_rate: 0.10)
-      expect { reserve_03_10_03_15 }.must_raise ArgumentError
-    end
   end
 
   describe "create_block method" do
@@ -179,22 +176,33 @@ describe "ReservationManager" do
     end
   end
 
-  describe "check_rooms_in_blocks" do
-    it "can check room availabity in a given block" do
+  describe "check_available_rooms_in_blocks" do
+    it "can get available rooms in a given block" do
+      reservation_manager.create_block(room_ids: [1, 2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
+      expect(reservation_manager.check_available_rooms_in_blocks(block_id: 1).length).must_equal 3
+    end
+
+    it "returns an empty array if no room is available in a block" do
       reservation_manager.create_block(room_ids: [2, 3],
                                        check_in_date: "2019-03-10",
                                        check_out_date: "2019-03-15",
                                        discount_rate: 0.10)
-      expect(reservation_manager.check_rooms_in_blocks(1).length).must_equal 2
+
+      reservation_manager.reserve_from_block(room_id: 2, block_id: 1)
+      reservation_manager.reserve_from_block(room_id: 3, block_id: 1)
+      expect(reservation_manager.check_available_rooms_in_blocks(block_id: 1).length).must_equal 0
     end
 
     it "raises ArgumentError if no block is found" do
-      expect { reservation_manager.check_rooms_in_blocks(1) }.must_raise ArgumentError
+      expect { reservation_manager.check_available_rooms_in_blocks(1) }.must_raise ArgumentError
     end
   end
 
   describe "reserve_from_block" do
-    it "can reserve from the block" do
+    it "adds to the reservation list after reserving from the block" do
       reservation_manager.create_block(room_ids: [1, 2, 3],
                                        check_in_date: "2019-03-10",
                                        check_out_date: "2019-03-15",
@@ -204,19 +212,20 @@ describe "ReservationManager" do
       after_reserve = reservation_manager.reservations.length
       expect(after_reserve - before_reserve).must_equal 1
     end
-  end
-  # might remove?
-  # describe "find_room method" do
-  #   it "can find an instance of Room" do
-  #     expect(reservation_manager.find_room(1)).must_be_instance_of Hotel::Room
-  #   end
 
-  #   it "throws an ArgumentError for a bad room_id" do
-  #     expect { reservation_manager.find_room(0) }.must_raise ArgumentError
-  #     expect { reservation_manager.find_room(21) }.must_raise ArgumentError
-  #     expect { reservation_manager.find_room(nil) }.must_raise ArgumentError
-  #   end
-  # end
+    it "changes the room's status in the block to unavailable after the room has been reserved from the block" do
+      reservation_manager.create_block(room_ids: [1, 2, 3],
+                                       check_in_date: "2019-03-10",
+                                       check_out_date: "2019-03-15",
+                                       discount_rate: 0.10)
+      reservation_manager.reserve_from_block(room_id: 1, block_id: 1)
+      block = reservation_manager.blocks.find { |block| block.block_id == 1 }
+      room_status = block.rooms_info.each do |current_room_id, status|
+        return status if current_room_id == 1
+      end
+      expect(room_status).must_equal :UNAVAILABLE
+    end
+  end
 
   describe "validate date method" do
     it "raises an ArgumentError if date is not a string" do
@@ -245,20 +254,4 @@ describe "ReservationManager" do
       expect { Hotel::ReservationManager.validate_date_range("2019-03-10", "2019-03-09") }.must_raise ArgumentError
     end
   end
-
-  # describe "connect_reservations" do
-  #   it "can connect reservations with the room/s" do
-  #     room1 = Hotel::Room.new(1)
-  #     room2 = Hotel::Room.new(2)
-  #     reservation_manager.reserve(room1, "2019-03-12", "2019-03-15")
-  #     reservation_manager.reserve(room2, "2019-04-12", "2019-04-15")
-  #     reservation_manager.connect_reservations
-
-  #     reservation_manager.reservations.each do |reservation|
-  #       expect(reservation.room).wont_be_nil
-  #       expect(reservation.room.room_id).must_equal reservation.room_id
-  #       expect(reservation.room.reservations).must_include room
-  #     end
-  #   end
-  # end
 end
