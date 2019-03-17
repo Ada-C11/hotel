@@ -17,18 +17,21 @@ module Hotel
       end
 
       r = Hotel::Reservation.new(reserved_dates, @room_id, RATE)
-      @reservations << r  
+      @reservations << r
+      return r
     end
 
     def reserve_block(reserved_dates, percent_off)
       @block_intervals.each do |interval|
-        if !interval.equals?(reserved_dates)
-          raise ArgumentError, "You cannot reserve this room"
+        if interval.equals?(reserved_dates)
+          r = Hotel::Reservation.new(reserved_dates, @room_id, RATE * (1 - percent_off))
+          @reservations << r
+          @block_intervals.delete(interval)
+          return r
         end
-        r = Hotel::Reservation.new(reserved_dates, @room_id, RATE * (1 - percent_off))
-        @reservations << r
-        @block_intervals.delete(interval)
       end
+
+      raise ArgumentError, "You cannot reserve this room"
     end
 
     def is_available?(time_interval)
@@ -61,6 +64,5 @@ module Hotel
       end
       block_dates << reserved_dates
     end
-    
   end
 end
