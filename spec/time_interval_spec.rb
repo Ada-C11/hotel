@@ -137,40 +137,16 @@ describe "time_interval class" do
   end
 
   describe "equals method" do
-    let(:i1) {
-      Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20"))
-    }
-
-    let(:i2) {
-      Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20"))
-    }
-
-    let(:i3) {
-      Hotel::Time_Interval.new(Date.parse("2019-05-10"), Date.parse("2019-05-20"))
-    }
-
-    let(:i4) {
-      Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-25"))
-    }
-
-    let(:i5) {
-      Hotel::Time_Interval.new(Date.parse("2019-05-10"), Date.parse("2019-05-25"))
-    }
-
     it "returns true when both check_in and check_out date are the same" do
+      i1 = Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20"))
+      i2 = Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20"))
       expect(i1.equals?(i2)).must_equal true
     end
 
-    it "returns false when check_in times of two intervals are different" do
-      expect(i1.equals?(i3)).must_equal false
-    end
-
-    it "returns false when check_out times of two intervals are different" do
-      expect(i1.equals?(i4)).must_equal false
-    end
-
-    it "returns false when both check_in and check_out time of two intervals are different" do
-      expect(i1.equals?(i5)).must_equal false
+    it "returns false when either check_in or check_out times of two intervals are different" do
+      i1 = Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20"))
+      i2 = Hotel::Time_Interval.new(Date.parse("2019-05-10"), Date.parse("2019-05-20"))
+      expect(i1.equals?(i2)).must_equal false
     end
   end
 end
