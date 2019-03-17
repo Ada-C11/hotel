@@ -144,4 +144,24 @@ describe "Scheduler class" do
     end
   end
 
+  describe "block_has_available_room method" do
+    before do
+      @scheduler = Hotel::Scheduler.new(5)
+      room_ids = [1, 2, 3]
+      discounted_rate = 180
+      duration = Hotel::Time_Interval.new(Date.parse("2019-03-14"), Date.parse("2019-03-18"))
+      @block_id = @scheduler.create_block(duration, room_ids, discounted_rate)
+    end
+
+    it "returns true when there is an available room in a given block" do
+      expect(@scheduler.block_has_available_room?(@block_id)).must_equal true
+    end
+
+    it "returns false when there is no available room in a given block" do
+      @scheduler.reserve_room_in_block(@block_id, 1)
+      @scheduler.reserve_room_in_block(@block_id, 2)
+      @scheduler.reserve_room_in_block(@block_id, 3)
+      expect(@scheduler.block_has_available_room?(@block_id)).must_equal false
+    end
+  end
 end
