@@ -52,4 +52,26 @@ describe "Room class" do
       }.must_raise ArgumentError
     end
   end
+
+  describe "reserve_block method" do
+    let(:room) {
+      Hotel::Room.new(10)
+    }
+
+    it "throws an exception if there are no blocked dates" do
+      reserved_dates = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      expect {
+        room.reserve_block(reserved_dates, 180)
+      }.must_raise ArgumentError
+    end
+
+    it "successfully reserve a block" do
+      reserved_dates = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      discount_rate = 180
+      room.block_dates(reserved_dates)
+      reservation = room.reserve_block(reserved_dates,discount_rate)
+      expect(reservation).must_be_instance_of Hotel::Reservation
+      expect(reservation.room_id).must_equal 10
+    end
+  end
 end

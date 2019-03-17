@@ -21,10 +21,10 @@ module Hotel
       return r
     end
 
-    def reserve_block(reserved_dates, percent_off)
+    def reserve_block(reserved_dates, discount_rate)
       @block_intervals.each do |interval|
         if interval.equals?(reserved_dates)
-          r = Hotel::Reservation.new(reserved_dates, @room_id, RATE * (1 - percent_off))
+          r = Hotel::Reservation.new(reserved_dates, @room_id, discount_rate)
           @reservations << r
           @block_intervals.delete(interval)
           return r
@@ -33,7 +33,7 @@ module Hotel
 
       raise ArgumentError, "You cannot reserve this room"
     end
-
+    # need test: test with blocks
     def is_available?(time_interval)
       @reservations.each do |reservation|
         if reservation.overlap?(time_interval)
@@ -57,12 +57,14 @@ module Hotel
       end
       return nil
     end
-
-    def block_dates(reserve_dates)
+    # need test: test 1: throws exception if dates are unvailable because of non-blocked reservation
+    # test 2: throws exception for block reservations
+    # test 3: successfully add block dates
+    def block_dates(reserved_dates)
       if !is_available?(reserved_dates)
         raise ArgumentError, "You cannot block out these dates"
       end
-      block_dates << reserved_dates
+      @block_intervals << reserved_dates
     end
   end
 end
