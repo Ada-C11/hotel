@@ -1,0 +1,13 @@
+Changes that could be made:
+
+1. room can have different room types with different pricing
+
+2. room can have amenities such as fridge that stores beverages
+
+    a. customer will be charged for the beverages they consumed during their stay period
+
+3. there should be a system to recognize guests.
+    
+    a. guests can earn scores
+    b. when guests accumulate enough scores they can earn a free night
+
