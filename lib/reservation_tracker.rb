@@ -18,7 +18,18 @@ module Hotel
 
             @reservations = []
             @all_availabile = []
-            
+        end
+
+#reservation methods 
+
+        def book_reservation(room, checkin_date, checkout_date)
+            reservation = Hotel::Reservation.new(room, checkin_date, checkout_date)
+            @reservations << reservation
+            return reservation
+        end
+
+        def reservations_by_date(date)
+        #
         end
     end
 end

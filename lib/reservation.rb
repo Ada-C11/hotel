@@ -1,33 +1,37 @@
 require 'date'
 
-class Reservation
+module Hotel
+  class Reservation
 
-  attr_reader :first_name, :last_name :checkin_date, :checkout_date, :room_number
+      attr_reader :room_number, :checkin_date, :checkout_date, :cost
 
-  def initialize(first_name, last_name, checkin_date, checkout_date)
-    @first_name = first_name
-    @last_name = last_name
-    check_date_range(checkin_date, checkout_date)
-    @checkin_date = checkin_date
-    @checkout_date = checkout_date
+      def initialize(room_number, checkin_date, checkout_date, cost: 200)
+        # check_date_range(checkin_date, checkout_date)
+        @room_number = room_number
+        @checkin_date = checkin_date
+        if checkout_date < checkin_date
+          raise ArgumentError, "check out cannot happen before check in"
+        else  
+          @checkout_date = checkout_date
+        end
+        @cost = cost
+      end
+
+      def total_cost 
+        days_spent = checkout_date - checkin_date
+        total = days_spent * 200
+        return total.to_i
+      end
+
+      
   end
-
-  def customer(first_name, last_name)
-  
-  end
-
-  def check_date_range(start, finish)
-    raise StandardError, 'Invalid date range' unless start < finish
-  end
+end # end of module
+    # def check_date_range(start, finish)
+    #   raise StandardError, 'Invalid date range' unless start < finish
+    # end
 
 
-
-# date, cost 
-
-
-end
-
-#   def find_room(room_number)
-#   end
- # @last_night = checkout_date - 1
-# @room = find_room(room_number)
+  #   def find_room(room_number)
+  #   end
+  # @last_night = checkout_date - 1
+  # @room = find_room(room_number)
