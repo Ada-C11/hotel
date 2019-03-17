@@ -3,3 +3,9 @@ class InvalidDateRangeError < StandardError
     super
   end
 end
+
+class RoomNotAvailable < StandardError
+  def initialize(msg = "Room not available")
+    super
+  end
+end

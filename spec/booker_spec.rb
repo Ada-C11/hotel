@@ -37,6 +37,12 @@ describe "Booker" do
     it "adds reservation to unavailable array in correct room" do
       expect(@room.unavailable_list.include?(@pend_reservation)).must_equal true
     end
+
+    it "raises exception if room is not available for given date range" do
+      expect {
+        booker.book_room(Hotel::Reservation.new(check_in: day1 + 3, check_out: day2 - 2), @room)
+      }.must_raise RoomNotAvailable
+    end
   end
 
   describe "Booker#cost_of_booking" do
