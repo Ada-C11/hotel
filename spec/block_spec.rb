@@ -1,15 +1,5 @@
 require_relative "spec_helper"
 
-# def create_block(num_rooms, first_day, last_day, discount)
-#   rooms = []
-#   num_rooms.times do |num|
-#     room = HotelSystem::Room.new(id: num)
-#     rooms << room
-#   end
-#   block = HotelSystem::Block.new(rooms: rooms, first_day: first_day, last_day: last_day, discount: discount)
-#   return block
-# end
-
 describe "Block" do
   describe "initialize" do
     before do
@@ -184,7 +174,6 @@ describe "Block" do
     end
 
     it "Can be called on a block" do
-      # @block.book_block_reservation(@reservations.first)
       expect(@block).must_respond_to :book_block_reservation
     end
 

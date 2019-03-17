@@ -148,9 +148,7 @@ describe "Hotel" do
   describe "hotel#book_reservation" do
     before do
       @room = HotelSystem::Room.new(id: 1)
-      # @room_two = HotelSystem::Room.new(id: 2)
       @hotel.rooms << @room
-      # @hotel.rooms << @room_two
 
       @way_before = "2016-11-07"
       @before = "2016-11-11"
@@ -162,7 +160,6 @@ describe "Hotel" do
       @way_after = "2016-11-25"
 
       @hotel.book_reservation(@room, @start, @end)
-      # @hotel.book_reservation(@room_two, @start, @end)
     end
     it "Adds reservation to hotel reservations array" do
       expect(@hotel.reservations.length).must_equal 1
@@ -244,7 +241,6 @@ describe "Hotel" do
         expect(@hotel.blocks.first).must_equal block
       end
 
-      ### MAYBE MORE TESTS
       it "Reserves all rooms in the block for the time frame, so they cannot get booked through normal means" do
         block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         @room_array.each do |room|
@@ -254,7 +250,6 @@ describe "Hotel" do
         end
       end
 
-      #### MAYBE MORE TESTS
       it "cannot book another block that includes any rooms that are included in another block for the same night" do
         block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         expect {

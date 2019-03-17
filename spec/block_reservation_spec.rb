@@ -57,7 +57,7 @@ describe "BlockReservation" do
     end
 
     it "Saves total cost to total_cost instance variable" do
-      expect(@block_reservation.total_cost).must_equal 800
+      expect(@block_reservation.total_cost).must_equal 800.0
     end
   end
 end
