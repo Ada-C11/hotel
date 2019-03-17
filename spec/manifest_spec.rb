@@ -128,18 +128,56 @@ describe "Manifest" do
   end
 
   describe "Manifest#list_available_rooms_by_date_range" do
-    before do 
+    before do
       @comparable_rooms = @manifest_unavailable.rooms.select do |room|
         !@room_ids.include?(room.id)
       end
+      @day3 = @day1 + 14
+      @day4 = @day1 + 21
+      @room_ids.each do |id|
+        room = @manifest_unavailable.find_room(id: id)
+        @booker.book_room(Hotel::Reservation.new(check_in: @day3, check_out: @day4), room)
+      end
     end
     it "returns an Array" do
-      expect(@manifest_unavailable.list_available_rooms_by_date_range(check_in: @day1, check_out: @day2 - 1)).must_be_instance_of Array
+      expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: @day1...@day2)).must_be_instance_of Array
     end
     describe "correctly selects available rooms" do
-      it "date_range checked is eqaul to a room reservations(same check-in/check-outs)" do 
-        expect(@manifest_unavailable.list_available_rooms_by_date_range(check_in: @day1, check_out: @day2 - 1)).must_equal @comparable_rooms
-      end  
+      it "date_range checked is eqaul to a room reservations(same check-in/check-outs)" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: @day1...@day2)).must_equal @comparable_rooms
+      end
+
+      it "date_range checked is overlap first part of room reservations(same check-in/ inner of check-out" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: @day1...(@day2 - 2))).must_equal @comparable_rooms
+      end
+
+      it "date_range checked is overlap end of room reservations(same check-out/ inner of check-in" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 + 2)...@day2)).must_equal @comparable_rooms
+      end
+
+      it "date_range checked in with-in reservations(inner check-out/ inner of check-in" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 + 1)...(@day2 - 1))).must_equal @comparable_rooms
+      end
+
+      it "date_range checked overlaps reservations(outer check-out/  outer  of check-in" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 - 2)...(@day2 + 2))).must_equal @comparable_rooms
+      end
+
+      it "date_range checked overlaps reservations(inner check-out/  outer of check-in" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 - 3)...(@day2 - 1))).must_equal @comparable_rooms
+      end
+
+      it "date_range checked overlaps 2 reservations" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 + 3)...(@day4 - 1))).must_equal @comparable_rooms
+      end
+
+      it "date_range checked inbtween 2 reservations" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day2 + 3)...(@day3 - 2))).must_equal @manifest_unavailable.rooms
+      end
+
+      it "date_range checked not overlapping with reservations" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 - 7)...(@day1 - 2))).must_equal @manifest_unavailable.rooms
+      end
     end
   end
 end

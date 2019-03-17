@@ -43,8 +43,16 @@ module Hotel
              end
     end
 
-    def list_available_rooms_by_date_range(check_in:, check_out:)
-      return []
+    def list_available_rooms_by_date_range(date_range:)
+      dates = [*date_range]
+      available_rooms_by_day = dates.map do |date|
+        list_available_rooms_by_date(date: date)
+      end.flatten
+      number_days_required = dates.length
+      possible_rooms = available_rooms_by_day.uniq
+      return possible_rooms.select do |room|
+               available_rooms_by_day.count(room) == number_days_required
+             end
     end
   end
 
