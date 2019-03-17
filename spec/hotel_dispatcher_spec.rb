@@ -51,12 +51,14 @@ describe "HotelDispatcher class" do
       expect(hotel.find_available_room("2019-2-21", "2019-2-26").length).must_equal 0
     end
 
-    it "returns a message saying that there are no available rooms" do
+    it "returns ArgumentError if there are no available rooms" do
       hotel = Hotel::HotelDispatcher.new
       20.times do
       hotel.reserve("2019-2-21", "2019-2-26")
       end 
-      expect(hotel.reserve("2019-2-21", "2019-2-26")).must_equal nil
+      expect do
+        hotel.reserve("2019-2-21", "2019-2-26")
+      end.must_raise ArgumentError
     end
   end
 
@@ -66,13 +68,13 @@ describe "HotelDispatcher class" do
       @room_nums = [1,2,4,5]
     end
 
-    it "returns array of blocks" do
-      expect(@hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150).length).must_equal 1
+    it "returns hotel block" do
+      expect(@hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150, "Ada101")).must_be_kind_of Hotel::Block
     end
 
     it "returns list of block rooms" do
-      @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150)
-      @hotel.add_block("2019-3-1", "2019-3-8", @room_nums, 180)
+      @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150,"Ada101")
+      @hotel.add_block("2019-3-1", "2019-3-8", @room_nums, 180,"Ada102")
       expect(@hotel.list_block_rooms("2019-2-27", "2019-3-7")).must_be_kind_of Array
       expect(@hotel.list_block_rooms("2019-2-21", "2019-3-7").length).must_equal 8
     end
@@ -80,14 +82,14 @@ describe "HotelDispatcher class" do
     it "raises an ArgumentError when room is already reserved" do
       @hotel.reserve("2019-2-21", "2019-2-26")
       expect do
-        @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150)
+        @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150,"Ada101")
       end.must_raise ArgumentError
     end
 
     it "raises an ArgumentError when room is already added to a block" do
-      @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150)
+      @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150,"Ada101")
       expect do
-        @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150)
+        @hotel.add_block("2019-2-21", "2019-2-26", @room_nums, 150,"Ada102")
       end.must_raise ArgumentError
     end
 
