@@ -136,12 +136,21 @@ describe "Hotel" do
       expect(available_rooms.length).must_equal 1
     end
 
-    it "Returns rooms that are avaiable, but were occupied the previous night" do
+    it "Returns room if it is available, but was occupied the previous night" do
+      available_rooms = @hotel.get_available_rooms(@end, @way_after)
+      expect(available_rooms.length).must_equal 1
+    end
+
+    it "Returns room if it is available, but is occupied the next night" do
+      available_rooms = @hotel.get_available_rooms(@way_before, @start)
+      expect(available_rooms.length).must_equal 1
     end
 
     it "Doesn't return rooms that have conflicting reservations" do
-      available_rooms = @hotel.get_available_rooms("2019-2-12", "2019-2-17")
-      expect(available_rooms.length).must_equal 1
+      available_rooms = @hotel.get_available_rooms(@way_before, @first_mid)
+      expect(available_rooms.length).must_equal 0
+      available_rooms = @hotel.get_available_rooms(@second_mid, @after)
+      expect(available_rooms.length).must_equal 0
     end
   end
 
@@ -156,7 +165,7 @@ describe "Hotel" do
       @first_mid = "2016-11-15"
       @second_mid = "2016-11-17"
       @end = "2016-11-19"
-      @after = "2016-11-21"
+      @after = "2016-11-20"
       @way_after = "2016-11-25"
 
       @hotel.book_reservation(@room, @start, @end)
