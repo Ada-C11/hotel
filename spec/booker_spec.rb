@@ -100,6 +100,12 @@ describe "RoomBooker" do
     it "will not double book a room, nor allow invalid booking dates" do
       conflict_1 = "March 4th 2021"
       conflict_2 = "March 6th 2021"
+      span_date_in = "March 3rd 2021"
+      span_date_out = "March 8th 2021"
+      starts_witin_span = "March 5th 2021"
+      outside_span = "March 9th 2021"
+      starts_before_span = "March 1st 2021"
+      finish_in_span = "March 6th 2021"
 
       pre_check_out = "January 15th 2021"
       ok_checkout = "January 12th 2020"
@@ -108,6 +114,9 @@ describe "RoomBooker" do
       expect { @another_hotel.book_reservation(check_in: conflict_1, check_out: conflict_2) }.must_raise ArgumentError
       expect { @another_hotel.book_reservation(check_in: pre_check_out, check_out: ok_checkout) }.must_raise ArgumentError
       expect { @another_hotel.book_reservation(check_in: bogus, check_out: ok_checkout) }.must_raise ArgumentError
+      expect { @another_hotel.book_reservation(check_in: span_date_in, check_out: span_date_out) }.must_raise ArgumentError
+      expect { @another_hotel.book_reservation(check_in: starts_witin_span, check_out: outside_span) }.must_raise ArgumentError
+      expect { @another_hotel.book_reservation(check_in: starts_before_span, check_out: finish_in_span) }.must_raise ArgumentError
     end
 
     it "will book dates that are adjacent to pre-existing dates" do

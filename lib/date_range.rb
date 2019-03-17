@@ -19,7 +19,6 @@ class DateRange
 
   def valid_date?(date_str)
     date = Date.parse(date_str)
-
     if Date.today > date
       raise ArgumentError, "Date cannot occur before current date, given: #{date_str}"
     end

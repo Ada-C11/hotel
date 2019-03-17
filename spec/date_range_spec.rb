@@ -13,9 +13,19 @@ describe "DateRange" do
 
   it "is an instance of DateRange" do
     expect(dates).must_be_kind_of DateRange
+  end
 
+  it "raises exception for blank dates" do
     expect {
       DateRange.new(check_in: "", check_out: "")
+    }.must_raise ArgumentError
+
+    expect {
+      DateRange.new(check_in: "", check_out: "July 3rd 2019")
+    }.must_raise ArgumentError
+
+    expect {
+      DateRange.new(check_in: "July 3rd 2019", check_out: "")
     }.must_raise ArgumentError
   end
 

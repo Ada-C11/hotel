@@ -17,7 +17,7 @@ class Reservation
   end
 
   def total_cost
-    total = (dates_booked.count-1) * ROOM_RATE
+    total = (dates_booked.count - 1) * ROOM_RATE
     return total
   end
 
@@ -27,6 +27,4 @@ class Reservation
     end
     return true
   end
-
 end
-
