@@ -32,6 +32,15 @@ describe "ReservationManager" do
     expect(reservation_generator).must_be_instance_of Hotel::Reservation
   end
 
+  it "raises ArgumentError when date range is invalid" do
+    id = 1
+    start_time = Time.parse("2019-03-19 14:08:45 -0700")
+    end_time = Time.parse("2019-03-15 14:08:45 -0700")
+    room_number = 3
+
+    expect { Hotel::ReservationManager.new(start_time, end_time, room_number) }.must_raise ArgumentError
+  end
+
   it "creates a reservation for an available room" do
     reservation_generator
     reservation = manager_new.create_reservation(Time.parse("2019-03-21 14:08:45 -0700"), Time.parse("2019-03-26 14:08:45 -0700"), 6)
