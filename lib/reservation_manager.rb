@@ -93,28 +93,47 @@ module Hotel
     end
 
     def make_block(total_rooms_in_block, check_in, check_out, block_id)
-      room_num_assign = available_rooms(check_in, check_out).take(total_rooms_in_block)
+      if total_rooms_in_block > 5
+        raise ArgumentError, "Blocks have a max of 5 rooms"
+      else
+        room_num_assign = available_rooms(check_in, check_out).take(total_rooms_in_block)
 
-      room_num_assign.each do |room|
-        room_number = room
+        room_num_assign.each do |room|
+          room_number = room
 
-        block_reservation = Hotel::Reservation.new(room_number,
-                                                   check_in,
-                                                   check_out, block_id)
+          block_reservation = Hotel::Reservation.new(room_number,
+                                                     check_in,
+                                                     check_out, block_id: block_id)
 
-        @block << block_reservation
-        # return block_reservation
+          @block << block_reservation
+          # return block_reservation
 
+        end
       end
       return @block
+    end
 
-      # list_numbers = []
-      # @block.each do |block_res|
-      #   num = block_res.room_number
-      #   list_numbers << num
-      # end
-      # return list_numbers
-      ap @block
+    def check_block_availability(id)
+      avail_block_rms = []
+      @block.each do |room|
+        if room.block_id == id
+          avail_block_rms << room.room_number
+        end
+      end
+      return avail_block_rms
+      ap avail_block_rms
+    end
+
+    def reserve_block_room(id)
+      i = 0
+      until i == 1
+        @block.each do |room|
+          if room.block_id == id
+            @reservations << room
+            i += 1
+          end
+        end
+      end
     end
   end
 end
