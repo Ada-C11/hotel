@@ -31,45 +31,75 @@ describe "Scheduler class" do
   end
 
   describe "reserve_room method" do
-    let(:scheduler) {
-      Hotel::Scheduler.new(2)
-    }
+    before do
+      @scheduler = Hotel::Scheduler.new(2)
+      @date_range = Hotel::Time_Interval.new(Date.parse("2019-06-12"), Date.parse("2019-06-15"))
+    end
 
     it "adds a new reservation to a given room" do
-      reservations = scheduler.get_reservations(Date.parse("2019-06-12"))
+      reservations = @scheduler.get_reservations(Date.parse("2019-06-12"))
       expect(reservations.length).must_equal 0
-      date_range = Hotel::Time_Interval.new(Date.parse("2019-06-12"), Date.parse("2019-06-15"))
-
-      scheduler.reserve_room(0, date_range)
-      reservations = scheduler.get_reservations(Date.parse("2019-06-12"))
+      @scheduler.reserve_room(0, @date_range)
+      reservations = @scheduler.get_reservations(Date.parse("2019-06-12"))
       expect(reservations.length).must_equal 1
       expect(reservations[0].room_id).must_equal 0
       expect(reservations[0].total_cost).must_equal 600
     end
-    # exception
 
-    # reserve same date range for two different rooms
+    it "raises an argument error when booking on the same duration for the same room" do
+      @scheduler.reserve_room(0, @date_range)
+      test_duration = Hotel::Time_Interval.new(Date.parse("2019-06-13"), Date.parse("2019-06-16"))
+      expect {
+        @scheduler.reserve_room(0, test_duration)
+      }.must_raise ArgumentError
+    end
+
+    it "successfully adds same date range to two different rooms" do
+      reservations = @scheduler.get_reservations(Date.parse("2019-06-12"))
+      expect(reservations.length).must_equal 0
+
+      @scheduler.reserve_room(0, @date_range)
+      @scheduler.reserve_room(1, @date_range)
+      reservations = @scheduler.get_reservations(Date.parse("2019-06-12"))
+      
+      expect(reservations.length).must_equal 2
+    end
   end
 
   describe "get_reservations method" do
     let(:scheduler) {
-      Hotel::Scheduler.new(3)
+      Hotel::Scheduler.new(6)
     }
 
-    it "returns a list of reservations for a given date" do
+    it "returns a list of reservations (including block reservations) for a given date" do
       expect(scheduler.get_reservations(Date.parse("2019-06-12")).length).must_equal 0
 
       date_range = Hotel::Time_Interval.new(Date.parse("2019-06-12"), Date.parse("2019-06-15"))
       scheduler.reserve_room(0, date_range)
       scheduler.reserve_room(1, date_range)
       scheduler.reserve_room(2, date_range)
+      
+      room_ids = [3, 4, 5]
+      discounted_rate = 180
+      block_id = scheduler.create_block(date_range, room_ids, discounted_rate)
+      scheduler.reserve_room_in_block(block_id, 3)
+      scheduler.reserve_room_in_block(block_id, 4)
+      scheduler.reserve_room_in_block(block_id, 5)
 
       return_list = scheduler.get_reservations(Date.parse("2019-06-12"))
-      expect(return_list.length).must_equal 3
+      expect(return_list.length).must_equal 6
     end
 
-    #add reservation
-    # ceck for a differnt date and ssee nothing is retruend
+    it "returns an empty list when there is a request to check reservation on the date not having reservations" do
+      expect(scheduler.get_reservations(Date.parse("2019-06-12")).length).must_equal 0
+      date_range = Hotel::Time_Interval.new(Date.parse("2019-06-12"), Date.parse("2019-06-15"))
+      scheduler.reserve_room(0, date_range)
+      scheduler.reserve_room(1, date_range)
+      scheduler.reserve_room(2, date_range)
+
+      return_list = scheduler.get_reservations(Date.parse("2019-12-12"))
+      expect(return_list.length).must_equal 0
+    end
   end
 
   describe "get_available_rooms method" do
@@ -162,6 +192,21 @@ describe "Scheduler class" do
       @scheduler.reserve_room_in_block(@block_id, 2)
       @scheduler.reserve_room_in_block(@block_id, 3)
       expect(@scheduler.block_has_available_room?(@block_id)).must_equal false
+    end
+  end
+
+  describe "reserve_room_in_block method" do
+    before do
+      @scheduler = Hotel::Scheduler.new(5)
+      room_ids = [1, 2, 3]
+      discounted_rate = 180
+      duration = Hotel::Time_Interval.new(Date.parse("2019-03-14"), Date.parse("2019-03-18"))
+      @block_id = @scheduler.create_block(duration, room_ids, discounted_rate)
+    end
+
+    it "returns a Reservation object" do
+      reservation = @scheduler.reserve_room_in_block(@block_id, 1)
+      expect(reservation).must_be_instance_of Hotel::Reservation
     end
   end
 end
