@@ -34,38 +34,38 @@ describe "Room" do
     @reservation = @room.unavailable_list[-1]
   end
 
-  describe "Room#room_available?" do
+  describe "Room#available?" do
     it "returns a boolean" do
-      boolean = @room.room_available?(date: @day1)
+      boolean = @room.available?(date: @day1)
       expect(boolean).must_equal !!boolean
     end
 
     it "returns false if same date as a checkin day" do
-      expect(@room.room_available?(date: @day1)).must_equal false
+      expect(@room.available?(date: @day1)).must_equal false
     end
 
     it "returns true if same date as a checkout day" do
-      expect(@room.room_available?(date: @day2)).must_equal true
+      expect(@room.available?(date: @day2)).must_equal true
     end
 
     it "returns false if inbetween a checkin and checkout" do
-      expect(@room.room_available?(date: @day1 + 2)).must_equal false
+      expect(@room.available?(date: @day1 + 2)).must_equal false
     end
 
     it "returns true if date inbetween two unavailable blocks" do
-      expect(@room.room_available?(date: @day2 + 2)).must_equal true
+      expect(@room.available?(date: @day2 + 2)).must_equal true
     end
 
     it "returns true if date is before unavailable dates" do
-      expect(@room.room_available?(date: @day1 - 10)).must_equal true
+      expect(@room.available?(date: @day1 - 10)).must_equal true
     end
 
     it "returns true if date is after unavailable dates" do
-      expect(@room.room_available?(date: @day2 + 10)).must_equal true
+      expect(@room.available?(date: @day2 + 10)).must_equal true
     end
 
     it "returns true if no dates are unavailable" do
-      expect(manifest.rooms[2].room_available?(date: @day1)).must_equal true
+      expect(manifest.rooms[2].available?(date: @day1)).must_equal true
     end
   end
 end

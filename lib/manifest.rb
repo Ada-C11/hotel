@@ -33,25 +33,19 @@ module Hotel
 
     def list_unavailable_rooms_by_date(date:)
       return rooms.reject do |room|
-               room.room_available?(date: date)
+               room.available?(date: date)
              end
     end
 
     def list_available_rooms_by_date(date:)
       return rooms.select do |room|
-               room.room_available?(date: date)
+               room.available?(date: date)
              end
     end
 
     def list_available_rooms_by_date_range(date_range:)
-      dates = [*date_range]
-      available_rooms_by_day = dates.map do |date|
-        list_available_rooms_by_date(date: date)
-      end.flatten
-      number_days_required = dates.length
-      possible_rooms = available_rooms_by_day.uniq
-      return possible_rooms.select do |room|
-               available_rooms_by_day.count(room) == number_days_required
+      return rooms.select do |room|
+               room.available_for_date_range?(date_range: date_range)
              end
     end
   end
