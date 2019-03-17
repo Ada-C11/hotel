@@ -28,6 +28,11 @@ describe "ReservationManager" do
     expect(reservation_generator).must_be_instance_of Hotel::Reservation
     # expect(reservations).must_be_kind_of Array # How do I test for
   end
+  it "creates a reservation with available rooms" do
+    reservation_generator
+    expect(manager_new.create_reservation(Time.parse("2019-03-21 14:08:45 -0700"), Time.parse("2019-03-26 14:08:45 -0700"))).must_be_instance_of Hotel::Reservation
+    puts "#{manager_new.create_reservation(Time.parse("2019-03-21 14:08:45 -0700"), Time.parse("2019-03-26 14:08:45 -0700"))}"
+  end
 
   it "raises ArgumentError when range of dates are invalid" do
     start_date = Time.parse("2019-03-19 14:08:45 -0700")
@@ -90,5 +95,6 @@ describe "ReservationManager" do
     reservation_generator
     # puts "HERE #{manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))}"
     expect(manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))).must_be_kind_of Array
+    expect { manager_new.find_available_rooms(Time.parse("2019-01-24 14:08:45 -0700"), Time.parse("2019-01-27 14:08:45 -0700")) }.must_raise ArgumentError
   end
 end
