@@ -134,41 +134,40 @@ describe "Scheduler class" do
   end
 
   describe "create_block method" do
-    before do
-      @scheduler = Hotel::Scheduler.new(6)
-      @scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")))
-    end
-
     it "raises an argument error if at least one of the rooms is unavailable for a given date range" do
+      scheduler = Hotel::Scheduler.new(6)
+      scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")))
       room_ids = [0, 2, 5]
       discounted_rate = 180
       expect {
-        @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")), 
+        scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")), 
                               room_ids, discounted_rate)
       }.must_raise ArgumentError 
     end
 
     it "raises an argument error when there is an attempt to reserve a room that is part of a block" do
+      scheduler = Hotel::Scheduler.new(6)
       room_ids = [0, 2, 5]
       discounted_rate = 180
-      @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+      scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
                               room_ids, discounted_rate)
       
       expect {
-        @scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+        scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
                                 room_ids, discounted_rate)
       }.must_raise ArgumentError
     end
 
     it "raises an argument error when there is an attempt to create a block that overlaps with existing blocks" do
+      scheduler = Hotel::Scheduler.new(6)
       room_ids = [0, 2, 5]
       discounted_rate = 180
-      @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+      scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
                               room_ids, discounted_rate)
       
       expect {
         room_ids = [2, 3, 4]
-        @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+        scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
                                 room_ids, discounted_rate)
       }.must_raise ArgumentError
     end
