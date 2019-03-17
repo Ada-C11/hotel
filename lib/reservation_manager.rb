@@ -11,16 +11,21 @@ module Hotel
       return @rooms
     end
 
-    def create_reservation(start_date, end_date) # TO CONSIDER should I parse the dates here??? not when I'm creating the reservation in the specs??
-      # find available rooms for dates
-      # I might need to receive the room as a parameter and not
-      # choose it with sample
+    def create_reservation(start_date, end_date, room_selected)
       begin
         rooms_available = find_available_rooms(start_date, end_date)
       rescue ArgumentError
-        room = rooms.sample
+        if rooms.include?(room_selected)
+          room = room_selected
+        else
+          raise ArgumentError, "The room number is not valid"
+        end
       else
-        room = rooms_available.sample
+        if rooms_available.include?(room_selected)
+          room = room_selected
+        else
+          raise ArgumentError, "The room number is not available"
+        end
       end
       id = @reservations.length + 1
       new_reservation = Reservation.new(id, start_date, end_date, room)
@@ -36,6 +41,7 @@ module Hotel
             return reservation
           end
         end
+        raise ArgumentError, "Invalid reservation id"
       end
     end
 
@@ -44,12 +50,7 @@ module Hotel
         reservations_found = []
 
         @reservations.each_with_index do |reservation, index|
-          if start_date_find >= reservation.start_date && end_date_find <= reservation.end_date ## IT WILL BE FREE IN THE CHECKOUT DATE SO I'M NOT RETURNING THAT... DOES IT AFFECT ANY OF THE
-            # CALCULATIONS FOR DAYS??
-            reservations_found << reservation
-          elsif start_date_find <= reservation.start_date && end_date_find == reservation.end_date
-            reservations_found << reservation
-          elsif start_date_find == reservation.start_date && end_date_find >= reservation.end_date
+          unless reservation.start_date >= end_date_find || reservation.end_date <= start_date_find
             reservations_found << reservation
           end
         end
@@ -71,26 +72,5 @@ module Hotel
       available_rooms = rooms - reserved_rooms_numbers
       return available_rooms
     end
-
-    # I can view a list of rooms that are not reserved for a given date range,
-    # so that I can see all available rooms for that day
-
-    # find all the reservations by date
-    # Then collect the number of the rooms reserved (maybe the range of dates for the reservations for each room, why though?)
-    #     Modify find_reservation_by_date method to take in a range rather that just a date
-    #     Create a method find_available_rooms
-    #         Invoke find_reservation_by_date range to get an array of reservations
-    #         From the array obtained filter the rooms and maybe the dates...
-    #         Return an array with the information collected OK
-    # I can reserve an available room for a given date range
-    #         Add the method find_available_rooms to create_reservation
-    #         I need to make sure the reservation "# A reservation is allowed
-    #         start on the same day that another reservation for the same room ends"
-    #
-    # I want an exception raised if I try to reserve a room that is unavailable
-    # for a given day, so that I cannot make two reservations for the same room that overlap by date
-
-    # Details
-    # A reservation is allowed start on the same day that another reservation for the same room ends
   end
 end
