@@ -23,7 +23,10 @@ module Hotel
       unless rooms_collection.all? do |room|
         room.available_for_date_range?(date_range: block.date_range)
       end
-        raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
+        raise RoomNotAvailable.new("Room #{room.id} not available for requested dates in Block. Block aborted, no rooms added.")
+      end
+      rooms_collection.each do |room|
+        room.unavailable_list << block
       end
     end
 
