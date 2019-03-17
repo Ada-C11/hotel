@@ -23,18 +23,18 @@ describe "Booker" do
   end
 
   describe "Booker#book" do
-    it "adds reservation to unavailable array to manifest for a given room" do
+    it "adds unavailable_object to unavailable array to manifest for a given room" do
       expect(@reservation).must_be_instance_of Hotel::Reservation
     end
 
-    it "adds reservation correctly" do
+    it "adds unavailable_object correctly" do
       expect(@reservation.check_in).must_equal Date.new(2020, 03, 20)
       expect(@reservation.check_out).must_equal Date.new(2020, 03, 28)
       expect(@reservation.duration_in_days).must_equal 8
       expect(@reservation.cost).must_equal 1600.0
     end
 
-    it "adds reservation to unavailable array in correct room" do
+    it "adds unavailable_object to unavailable array in correct room" do
       expect(@room.unavailable_list.include?(@pend_reservation)).must_equal true
     end
 
@@ -59,7 +59,22 @@ describe "Booker" do
 
   describe "Booker#get_cost_of_booking" do
     it "returns cost of booking from reservation object" do
-      expect(booker.get_cost_of_booking(@reservation)).must_equal 1600.0
+      expect(booker.get_cost_of_booking(reservation: @reservation)).must_equal 1600.0
+    end
+  end
+
+  describe "Booker#set_up_block" do
+    let(:valid_block) {
+      Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
+    }
+    it "will add block to each room in rooms_collection" do
+      rooms_collect = [2, 3, 1, 5].map do |id|
+        manifest.find_room(id: id)
+      end
+      booker.set_up_block(block: valid_block, rooms_collection: rooms_collect)
+      rooms_collect.each do |room|
+        expect(room.unavailable_list[-1]).must_equal valid_block
+      end
     end
   end
 end
