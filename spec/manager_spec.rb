@@ -40,6 +40,26 @@ describe "Manager Spec" do
       expect(res_on_date[0][0]).must_equal 1
       expect(res_on_date[1][0]).must_equal 8
     end
+
+    it "Sorts the array of reservations after res is made" do
+      room = 1
+
+      check_in1 = Date.new(2019, 6, 3)
+      check_out1 = Date.new(2019, 6, 7)
+      this_manager.make_res_for_room(check_in1, check_out1, room)
+
+      check_in2 = Date.new(2019, 6, 8)
+      check_out2 = Date.new(2019, 6, 10)
+      this_manager.make_res_for_room(check_in2, check_out2, room)
+
+      check_in3 = Date.new(2019, 6, 12)
+      check_out3 = Date.new(2019, 6, 17)
+      this_manager.make_res_for_room(check_in3, check_out3, room)
+
+      #   p this_manager.rooms_reservations_hash
+
+      expect(this_manager.rooms_reservations_hash[1][2].ckin_date.to_s).must_equal "2019-06-12"
+    end
   end
 
   describe "Room Availability" do
@@ -70,6 +90,7 @@ describe "Manager Spec" do
     # let (:test_dates) {}
 
     it "Display a list of rooms not reserved on a given date range" do
+
       # ARRANGE
       this_manager
       res1

@@ -29,7 +29,7 @@ module Hotel
     end
 
     def list_reservations_for_date(date)
-      res_on_date = []  # write code here
+      res_on_date = []
       @rooms_reservations_hash.each do |room, reservations|
         reservations.each do |res|
           if res.date_range_string_array.include? (date.to_s)
@@ -44,13 +44,50 @@ module Hotel
     end
 
     def find_avail_rooms_for_dates(ckin, ckout)
-      # write code here
+      avail_rooms = []
+      # ~~~~~~~~~~~~~ WRITE THIS!!! ~~~~~~~~~~~~~
+      @rooms_reservations_hash.each do |room, reservations|
+        avail_rooms << room if reservations.empty?
+        reservations.each_with_index do |res, index|
+          res_a = res
+          res_b = reservations[index + 1]
+          if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
+            # binding.pry
+            avail_rooms << room
+          end
+        end
+      end
+
+      return avail_rooms
+    end
+
+    def get_insert_index(res_hash, new_res)
+      insert_index = 0
+
+      res_hash.each do |res_in_hash|
+        # DOES IT MAKE SENSE TO KEEP THIS IN ITS OWN METHOD?
+        # IF NOT, MOVE TO #make_res_for_room
+        if (res_in_hash.ckin_date <=> new_res.ckin_date) == -1
+          insert_index += 1
+        end
+      end
+
+      return insert_index
+    end
+
+    def ck_avail(ckin, ckout, room_num)
+      # DO WE NEED THIS METHOD? MAYBE NOT.
+      # check if specific room is available for this date range
+      # return true/false
     end
 
     def make_res_for_room(ckin, ckout, room_num)
+      # ck_avail
+      # if true, continue; else return error
       new_res = Reservation.new(ckin, ckout)
+      at_index = get_insert_index(@rooms_reservations_hash[room_num], new_res)
+      @rooms_reservations_hash[room_num].insert(at_index, new_res)
 
-      @rooms_reservations_hash[room_num] << new_res
       #   binding.pry
     end
   end
