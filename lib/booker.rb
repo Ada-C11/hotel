@@ -5,63 +5,58 @@ require_relative "room"
 require_relative "reserve"
 require_relative "date_range"
 
-class RoomBooker
-  attr_reader :check_in, :check_out, :reservations, :rooms, :reservation_cost
+class RoomBooker < Date
+  attr_reader :reservations, :rooms
 
-  def initialize
-    @rooms = hotel_rooms
+  def initialize(rooms:)
+    @rooms = rooms
     @reservations = []
   end
 
-  def make_reservation(check_in:, check_out:)
-    room = find_available_room()
-    reserved = Reservation.new(id: @reservations.length + 1, check_in: check_in, check_out: check_out, room_booked: room)
-    room.booked_on((Date.parse(check_in)..Date.parse(check_out)))
-    @reservations << reserved
+  def book_reservation(check_in:, check_out:)
+    date_request = request_dates(check_in: check_in, check_out: check_out) # validate dates
+    find_room = find_available_room(check_in: check_in, check_out: check_out) #find available room
+    if find_room == nil
+      raise ArgumentError, "No rooms are available for these dates"
+    end
+    # only make reservation if room is available
+    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: date_request, room_booked: find_room)
+
+    find_room.booked_on(check_in: check_in, check_out: check_out)
+    @reservations.push(reservation_request)
+    return reservation_request
   end
 
-  def find_room_id(id)
-    @rooms.each do |room|
-      if room.id == id
-        return room
-      end
-    end
-      return nil
+  def make_reservation(id:, dates_booked:, room_booked:)
+    reservation = Reservation.new(id: id, dates_booked: dates_booked, room_booked: room_booked)
+    return reservation
   end
 
-  def find_available_room
-    @rooms.each do |room|
-      if room.date_available?
-        return room
-      end
-    end
+  def request_dates(check_in:, check_out:)
+    date_range = DateRange.new(check_in: check_in, check_out: check_out).dates_booked
+    return date_range
   end
 
-  def hotel_rooms
-    rooms = []
-    20.times do |room_num|
-      rooms << Room.new(@id = room_num + 1)
-    end
-    return rooms
+  def find_room_id(id:)
+    return rooms.find do |room|
+             room.id == id
+           end
   end
 
-  def date_query(date)
-    n_date = Date.parse(date)
-    find_by_dates = []
-    @reservations.each do |res_dates|
-      if res_dates.dates_booked.include?(n_date)
-        find_by_dates << res_dates
-      end
+  def find_available_room(check_in:, check_out:)
+    found_room = rooms.select do |room|
+      room.room_available?(check_in: check_in, check_out: check_out)
     end
+    return found_room[0]
+  end
 
-    if find_by_dates.empty?
-      return nil
-    end
-
+  def date_query(date:)
+    find_dates = Date.parse(date)
+    find_by_dates = reservations.select { |reserved| reserved.dates_booked.include?(find_dates) == true }
     return find_by_dates
   end
 
-  def find_cost(id)
+  def find_cost(id:)
     @reservations.each do |res|
       if res.id == id
         return "#{res.total_cost}"
@@ -69,5 +64,4 @@ class RoomBooker
     end
     return nil
   end
-
 end

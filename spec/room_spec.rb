@@ -1,94 +1,117 @@
 require_relative "spec_helper"
+require "awesome_print"
 
 describe "Room class" do
   before do
-    @room = Room.new(1)
+    @room = Room.new(id: 1)
   end
   describe "Room instantiation" do
     it "is an instance of a room" do
       expect(@room).must_be_kind_of Room
+      expect(Room).must_respond_to :hotel_rooms
+    end
+    it "creates 20 rooms upon instantiation" do
+      expect(Room.hotel_rooms).must_be_kind_of Array
+      expect(Room.hotel_rooms.length).must_equal 20
     end
     it "knows it's id" do
       expect(@room.id).must_equal 1
     end
 
     it "returns nil for a room that does not exist" do
-      expect { Room.new(1337) }.must_raise ArgumentError
+      expect { Room.new(id: 1337) }.must_raise ArgumentError
     end
   end
 
   describe "booked_on" do
     before do
-      @room = Room.new(2)
+      @room = Room.new(id: 2)
     end
     it "knows what reservations it has" do
-      reservation = Reservation.new(id: 1, check_in: "3rd of March 2020", check_out: "5th of March 2020")
+      reservation = Reservation.new(id: 1, room_booked: @room, dates_booked: (Date.parse("03/03/2020")...Date.parse("03/05/2020)")))
       expect(@room).must_respond_to :booked_on
-      expect(@room.booked_on(reservation)).must_be_kind_of Array
+      expect(@room.bookings).must_be_kind_of Array
     end
   end
 
-  describe "dates overlap?" do
+  describe "room available?" do
     before do
-      checkin = Date.parse("March 9th 2020")
-      checkout = Date.parse("March 11th 2020")
-      @room.booked_on(checkin...checkout)
+      checkin = "March 9th 2020"
+      checkout = "March 11th 2020"
+      @room.booked_on(check_in: checkin, check_out: checkout)
+    end
+
+    it "books a room that has no bookings" do
+      room = Room.new(id: 5)
+      start = "March 3 2020"
+      out = "March 6th 2020"
+
+      expect(room.bookings.length).must_equal 0
+      expect(room.bookings.empty?).must_equal true
+      expect(room.room_available?(check_in: start, check_out: out)).must_equal true
+      expect(room.bookings[0]).must_be_nil
     end
 
     it "allows you to book a room for an incoming date range that ends before any current bookings" do
-      start = Date.parse("March 3 2020")
-      out = Date.parse("March 6th 2020")
+      start = "March 3 2020"
+      out = "March 6th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal true
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal true
     end
 
     it "allows you to book a room for an incoming date range that starts after any current bookings" do
-      start = Date.parse("March 12 2020")
-      out = Date.parse("March 14th 2020")
-      expect(@room.room_available?(start, out)).must_equal true
+      start = "March 12 2020"
+      out = "March 14th 2020"
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal true
     end
 
     it "allows you to book a room for an incoming checkout date that ends on the same day another reservation begins" do
-      start = Date.parse("March 7th 2020")
-      out = Date.parse("March 9th 2020")
+      start = "March 7th 2020"
+      out = "March 9th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal true
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal true
     end
 
     it "allows you to book a room for an incoming checkout date that ends on the same day another reservation begins" do
-      start = Date.parse("March 11th 2020")
-      out = Date.parse("March 12th 2020")
+      start = "March 11th 2020"
+      out = "March 12th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal true
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal true
     end
 
-    it "will not allow a reservation that starts and ends on the same dates as a booking " do 
-      start = Date.parse("March 9th 2020")
-      out = Date.parse("March 11th 2020")
-      
-      expect(@room.room_available?(start, out)).must_equal false
+    it "will not allow a reservation that starts and ends on the same dates as a booking " do
+      start = "March 9th 2020"
+      out = "March 11th 2020"
+
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
     end
 
-    it "will not allow a reservation that occurs within a booked date range" do 
-      start = Date.parse("March 10th 2020")
-      out = Date.parse("March 11th 2020")
+    it "will not allow a reservation that occurs within a booked date range" do
+      start = "March 10th 2020"
+      out = "March 11th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal false
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
     end
 
-    it "it will not allow a reservation that ends during a booked reservation" do 
-      start = Date.parse("March 8th 2020")
-      out = Date.parse("March 10th 2020")
+    it "it will not allow a reservation that ends during a booked reservation" do
+      start = "March 8th 2020"
+      out = "March 10th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal false
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
     end
 
-    it " will not allow a reservation that starts during a booked reservation" do 
-      start = Date.parse("March 10th 2020")
-      out = Date.parse("March 15th 2020")
+    it " will not allow a reservation that starts during a booked reservation" do
+      start = "March 10th 2020"
+      out = "March 15th 2020"
 
-      expect(@room.room_available?(start, out)).must_equal false
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
+    end
+
+    it "will return false for an inquiry that conflicts with previous booking" do
+      start = "March 8th 2020"
+      out = "March 12th 2020"
+
+      expect(@room.room_available?(check_in: start, check_out: out)).must_equal false
     end
   end
-
 end

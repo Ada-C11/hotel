@@ -10,7 +10,7 @@ class Room
     end
 
     @id = id
-    @bookings ||= []
+    @bookings = [(Date.parse("2012-02-02"))..(Date.parse("2012-02-05")), (Date.parse("2012-02-07"))...(Date.parse("2012-02-09"))]
   end
 
   def self.hotel_rooms
@@ -26,8 +26,6 @@ class Room
   end
 
   def room_available?(check_in:, check_out:)
-   check_in = Date.parse(check_in)
-   check_out = Date.parse(check_out)
     @bookings.each do |booked|
       if booked == nil
         return true
@@ -44,3 +42,13 @@ class Room
     return true
   end
 end
+
+test_room = Room.new(id: 1)
+day1 = Date.parse("2012-02-03")
+day1b = Date.parse("2012-02-04")
+
+day2 = Date.parse("2012-02-06")
+day2b = Date.parse("2012-02-10")
+
+puts test_room.room_available?(check_in: day1, check_out: day1b)
+puts test_room.room_available?(check_in: day2, check_out: day2b)
