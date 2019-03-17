@@ -12,11 +12,11 @@ class Room
             available_room = []
         
         
-        @room_id.each do |room|
+        def @room_id.each do |room|
             unless unavailable_room.include?(room)
                 available_room << room
             end
-            return available_rooms
+        return available_rooms
         end
     end 
 

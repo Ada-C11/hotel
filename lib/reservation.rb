@@ -22,6 +22,7 @@ class Reservation
 
 
 
+# date, cost 
 
 
 end
