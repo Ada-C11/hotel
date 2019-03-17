@@ -9,7 +9,7 @@ describe "Hotel class" do
     it "initializes a Hotel object" do
       expect(@new_hotel).must_be_instance_of HotelSystem::Hotel
     end
-    it "creates an array of Room objects" do
+    it "can access a list of all rooms" do
       expect(@new_hotel.rooms).must_be_instance_of Array
       @new_hotel.rooms.each do |room|
         expect(room).must_be_instance_of HotelSystem::Room

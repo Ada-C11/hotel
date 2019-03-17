@@ -53,6 +53,12 @@ describe "DateRange class" do
       expect(date_range.includes_date?(test_date_1)).must_equal true
       expect(date_range.includes_date?(test_date_2)).must_equal false
     end
+    it "cexcludes the last day" do
+      date_range = make_date_range(start_date: "01 Feb 2020", end_date: "08 Feb 2020")
+      test_date = Date.parse("08 Feb 2020")
+
+      expect(date_range.includes_date?(test_date)).must_equal false
+    end
   end
   describe "overlap method" do
     it "checks if its dates overlap with the dates of another DateRange" do
@@ -64,6 +70,17 @@ describe "DateRange class" do
       test_2 = date_range.overlap?(date_with_no_overlap)
 
       expect(test_1).must_equal true
+      expect(test_2).must_equal false
+    end
+    it "excludes end dates in testing overlap" do
+      date_range = make_date_range(start_date: "01 Feb 2020", end_date: "08 Feb 2020")
+      starts_on_end_date = make_date_range(start_date: "08 Feb 2020", end_date: "14 Feb 2020")
+      ends_on_start_date = make_date_range(start_date: "27 Jan 2020", end_date: "01 Feb 2020")
+
+      test_1 = date_range.overlap?(starts_on_end_date)
+      test_2 = date_range.overlap?(ends_on_start_date)
+
+      expect(test_1).must_equal false
       expect(test_2).must_equal false
     end
   end
