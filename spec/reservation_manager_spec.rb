@@ -74,6 +74,7 @@ describe "available_rooms method" do
   it "can return available rooms for a specified date range, end_date unavail" do
     reservation1
     reservation2
+
     start_date = "march 14, 2019"
     end_date = "march 16, 2019"
     vacant_rooms = manager.available_rooms(start_date, end_date)
@@ -151,12 +152,12 @@ describe "make_block method" do
   it "Will not show blocked rooms as available" do
     reservation1
     reservation2
-    # block_id = 1
     manager.make_block(4, "march 19, 2019", "march 23, 2019", block_id: 1)
 
     vacant_rooms = manager.available_rooms("march 19, 2019", "march 20, 2019")
+    ap vacant_rooms
     expect(vacant_rooms.length).must_equal 14
-    expect(vacant_rooms).wont_include @block
+    # expect(vacant_rooms).wont_include reserved_block_rooms
     expect(vacant_rooms).wont_include reservation1.room_number
     expect(vacant_rooms).wont_include reservation2.room_number
   end

@@ -1,6 +1,7 @@
 require_relative "reservation.rb"
 require "date"
 require "pry"
+require "awesome_print"
 
 module Hotel
   class ReservationManager
@@ -53,34 +54,67 @@ module Hotel
       return reservations_by_date
     end
 
+    def blocked_rm_by_date(start_date, end_date)
+      s_date = Date.parse(start_date)
+      e_date = Date.parse(end_date)
+      blocks_by_date = []
+      @block.each do |room|
+        if e_date > room.check_in && e_date <= room.check_out
+          blocks_by_date << room
+        elsif s_date >= room.check_in && s_date < room.check_out
+          blocks_by_date << room
+        elsif s_date <= room.check_in && e_date >= room.check_out
+          blocks_by_date << room
+
+          #Right now checkout day is not included because you can check-in on that day
+        end
+      end
+
+      return blocks_by_date
+    end
+
     def available_rooms(start_date, end_date)
       unavail_rooms = reservations_by_date(start_date, end_date).map do |reservation|
         reservation.room_number
       end
 
-      non_block_avail_rooms = all_rooms.reject { |rm_num| unavail_rooms.include? rm_num }
+      unavail_block_rms = blocked_rm_by_date(start_date, end_date).map do |block_room|
+        block_room.room_number
+      end
 
-      #if you want to remove line below, change non_block_avail_rooms to avail_rooms
+      all_unavail_rooms = unavail_rooms + unavail_block_rms
+      # ap all_unavail_rooms
 
-      avail_rooms = non_block_avail_rooms.reject { |rm_num| @block.include? rm_num }
+      all_avail_rooms = all_rooms.reject { |rm_num| all_unavail_rooms.include? rm_num }
 
-      return avail_rooms
+      # ap all_avail_rooms
+
+      return all_avail_rooms
     end
 
     def make_block(total_rooms_in_block, check_in, check_out, block_id)
-      block_room_numbers = available_rooms(check_in, check_out).take(total_rooms_in_block)
+      room_num_assign = available_rooms(check_in, check_out).take(total_rooms_in_block)
 
-      block_room_numbers.each do |room|
+      room_num_assign.each do |room|
         room_number = room
 
         block_reservation = Hotel::Reservation.new(room_number,
                                                    check_in,
                                                    check_out, block_id)
 
-        @block << block_reservation.room_number
-      end
+        @block << block_reservation
+        # return block_reservation
 
+      end
       return @block
+
+      # list_numbers = []
+      # @block.each do |block_res|
+      #   num = block_res.room_number
+      #   list_numbers << num
+      # end
+      # return list_numbers
+      ap @block
     end
   end
 end
