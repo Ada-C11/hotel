@@ -2,6 +2,7 @@ module Hotel
   class Scheduler
     def initialize(num_rooms)
       @rooms = Hash.new
+      @blocks = Hash.new
       num_rooms.times do |i|
         @rooms[i] = Room.new(i)
       end
@@ -34,6 +35,10 @@ module Hotel
         end
       }
       return list
+    end
+
+    def create_block(date_range, room_ids, discounted_rate)
+      
     end
   end
 end
