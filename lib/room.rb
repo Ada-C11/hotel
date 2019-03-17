@@ -1,11 +1,10 @@
 module Hotel
   class Room
-    attr_accessor :room_num, :status, :room_rate
+    attr_accessor :room_num, :room_rate
 
-    def initialize(room_num:, room_rate: 200, status: :AVAILABLE)
+    def initialize(room_num:, room_rate: 200)
       @room_num = room_num
       @room_rate = room_rate
-      @status = status
 
       raise ArgumentError.new("Invalid room number") if @room_num < 1 || @room_num > 20
     end
