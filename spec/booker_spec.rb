@@ -123,13 +123,14 @@ describe "RoomBooker" do
     incoming_allowed = "March 1st 2021"
     outgoing_allowed = "March 2nd 2021"
 
-    it "@@@@@@@@@@@@@@@@@@@@@@@@@@@" do
+    it "will find rooms that are avaiable on specific dates" do
       20.times do
         hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
       end
+      available_rooms = hotel.get_available_rooms(check_in: "March 5th", check_out: "March 6th")
 
-      expect(hotel.get_available_rooms(check_in: "March 5th", check_out: "March 6th")).must_be_kind_of Array
-      expect(hotel.get_available_rooms.length).must_equal 20
+      expect(available_rooms).must_be_kind_of Array
+      expect(available_rooms.length).must_equal 20 
     end
   end
 end

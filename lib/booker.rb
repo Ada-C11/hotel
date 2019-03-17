@@ -32,11 +32,6 @@ class RoomBooker < Date
     return reservation
   end
 
-  # def request_dates(check_in:, check_out:)
-  #   date_range = DateRange.new(check_in: check_in, check_out: check_out)
-  #   return date_range.date_range
-  # end
-
   def find_room_id(id:)
     return rooms.find do |room|
              room.id == id
@@ -66,9 +61,9 @@ class RoomBooker < Date
   end
 
 
-  def get_available_rooms(check_in:, check_out:)
-    open_rooms = rooms.map { |room| room.room_available?(check_in: check_in, check_out: check_out) }
+  def get_available_rooms(check_in: , check_out:)
+    open_rooms = @rooms.map { |room| room.room_available?(check_in: check_in, check_out: check_out) }
     return open_rooms
   end
-  
+
 end

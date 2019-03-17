@@ -18,12 +18,7 @@ class DateRange
   end
 
   def valid_date?(date_str)
-    format = "%Y-%m-%d"
-    begin
-      date = Date.parse(date_str, format)
-    rescue ArgumentError
-      puts "Invalid date given, #{date_str}"
-    end
+    date = Date.parse(date_str)
 
     if Date.today > date
       raise ArgumentError, "Date cannot occur before current date, given: #{date_str}"
