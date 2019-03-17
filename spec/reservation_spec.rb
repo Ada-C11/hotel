@@ -12,14 +12,6 @@ describe "Reservation" do
   it "is an instance of Reservation" do
     expect(reservation_1).must_be_instance_of Hotel::Reservation
   end
-  it "raises ArgumentError when date range is invalid" do
-    id = 1
-    start_time = Time.parse("2019-03-19 14:08:45 -0700")
-    end_time = Time.parse("2019-03-15 14:08:45 -0700")
-    room_number = 3
-
-    expect { Hotel::Reservation.new(id, start_time, end_time, room_number) }.must_raise ArgumentError
-  end
 
   it "can generate an id for the reservation" do
     expect(reservation_1.id).must_be_kind_of Integer
