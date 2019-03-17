@@ -9,6 +9,7 @@ module Hotel
       @room_number = room_number
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
+      @block_id = block_id
 
       if @check_out < @check_in
         raise ArgumentError, "Invalid dates, checkout date must be after checkin date."
