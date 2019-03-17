@@ -11,13 +11,14 @@ class Room
         def all_dates
             available_room = []
         
-            @room_id.each do |room|
-                unless unavailable_room.include?(room)
-                    available_room << room
-                end
-                return available_rooms
+        
+        @room_id.each do |room|
+            unless unavailable_room.include?(room)
+                available_room << room
             end
-        end 
+            return available_rooms
+        end
+    end 
 
 
     end

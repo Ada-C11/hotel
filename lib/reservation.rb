@@ -16,10 +16,6 @@ class Reservation
   
   end
 
-  
-
- 
-
   def check_date_range(start, finish)
     raise StandardError, 'Invalid date range' unless start < finish
   end
