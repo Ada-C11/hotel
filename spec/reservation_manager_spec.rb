@@ -70,11 +70,6 @@ describe "ReservationManager class" do
   end
 
   describe "hotel_block method" do
-    it "lets user create another multiple hotel blocks if the dates and rooms are unique" do
-      reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["7", "8", "9"], cost: 100)
-      reservation_manager.hotel_block(start_date: "2nd June 2019", end_date: "5th June 2019", rooms_array: ["7", "8", "9"], cost: 100)
-      expect (reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["10", "11", "12"], cost: 100).length).must_equal 9
-    end
     it "Returns an array" do
       expect(reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100).length).must_equal 3
     end
@@ -82,18 +77,34 @@ describe "ReservationManager class" do
       expect(reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100).first).must_equal "18"
     end
     it "raises an exception if the user tries to book a block including a room that is booked during the date range" do
-      reservation_manager.make_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "1")
-      expect { reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["1", "19", "20"], cost: 100) }.must_raise ArgumentError
+      reservation_manager.make_reservation(start_date: "2nd Jan 2020", end_date: "5th Jan 2020", room: "1")
+      reservation_manager.make_reservation(start_date: "2nd Feb 2020", end_date: "5th Feb 2020", room: "1")
+      expect { reservation_manager.hotel_block(start_date: "3rd Feb 2020", end_date: "4th Feb 2020", rooms_array: ["1", "19", "20"], cost: 100) }.must_raise ArgumentError
     end
     it "raises an argument error if the user tries to create another hotel block for rooms that are already blocked for that date range" do
       reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["1", "19", "20"], cost: 100)
       expect { reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["1", "19", "20"], cost: 100) }.must_raise ArgumentError
+    end
+    it "lets user create another multiple hotel blocks for the same dates if the rooms are unique" do
+      reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["7", "8", "9"], cost: 100)
+      expect (reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["10", "11", "12"], cost: 100).length).must_equal 6
+    end
+    it "lets user create a hotel block with rooms from exiting block but with unique days" do
+      reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["7", "8", "9"], cost: 100)
+      expect (reservation_manager.hotel_block(start_date: "6th August 2019", end_date: "10th August 2019", rooms_array: ["7", "8", "9"], cost: 100).length).must_equal 6
+    end
+    it "lets user create a new block with the start date the same as the end date for a previous block with the same rooms" do
+      reservation_manager.hotel_block(start_date: "2nd August 2019", end_date: "5th August 2019", rooms_array: ["7", "8", "9"], cost: 100)
+      expect (reservation_manager.hotel_block(start_date: "5th August 2019", end_date: "10th August 2019", rooms_array: ["7", "8", "9"], cost: 100).length).must_equal 6
     end
   end
 
   describe "view_all_rooms method" do
     it "rooms array includes 20 rooms" do
       expect(reservation_manager.view_all_rooms.length).must_equal 20
+    end
+    it "rooms array includes rooms" do
+      expect(reservation_manager.view_all_rooms.include?("15")).must_equal true
     end
   end
 

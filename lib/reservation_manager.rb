@@ -39,59 +39,33 @@ class ReservationManager
     end_date = end_date
     cost = cost
     rooms_array = rooms_array
+
     rooms_array.each do |room|
-      @reservation_array.each do |reservation| #this only checks rooms, not rooms & dates
-        if reservation.room.include?(room)
-          raise ArgumentError, "A room in your desired block is booked during that time period"
+      @reservation_array.each do |reservation|
+        reservation.reservation_dates[0..-2].each do |date|
+          if (Date.parse(start_date)..Date.parse(end_date)).to_a[0..-2].include?(date) && reservation.room.include?(room)
+            raise ArgumentError, "A room in your desired block is booked during that time period"
+          end
         end
       end
-      if @blocked_rooms_array.include?(room)
-        raise ArgumentError, "There is already a block on that date or room during your block duration."
+
+      @blocked_reservation_array.each do |blocked_reservation|
+        blocked_reservation.reservation_dates[0..-2].each do |date|
+          if (Date.parse(start_date)..Date.parse(end_date)).to_a[0..-2].include?(date) && blocked_reservation.room.include?(room)
+            raise ArgumentError, "There is already a block on that date or room during your block duration."
+          end
+        end
       end
     end
+
     rooms_array.each do |block_room|
       block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
       @blocked_rooms_array << block_reservation.room
       @blocked_reservation_array << block_reservation
     end
+
     return @blocked_rooms_array
   end
-
-  # def hotel_block(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, cost: 100, rooms_array: ["0"])
-  #   start_date = start_date
-  #   end_date = end_date
-  #   cost = cost
-  #   rooms_array = rooms_array
-
-  #   hotel_block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
-
-  #   hotel_block_reservation.rooms_array.each do |block_room|
-  #     if  hotel_block_reservation.reservation_dates[0..2].each do |date|
-  #         @blocked_reservation_array.each do |reservation|
-  #           if reservation.reservation_dates[0..-2].include?(date)
-  #             @booked_rooms << reservation.room
-  #           end
-  #         end
-  #       end
-
-  #   rooms_array.each do |room|
-  #     @reservation_array.each do |reservation| #this only checks rooms, not rooms & dates
-  #       if reservation.room.include?(room)
-  #         raise ArgumentError, "A room in your desired block is booked during that time period"
-  #       end
-  #     end
-  #     if @blocked_rooms_array.include?(room)
-  #       raise ArgumentError, "There is already a block on that date or room during your block duration."
-  #     end
-  #   end
-  #   # rooms_array.each do |block_room|
-  #   #   block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost)
-  #   #   @blocked_rooms_array << block_reservation.room
-  #   @blocked_rooms_array << block_reservation.room
-  #     @blocked_reservation_array << block_reservation
-  #   # end
-  #   return @blocked_rooms_array
-  # end
 
   def view_all_rooms
     return @rooms
