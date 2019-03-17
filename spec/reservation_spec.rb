@@ -12,11 +12,10 @@ describe "create instance of Reservation class" do
   end
 
   it "raises an error if checkout date is before checkin date" do 
-    room_id = 2
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,3)
 
-    expect{booking = Booking::Reservation.new(2, checkin_date, checkout_date)}.must_raise ArgumentError
+    expect{Booking::Reservation.new(2, checkin_date, checkout_date)}.must_raise ArgumentError
   end
 
   # it "is able to use the add_reservation method from Hotel class" do

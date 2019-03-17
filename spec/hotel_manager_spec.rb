@@ -2,12 +2,18 @@ require 'date'
 
 require_relative 'spec_helper'
 
-describe "list_rooms method" do
-  it "provides a list of all rooms in the hotel" do
-    hotel = Booking::Hotel.new(5)
+describe "hotel_manager initalize" do 
+  it "raises an error if a hotel has more than 20 rooms" do 
+    expect {hotel = Booking::Hotel_Manager.new(21)}.must_raise ArgumentError
+  end
+end
 
-    expect(hotel.list_rooms).must_be_kind_of Array
-    expect(hotel.list_rooms[4]).must_be_kind_of Booking::Room
+describe "@all_rooms variable" do
+  it "provides a list of all rooms in the hotel" do
+    hotel = Booking::Hotel_Manager.new(5)
+
+    expect(hotel.all_rooms).must_be_kind_of Array
+    expect(hotel.all_rooms[4]).must_equal 5
     
   end
 end
@@ -16,7 +22,7 @@ describe "add_reservation method" do
   before do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
-    @hotel = Booking::Hotel.new(4)
+    @hotel = Booking::Hotel_Manager.new(4)
     
     # @reservation = Booking::Reservation.new(2, @checkin_date, @checkout_date)
   end
@@ -31,7 +37,7 @@ describe "reservation_by_date" do
   before do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
-    @hotel = Booking::Hotel.new(4)
+    @hotel = Booking::Hotel_Manager.new(4)
     
     # @reservation = Booking::Reservation.new(2, @checkin_date, @checkout_date)
 
@@ -53,7 +59,7 @@ end
 
 describe "check_availability method" do
   before do
-    @hotel = Booking::Hotel.new(3)
+    @hotel = Booking::Hotel_Manager.new(3)
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     
@@ -107,33 +113,83 @@ describe "check_availability method" do
   end
 end
 
-describe "hotel_block method" do
-  before do
-    @hotel = Booking::Hotel.new(5)
-    @checkin_date = Date.new(2019,1,4)
-    @checkout_date = Date.new(2019,1,7)
-    @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
-  end
+# describe "hotel_block method" do
+#   before do
+#     @hotel = Booking::Hotel.new(5)
+#     @checkin_date = Date.new(2019,1,4)
+#     @checkout_date = Date.new(2019,1,7)
+#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
+#   end
 
-  it "creates a hotel_block" do
-   expect(@block).must_be_kind_of Array
-   expect(@block.length).must_equal 4
-   expect(@block[1]).must_be_kind_of Integer
-  end
+#   it "creates a hotel_block" do
+#    expect(@block).must_be_kind_of Array
+#    expect(@block.length).must_equal 4
+#    expect(@block[1]).must_be_kind_of Booking::Room
+#   end
 
-  it "removes the block rooms from available_rooms array" do
-    expect(@hotel.available_rooms[0]).wont_equal 1
-  end
+#   it "removes the block rooms from available_rooms array" do
+#     expect(@hotel.available_rooms[0]).wont_equal 1
+#   end
 
-  it "raises an error if at least one of the selected rooms is unavailable" do
-    @hotel.add_reservation(@checkin_date, @checkout_date)
-    expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)}.must_raise ArgumentError
-  end
+#   it "raises an error if a block has more than 5 rooms" do
+#     expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,2,3,4,5,6], 150)}.must_raise ArgumentError
+#   end
 
-  it "raises an error if I try to create another block with a room already in another block" do
-    @checkin_date2 = Date.new(2019,1,6)
-    @checkout_date2 = Date.new(2019,1,9)
-    expect{@hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8,3], 150)}.must_raise ArgumentError
-  end
-end
+#   it "raises an error if at least one of the selected rooms is unavailable" do
+#     @hotel.add_reservation(@checkin_date, @checkout_date)
+#     expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)}.must_raise ArgumentError
+#   end
+
+#   it "raises an error if I try to create another block with a room already in another block" do
+#     @checkin_date2 = Date.new(2019,1,6)
+#     @checkout_date2 = Date.new(2019,1,9)
+#     expect{@hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8,3], 150)}.must_raise ArgumentError
+#   end
+
+# end
+
+# describe "block_availability method" do 
+#   before do 
+#     @hotel = Booking::Hotel.new(8)
+
+#     @checkin_date = Date.new(2019,1,4)
+#     @checkout_date = Date.new(2019,1,7)
+
+#     @checkin_date2 = Date.new(2019,1,5)
+#     @checkout_date2 = Date.new(2019,1,8)
+
+#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
+#     @block2 = @hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8], 150)
+#   end
+
+#   it "can list the available rooms in a block" do
+#     @available_rooms = @hotel.block_availability(@block)
+#     @available_rooms2 = @hotel.block_availability(@block2)
+
+#     expect(@available_rooms).must_be_kind_of Array
+#     expect(@available_rooms[0]).must_equal 1
+
+#     expect(@available_rooms2.length).must_equal 3
+#     expect(@available_rooms2[0]).must_equal 6
+#   end
+# # END OF DESCRIBE
+# end
+
+# describe "reserve_room_from_block" do
+#   before do
+#     @hotel = Booking::Hotel.new(8)
+#     @checkin_date = Date.new(2019,1,4)
+#     @checkout_date = Date.new(2019,1,7)
+#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
+#   end
+
+#   it "can reserve a room from the block" do
+    
+#     @reservation = @hotel.reserve_room_from_block(@block, 3)
+    
+#   expect(@reservation).must_be_kind_of Booking::Reservation
+    
+#   end
+
+# end
 
