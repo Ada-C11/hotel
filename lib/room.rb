@@ -13,25 +13,16 @@ module HotelSystem
       @reservations << reservation
     end
 
-    ##### NEEDS TESTS
-
     def available?(date)
       reservations.each do |reservation|
-        if date >= reservation.arrive_day && date < reservation.depart_day
-          return false
-        end
-        # reservation.date_range.each do |reserved_date|
-        #   return false if reserved_date.to_s == date.to_s
-        # end
+        return false if reservation.date_range.include?(date)
       end
       return true
     end
 
     def self.create_rooms(room_numbers)
-      rooms = []
-      room_numbers.each do |num|
+      rooms = room_numbers.map do |num|
         new_room = HotelSystem::Room.new(id: num)
-        rooms << new_room
       end
       return rooms
     end

@@ -39,7 +39,6 @@ module HotelSystem
 
     def find_available_reservations
       availabe_reservations = reservations.select { |res| res.status == :AVAILABLE }
-      # availabe_rooms.map! { |res| res.room }
       return availabe_reservations
     end
 

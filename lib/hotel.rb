@@ -10,11 +10,11 @@ module HotelSystem
     attr_reader :reservations, :blocks, :id
     attr_accessor :rooms
 
-    def initialize(id:, rooms: [], reservations: [], blocks: [])
+    def initialize(id:, rooms: [])
       @id = id
       @rooms = HotelSystem::Room.create_rooms(rooms)
-      @reservations = reservations
-      @blocks = blocks
+      @reservations = []
+      @blocks = []
     end
 
     def list_rooms
@@ -58,7 +58,6 @@ module HotelSystem
       reservations_on_date.reject! do |res|
         res if res.class == HotelSystem::BlockReservation && res.status == :AVAILABLE
       end
-
       return reservations_on_date
     end
 
@@ -73,7 +72,6 @@ module HotelSystem
 
     def create_block(rooms, first_day, last_day, discount)
       new_block = HotelSystem::Block.new(rooms: rooms, first_day: create_date_object(first_day), last_day: create_date_object(last_day), discount: discount)
-      # new_block.create_block_reservations
       new_block.reservations.each do |reservation|
         add_reservation(reservation)
       end
