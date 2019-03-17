@@ -45,10 +45,10 @@ module Hotel
         end
       end
 
-      block = Block.new(@next_block_id, room_ids, date_range, discounted_rate)
+      block = Hotel::Block.new(@next_block_id, room_ids, date_range, discounted_rate)
       @blocks[block.block_id] = block
       @next_block_id = @next_block_id + 1
-      
+
       return block.block_id
     end
   end

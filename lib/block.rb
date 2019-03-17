@@ -12,7 +12,7 @@ module Hotel
       @block_id = block_id
       @room_ids = room_ids
       @reserved_dates = reserved_dates
-      @discount_rate = discount_rate
+      @discounted_rate = discounted_rate
     end
   end
 end
