@@ -5,19 +5,11 @@ module Hotel
 
     def initialize(id, start_date, end_date, room_number)
       @id = id
-      validate_date_range(start_date, end_date)
+      @start_date = start_date
+      @end_date = end_date
       @room_number = room_number
       @total_nights = total_nights
       @total_cost = total_cost
-    end
-
-    def validate_date_range(start_date, end_date)
-      if start_date > end_date
-        raise ArgumentError, "Invalid date range"
-      else
-        @start_date = start_date
-        @end_date = end_date
-      end
     end
 
     def total_nights
