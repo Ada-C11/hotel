@@ -103,4 +103,24 @@ describe "Scheduler class" do
     #reserve the same room and expect an excpetion
   end
 
+  describe "create_block method" do
+    before do
+      @scheduler = Hotel::Scheduler.new(6)
+      @scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")))
+    end
+
+    it "raises an argument error if at least one of the rooms is unavailable for a given date range" do
+      room_ids = [0, 2, 5]
+      discount_rate = 180
+      expect {
+        @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")), 
+                              room_ids, discount_rate)
+      }.must_raise ArgumentError 
+    end
+
+    it "raises an argument error when there is an attempt to reserve a room as part of a block" do
+      
+    end
+  end
+
 end
