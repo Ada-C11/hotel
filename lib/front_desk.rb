@@ -93,7 +93,7 @@ module Hotel
       return reservations_by_date_list
     end # get_reservations_by_date
 
-    def room_availablity(date)
+    def room_availability(date)
       reservations_at_date = get_reservations_by_date(date)
 
       available_rooms = Array.new
@@ -113,7 +113,7 @@ module Hotel
       end # for
 
       return available_rooms
-    end # room_availablity
+    end # room_availability
 
     #### BLOCK METHODS ####
     def add_block_reservations
@@ -288,18 +288,38 @@ end # module
 # puts "Check_in: #{new_booking_5.check_in}"
 # puts "Check_out: #{new_booking_5.check_out}"
 
+# new_booking_6 = @concierge.make_reservation(
+#   1201,
+#   5,
+#   1,
+#   Date.new(2019, 3, 20),
+#   Date.new(2019, 3, 24)
+# )
+# @concierge.add_reservation(new_booking_6)
+
+# puts "\nBOOKING 6"
+# puts "Memory address: #{new_booking_6}"
+# puts "Number of rooms: #{new_booking_6.number_of_rooms}"
+# puts "Room number: #{new_booking_6.first_room_number}"
+# puts "Check_in: #{new_booking_6.check_in}"
+# puts "Check_out: #{new_booking_6.check_out}"
+# puts "Total cost: #{new_booking_6.total_cost}"
+# puts "Room blocks: #{new_booking_6.room_blocks}"
+
+# @concierge.add_block_reservations
+
 # block_reserved_rooms = @concierge.reserved_rooms_in_blocks_array
 # puts "Reserved Rooms: #{block_reserved_rooms}"
 
-# room_availibilty = @concierge.block_room_availability(Date.new(2019, 5, 23))
-# puts "Rooms available in blocks: #{room_availibilty}"
+# room_availibility = @concierge.block_room_availability(Date.new(2019, 3, 23))
+# puts "Rooms available in blocks: #{room_availibility}"
 # reservations_array = @concierge.reservations_record_array
-# reservation_list_date = @concierge.get_reservations_by_date(Date.new(2019, 4, 20))
-# avail_rooms = @concierge.room_availablity(Date.new(2019, 5, 23))
+# reservation_list_date = @concierge.get_reservations_by_date(Date.new(2019, 3, 20))
+# avail_rooms = @concierge.room_availability(Date.new(2019, 3, 23))
 
 # block_reservations = @concierge.block_reservations_array
-# block_reservation_list = @concierge.block_reservations_by_date(Date.new(2019, 5, 23))
-# block_rooms_avail = @concierge.block_room_availability(Date.new(2019, 5, 23))
+# block_reservation_list = @concierge.block_reservations_by_date(Date.new(2019, 3, 23))
+# block_rooms_avail = @concierge.block_room_availability(Date.new(2019, 3, 21))
 
 # puts "\nReservations array length: #{reservations_array.length}"
 # puts "\nReservations by date list: #{reservation_list_date}"

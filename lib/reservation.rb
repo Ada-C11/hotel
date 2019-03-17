@@ -46,20 +46,20 @@ module Hotel
   end # class
 end # module
 
-new_booking = Hotel::Reservation.new(
-  booking_ref: 1301,
-  number_of_rooms: 1,
-  first_room_number: 10,
-  check_in: Date.new(2019, 5, 20),
-  check_out: Date.new(2019, 5, 24),
-  total_cost: @total_cost,
-  room_blocks: @room_blocks,
-)
+# new_booking = Hotel::Reservation.new(
+#   booking_ref: 1301,
+#   number_of_rooms: 1,
+#   first_room_number: 10,
+#   check_in: Date.new(2019, 5, 20),
+#   check_out: Date.new(2019, 5, 24),
+#   total_cost: @total_cost,
+#   room_blocks: @room_blocks,
+# )
 
-puts new_booking
-puts "Number of rooms: #{new_booking.number_of_rooms}"
-puts "Room number: #{new_booking.first_room_number}"
-puts "Check_in: #{new_booking.check_in}"
-puts "Check_out: #{new_booking.check_out}"
-puts "Total cost: #{new_booking.total_cost}"
-puts "Room blocks: #{new_booking.room_blocks}"
+# puts new_booking
+# puts "Number of rooms: #{new_booking.number_of_rooms}"
+# puts "Room number: #{new_booking.first_room_number}"
+# puts "Check_in: #{new_booking.check_in}"
+# puts "Check_out: #{new_booking.check_out}"
+# puts "Total cost: #{new_booking.total_cost}"
+# puts "Room blocks: #{new_booking.room_blocks}"
