@@ -1,0 +1,4 @@
+1. Add price, type attributes to room to allow for different room types
+2. Turn reservations and blocks attributes in rooms so they're a hash with date range as the key? Don't know how to search for date range without looping through all the values, though
+3. There might be some overlap between variable, parameter, and method names. Could cause potential problems 
+4. Tests currently tightly coupled with program 

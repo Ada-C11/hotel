@@ -2,8 +2,6 @@ require_relative "room"
 require_relative "date_range"
 require_relative "block"
 
-# need block id & connect block
-
 module Hotel
   class Reservation
     attr_reader :id, :date_range, :room, :price, :room_id, :block, :block_id
