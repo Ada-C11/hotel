@@ -103,8 +103,11 @@ describe "Scheduler class" do
   end
 
   describe "get_available_rooms method" do
+    let(:scheduler) {
+      Hotel::Scheduler.new(3)
+    }
+
     it "returns a list of one room_id when two rooms are booked in a three room hotel" do
-      scheduler = Hotel::Scheduler.new(3)
       initial_list = scheduler.get_available_rooms(Hotel::Time_Interval.new(Date.parse("2019-12-10"), Date.parse("2019-12-15")))
       expect(initial_list.length).must_equal 3
 
@@ -118,7 +121,6 @@ describe "Scheduler class" do
     end
 
     it "returns an empty list when no room is available in a three room hotel" do
-      scheduler = Hotel::Scheduler.new(3)
       initial_list = scheduler.get_available_rooms(Hotel::Time_Interval.new(Date.parse("2019-12-10"), Date.parse("2019-12-15")))
       expect(initial_list.length).must_equal 3
 
@@ -129,13 +131,14 @@ describe "Scheduler class" do
 
       expect(return_list.length).must_equal 0
     end
-
-    #reserve the same room and expect an excpetion
   end
 
   describe "create_block method" do
+    let(:scheduler) {
+      Hotel::Scheduler.new(6)
+    }
+
     it "raises an argument error if at least one of the rooms is unavailable for a given date range" do
-      scheduler = Hotel::Scheduler.new(6)
       scheduler.reserve_room(0, Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")))
       room_ids = [0, 2, 5]
       discounted_rate = 180
@@ -146,7 +149,6 @@ describe "Scheduler class" do
     end
 
     it "raises an argument error when there is an attempt to reserve a room that is part of a block" do
-      scheduler = Hotel::Scheduler.new(6)
       room_ids = [0, 2, 5]
       discounted_rate = 180
       scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
@@ -159,7 +161,6 @@ describe "Scheduler class" do
     end
 
     it "raises an argument error when there is an attempt to create a block that overlaps with existing blocks" do
-      scheduler = Hotel::Scheduler.new(6)
       room_ids = [0, 2, 5]
       discounted_rate = 180
       scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
