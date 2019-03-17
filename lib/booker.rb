@@ -10,18 +10,21 @@ module Hotel
       @manifest = manifest
     end
 
-    def book(unavailable_object:, room:, percent_discount: 0)
-      unless room.available_for_date_range?(date_range: unavailable_object.date_range)
+    def book(reservation:, room:, percent_discount: 0)
+      unless room.available_for_date_range?(date_range: reservation.date_range)
         raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
       end
-      if unavailable_object.respond_to?(:cost)
-        calculate_cost_of_booking(reservation: unavailable_object, room: room, percent_discount: 0)
-      end
-      room.unavailable_list << unavailable_object
+      calculate_cost_of_booking(reservation: reservation, room: room, percent_discount: 0)
+      room.unavailable_list << reservation
       return room
     end
 
-    def set_up_block(block:, rooms_collection:)
+    def set_aside_block(block:, rooms_collection:)
+      unless rooms_collection.all? do |room|
+        room.available_for_date_range?(date_range: block.date_range)
+      end
+        raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
+      end
     end
 
     def calculate_cost_of_booking(reservation:, room:, percent_discount: 0)

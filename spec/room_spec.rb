@@ -29,8 +29,8 @@ describe "Room" do
     @pend_reservation = Hotel::Reservation.new(check_in: @day1, check_out: @day2)
     pend_reservation2 = Hotel::Reservation.new(check_in: @day2 + 3, check_out: @day2 + 6)
     @room = manifest.find_room(id: room_id)
-    booker.book(unavailable_object: @pend_reservation, room: @room)
-    booker.book(unavailable_object: pend_reservation2, room: @room)
+    booker.book(reservation: @pend_reservation, room: @room)
+    booker.book(reservation: pend_reservation2, room: @room)
     @reservation = @room.unavailable_list[-1]
   end
 
