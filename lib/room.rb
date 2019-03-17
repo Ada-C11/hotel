@@ -73,5 +73,14 @@ module Hotel
       end
       return false
     end
+
+    def is_available_in_block?(time_interval)
+      @block_intervals.each do |interval|
+        if interval.equals?(time_interval)
+          return true
+        end
+      end
+      return false
+    end
   end
 end

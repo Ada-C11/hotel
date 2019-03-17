@@ -55,5 +55,16 @@ module Hotel
 
       return block.block_id
     end
+
+    def block_has_available_room?(block_id)
+      @blocks[block_id].room_ids.each do |id|
+        if @rooms[id].is_available_in_block?(@blocks[block_id].reserved_dates)
+          return true
+        end
+      end
+      return false
+    end
+
+    
   end
 end
