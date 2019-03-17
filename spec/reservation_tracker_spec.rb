@@ -90,7 +90,6 @@ describe "reservation_tracker" do
             @checkout_date6 = Date.new(2019,3,19)
 
             expect{@front_desk.check_availability(@checkin_date6, @checkout_date6)}.must_raise ArgumentError
-            
         end
     end
 end # end of describe block "reservation_tracker"

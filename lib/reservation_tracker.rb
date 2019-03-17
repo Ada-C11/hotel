@@ -33,8 +33,16 @@ module Hotel
         end
         return list_all_rooms
         end
-
-        
-
+       
+        def check_availability(checkin_date, checkout_date)
+            booked_rooms = []
+            @reservations.each do |reservation|
+            if (checkin_date <= reservation.checkin_date && checkout_date >= reservation.checkout_date) || 
+                (checkin_date <= reservation.checkout_date && checkout_date >= reservation.checkout_date) ||
+                (checkin_date >= reservation.checkin_date && checkout_date <= reservation.checkout_date)
+                booked_rooms << reservation.room_number
+            end
+            end
+        end
     end # end of class
 end # end of module

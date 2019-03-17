@@ -3,7 +3,7 @@ require 'date'
 module Hotel
   class Reservation
 
-      attr_reader :room_number, :checkin_date, :checkout_date, :cost
+    attr_reader :room_number, :checkin_date, :checkout_date, :cost
 
       def initialize(room_number, checkin_date, checkout_date, cost: 200)
         # check_date_range(checkin_date, checkout_date)
@@ -22,9 +22,5 @@ module Hotel
         total = days_spent * 200
         return total.to_i
       end   # end of method  
-      
-      # def 
-      #   
-      # end 
-  end # end of class
-end # end of module
+    end
+end # end of class # end of module
