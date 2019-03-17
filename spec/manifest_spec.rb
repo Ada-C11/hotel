@@ -119,11 +119,12 @@ describe "Manifest" do
     end
 
     it "returns an empty Array if all rooms reserved for given date" do
-      (1..@manifest_unavailable.rooms.length).each do |id|
-        room = @manifest_unavailable.find_room(id: id)
+      manifest_all_rooms_booked = Hotel::Booker.new.manifest
+      (1..manifest_all_rooms_booked.rooms.length).each do |id|
+        room = manifest_all_rooms_booked.find_room(id: id)
         @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
       end
-      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
+      expect(manifest_all_rooms_booked.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
     end
   end
 

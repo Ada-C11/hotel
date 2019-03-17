@@ -1,5 +1,6 @@
 require_relative "manifest"
 require_relative "reservation"
+require_relative "custom_exceptions"
 
 module Hotel
   class Booker
@@ -10,6 +11,9 @@ module Hotel
     end
 
     def book_room(reservation, room)
+      unless room.available_for_date_range?(date_range: reservation.date_range)
+        raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
+      end
       reservation.cost = cost_of_booking(reservation: reservation, room: room)
       room.unavailable_list << reservation
       return room

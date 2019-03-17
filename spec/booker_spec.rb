@@ -40,7 +40,7 @@ describe "Booker" do
 
     it "raises exception if room is not available for given date range" do
       expect {
-        booker.book_room(Hotel::Reservation.new(check_in: day1 + 3, check_out: day2 - 2), @room)
+        booker.book_room(Hotel::Reservation.new(check_in: Date.new(2020, 03, 22), check_out: Date.new(2020, 03, 27)), @room)
       }.must_raise RoomNotAvailable
     end
   end
