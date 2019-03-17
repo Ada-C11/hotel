@@ -45,15 +45,15 @@ describe "Booker" do
     end
   end
 
-  describe "Booker#calculate_cost" do
+  describe "Booker#calculate_cost_of_booking" do
     it "returns a float" do
-      expect(booker.calculate_cost(reservation: @pend_reservation, room: @room)).must_be_instance_of Float
+      expect(booker.calculate_cost_of_booking(reservation: @pend_reservation, room: @room)).must_be_instance_of Float
     end
 
     it "calculates the cost of booking correctly" do
-      expect(booker.calculate_cost(reservation: @pend_reservation, room: @room)).must_equal 1600.0
+      expect(booker.calculate_cost_of_booking(reservation: @pend_reservation, room: @room)).must_equal 1600.0
       pend_reservation = Hotel::Reservation.new(check_in: Time.new.to_date, check_out: Time.new.to_date + 2)
-      expect(booker.calculate_cost(reservation: pend_reservation, room: @room)).must_equal 400.0
+      expect(booker.calculate_cost_of_booking(reservation: pend_reservation, room: @room)).must_equal 400.0
     end
   end
 
