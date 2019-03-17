@@ -207,7 +207,7 @@ end # module
 #   Date.new(2019, 5, 25)
 # )
 # @concierge.add_reservation(new_booking)
-# # @concierge.add_block_reservations
+# @concierge.add_block_reservations
 
 # puts "\nBOOKING 1"
 # puts "Memory address: #{new_booking}"
