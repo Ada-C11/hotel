@@ -34,7 +34,7 @@ module Hotel
         raise ArgumentError.new("Room number doesn't exist")
     end 
 
-     reservations_data = {reservation_id: @reservation_id.slice!,
+     reservations_data = {id: @reservation_id.slice!,
          room: room, 
          start_date: start_date, 
          end_date: end_date

@@ -9,5 +9,6 @@ module Hotel
       @room_number = room_number
       @price_per_night = price_per_night
     end
+    
   end
 end
