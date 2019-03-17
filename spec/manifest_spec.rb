@@ -86,7 +86,7 @@ describe "Manifest" do
     @room_ids = [2, 10, 12]
     @room_ids.each do |id|
       room = @manifest_unavailable.find_room(id: id)
-      @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
+      @booker.book(unavailable_object: Hotel::Reservation.new(check_in: @day1, check_out: @day2), room: room)
     end
   end
   describe "Manifest#list_unavailable_rooms_by_date" do
@@ -122,7 +122,7 @@ describe "Manifest" do
       manifest_all_rooms_booked = Hotel::Booker.new.manifest
       (1..manifest_all_rooms_booked.rooms.length).each do |id|
         room = manifest_all_rooms_booked.find_room(id: id)
-        @booker.book_room(Hotel::Reservation.new(check_in: @day1, check_out: @day2), room)
+        @booker.book(unavailable_object: Hotel::Reservation.new(check_in: @day1, check_out: @day2), room: room)
       end
       expect(manifest_all_rooms_booked.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
     end
@@ -137,7 +137,7 @@ describe "Manifest" do
       @day4 = @day1 + 21
       @room_ids.each do |id|
         room = @manifest_unavailable.find_room(id: id)
-        @booker.book_room(Hotel::Reservation.new(check_in: @day3, check_out: @day4), room)
+        @booker.book(unavailable_object: Hotel::Reservation.new(check_in: @day3, check_out: @day4), room: room)
       end
     end
     it "returns an Array" do

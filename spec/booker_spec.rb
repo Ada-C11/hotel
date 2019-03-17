@@ -9,7 +9,7 @@ describe "Booker" do
     day2 = Date.parse("march 28, 2020")
     @pend_reservation = Hotel::Reservation.new(check_in: day1, check_out: day2)
     @room = manifest.find_room(id: room_id)
-    booker.book_room(@pend_reservation, @room)
+    booker.book(unavailable_object: @pend_reservation, room: @room)
     @reservation = @room.unavailable_list[-1]
   end
   describe "Booker#initialize" do
@@ -22,7 +22,7 @@ describe "Booker" do
     end
   end
 
-  describe "Booker#book_room" do
+  describe "Booker#book" do
     it "adds reservation to unavailable array to manifest for a given room" do
       expect(@reservation).must_be_instance_of Hotel::Reservation
     end
@@ -40,7 +40,7 @@ describe "Booker" do
 
     it "raises exception if room is not available for given date range" do
       expect {
-        booker.book_room(Hotel::Reservation.new(check_in: Date.new(2020, 03, 22), check_out: Date.new(2020, 03, 27)), @room)
+        booker.book(unavailable_object: Hotel::Reservation.new(check_in: Date.new(2020, 03, 22), check_out: Date.new(2020, 03, 27)), room: @room)
       }.must_raise RoomNotAvailable
     end
   end
