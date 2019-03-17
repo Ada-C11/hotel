@@ -29,7 +29,7 @@ module Hotel
         end
 
         def reservations_by_date(date)
-        #
+      
         end
     end
 end
