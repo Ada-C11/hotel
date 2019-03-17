@@ -1,12 +1,14 @@
 require_relative "reservation"
 require_relative "room"
+require_relative "hotel_block"
 
 class Hotel
-  attr_reader :name, :rooms, :reservations
+  attr_reader :name, :rooms, :reservations, :blocks
 
   def initialize
     @name = name
     @reservations = []
+    @blocks = []
     @rooms = []
     id = 1
     20.times do
@@ -26,12 +28,27 @@ class Hotel
     return reservation
   end
 
-  def free_rooms
-    reserved_rooms = []
-    @reservations.each do |reservation|
-      reserved_rooms << reservation.room
+  def make_block(rooms, start_date, end_date)
+    id = @blocks.length + 1
+    a
+    rooms.each do |room|
+      if !load_available.include?(room)
+        raise ArgumentError, "This room is booked for this date range and can't be in the block"
+        rooms.delete(room)
+      end
+      block = Block.new(id, rooms, start_date, end_date)
+      @blocks << block
+      return block
     end
-    return @rooms - reserved_rooms.uniq
+  end
+
+  def reserved_rooms
+    reserved = []
+    @reservations.each do |reservation|
+      reserved << reservation.room
+    end
+    #return @rooms - reserved_rooms.uniq
+    return reserved
   end
 
   def load_availables(start_date, end_date)
@@ -42,7 +59,8 @@ class Hotel
         available_rooms << reservation.room
       end
     end
-    all_available = (available_rooms + free_rooms).uniq
+    #all_available = (available_rooms + free_rooms).uniq
+    all_available = (available_rooms + (@rooms - reserved_rooms)).uniq
     return all_available
   end
 

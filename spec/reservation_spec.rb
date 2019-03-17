@@ -5,8 +5,8 @@ describe "Reservation class" do
     start_date = Date.new(2018, 3, 5)
     end_date = start_date + 3
     id = 8
-    room_id = 10
-    @reservation = Reservation.new(id, room_id, start_date, end_date)
+    room = 10
+    @reservation = Reservation.new(id, room, start_date, end_date)
   end
   describe "initialize" do
     it "is an instance of reservation" do
@@ -16,9 +16,9 @@ describe "Reservation class" do
       start_date = Date.new(2018, 5, 20)
       end_date = start_date - 3
       id = 8
-      room_id = 10
+      room = 10
       expect {
-        Reservation.new(id, room_id, start_date, end_date)
+        Reservation.new(id, room, start_date, end_date)
       }.must_raise ArgumentError
     end
   end
