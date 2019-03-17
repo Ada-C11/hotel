@@ -40,7 +40,9 @@ module Hotel
     end
 
     def add_block(start_date, end_date, room_nums, discounted_rate)
-      rooms = get_rooms(room_nums)
+      rooms = room_nums.map do |room_num|
+        self.find_room(room_num)
+      end
       new_rooms = []
       rooms.each do |room|
         if list_reserved_rooms(start_date, end_date).include?(room)
@@ -106,9 +108,9 @@ module Hotel
       return available_rooms
     end
 
-    # def find_room(room_num)
-    #   return @rooms.find { |room| room.room_num == room_num }
-    # end
+    def find_room(room_num)
+      return @rooms.find { |room| room.room_num == room_num }
+    end
 
   end
 end
