@@ -65,6 +65,13 @@ module Hotel
       return false
     end
 
-    
+    def reserve_room_in_block(block_id, room_id)
+      block = @blocks[block_id]
+      block.room_ids.each do |id|
+        if id == room_id
+          return @rooms[room_id].reserve_block(block.reserved_dates, block.discounted_rate)
+        end
+      end
+    end
   end
 end

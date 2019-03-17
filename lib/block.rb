@@ -1,6 +1,6 @@
 module Hotel
   class Block
-    attr_reader :block_id, :room_ids, :reserved_dates
+    attr_reader :block_id, :room_ids, :reserved_dates, :discounted_rate
     MAX_NUM_ROOMS = 5.freeze
     private_constant :MAX_NUM_ROOMS
 
