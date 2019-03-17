@@ -100,10 +100,12 @@ describe "Block" do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
       @room_three = HotelSystem::Room.new(id: 3)
+      @first_day = Date.parse("2017-05-03")
+      @last_day = Date.parse("2017-05-06")
       @block = HotelSystem::Block.new(
         rooms: [@room, @room_two, @room_three],
-        first_day: Date.parse("2017-05-03"),
-        last_day: Date.parse("2017-05-06"),
+        first_day: @first_day,
+        last_day: @last_day,
         discount: 0,
       )
     end
@@ -124,6 +126,12 @@ describe "Block" do
       expect(@room.reservations.length).must_equal 1
       expect(@block.reservations).must_include @room.reservations.first
       expect(@room.reservations.first.room.id).must_equal @room.id
+    end
+
+    it "creates reservations that have the same start and end day as the block" do
+      first_res = @block.reservations.first
+      expect(first_res.arrive_day).must_equal @block.first_day
+      expect(first_res.depart_day).must_equal @block.last_day
     end
   end
   describe "find_available_reservations" do
