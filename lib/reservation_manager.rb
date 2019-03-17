@@ -12,25 +12,46 @@ module Hotel
     end
 
     def create_reservation(start_date, end_date, room_selected)
+      room = validate_room_availability(start_date, end_date, room_selected)
+      # begin
+      #   rooms_available = find_available_rooms(start_date, end_date)
+      # rescue ArgumentError
+      #   if rooms.include?(room_selected)
+      #     room = room_selected
+      #   else
+      #     raise ArgumentError, "The room number is not valid"
+      #   end
+      # else
+      #   if rooms_available.include?(room_selected)
+      #     room = room_selected
+      #   else
+      #     raise ArgumentError, "The room number is not available"
+      #   end
+      # end
+      id = @reservations.length + 1
+      new_reservation = Reservation.new(id, start_date, end_date, room)
+      @reservations << new_reservation
+      return new_reservation
+    end
+
+    def validate_room_availability(start_date, end_date, room_selected)
       begin
         rooms_available = find_available_rooms(start_date, end_date)
       rescue ArgumentError
         if rooms.include?(room_selected)
           room = room_selected
+          return room
         else
           raise ArgumentError, "The room number is not valid"
         end
       else
         if rooms_available.include?(room_selected)
           room = room_selected
+          return room
         else
           raise ArgumentError, "The room number is not available"
         end
       end
-      id = @reservations.length + 1
-      new_reservation = Reservation.new(id, start_date, end_date, room)
-      @reservations << new_reservation
-      return new_reservation
     end
 
     def find_reservation_by_id(id:)
