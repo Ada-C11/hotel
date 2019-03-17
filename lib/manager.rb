@@ -47,19 +47,20 @@ module Hotel
       res_array_to_check = @rooms_reservations_hash[room_num]
       res_0 = res_array_to_check[0]
       res_last = res_array_to_check.last
+      #   binding.pry
 
       if res_array_to_check.length == 0
         return true
       elsif res_array_to_check.length == 1
         (res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date) ? true : false
         #   binding.pry
-      else
-        # ----->
+      else # there is more than one reservation in the array
+        # check left and right ends of the reservation array
         return true if (ckout <= res_0.ckin_date)
         return true if (res_last.ckout_date <= ckin)
-
+        # check date gaps between reservations
         i = 0
-        while i <= res_array_to_check.(length - 2)
+        while i <= res_array_to_check.length - 2
           res_a = res_array_to_check[i]
           res_b = res_array_to_check[i + 1]
           #   binding.pry
@@ -77,23 +78,29 @@ module Hotel
     def find_avail_rooms_for_dates(ckin, ckout)
       avail_rooms = []
 
-      @rooms_reservations_hash.each do |room, reservations|
-        avail_rooms << room if reservations.empty?
-
-        if reservations.length == 1
+      @rooms_reservations_hash.each do |room_num, reservations|
+        # avail_rooms << room if reservations.empty?
+        # room_num = room
+        # POSSIBLY REPLACE THE REST OF THIS MEHOD'S CODE WITH A CALL TO #ck_avail
+        reservations.each do |res|
+          #   binding.pry
+          avail_rooms << room_num if ck_avail(ckin, ckout, room_num)
+          #   binding.pry
         end
+        # IF TRUE, avail_rooms << room
+        # if reservations.length == 1
+        # end
 
         # add check for before first item
         # add check for after last item
 
-        reservations.each_with_index do |res, index|
-          res_a = res
-          res_b = reservations[index + 1]
-          #   binding.pry
-          if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
-            avail_rooms << room
-          end
-        end
+        # reservations.each_with_index do |res, index|
+        #   res_a = res
+        #   res_b = reservations[index + 1]
+        #   #   binding.pry
+        #   if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
+        #     avail_rooms << room
+        #   end
       end
       return avail_rooms
     end
@@ -123,9 +130,8 @@ module Hotel
     def make_res_for_room(ckin, ckout, room_num)
       # ck_avail
       # if true, continue; else return error
-      avail_rooms = find_avail_rooms_for_dates(ckin, ckout)
 
-      raise ArgumentError, "This room is not available on the dates entered." if !avail_rooms.include?(room_num)
+      raise ArgumentError, "This room is not available on the dates entered." unless ck_avail(ckin, ckout, room_num)
 
       #  ~~~~~~ ^^^ WRITE THIS ^^^ ~~~~~~~~~
 

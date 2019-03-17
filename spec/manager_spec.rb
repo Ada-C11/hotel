@@ -140,7 +140,7 @@ describe "Manager Spec" do
       #   room = 1
       #   res_with_overlap1 = this_manager.make_res_for_room(check_in, check_out, room)
       #   binding.pry
-      expect(res5_overlap).must_raise ArgumentError
+      expect { res5_overlap }.must_raise ArgumentError
     end
   end
 end
