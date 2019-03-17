@@ -1,24 +1,20 @@
 require "date"
 
-class Room
-  attr_reader :id, :price, :bookings, :booked_on
-  ROOMS = 20
+class BlockParty
+  attr_reader :id, :price, :block_rooms, :booked_on
+  ROOM_BLOCK = 5
 
-  def initialize(id:, bookings: nil)
+  def initialize(id:, block_rooms: nil)
     unless id.instance_of?(Integer) && id > 0 && id <= 20
       raise ArgumentError, "ID must be a positive number, given #{id}..."
     end
 
     @id = id
-    @bookings = [(Date.parse("2012-02-02"))..(Date.parse("2012-02-05")), (Date.parse("2012-02-07"))...(Date.parse("2012-02-09"))]
+    @block_rooms = []
   end
 
-  def self.hotel_rooms
-    rooms = []
-    ROOMS.times do |room_num|
-      rooms << Room.new(id: room_num + 1)
-    end
-    return rooms
+  def self.blocked_rooms
+    block_rooms = []
   end
 
   def booked_on(check_in:, check_out:)
@@ -43,12 +39,3 @@ class Room
   end
 end
 
-test_room = Room.new(id: 1)
-day1 = Date.parse("2012-02-03")
-day1b = Date.parse("2012-02-04")
-
-day2 = Date.parse("2012-02-06")
-day2b = Date.parse("2012-02-10")
-
-puts day1 > day1b
-puts day1b < day1

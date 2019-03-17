@@ -65,7 +65,6 @@ describe "RoomBooker" do
     before do
       @second_hotel = RoomBooker.new(rooms: Room.hotel_rooms)
       @first_reservation = @second_hotel.book_reservation(check_in: "September 1st 2023", check_out: "September 5th 2023")
-      # @third_reservation = @second_hotel.book_reservation(check_in: "September 21st 2023", check_out: "September 25th 2023")
     end
 
     it "can look up reservations for a given date" do
@@ -86,19 +85,12 @@ describe "RoomBooker" do
         @second_reservation = @second_hotel.book_reservation(check_in: "September 15th 2023", check_out: "September 8th 2023")
       }.must_raise ArgumentError
     end
-
-    it "will not book a reservation with conflicting dates" do
-      3.times do
-        @second_hotel.book_reservation(check_in: "September 21st 2023", check_out: "September 25th 2023")
-      end
-      # ap @second_hotel.rooms # REMOVE ME BEFORE FINAL SUBMIT
-    end
   end
 
-  describe "find_available_room" do
+  describe "book reservation" do
     before do
-      incoming_allowed = "March 1st 2021"
-      outgoing_allowed = "March 2nd 2021"
+      incoming_allowed = "March 4th 2021"
+      outgoing_allowed = "March 7th 2021"
       @another_hotel = RoomBooker.new(rooms: Room.hotel_rooms)
       20.times do
         @another_hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
@@ -106,8 +98,8 @@ describe "RoomBooker" do
     end
 
     it "will not double book a room, nor allow invalid booking dates" do
-      conflict_1 = "March 1st 2021"
-      conflict_2 = "March 2nd 2021"
+      conflict_1 = "March 4th 2021"
+      conflict_2 = "March 6th 2021"
 
       pre_check_out = "January 15th 2021"
       ok_checkout = "January 12th 2020"
@@ -117,20 +109,47 @@ describe "RoomBooker" do
       expect { @another_hotel.book_reservation(check_in: pre_check_out, check_out: ok_checkout) }.must_raise ArgumentError
       expect { @another_hotel.book_reservation(check_in: bogus, check_out: ok_checkout) }.must_raise ArgumentError
     end
+
+    it "will book dates that are adjacent to pre-existing dates" do
+      pre_adj = "March 1st 2021"
+      aligned = "March 4th 2021"
+      @another_hotel.book_reservation(check_in: pre_adj, check_out: aligned)
+
+      expect(@another_hotel.reservations.length).must_equal 21
+    end
+
+    it "will book dates that are adjacent to pre-existing dates" do
+      post_align = "March 7th 2021"
+      post_adj = "March 8th 2021"
+      @another_hotel.book_reservation(check_in: post_align, check_out: post_adj)
+
+      expect(@another_hotel.reservations.length).must_equal 21
+    end
   end
 
   describe "get available rooms" do
-    incoming_allowed = "March 1st 2021"
-    outgoing_allowed = "March 2nd 2021"
-
-    it "will find rooms that are avaiable on specific dates" do
+    before do
+      incoming_allowed = "March 2nd 2021"
+      outgoing_allowed = "March 6th 2021"
       20.times do
         hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
       end
+    end
+
+    it "will find rooms that are available on specific dates" do
       available_rooms = hotel.get_available_rooms(check_in: "March 5th", check_out: "March 6th")
 
       expect(available_rooms).must_be_kind_of Array
-      expect(available_rooms.length).must_equal 20 
+      expect(available_rooms.length).must_equal 20
+    end
+
+    it "will raise an exception for a date conflict of any kind" do
+      going_in = "March 1st 2021"
+      conflicts_out = "March 5th 2021"
+
+      expect {
+        hotel.get_available_rooms(check_in: going_in, check_out: conflicts_out)
+      }.must_raise ArgumentError
     end
   end
 end

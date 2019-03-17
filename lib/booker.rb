@@ -66,7 +66,9 @@ class RoomBooker < Date
     @rooms.each do |room| 
       room.room_available?(check_in: check_in, check_out: check_out) ? open_rooms << room : next
     end
- 
+    if open_rooms.length == 0
+      raise ArgumentError, "No rooms are available for the provided date range."
+    end
     return open_rooms
   end
 

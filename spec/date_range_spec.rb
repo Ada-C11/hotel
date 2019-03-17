@@ -13,6 +13,10 @@ describe "DateRange" do
 
   it "is an instance of DateRange" do
     expect(dates).must_be_kind_of DateRange
+
+    expect {
+      DateRange.new(check_in: "", check_out: "")
+    }.must_raise ArgumentError
   end
 
   it "creates date objects from strings" do
