@@ -5,6 +5,8 @@ require "awesome_print"
 
 module Hotel
   class ReservationManager
+
+    # To access the list of all of the rooms, reservations and blocks in the hotel
     attr_reader :rooms, :reservations, :blocks
 
     def initialize
@@ -13,6 +15,7 @@ module Hotel
       @blocks = Hotel::Block.load_all
     end
 
+    # I can reserve a room for a given date range, so that I can make a reservation
     def reserve(room_id:, check_in_date:, check_out_date:)
       self.class.validate_id(room_id)
       self.class.validate_date(check_in_date)
@@ -30,6 +33,7 @@ module Hotel
       add_reservation(new_reservation)
     end
 
+    # I can access the list of reservations for a specific date, so that I can track reservations by date
     def list_reservations(date:)
       self.class.validate_date(date)
       date = Date.parse(date)
@@ -37,6 +41,13 @@ module Hotel
         date >= reservation.check_in_date && date < reservation.check_out_date
       end
       return reservations
+    end
+
+    # I can get the total cost for a given reservation
+    def total_cost(reservation_id:)
+      reservation = @reservations.find { |current_reservation| current_reservation.reservation_id == reservation_id }
+      num_nights = reservation.check_out_date - reservation.check_in_date
+      return num_nights * Hotel::Room.cost
     end
 
     def find_available_rooms(check_in_date:, check_out_date:)

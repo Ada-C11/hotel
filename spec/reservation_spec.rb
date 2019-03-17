@@ -26,9 +26,9 @@ describe "Hotel::Reservation" do
     end
   end
 
-  describe "cost" do
-    it "calculates the total cost correctly" do
-      expect(reservation.cost).must_be_close_to 600.0
-    end
-  end
+  # describe "cost" do
+  #   it "calculates the total cost correctly" do
+  #     expect(reservation.cost).must_be_close_to 600.0
+  #   end
+  # end
 end

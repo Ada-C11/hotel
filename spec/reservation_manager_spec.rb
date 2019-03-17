@@ -81,6 +81,13 @@ describe "ReservationManager" do
     end
   end
 
+  describe "total_cost method" do
+    it "correctly calculates the cost for a given reservation" do
+      reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-10", check_out_date: "2019-03-15")
+      expect(reservation_manager.total_cost(reservation_id: 1)).must_be_close_to 1000.0
+    end
+  end
+
   describe "find_available_rooms" do
     let(:reserve_03_10_03_15) { reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-10", check_out_date: "2019-03-15") }
     let(:reserve_03_17_03_20) { reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-17", check_out_date: "2019-03-20") }

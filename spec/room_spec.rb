@@ -9,7 +9,7 @@ describe "Room" do
     it "has attributes of the right data types" do
       room = Hotel::Room.new(1)
       expect(room.room_id).must_be_kind_of Integer
-      expect(room.cost).must_be_kind_of Float
+      expect(Hotel::Room.cost).must_be_kind_of Float
     end
   end
 end
