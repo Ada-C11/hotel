@@ -130,7 +130,18 @@ describe "Scheduler class" do
       }.must_raise ArgumentError
     end
 
-
+    it "raises an argument error when there is an attempt to create a block that overlaps with existing blocks" do
+      room_ids = [0, 2, 5]
+      discounted_rate = 180
+      @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+                              room_ids, discounted_rate)
+      
+      expect {
+        room_ids = [2, 3, 4]
+        @scheduler.create_block(Hotel::Time_Interval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")), 
+                                room_ids, discounted_rate)
+      }.must_raise ArgumentError
+    end
   end
 
 end

@@ -49,6 +49,10 @@ module Hotel
       @blocks[block.block_id] = block
       @next_block_id = @next_block_id + 1
 
+      room_ids.each do |id|
+        @rooms[id].block_dates(date_range)
+      end
+
       return block.block_id
     end
   end
