@@ -77,6 +77,7 @@ describe "reserve room from block method" do
   end
 
   it "can add that reservation to the hotel's list of reservations" do
-    print @block.all_reservations
+    expect(@block.all_reservations[0]).must_be_kind_of Booking::Reservation
+    expect(@block.hotel.all_reservations[0].room_number).must_equal 3
   end
 end

@@ -36,12 +36,9 @@ describe "reservation_by_date" do
     @checkout_date = Date.new(2019,1,7)
     @hotel = Booking::Hotel_Manager.new(4)
     
-    # @reservation = Booking::Reservation.new(2, @checkin_date, @checkout_date)
-
     @checkin_date2 = Date.new(2019,1,4)
     @checkout_date2 = Date.new(2019,1,8)
     
-    # @reservation2 = Booking::Reservation.new(2, @checkin_date, @checkout_date)
   end
   it "allows you to look up reservations by a specific date" do 
     @hotel.add_reservation(@checkin_date2, @checkout_date2)
@@ -60,16 +57,11 @@ describe "check_availability method" do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     
-    # @reservation = Booking::Reservation.new(@hotel.check_availability(@checkin_date, @checkout_date).first, @checkin_date, @checkout_date)
-
-    
     @reservation = @hotel.add_reservation(@checkin_date, @checkout_date)
 
     @checkin_date2 = Date.new(2019,1,4)
     @checkout_date2 = Date.new(2019,1,7)
     
-    # @reservation2 = Booking::Reservation.new(@hotel.check_availability(@checkin_date2, @checkout_date2).first, @checkin_date, @checkout_date)
-
     @reservation2 = @hotel.add_reservation(@checkin_date2, @checkout_date2)
   end
 
@@ -122,89 +114,4 @@ describe "check_availability method" do
   end
 
 end
-
-# describe "hotel_block method" do
-#   before do
-#     @hotel = Booking::Hotel_Manager.new(5)
-#     @checkin_date = Date.new(2019,1,4)
-#     @checkout_date = Date.new(2019,1,7)
-
-#     @hotel.check_availability(@checkin_date, @checkout_date)
-#     @block = @hotel.create_block(@checkin_date, @checkout_date, [1,3,4,5], cost: 150)
-    
-#   end
-
-#   it "creates a hotel_block" do
-#   #  expect(@block).must_be_kind_of Array
-#   #  expect(@block.length).must_equal 4
-#   #  expect(@block[1]).must_be_kind_of Booking::Room
-#   end
-
-# end
-
-#   it "removes the block rooms from available_rooms array" do
-#     expect(@hotel.available_rooms[0]).wont_equal 1
-#   end
-
-#   it "raises an error if a block has more than 5 rooms" do
-#     expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,2,3,4,5,6], 150)}.must_raise ArgumentError
-#   end
-
-#   it "raises an error if at least one of the selected rooms is unavailable" do
-#     @hotel.add_reservation(@checkin_date, @checkout_date)
-#     expect{@hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)}.must_raise ArgumentError
-#   end
-
-#   it "raises an error if I try to create another block with a room already in another block" do
-#     @checkin_date2 = Date.new(2019,1,6)
-#     @checkout_date2 = Date.new(2019,1,9)
-#     expect{@hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8,3], 150)}.must_raise ArgumentError
-#   end
-
-# end
-
-# describe "block_availability method" do 
-#   before do 
-#     @hotel = Booking::Hotel.new(8)
-
-#     @checkin_date = Date.new(2019,1,4)
-#     @checkout_date = Date.new(2019,1,7)
-
-#     @checkin_date2 = Date.new(2019,1,5)
-#     @checkout_date2 = Date.new(2019,1,8)
-
-#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
-#     @block2 = @hotel.hotel_block(@checkin_date2, @checkout_date2, [6,7,8], 150)
-#   end
-
-#   it "can list the available rooms in a block" do
-#     @available_rooms = @hotel.block_availability(@block)
-#     @available_rooms2 = @hotel.block_availability(@block2)
-
-#     expect(@available_rooms).must_be_kind_of Array
-#     expect(@available_rooms[0]).must_equal 1
-
-#     expect(@available_rooms2.length).must_equal 3
-#     expect(@available_rooms2[0]).must_equal 6
-#   end
-# # END OF DESCRIBE
-# end
-
-# describe "reserve_room_from_block" do
-#   before do
-#     @hotel = Booking::Hotel.new(8)
-#     @checkin_date = Date.new(2019,1,4)
-#     @checkout_date = Date.new(2019,1,7)
-#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
-#   end
-
-#   it "can reserve a room from the block" do
-    
-#     @reservation = @hotel.reserve_room_from_block(@block, 3)
-    
-#   expect(@reservation).must_be_kind_of Booking::Reservation
-    
-#   end
-
-# end
 

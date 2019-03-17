@@ -1,7 +1,6 @@
 require 'date'
 require 'pry'
-# require_relative 'reservation.rb'
-# require_relative '../spec/hotel_spec.rb'
+
 module Booking
   class Hotel_Manager
     attr_accessor :all_reservations, :all_rooms, :available_rooms, :all_blocks
@@ -31,7 +30,6 @@ module Booking
       
       @available_rooms = check_availability(checkin_date, checkout_date) - res_array
 
-      
       return reservation
     end
 
@@ -61,41 +59,9 @@ module Booking
         @available_rooms = all_rooms - unavail_rooms
       end
       
-
       return @available_rooms
     end
-
-    # def create_block(checkin_date, checkout_date, requested_rooms, cost: cost)
-
-    #   return @available_rooms
-    #     # i = 0
-    #     # # requested_rooms.each do |room|
-    #     # #   unless @available_rooms == nil
-    #     # #     if !@available_rooms.include?(room)
-    #     # #       raise ArgumentError, "That room is unavailable."
-    #     # #     end
-    #     # # end
-        
-    #     # if requested_rooms.length > 5
-    #     #   raise ArgumentError, "A block can have 5 rooms maximum."
-    #     #     else
-    #     #       @available_rooms.each do |room|
-    #     #         if room == requested_rooms[i]
-    #     #           @room_block << room
-    #     #         end
-    #     #         i += 1
-    #     #       end
-    #     #   end
     
-    #     # #       # @room_numbers = @room_block.map do |room|
-    #     # #       # room.number
-    #     # #       # end
-            
-              
-    #     # @all_blocks << @room_block
-    #     # return @room_block
-    #   end
-
 # END OF CLASS
   end
 # END OF MODULE
