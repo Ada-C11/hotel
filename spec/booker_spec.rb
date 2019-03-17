@@ -76,5 +76,23 @@ describe "Booker" do
         expect(room.unavailable_list[-1]).must_equal valid_block
       end
     end
+
+    it "will raise expection if any room is unavailable before adding block to any room" do
+      rooms_collect = [8, 1, 3, 4, 5].map do |id|
+        manifest.find_room(id: id)
+      end
+      expect {
+        booker.set_aside_block(block: valid_block, rooms_collection: rooms_collect)
+      }.must_raise RoomNotAvailable
+      rooms_collect.each do |room|
+        expect(room.unavailable_list[-1]).wont_equal valid_block
+      end
+    end
+
+    it "will raise exception if number of rooms requested in block is greater than 5" do
+      expect {
+        booker.set_aside_block(block: valid_block, rooms_collection: [7, 6, 5, 4, 3, 4].map { |id| manifest.find_room(id: id) })
+      }.must_raise InvalidBlock
+    end
   end
 end

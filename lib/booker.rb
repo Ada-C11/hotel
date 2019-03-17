@@ -20,10 +20,11 @@ module Hotel
     end
 
     def set_aside_block(block:, rooms_collection:)
-      unless rooms_collection.all? do |room|
-        room.available_for_date_range?(date_range: block.date_range)
-      end
-        raise RoomNotAvailable.new("Room #{room.id} not available for requested dates in Block. Block aborted, no rooms added.")
+      raise InvalidBlock.new if rooms_collection.length > 5
+      rooms_collection.each do |room|
+        unless room.available_for_date_range?(date_range: block.date_range)
+          raise RoomNotAvailable.new("Room #{room.id} not available for requested dates in Block. Block aborted, no rooms added.")
+        end
       end
       rooms_collection.each do |room|
         room.unavailable_list << block

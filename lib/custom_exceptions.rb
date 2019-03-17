@@ -9,3 +9,9 @@ class RoomNotAvailable < StandardError
     super
   end
 end
+
+class InvalidBlock < StandardError
+  def initialize(msg = "Invalid Block. Block aborted.")
+    super
+  end
+end
