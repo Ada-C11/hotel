@@ -15,14 +15,16 @@ module Hotel
       @blocks = Hotel::Block.load_all
     end
 
-    # I can reserve a room for a given date range, so that I can make a reservation
+    # I can reserve an available room for a given date range
     def reserve(room_id:, check_in_date:, check_out_date:)
       self.class.validate_id(room_id)
+      # I want exception raised when an invalid date range is provided
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
+      # I want an exception raised if I try to reserve a room that is unavailable for a given day
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
@@ -50,6 +52,7 @@ module Hotel
       return num_nights * Hotel::Room.cost
     end
 
+    # I can view a list of rooms that are not reserved for a given date range
     def find_available_rooms(check_in_date:, check_out_date:)
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
@@ -57,6 +60,8 @@ module Hotel
       check_in_date = Date.parse(check_in_date)
       check_out_date = Date.parse(check_out_date)
       na_reservations = get_na_objects(@reservations, check_in_date, check_out_date)
+
+      # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve or create a block for that specific room for that specific date
       na_blocks = get_na_objects(@blocks, check_in_date, check_out_date)
       na_room_ids_blocks = []
       na_blocks.each do |block|
@@ -72,6 +77,7 @@ module Hotel
              end
     end
 
+    # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
     def create_block(room_ids:, check_in_date:, check_out_date:, discount_rate:)
       room_ids.each { |room_id| self.class.validate_id(room_id) }
       self.class.validate_date(check_in_date)
@@ -79,6 +85,8 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
+
+      # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
       room_ids.each do |room_id|
         raise ArgumentError, "Room #{room_id} is not available" if available_room_ids.include?(room_id) == false
       end
@@ -102,6 +110,7 @@ module Hotel
              end
     end
 
+    # I can reserve a specific room from a hotel block
     def reserve_from_block(room_id:, block_id:)
       self.class.validate_id(room_id)
       self.class.validate_id(block_id)
@@ -115,6 +124,7 @@ module Hotel
         check_in_date: block.check_in_date.to_s,
         check_out_date: block.check_out_date.to_s,
       )
+      # I can see a reservation made from a hotel block
       add_reservation(new_reservation)
     end
 
