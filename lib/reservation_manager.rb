@@ -128,6 +128,13 @@ module Hotel
       add_reservation(new_reservation)
     end
 
+    # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
+    def set_room_rate(room_id:, room_rate:)
+      @rooms.each do |room|
+        room.cost = room_rate if room.room_id == room_id
+      end
+    end
+
     private
 
     def self.validate_date(date)

@@ -2,7 +2,7 @@
 module Hotel
   class Room
     attr_reader :room_id
-    # COST = 200.0
+    attr_accessor :cost
 
     def initialize(room_id, cost: self.class.cost)
       @room_id = room_id

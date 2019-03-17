@@ -269,4 +269,12 @@ describe "ReservationManager" do
       expect { Hotel::ReservationManager.validate_id("string") }.must_raise ArgumentError
     end
   end
+
+  describe "set_room_rate method" do
+    it "allows the ability to set different rates for different rooms" do
+      reservation_manager.set_room_rate(room_id: 1, room_rate: 300.00)
+      room = reservation_manager.rooms.find { |room| room.room_id == 1 }
+      expect(room.cost).must_equal 300.00
+    end
+  end
 end
