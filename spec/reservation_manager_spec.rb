@@ -60,6 +60,8 @@ describe "ReservationManager" do
     reservation_generator
 
     expect(manager_new.find_reservation_by_date(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))).must_be_kind_of Array
+    expect(manager_new.find_reservation_by_date(Time.parse("2019-02-27 14:08:45 -0700"), Time.parse("2019-02-28 14:08:45 -0700"))).must_be_kind_of Array
+    expect { manager_new.find_reservation_by_date(Time.parse("2019-01-27 14:08:45 -0700"), Time.parse("2019-01-28 14:08:45 -0700")) }.must_raise ArgumentError
     # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-03-13 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
     # expect(manager_new.find_reservation_by_date(date: Time.parse("2019-02-27 14:08:45 -0700"))).must_be_kind_of Hotel::Reservation
     # # puts ">>>>>>>>#{manager_new.find_reservation(date: Time.parse("2019-03-13 14:08:45 -0700"))}"
@@ -86,7 +88,7 @@ describe "ReservationManager" do
 
   it "finds available rooms" do
     reservation_generator
-    puts "HERE #{manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))}"
+    # puts "HERE #{manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))}"
     expect(manager_new.find_available_rooms(Time.parse("2019-03-19 14:08:45 -0700"), Time.parse("2019-03-22 14:08:45 -0700"))).must_be_kind_of Array
   end
 end
