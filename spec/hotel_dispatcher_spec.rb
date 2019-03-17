@@ -59,4 +59,47 @@ describe "HotelDispatcher class" do
       expect(hotel.reserve("2019-2-21", "2019-2-26")).must_equal nil
     end
   end
+
+  describe "testing blocks" do
+    before do
+      @hotel = Hotel::HotelDispatcher.new
+      # @rooms = [
+      #   @hotel.find_room(1),
+      #   @hotel.find_room(2),
+      #   @hotel.find_room(3),
+      #   @hotel.find_room(4),
+      # ]
+      4.times do |i|
+        @rooms << Hotel::Room.new(
+          room_num: i+=1
+        )
+      end
+    end
+
+    it "returns array of blocks" do
+      expect(@hotel.add_block("2019-2-21", "2019-2-26", @rooms, 150).length).must_equal 1
+    end
+
+    it "returns list of block rooms" do
+      hotel.add_block("2019-2-21", "2019-2-26", @rooms, 150)
+      hotel.add_block("2019-3-1", "2019-3-8", @rooms, 180)
+      expect(hotel.list_block_rooms("2019-2-27", "2019-3-7")).must_be_kind_of Array
+      expect(hotel.list_block_rooms("2019-2-21", "2019-3-7").length).must_equal 8
+    end
+
+    it "raises an ArgumentError when room is already reserved" do
+      hotel.reserve("2019-2-21", "2019-2-26")
+      expect do
+        hotel.add_block("2019-2-21", "2019-2-26", @rooms, 150)
+      end.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError when room is already added to a block" do
+      hotel.add_block("2019-2-21", "2019-2-26", @rooms, 150)
+      expect do
+        hotel.add_block("2019-2-21", "2019-2-26", @rooms, 150)
+      end.must_raise ArgumentError
+    end
+
+  end
 end

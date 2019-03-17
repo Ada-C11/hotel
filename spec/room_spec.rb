@@ -13,11 +13,11 @@ describe "Room class" do
     end
 
     it "throws an ArgumentError for the room number greater than 20" do
-      expect{Hotel::Room.new( room_num: 21, cost_per_night: 200)}.must_raise ArgumentError
+      expect{Hotel::Room.new( room_num: 21, room_rate: 200)}.must_raise ArgumentError
     end
 
     it "throws an ArgumentError for the room number less than 1" do
-      expect{Hotel::Room.new( room_num: 0, cost_per_night: 200)}.must_raise ArgumentError
+      expect{Hotel::Room.new( room_num: 0, room_rate: 200)}.must_raise ArgumentError
     end
 
    

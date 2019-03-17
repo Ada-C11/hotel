@@ -5,7 +5,7 @@ describe "Reservation class" do
     before do
       @room = Hotel::Room.new(
         room_num: 15,
-        cost_per_night: 200)
+        room_rate: 200)
       @reservation = Hotel::Reservation.new(
         start_date: "2016-08-08",
         end_date: "2016-08-15",
@@ -19,6 +19,5 @@ describe "Reservation class" do
     it "calculates the total cost of the reservation correctly" do
       expect(@reservation.calculate_cost).must_equal 1400
     end
-
   end
 end
