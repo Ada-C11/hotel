@@ -102,16 +102,18 @@ describe "Room class" do
 
     it "adds a new date range into the block intervals" do
       duration = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      expect(room.has_blocked_dates?(duration)).must_equal false
       room.block_dates(duration)
       expect(room.has_blocked_dates?(duration)).must_equal true
     end
 
     it "throws an exception if the reserved dates overlap with the existing blocked out dates" do
-      duration = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
-      room.block_dates(duration)
-
+      duration_one = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      duration_two = Hotel::Time_Interval.new(Date.parse("2019-10-15"), Date.parse("2019-10-20"))
+      room.block_dates(duration_one)
+      
       expect {
-        room.block_dates(duration)
+        room.block_dates(duration_two)
       }.must_raise ArgumentError
     end
 
