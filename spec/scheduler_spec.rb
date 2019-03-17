@@ -196,12 +196,12 @@ describe "Scheduler class" do
 
   describe "reserve_room_in_block method" do
     it "returns a Reservation object" do
-      @scheduler = Hotel::Scheduler.new(5)
+      scheduler = Hotel::Scheduler.new(5)
       room_ids = [1, 2, 3]
       discounted_rate = 180
       duration = Hotel::Time_Interval.new(Date.parse("2019-03-14"), Date.parse("2019-03-18"))
-      @block_id = @scheduler.create_block(duration, room_ids, discounted_rate)
-      reservation = @scheduler.reserve_room_in_block(@block_id, 1)
+      block_id = scheduler.create_block(duration, room_ids, discounted_rate)
+      reservation = scheduler.reserve_room_in_block(block_id, 1)
       expect(reservation).must_be_instance_of Hotel::Reservation
     end
   end
