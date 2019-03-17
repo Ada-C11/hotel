@@ -11,6 +11,7 @@ module Hotel
       @discounted_rate = discounted_rate
       @reservations = []
       @rooms.each {|room| room.room_rate = discounted_rate}
+
       raise ArgumentError.new("A block can contain a maximum of 5 rooms") if @rooms.length > 5 
     end
   end
