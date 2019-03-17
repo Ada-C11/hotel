@@ -22,5 +22,17 @@ describe "Block" do
       expect(@new_block.check_out_date).must_be_kind_of Date
       expect(@new_block.discount_rate).must_be_kind_of Float
     end
+
+    it "raises ArgumentError if room_ids is more than 5" do
+      expect {
+        Hotel::Block.new(
+          block_id: 1,
+          room_ids: [1, 2, 3, 4, 5, 6],
+          check_in_date: "2019-03-10",
+          check_out_date: "2019-03-15",
+          discount_rate: 0.10,
+        )
+      }.must_raise ArgumentError
+    end
   end
 end

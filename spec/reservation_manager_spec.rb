@@ -254,4 +254,12 @@ describe "ReservationManager" do
       expect { Hotel::ReservationManager.validate_date_range("2019-03-10", "2019-03-09") }.must_raise ArgumentError
     end
   end
+
+  describe "validate_id method" do
+    it "raises ArgumentError if id is smaller than 0 or is not an Integer" do
+      expect { Hotel::ReservationManager.validate_id(-1) }.must_raise ArgumentError
+      expect { Hotel::ReservationManager.validate_id() }.must_raise ArgumentError
+      expect { Hotel::ReservationManager.validate_id("string") }.must_raise ArgumentError
+    end
+  end
 end

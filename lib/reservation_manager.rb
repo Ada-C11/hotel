@@ -14,10 +14,7 @@ module Hotel
     end
 
     def reserve(room_id:, check_in_date:, check_out_date:)
-      raise ArgumentError, "room_id is required" if room_id == nil
-      raise ArgumentError, "check_in_date is required" if check_in_date == nil
-      raise ArgumentError, "check_out_date is required" if check_out_date == nil
-
+      self.class.validate_id(room_id)
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
@@ -65,6 +62,7 @@ module Hotel
     end
 
     def create_block(room_ids:, check_in_date:, check_out_date:, discount_rate:)
+      room_ids.each { |room_id| self.class.validate_id(room_id) }
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
@@ -85,6 +83,7 @@ module Hotel
 
     # I can check whether a given block has any rooms available
     def check_available_rooms_in_blocks(block_id:)
+      self.class.validate_id(block_id)
       block = @blocks.find { |current_block| current_block.block_id == block_id }
       raise ArgumentError, "Block #{block_id} is not found" if block == nil
       return block.rooms_info.select do |room_id, status|
@@ -93,6 +92,8 @@ module Hotel
     end
 
     def reserve_from_block(room_id:, block_id:)
+      self.class.validate_id(room_id)
+      self.class.validate_id(block_id)
       block = @blocks.find { |block| block.block_id == block_id }
       block.rooms_info.each do |current_room_id, status|
         block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
@@ -106,12 +107,7 @@ module Hotel
       add_reservation(new_reservation)
     end
 
-    # move to Room?
-    def self.validate_room_id(room_id)
-      if room_id.nil? || room_id <= 0 || room_id.class != Integer || room_id > Room.num_rooms
-        raise ArgumentError, "ID must be an integer and cannot be blank, less than zero or larger than #{Room.num_rooms}"
-      end
-    end
+    private
 
     def self.validate_date(date)
       raise ArgumentError, "Date cannot be nil" if date == nil
@@ -128,8 +124,6 @@ module Hotel
       raise ArgumentError, "Check_out_date must be after check_in_date" if end_date < start_date
     end
 
-    private
-
     def get_na_objects(array_object, check_in_date, check_out_date)
       return array = array_object.select do |object|
                check_in_date < object.check_out_date && check_in_date >= object.check_in_date ||
@@ -140,6 +134,12 @@ module Hotel
 
     def add_reservation(new_reservation)
       @reservations << new_reservation
+    end
+
+    def self.validate_id(id)
+      if id.nil? || id <= 0 || id.class != Integer
+        raise ArgumentError, "ID must be an integer and cannot be blank or less than zero."
+      end
     end
   end
 end
