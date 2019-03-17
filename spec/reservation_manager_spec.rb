@@ -70,35 +70,45 @@ describe "available_rooms method" do
   let (:reservation2) {
     manager.make_reservation("march 17, 2019", "march 22, 2019")
   }
+  let (:block1) {
+    manager.make_block(5, "march 19, 2019", "march 23, 2019", block_id: 1)
+  }
+  let (:block2) {
+    manager.make_block(4, "march 21, 2019", "march 25, 2019", block_id: 2)
+  }
 
-  it "can return available rooms for a specified date range, end_date unavail" do
+  it "can return available rooms for a specified date range, end_date overlap" do
     reservation1
     reservation2
-
+    block1
+    block2
     start_date = "march 14, 2019"
-    end_date = "march 16, 2019"
+    end_date = "march 20, 2019"
     vacant_rooms = manager.available_rooms(start_date, end_date)
-    expect(vacant_rooms.length).must_equal 19
+    expect(vacant_rooms.length).must_equal 13
   end
 
   it "can return available rooms for a specified date range, full range unavail" do
     reservation1
     reservation2
+    block1
 
     start_date = "march 17, 2019"
-    end_date = "march 19, 2019"
+    end_date = "march 20, 2019"
     vacant_rooms = manager.available_rooms(start_date, end_date)
-    expect(vacant_rooms.length).must_equal 18
+    expect(vacant_rooms.length).must_equal 13
   end
 
   it "can return available rooms for a specified date range, start_date unavail" do
     reservation1
     reservation2
+    block1
+    block2
 
     start_date = "march 20, 2019"
     end_date = "march 25, 2019"
     vacant_rooms = manager.available_rooms(start_date, end_date)
-    expect(vacant_rooms.length).must_equal 19
+    expect(vacant_rooms.length).must_equal 10
   end
 
   it "can return an empty array when no rooms are available for a specified date range" do
@@ -120,13 +130,13 @@ describe "available_rooms method" do
   end
 
   it "does not include the booked rooms" do
-    reservation1 = manager.make_reservation("march 15, 2019", "march 20, 2019")
-    reservation2 = manager.make_reservation("march 17, 2019", "march 22, 2019")
+    reservation1
+    reservation2
     start_date = "march 14, 2019"
     end_date = "march 16, 2019"
     vacant_rooms = manager.available_rooms(start_date, end_date)
     expect(vacant_rooms).wont_include reservation1.room_number
-    # expect(vacant_rooms).wont_include reservation2.room_number
+    expect(vacant_rooms).must_include reservation2.room_number
   end
 end
 
