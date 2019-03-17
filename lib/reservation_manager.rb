@@ -13,12 +13,16 @@ module Hotel
 
     def create_reservation(start_date, end_date) # TO CONSIDER should I parse the dates here??? not when I'm creating the reservation in the specs??
       # find available rooms for dates
-      # rooms_available = find_available_rooms(start_date, end_date)
-      # if rooms_available == ArgumentError
-      # room = rooms.sample
-      # end
+      # I might need to receive the room as a parameter and not
+      # choose it with sample
+      begin
+        rooms_available = find_available_rooms(start_date, end_date)
+      rescue ArgumentError
+        room = rooms.sample
+      else
+        room = rooms_available.sample
+      end
       id = @reservations.length + 1
-      room = rooms.sample
       new_reservation = Reservation.new(id, start_date, end_date, room)
       @reservations << new_reservation
       return new_reservation
@@ -35,15 +39,11 @@ module Hotel
       end
     end
 
-    # def find_reservation_by_date(date: nil)
     def find_reservation_by_date(start_date_find, end_date_find)
       if start_date_find.class == Time ## DO I NEED TO VALIDATE THIS? IF SO, DO I NEED TO DO THAT HERE?
         reservations_found = []
-        # if @reservations.empty?
-        #   return reservations_found
-        # end
+
         @reservations.each_with_index do |reservation, index|
-          # if date >= reservation.start_date && date <= reservation.end_date
           if start_date_find >= reservation.start_date && end_date_find <= reservation.end_date ## IT WILL BE FREE IN THE CHECKOUT DATE SO I'M NOT RETURNING THAT... DOES IT AFFECT ANY OF THE
             # CALCULATIONS FOR DAYS??
             reservations_found << reservation
@@ -56,9 +56,6 @@ module Hotel
 
         if reservations_found.empty?
           raise ArgumentError, "There are no reservations for that date"
-          # elsif reservations_found.length == 1
-          #   return reservations_found[0] #RIGHT NOW RETURNING THE OBJECT WHEN THERE IS JUST ONE MATCH
-          #   # RECONSIDER THIS IN THE FUTURE...
         else
           return reservations_found
         end
