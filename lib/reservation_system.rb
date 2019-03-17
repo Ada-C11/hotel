@@ -25,13 +25,13 @@ module HotelBooking
 
     def get_available_rooms(start_date, end_date)
       unavailable_bookings = find_booking_by_date(start_date, end_date)
-      occpuied_rooms = unavailable_bookings.map { |booking| booking.room }
-      @hotel.rooms.reject { |room| occpuied_rooms.include?(room) }
+      occpuied_rooms = unavailable_bookings.map { |b| b.room }
+      @hotel.rooms.reject { |r| occpuied_rooms.include?(r) }
     end
 
     def available?(start_date, end_date, room_number)
       rooms_available = get_available_rooms(start_date, end_date)
-      room_numbers = rooms_available.map { |room| room.number }
+      room_numbers = rooms_available.map { |r| r.number }
       room_numbers.include?(room_number)
     end
 

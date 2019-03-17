@@ -1,7 +1,6 @@
 module HotelBooking
   class Booking
-    
-  attr_reader :reference_number, :room, :start_date, :end_date, :price
+    attr_reader :reference_number, :room, :start_date, :end_date, :price
 
     def initialize(reference_number:, room:, start_date:, end_date:, price: 200)
       @reference_number = reference_number

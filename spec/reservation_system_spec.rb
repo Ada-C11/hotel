@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 
-describe "ReservationSystem class" do
+describe 'ReservationSystem class' do
   describe 'Find room and booking methods' do
     before do
-      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+      @reservation_system = HotelBooking::ReservationSystem.new('Wyndham', 20)
     end
 
     it 'Can find room by booking number' do
@@ -33,7 +33,7 @@ describe "ReservationSystem class" do
 
   describe 'Get available rooms' do
     before do
-      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+      @reservation_system = HotelBooking::ReservationSystem.new('Wyndham', 20)
     end
 
     it 'Returns an array of 20 available rooms' do
@@ -108,10 +108,10 @@ describe "ReservationSystem class" do
 
   describe 'available?' do
     before do
-      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+      @reservation_system = HotelBooking::ReservationSystem.new('Wyndham', 20)
     end
 
-    it 'Returns true if room is available for date range' do
+    it 'Returns room if room is available for date range' do
       booking = @reservation_system.make_booking('2001-02-02', '2001-02-09')
       rooms = @reservation_system.get_available_rooms('2001-02-02', '2001-02-09')
 
@@ -121,7 +121,7 @@ describe "ReservationSystem class" do
 
   describe 'Make booking?' do
     before do
-      @reservation_system = HotelBooking::ReservationSystem.new("Wyndham", 20)
+      @reservation_system = HotelBooking::ReservationSystem.new('Wyndham', 20)
     end
 
     it 'Returns an array of 20 available rooms' do

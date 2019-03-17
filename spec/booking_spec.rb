@@ -11,7 +11,7 @@ describe 'Booking class' do
       price: 200
       )
   end
-  
+
   describe 'Booking instantiation' do
     it 'creates an instance of a booking' do
       expect(@booking).must_be_kind_of HotelBooking::Booking
