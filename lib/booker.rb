@@ -1,17 +1,18 @@
 require_relative "room"
 require_relative "date_range"
 require_relative "reservation"
-# require_relative "block"
+require_relative "block"
 
 require "pry"
 
 module Hotel
   class Booker
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @rooms = create_rooms(20)
       @reservations = []
+      @blocks = []
     end
 
     # reservation methods
@@ -38,14 +39,20 @@ module Hotel
     def create_block(date_range:, rooms:, price:)
       id = assign_id(blocks)
       block = block_wrapper(id, date_range, rooms, price)
+      add_block(self)
       return block
     end
 
     def reserve_block(block)
       id = assign_id(reservations)
       date_range = block.date_range
+      room = block.bookable_room
+      price = block.price
+      return reservation_wrapper(id, date_range, room, price, block: block)
+    end
 
-      reservation_wrapper(id, date_range, room, price, block: block)
+    def add_block(block)
+      blocks.push(block)
     end
 
     # def find_room(room_id)
@@ -55,7 +62,7 @@ module Hotel
     # available room methods
     def available_rooms(date_range)
       return rooms.select do |room|
-               room.is_available?(date_range) #is_blocked?
+               room.is_available?(date_range) && room.is_blocked?(date_range) == false
              end
     end
 
