@@ -52,7 +52,7 @@ describe "Room" do
       @room.add_reservation(reservation3)
     end
 
-    it "method returns true for an available date ranges" do
+    it "method returns true for an available date range" do
       range1 = Hotel::DateRange.new("15-04-2019", "19-04-2019")
       range2 = Hotel::DateRange.new("15-05-2019", "19-05-2019")
       expect(@room.is_available?(range1)).must_equal true

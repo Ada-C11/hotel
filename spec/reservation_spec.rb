@@ -18,7 +18,7 @@ describe "Reservation" do
     end
 
     it "is set up for specific attributes and data types" do
-      [:id, :date_range, :room, :price].each do |prop|
+      [:id, :date_range, :room, :price, :room_id, :block, :block_id].each do |prop|
         expect(@reservation).must_respond_to prop
       end
 
@@ -26,10 +26,22 @@ describe "Reservation" do
       expect(@reservation.date_range).must_be_instance_of Hotel::DateRange
       expect(@reservation.room).must_be_instance_of Hotel::Room
       expect(@reservation.price).must_be_kind_of Integer
+      expect(@reservation.room_id).must_be_kind_of Integer
+
+      block = @reservation.block
+      if block
+        expect(block).must_be_instance_of Hotel::Block
+        expect(@reservation.block_id).must_be_kind_of Integer
+      else
+        assert_nil(block)
+        assert_nil(@reservation.block_id)
+      end
     end
 
-    it "rejects overlapping reservations" do
+    it "raises error for unavailable room" do
       date_range = Hotel::DateRange.new("03-04-2019", "05-04-2019")
+
+      expect(@room.is_available?(date_range)).must_equal false
       expect {
         Hotel::Reservation.new(
           id: 2,

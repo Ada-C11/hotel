@@ -25,7 +25,7 @@ module Hotel
     end
   end
 
-  def inspect
+  def def(inspect)
     return "[Date range #{start_date} to #{end_date}]"
   end
 end

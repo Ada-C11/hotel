@@ -115,7 +115,7 @@ describe "Booker class" do
   end
 
   describe "reservations_by_date" do
-    it "searches reservations by date range" do
+    it "correctly returns reservations by date range" do
       booker = Hotel::Booker.new
       date_range = Hotel::DateRange.new("03-04-2019", "06-04-2019")
 
