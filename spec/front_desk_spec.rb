@@ -11,26 +11,51 @@ module Hotel
         @concierge = build_front_desk
       end # before
 
-      it "will say that all_rooms, reservations_record, block_reservations_only, and reserved_rooms_in_blocks are arrays and all_rooms has a length of 20" do
+      it "will say that all_rooms is an array" do
         expect(@concierge.all_rooms_array).must_be_kind_of Array
+      end
+
+      it "will say all_rooms_array has a length of 20" do
         expect(@concierge.all_rooms_array.length).must_equal 20
+      end
+
+      it "will say element at all_rooms index 0 is 1" do
         expect(@concierge.all_rooms_array[0]).must_equal 1
+      end
+      it "will say element at all_rooms index 19 is 20" do
         expect(@concierge.all_rooms_array[19]).must_equal 20
-        expect(@concierge.reservations_record).must_be_kind_of Array
-        expect(@concierge.block_reservations_only).must_be_kind_of Array
-        expect(@concierge.reserved_rooms_in_blocks).must_be_kind_of Array
-        expect(@concierge.reservations_record.length).must_equal 0
-        expect(@concierge.block_reservations_only.length).must_equal 0
-        expect(@concierge.reserved_rooms_in_blocks.length).must_equal 0
       end # it
+
+      it "will say reservations_record is an array" do
+        expect(@concierge.reservations_record).must_be_kind_of Array
+      end
+
+      it "will say block_reservations_only is an array " do
+        expect(@concierge.block_reservations_only).must_be_kind_of Array
+      end
+
+      it "will say reserved_rooms_in_blocks_is an array" do
+        expect(@concierge.reserved_rooms_in_blocks).must_be_kind_of Array
+      end
+
+      it "will say reserved_rooms_in_blocks array length is 0" do
+        expect(@concierge.reserved_rooms_in_blocks.length).must_equal 0
+      end
+
+      it "will say block_reservations_only array length is 0" do
+        expect(@concierge.block_reservations_only.length).must_equal 0
+      end
+
+      it "will say reservations_record array length is 0" do
+        expect(@concierge.reservations_record.length).must_equal 0
+      end
     end # describe
 
     describe "make_reservation and add_reservation methods" do
       before do
         @concierge = build_front_desk
       end # before
-
-      it "adds reservation to reservations_record array" do
+      it "will describe various attributes of the reservation" do
         reservation_1 = @concierge.make_reservation(
           1201,
           5,
@@ -40,21 +65,21 @@ module Hotel
         )
 
         @concierge.add_reservation(reservation_1)
-        # Number of rooms
+
         expect(reservation_1.number_of_rooms).must_equal 5
-        # First room number
+
         expect(reservation_1.first_room_number).must_equal 1
-        # reservations_record array length
+
         expect(@concierge.reservations_record.length).must_equal 1
-        # total cost of reservation_1
+
         expect(@concierge.reservations_record[0].total_cost).must_equal 3200.00
-        # room_blocks array's element at index 4
+
         expect(@concierge.reservations_record[0].room_blocks[4]).must_equal 5
-        # room_blocks array's length
+
         expect(@concierge.reservations_record[0].room_blocks.length).must_equal 5
-        # reservation_1 check_in date
+
         expect(reservation_1.check_in).must_equal Date.new(2019, 3, 20)
-        # reservation_1 check_out date
+
         expect(reservation_1.check_out).must_equal Date.new(2019, 3, 24)
       end # it
     end # describe
@@ -152,6 +177,60 @@ module Hotel
         @concierge.add_block_reservations
 
         expect(@concierge.block_reservations_only.length).must_equal 1
+      end # it
+    end # describe
+
+    describe "room availbilty in block" do
+      before do
+        @concierge = build_front_desk
+      end # before
+
+      it "will say all the rooms that are in a block" do
+        reservation_5 = @concierge.make_reservation(
+          3002,
+          2,
+          17,
+          Date.new(2019, 7, 5),
+          Date.new(2019, 7, 7),
+        )
+        @concierge.add_reservation(reservation_5)
+        @concierge.add_block_reservations
+
+        all_block_rooms = @concierge.all_rooms_in_blocks(Date.new(2019, 7, 6))
+        expect(all_block_rooms).must_be_kind_of Array
+        expect(all_block_rooms.length).must_equal 2
+        expect(all_block_rooms[0]).must_equal 17
+        expect(all_block_rooms[1]).must_equal 18
+      end # it
+    end # describe
+
+    describe "make_reservation_in_block method" do
+      before do
+        @concierge = build_front_desk
+      end # before
+
+      it "will not show reserved rooms in block" do
+        reservation_6 = @concierge.make_reservation(
+          3002,
+          2,
+          17,
+          Date.new(2019, 7, 5),
+          Date.new(2019, 7, 7),
+        )
+        @concierge.add_reservation(reservation_6)
+        @concierge.add_block_reservations
+
+        new_reservation = @concierge.make_reservation_in_block(
+          3003,
+          17,
+          Date.new(2019, 7, 5),
+          Date.new(2019, 7, 7),
+        )
+
+        reserved_room = @concierge.add_block_room_reservation(new_reservation)
+
+        expect(@concierge.reserved_rooms_in_blocks).must_be_kind_of Array
+        expect(@concierge.reserved_rooms_in_blocks.length).must_equal 1
       end # it
     end # describe
   end # describe
