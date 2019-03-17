@@ -21,8 +21,6 @@ module Hotel
 
     def list_rooms
       all_room_numbers = @rooms_reservations_hash.keys.sort!
-      #   puts "Rooms in this hotel:"
-      #   puts all_room_numbers
       return all_room_numbers
     end
 
@@ -37,8 +35,8 @@ module Hotel
           res_on_date << this_rooms_reservations
         end
       end
-      #   binding.pry
-      return res_on_date #array with room and reservations
+
+      return res_on_date # array with room and reservations
     end
 
     def ck_avail(ckin, ckout, room_num)
@@ -47,13 +45,11 @@ module Hotel
       res_array_to_check = @rooms_reservations_hash[room_num]
       res_0 = res_array_to_check[0]
       res_last = res_array_to_check.last
-      #   binding.pry
 
       if res_array_to_check.length == 0
         return true
       elsif res_array_to_check.length == 1
         (res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date) ? true : false
-        #   binding.pry
       else # there is more than one reservation in the array
         # check left and right ends of the reservation array
         return true if (ckout <= res_0.ckin_date)
@@ -63,44 +59,27 @@ module Hotel
         while i <= res_array_to_check.length - 2
           res_a = res_array_to_check[i]
           res_b = res_array_to_check[i + 1]
-          #   binding.pry
+
           if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
             return true
           end
+
           i += 1
         end
         return false
-
-        # ^^^^^^
       end
     end
 
     def find_avail_rooms_for_dates(ckin, ckout)
       avail_rooms = []
+      puts "find_avail_rooms_for_dates, rooms_res_hash is:"
+      p @rooms_reservations_hash
 
       @rooms_reservations_hash.each do |room_num, reservations|
-        # avail_rooms << room if reservations.empty?
-        # room_num = room
-        # POSSIBLY REPLACE THE REST OF THIS MEHOD'S CODE WITH A CALL TO #ck_avail
+        avail_rooms << room_num if reservations.empty?
         reservations.each do |res|
-          #   binding.pry
-          avail_rooms << room_num if ck_avail(ckin, ckout, room_num)
-          #   binding.pry
+          avail_rooms << room_num if (ck_avail(ckin, ckout, room_num) && !avail_rooms.include?(room_num))
         end
-        # IF TRUE, avail_rooms << room
-        # if reservations.length == 1
-        # end
-
-        # add check for before first item
-        # add check for after last item
-
-        # reservations.each_with_index do |res, index|
-        #   res_a = res
-        #   res_b = reservations[index + 1]
-        #   #   binding.pry
-        #   if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
-        #     avail_rooms << room
-        #   end
       end
       return avail_rooms
     end
@@ -115,10 +94,7 @@ module Hotel
 
     def get_insert_index(res_array, new_res)
       insert_index = 0
-      # FIX THIS? CHANGED HASH TO ARRAY
       res_array.each do |res_in_array|
-        # DOES IT MAKE SENSE TO KEEP THIS IN ITS OWN METHOD?
-        # IF NOT, MOVE TO #make_res_for_room
         if (res_in_array.ckin_date <=> new_res.ckin_date) == -1
           insert_index += 1
         end
@@ -128,18 +104,11 @@ module Hotel
     end
 
     def make_res_for_room(ckin, ckout, room_num)
-      # ck_avail
-      # if true, continue; else return error
-
       raise ArgumentError, "This room is not available on the dates entered." unless ck_avail(ckin, ckout, room_num)
-
-      #  ~~~~~~ ^^^ WRITE THIS ^^^ ~~~~~~~~~
 
       new_res = Reservation.new(ckin, ckout)
       at_index = get_insert_index(@rooms_reservations_hash[room_num], new_res)
       @rooms_reservations_hash[room_num].insert(at_index, new_res)
-
-      #   binding.pry
     end
   end
 end
