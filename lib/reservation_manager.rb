@@ -1,6 +1,6 @@
 require_relative "reservation.rb"
 require "date"
-require "pry"
+
 require "awesome_print"
 
 module Hotel
@@ -125,15 +125,16 @@ module Hotel
     end
 
     def reserve_block_room(id)
-      i = 0
-      until i == 1
-        @block.each do |room|
-          if room.block_id == id
-            @reservations << room
-            i += 1
-          end
+      num_rooms = 0
+      @block.each do |room|
+        if room.block_id == id
+          @reservations << room
+          @block.delete(room)
+          num_rooms += 1
+          break if (num_rooms == 1)
         end
       end
+      return @reservations
     end
   end
 end

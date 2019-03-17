@@ -166,7 +166,6 @@ describe "make_block method" do
     manager.make_block(4, "march 19, 2019", "march 23, 2019", 1)
 
     vacant_rooms = manager.available_rooms("march 19, 2019", "march 20, 2019")
-    # ap vacant_rooms
     expect(vacant_rooms.length).must_equal 14
     # expect(vacant_rooms).wont_include reserved_block_rooms
     expect(vacant_rooms).wont_include reservation1.room_number
@@ -192,6 +191,14 @@ describe "check_block_availability method" do
     avail_rooms = manager.check_block_availability(id)
     expect(avail_rooms.length).must_equal 5
   end
+
+  it "Will not show rooms that have been turned into reservations" do
+    block1
+    id = 1
+    reserved_room = manager.reserve_block_room(id)
+    avail_rooms = manager.check_block_availability(id)
+    expect(avail_rooms.length).must_equal 4
+  end
 end
 
 describe "reserve_block_room method" do
@@ -201,12 +208,27 @@ describe "reserve_block_room method" do
   let (:block1) {
     manager.make_block(5, "march 19, 2019", "march 23, 2019", 1)
   }
+  let (:reservation2) {
+    manager.make_reservation("march 17, 2019", "march 22, 2019")
+  }
 
-  it "can reserve a room in a specified block" do
+  it "can reserve a room in a specified block by moving to @reservations and removing it from @block" do
     block1
     id = 1
-    manager.reserve_block_room(id)
-    expect(@reservations.length).must_equal 1
-    expect(@reservations.block_id).must_equal 2
+    reserved_room = manager.reserve_block_room(id)
+    expect(reserved_room.length).must_equal 1
+    expect(reserved_room[0].block_id).must_equal 1
+    expect(block1.length).must_equal 4
+  end
+
+  it "Will show the reserved room from the block in @reservations for that specific date range" do
+    block1
+    reservation2
+    id = 1
+    start_date = "march 18, 2019"
+    end_date = "march 20, 2019"
+    reserved_room = manager.reserve_block_room(id)
+    all_reservations = manager.reservations_by_date(start_date, end_date)
+    expect(all_reservations.length).must_equal 2
   end
 end
