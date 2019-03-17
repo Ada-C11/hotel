@@ -37,6 +37,12 @@ module Hotel
              end
     end
 
+    def list_rooms_with_reservations_by_date(date:)
+      return rooms.select do |room|
+               room.reservation?(date: date)
+             end
+    end
+
     def list_available_rooms_by_date(date:)
       return rooms.select do |room|
                room.available?(date: date)

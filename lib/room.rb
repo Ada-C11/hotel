@@ -22,5 +22,12 @@ module Hotel
       end
       return true
     end
+
+    def reservation?(date:)
+      unavailable_list.each do |unavailable|
+        return true if unavailable.date_unavailable?(date: date) && unavailable.id[0] == "R"
+      end
+      return false
+    end
   end
 end
