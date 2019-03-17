@@ -83,5 +83,45 @@ describe "Room class" do
       expect(reservation).must_be_instance_of Hotel::Reservation
       expect(reservation.room_id).must_equal 10
     end
+
+    it "removes the reserved dates from the block_intervals list" do
+      duration_one = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      duration_two = Hotel::Time_Interval.new(Date.parse("2019-11-14"), Date.parse("2019-11-18"))
+      discount_rate = 180
+      room.block_dates(duration_one)
+      room.block_dates(duration_two)
+      room.reserve_block(duration_one,discount_rate)
+      expect(room.has_blocked_dates?(duration_one)).must_equal false
+    end
+  end
+
+  describe "block_dates method" do
+    let(:room) {
+      Hotel::Room.new(18)
+    }
+
+    it "adds a new date range into the block intervals" do
+      duration = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      room.block_dates(duration)
+      expect(room.has_blocked_dates?(duration)).must_equal true
+    end
+
+    it "throws an exception if the reserved dates overlap with the existing blocked out dates" do
+      duration = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      room.block_dates(duration)
+
+      expect {
+        room.block_dates(duration)
+      }.must_raise ArgumentError
+    end
+
+    it "throws an exception if dates are unavailable because of non-block reservations" do
+      duration = Hotel::Time_Interval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
+      room.reserve(duration)
+
+      expect {
+        room.block_dates(duration)
+      }.must_raise ArgumentError
+    end
   end
 end

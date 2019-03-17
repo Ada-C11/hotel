@@ -33,7 +33,7 @@ module Hotel
 
       raise ArgumentError, "You cannot reserve this room"
     end
-    # need test: test with blocks
+
     def is_available?(time_interval)
       @reservations.each do |reservation|
         if reservation.overlap?(time_interval)
@@ -57,14 +57,21 @@ module Hotel
       end
       return nil
     end
-    # need test: test 1: throws exception if dates are unvailable because of non-blocked reservation
-    # test 2: throws exception for block reservations
-    # test 3: successfully add block dates
+
     def block_dates(reserved_dates)
       if !is_available?(reserved_dates)
         raise ArgumentError, "You cannot block out these dates"
       end
       @block_intervals << reserved_dates
+    end
+
+    def has_blocked_dates?(time_interval)
+      @block_intervals.each do |interval|
+        if interval.equals?(time_interval)
+          return true
+        end
+      end
+      return false
     end
   end
 end
