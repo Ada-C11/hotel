@@ -12,10 +12,6 @@ describe "Hotel::Reservation" do
       expect(reservation).must_be_instance_of Hotel::Reservation
     end
 
-    # it "stores an instance of Room" do
-    #   expect(room).must_be_kind_of Hotel::Room
-    # end
-
     it "has room_id as an integer" do
       expect(reservation.room_id).must_be_kind_of Integer
     end
@@ -24,15 +20,6 @@ describe "Hotel::Reservation" do
       expect(reservation.check_in_date).must_be_kind_of Date
       expect(reservation.check_out_date).must_be_kind_of Date
     end
-
-    # it "raises an ArgumentError if the check-out-date is before the check-in-date" do
-    #   expect { Hotel::Reservation.new("2019-03-12", "2019-03-10", room: room) }.must_raise ArgumentError
-    # end
-
-    # it "raises an ArgumentError if the check-in-date or the check-out-date is nil" do
-    #   expect { Hotel::Reservation.new(nil, "2019-03-10", room: room, room_id: 1) }.must_raise ArgumentError
-    #   expect { Hotel::Reservation.new("2019-03-10", nil, room: room, room_id: 1) }.must_raise ArgumentError
-    # end
 
     it "raises an ArgumentError if room_id is not provided" do
       expect { Hotel::Reservation.new(check_in_date: "2019-03-12", check_out_date: "2019-03-15") }.must_raise ArgumentError

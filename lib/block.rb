@@ -12,18 +12,9 @@ module Hotel
       end
       @room_ids = room_ids
       @check_in_date = Date.parse(check_in_date)
-      # raise ArgumentError, "check_in_date is required" if check_in_date == nil
-
       @check_out_date = Date.parse(check_out_date)
-      # @check_out_date = Date.parse(check_out_date)
-      # raise ArgumentError, "check_out_date is required" if check_out_date == nil
       @discount_rate = discount_rate
       raise ArgumentError, "Maximum number of room_ids is 5!" if room_ids.length > 5
-      # raise ArgumentError, "block_id is required" if block_id == nil
-      # raise ArgumentError, "at least 1 room is required" if room_ids == nil
-      # raise ArgumentError, "check_in_date is required" if check_in_date == nil
-      # raise ArgumentError, "check_out_date is required" if check_out_date == nil
-      # raise ArgumentError, "discount_rate is required" if discount_rate == nil
     end
 
     def self.load_all

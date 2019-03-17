@@ -1,15 +1,12 @@
-# require_relative "reservation"
 
 module Hotel
   class Room
     attr_reader :room_id, :cost
-    # , :reservations
     COST = 200.0
 
     def initialize(room_id, cost: COST)
       @room_id = room_id
       @cost = cost
-      # @reservations = reservations || []
     end
 
     def self.num_rooms

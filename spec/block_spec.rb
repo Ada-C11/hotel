@@ -17,8 +17,7 @@ describe "Block" do
 
     it "has attributes of the right data types" do
       expect(@new_block.block_id).must_be_kind_of Integer
-      # will revisit
-      # expect(@new_block.room_ids).must_be_kind_of Array
+      expect(@new_block.room_ids).must_be_kind_of Array
       expect(@new_block.check_in_date).must_be_kind_of Date
       expect(@new_block.check_out_date).must_be_kind_of Date
       expect(@new_block.discount_rate).must_be_kind_of Float
