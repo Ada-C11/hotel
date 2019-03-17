@@ -1,3 +1,18 @@
+require_relative "spec_helper"
+
+describe "BlockManager" do
+  let (:block_new) do
+    start_date = Time.parse("2019-02-27 14:08:45 -0700")
+    end_date = Time.parse("2019-02-28 14:08:45 -0700")
+    rooms = [1, 4, 6, 16, 19]
+    rate_discount = 10
+    block = Hotel::BlockManager.create_block(start_date, end_date, rooms, rate_discount)
+  end
+  it "creates a block" do
+    expect(block_new).must_be_instance_of Hotel::Block
+  end
+end
+
 # As a user of the hotel system,
 # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate OK
 #       Create method create_block (start_date, end_date, rooms, rate_discount)
