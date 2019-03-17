@@ -14,7 +14,6 @@ describe "@all_rooms variable" do
 
     expect(hotel.all_rooms).must_be_kind_of Array
     expect(hotel.all_rooms[4]).must_equal 5
-    
   end
 end
 
@@ -23,8 +22,6 @@ describe "add_reservation method" do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     @hotel = Booking::Hotel_Manager.new(4)
-    
-    # @reservation = Booking::Reservation.new(2, @checkin_date, @checkout_date)
   end
 
   it "adds the Reservation to a list of reservations" do
@@ -59,7 +56,7 @@ end
 
 describe "check_availability method" do
   before do
-    @hotel = Booking::Hotel_Manager.new(3)
+    @hotel = Booking::Hotel_Manager.new(5)
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     
@@ -79,8 +76,9 @@ describe "check_availability method" do
   it "checks if booked room number is included in array available rooms" do
     
     availability = @hotel.check_availability(@checkin_date, @checkout_date)
+
     
-    expect(availability.length).must_equal 1
+    expect(availability.length).must_equal 3
     expect(availability).wont_include 2
   end
 
@@ -96,12 +94,23 @@ describe "check_availability method" do
   it "raises an error if there are no available rooms for that date" do
     @checkin_date3 = Date.new(2019,1,4)
     @checkout_date3 = Date.new(2019,1,7)
-    @reservation3 = @hotel.add_reservation(@checkin_date3, @checkout_date3)
 
     @checkin_date4 = Date.new(2019,1,4)
     @checkout_date4 = Date.new(2019,1,7)
 
-    expect{@hotel.check_availability(@checkin_date4, @checkout_date4)}.must_raise ArgumentError
+    @checkin_date5 = Date.new(2019,1,4)
+    @checkout_date5 = Date.new(2019,1,7)
+
+    @checkin_date6 = Date.new(2019,1,4)
+    @checkout_date6 = Date.new(2019,1,7)
+
+    
+
+    @reservation3 = @hotel.add_reservation(@checkin_date3, @checkout_date3)
+    @reservation4 = @hotel.add_reservation(@checkin_date4, @checkout_date4)
+    @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
+
+    expect{@hotel.check_availability(@checkin_date5, @checkout_date5)}.must_raise ArgumentError
   end
 
   it "allows a room to be reserved on a previous reservation's checkout date" do
@@ -111,21 +120,27 @@ describe "check_availability method" do
     @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
     expect(@reservation5).must_be_kind_of Booking::Reservation
   end
+
 end
 
 # describe "hotel_block method" do
 #   before do
-#     @hotel = Booking::Hotel.new(5)
+#     @hotel = Booking::Hotel_Manager.new(5)
 #     @checkin_date = Date.new(2019,1,4)
 #     @checkout_date = Date.new(2019,1,7)
-#     @block = @hotel.hotel_block(@checkin_date, @checkout_date, [1,3,4,5], 150)
+
+#     @hotel.check_availability(@checkin_date, @checkout_date)
+#     @block = @hotel.create_block(@checkin_date, @checkout_date, [1,3,4,5], cost: 150)
+    
 #   end
 
 #   it "creates a hotel_block" do
-#    expect(@block).must_be_kind_of Array
-#    expect(@block.length).must_equal 4
-#    expect(@block[1]).must_be_kind_of Booking::Room
+#   #  expect(@block).must_be_kind_of Array
+#   #  expect(@block.length).must_equal 4
+#   #  expect(@block[1]).must_be_kind_of Booking::Room
 #   end
+
+# end
 
 #   it "removes the block rooms from available_rooms array" do
 #     expect(@hotel.available_rooms[0]).wont_equal 1

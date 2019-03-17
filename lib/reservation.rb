@@ -22,7 +22,7 @@ module Booking
       end
   
       def total_cost
-        days_spent = (self.checkout_date - self.checkin_date)
+        days_spent = (checkout_date - checkin_date)
         if cost == 200
           total = (days_spent)*ROOM_COST
         else total = (days_spent)*cost
