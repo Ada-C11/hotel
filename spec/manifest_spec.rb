@@ -130,15 +130,18 @@ describe "Manifest" do
 
   describe "Manifest#list_available_rooms_by_date_range" do
     before do
-      @comparable_rooms = @manifest_unavailable.rooms.select do |room|
-        !@room_ids.include?(room.id)
+      @comparable_rooms = @manifest_unavailable.rooms.reject do |room|
+        @room_ids.include?(room.id)
       end
       @day3 = @day1 + 14
       @day4 = @day1 + 21
+      room_collect = []
       @room_ids.each do |id|
         room = @manifest_unavailable.find_room(id: id)
+        room_collect << room
         @booker.book(reservation: Hotel::Reservation.new(check_in: @day3, check_out: @day4), room: room)
       end
+      @booker.set_aside_block(block: Hotel::Block.new(check_in: @day4 + 10, check_out: @day4 + 20, percent_discount: 15), rooms_collection: room_collect)
     end
     it "returns an Array" do
       expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: @day1...@day2)).must_be_instance_of Array
@@ -178,6 +181,14 @@ describe "Manifest" do
 
       it "date_range checked not overlapping with reservations" do
         expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1 - 7)...(@day1 - 2))).must_equal @manifest_unavailable.rooms
+      end
+
+      it "date_range overlaps block" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day4 + 12)...(@day4 + 18))).must_equal @comparable_rooms
+      end
+
+      it "date_range overlaps block and reservation" do
+        expect(@manifest_unavailable.list_available_rooms_by_date_range(date_range: (@day1)...(@day4 + 18))).must_equal @comparable_rooms
       end
     end
   end
