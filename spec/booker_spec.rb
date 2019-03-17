@@ -110,12 +110,26 @@ describe "RoomBooker" do
       conflict_2 = "March 2nd 2021"
 
       pre_check_out = "January 15th 2021"
-      ok_checkout = "January 12th"
+      ok_checkout = "January 12th 2020"
+      bogus = "January 55th 2020"
 
       expect { @another_hotel.book_reservation(check_in: conflict_1, check_out: conflict_2) }.must_raise ArgumentError
       expect { @another_hotel.book_reservation(check_in: pre_check_out, check_out: ok_checkout) }.must_raise ArgumentError
+      expect { @another_hotel.book_reservation(check_in: bogus, check_out: ok_checkout) }.must_raise ArgumentError
     end
+  end
 
-  
+  describe "get available rooms" do
+    incoming_allowed = "March 1st 2021"
+    outgoing_allowed = "March 2nd 2021"
+
+    it "@@@@@@@@@@@@@@@@@@@@@@@@@@@" do
+      20.times do
+        hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
+      end
+
+      expect(hotel.get_available_rooms(check_in: "March 5th", check_out: "March 6th")).must_be_kind_of Array
+      expect(hotel.get_available_rooms.length).must_equal 20
+    end
   end
 end

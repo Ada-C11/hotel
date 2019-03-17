@@ -6,7 +6,7 @@ require_relative "reserve"
 require_relative "date_range"
 
 class RoomBooker < Date
-  attr_reader :reservations, :rooms
+  attr_reader :reservations, :rooms, :get_available_rooms
 
   def initialize(rooms:)
     @rooms = rooms
@@ -65,7 +65,10 @@ class RoomBooker < Date
     return nil
   end
 
-  def list_available_rooms(check_in:, check_out:)
+
+  def get_available_rooms(check_in:, check_out:)
     open_rooms = rooms.map { |room| room.room_available?(check_in: check_in, check_out: check_out) }
+    return open_rooms
   end
+  
 end
