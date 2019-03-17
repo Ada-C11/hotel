@@ -62,7 +62,11 @@ class RoomBooker < Date
 
 
   def get_available_rooms(check_in: , check_out:)
-    open_rooms = @rooms.map { |room| room.room_available?(check_in: check_in, check_out: check_out) }
+    open_rooms = []
+    @rooms.each do |room| 
+      room.room_available?(check_in: check_in, check_out: check_out) ? open_rooms << room : next
+    end
+ 
     return open_rooms
   end
 
