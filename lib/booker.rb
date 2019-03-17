@@ -19,8 +19,8 @@ module Hotel
       return room
     end
 
-    def calculate_cost(reservation:, room:)
-      return room.cost_per_night.to_f * reservation.duration_in_days
+    def calculate_cost(reservation:, room:, percent_discount: 0)
+      return room.cost_per_night.to_f * reservation.duration_in_days * (1 - percent_discount)
     end
 
     def get_cost_of_booking(reservation)

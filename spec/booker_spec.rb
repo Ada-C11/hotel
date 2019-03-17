@@ -56,6 +56,7 @@ describe "Booker" do
       expect(booker.calculate_cost(reservation: pend_reservation, room: @room)).must_equal 400.0
     end
   end
+
   describe "Booker#get_cost_of_booking" do
     it "returns cost of booking from reservation object" do
       expect(booker.get_cost_of_booking(@reservation)).must_equal 1600.0
