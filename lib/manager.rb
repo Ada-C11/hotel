@@ -21,10 +21,8 @@ module Hotel
 
     def list_rooms
       all_room_numbers = @rooms_reservations_hash.keys.sort!
-
-      puts "Rooms in this hotel:"
-      puts all_room_numbers
-
+      #   puts "Rooms in this hotel:"
+      #   puts all_room_numbers
       return all_room_numbers
     end
 
@@ -45,7 +43,7 @@ module Hotel
 
     def find_avail_rooms_for_dates(ckin, ckout)
       avail_rooms = []
-      # ~~~~~~~~~~~~~ WRITE THIS!!! ~~~~~~~~~~~~~
+
       @rooms_reservations_hash.each do |room, reservations|
         avail_rooms << room if reservations.empty?
         reservations.each_with_index do |res, index|
@@ -57,7 +55,14 @@ module Hotel
           end
         end
       end
+      return avail_rooms
+    end
 
+    def print_available_rooms_for_dates(ckin, ckout)
+      # This method is a helper to print the results of #find_avail_rooms_for_dates(ckin, ckout)
+      avail_rooms = find_avail_rooms_for_dates(ckin, ckout)
+      puts "Rooms available #{ckin.strftime("%-m/%-d/%y")} - #{ckout.strftime("%-m/%-d/%y")}"
+      puts avail_rooms
       return avail_rooms
     end
 

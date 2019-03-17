@@ -8,7 +8,7 @@ describe "Manager Spec" do
     end
 
     it "List all rooms" do
-      skip
+      # skip
       expect(this_manager.list_rooms).must_include 13
       expect(this_manager.list_rooms).wont_include 21
       expect(this_manager.list_rooms).wont_include 0
@@ -100,10 +100,23 @@ describe "Manager Spec" do
       ck_out = Date.new(2019, 6, 9)
 
       # ACT
-      avail_rooms = this_manager.find_avail_rooms_for_dates(ck_in, ck_out)
+      avail_rooms = this_manager.print_available_rooms_for_dates(ck_in, ck_out)
 
       # ASSERT
       expect(avail_rooms).must_equal [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    end
+
+    it "Add a new reservation to an available room's reservations array" do
+      this_manager
+      res1
+      res2
+      res3
+      check_in = Date.new(2019, 6, 8)
+      check_out = Date.new(2019, 6, 9)
+      room = 1
+      this_manager.make_res_for_room(check_in, check_out, room)
+      #   binding.pry
+      expect(this_manager.rooms_reservations_hash[1][1].ckout_date.to_s).must_equal "2019-06-09"
     end
   end
 end
