@@ -64,8 +64,8 @@ module HotelSystem
     def get_available_rooms(first_day, last_day)
       available_rooms = @rooms.clone
       (first_day...last_day).each do |day|
-        date = create_date_object(day)
-        available_rooms = available_rooms.select { |room| is_room_availabile?(room, date) == true }
+        date_obj = create_date_object(day)
+        available_rooms.reject! { |room| is_room_availabile?(room, date_obj) == false }
       end
       return available_rooms
     end
@@ -78,11 +78,5 @@ module HotelSystem
       @blocks << new_block
       return new_block
     end
-
-    # def available_block_rooms(block)
-    # end
-
-    # def reserve_block_room(block, room)
-    # end
   end
 end
