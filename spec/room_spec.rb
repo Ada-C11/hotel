@@ -23,6 +23,8 @@ describe "Room class" do
       @room = Hotel::Room.new(8)
       @room.reserve(Hotel::Time_Interval.new(Date.parse("2019-03-25"), Date.parse("2019-03-29")))
       @room.reserve(Hotel::Time_Interval.new(Date.parse("2019-03-20"), Date.parse("2019-03-23")))
+      @room.block_dates(Hotel::Time_Interval.new(Date.parse("2019-04-20"), Date.parse("2019-04-25")))
+      @room.block_dates(Hotel::Time_Interval.new(Date.parse("2019-05-01"), Date.parse("2019-05-05")))
     end
 
     it "returns true when a room is available for a given period" do
@@ -31,6 +33,14 @@ describe "Room class" do
 
     it "returns false when a room is unavailable for a given period" do
       @room.is_available?(Hotel::Time_Interval.new(Date.parse("2019-03-20"), Date.parse("2019-03-21"))).must_equal false
+    end
+
+    it "returns true when a room block is available for a given period" do
+      @room.is_available?(Hotel::Time_Interval.new(Date.parse("2019-04-25"), Date.parse("2019-04-30"))).must_equal true
+    end
+
+    it "returns false when a room block is unavailable for a given period" do
+      @room.is_available?(Hotel::Time_Interval.new(Date.parse("2019-04-20"), Date.parse("2019-04-25"))).must_equal false
     end
   end
 
