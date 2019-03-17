@@ -68,13 +68,15 @@ describe "Booker" do
       Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
     }
     it "will add block to each room in rooms_collection" do
-      rooms_collect = [2, 3, 1, 5].map do |id|
+      rooms_collect = [2, 3, 5].map do |id|
         manifest.find_room(id: id)
       end
-      booker.set_up_block(block: valid_block, rooms_collection: rooms_collect)
+      booker.set_aside_block(block: valid_block, rooms_collection: rooms_collect)
       rooms_collect.each do |room|
         expect(room.unavailable_list[-1]).must_equal valid_block
       end
     end
+
+    it "will raise expection if a room in block is not"
   end
 end

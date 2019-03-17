@@ -21,7 +21,14 @@ module Hotel
       return room
     end
 
-    def set_up_block(block:, rooms_collection:)
+    def set_aside_block(block:, rooms_collection:)
+      begin 
+      rooms_collection.each do |room|
+        book(unavailable_object: block, room: room, percent_discount: block.percent_discount)
+      rescue RoomNotAvailable
+  
+      end
+      
     end
 
     def calculate_cost_of_booking(reservation:, room:, percent_discount: 0)
