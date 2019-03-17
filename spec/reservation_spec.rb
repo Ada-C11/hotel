@@ -27,10 +27,4 @@ describe "reservation" do
             expect(@reservation.total_cost).must_equal 400 #checking for 2 days
         end
     end
-    
-    # describe "find specific date"
-    #   it "find a specific date" do 
-    #     expect()
-    
-    
 end

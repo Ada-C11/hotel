@@ -21,17 +21,10 @@ module Hotel
         days_spent = checkout_date - checkin_date
         total = days_spent * 200
         return total.to_i
-      end
-
+      end   # end of method  
       
-  end
+      # def 
+      #   
+      # end 
+  end # end of class
 end # end of module
-    # def check_date_range(start, finish)
-    #   raise StandardError, 'Invalid date range' unless start < finish
-    # end
-
-
-  #   def find_room(room_number)
-  #   end
-  # @last_night = checkout_date - 1
-  # @room = find_room(room_number)
