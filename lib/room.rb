@@ -11,12 +11,12 @@ module Hotel
     end
 
     def reserve(reserved_dates)
-      if is_available?(reserved_dates)
-        r = Hotel::Reservation.new(reserved_dates, @room_id, RATE)
-        @reservations << r
-      else
+      if !is_available?(reserved_dates)
         raise ArgumentError, "The room you want to reserve is not available."
       end
+
+      r = Hotel::Reservation.new(reserved_dates, @room_id, RATE)
+      @reservations << r  
     end
 
     def is_available?(time_interval)

@@ -20,5 +20,9 @@ module Hotel
     def has_date?(date)
       return date >= @check_in && date < @check_out
     end
+
+    def equals?(time_interval)
+      return @check_in == time_interval.check_in && @check_out == time_interval.check_out
+    end
   end
 end

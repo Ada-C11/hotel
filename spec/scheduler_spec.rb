@@ -48,9 +48,6 @@ describe "Scheduler class" do
     end
     # exception
 
-  
-
-
     # reserve same date range for two different rooms
   end
 
