@@ -20,11 +20,12 @@ class Hotel
     validate_date_range(start_date, end_date)
     # Find room that's available.
     available_rooms = find_available_rooms(start_date, end_date)
+    raise RuntimeError.new("there are no rooms available") if available_rooms.empty?
     room_number = available_rooms.to_a.sample
     # Create reservation.
     reservation = Reservation.new(room_number, start_date, end_date)
     # Store the reservation.
-    reservations << reservation
+    @reservations << reservation
     # Return the reservation.
     return reservation
   end
@@ -40,16 +41,10 @@ class Hotel
   end
 
   def validate_date_range(start_date, end_date)
-    # Test if date is after now (time.now).
-    # raise ArgumentError "start date is before now" unless start_date >= Time.now
-    # If end date is before start date.
     raise ArgumentError.new("the end date is before start date") unless end_date >= start_date
-    # Check if dates are real ie 12/33 (raised_exception).
-    # Research in rubys date gem? maybe time library.
   end
 
   def get_reservations_inclusive(date)
     @reservations.find_all {|reservation| reservation.end_date >= date && reservation.start_date <= date}
   end
-
 end

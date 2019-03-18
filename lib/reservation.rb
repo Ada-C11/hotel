@@ -1,5 +1,5 @@
 class Reservation
-  attr_reader :room_number
+  attr_reader :room_number, :start_date, :end_date
 
   ROOM_PRICE = 200
 
