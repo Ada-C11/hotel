@@ -4,6 +4,7 @@ require "date"
 require_relative "room"
 require_relative "reserve"
 require_relative "date_range"
+require_relative "blocks"
 
 class RoomBooker < Date
   attr_reader :reservations, :rooms, :get_available_rooms
@@ -61,10 +62,9 @@ class RoomBooker < Date
     return nil
   end
 
-
-  def get_available_rooms(check_in: , check_out:)
+  def get_available_rooms(check_in:, check_out:)
     open_rooms = []
-    @rooms.each do |room| 
+    @rooms.each do |room|
       room.room_available?(check_in: check_in, check_out: check_out) ? open_rooms << room : next
     end
     if open_rooms.length == 0
@@ -77,17 +77,17 @@ class RoomBooker < Date
 
   def reserve_blocks(check_in:, check_out:, rooms_needed:, discount_price:)
     raise ArgumentError if rooms_needed > 5
-    reserved_block = []
+    block_rooms = []
 
     rooms_needed.times do |i|
-      room = find_available_room(check_in: check_in,  check_out: check_out )
-      reserved_block << room
+      room = find_available_room(check_in: check_in, check_out: check_out)
+      block_rooms << room
     end
 
     if reserved_block.length < rooms_needed
       raise ArgumentError, "We cannot book this block reservation due to insufficient room availability"
     end
 
+    block = BlockParty.new(id:)
   end
-
 end
