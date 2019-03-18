@@ -6,63 +6,68 @@ require_relative 'booking_manager'
 
 module Hotel
   class ReservationsManager
-    # should handle the business logic for bookings
-    attr_reader :rooms, :reservations, :reservation_id
+    attr_reader :rooms, :reservations, :reservation_id, :occupied
 
     def initialize
       @rooms = load_rooms
       @reservations = {}
-      @reservation_id = (1..300).to_a 
+      @reservation_id = (1..300).to_a
+      @occupied = {}
     end
 
     def load_rooms
-     rooms = {}
-     room_number = nil 
-     price_per_night = nil
-     (1..20).each do |id|
-      rooms[number] = Hotel::Room.new(room_number, price_per_night)
-    end
-     return rooms 
+      rooms = {}
+      (1..20).each do |room_number, price_per_night|
+        rooms[room_number] = Hotel::Room.new(room_number, price_per_night)
+      end
+      rooms
     end
 
     def list_rooms
-     return @rooms.values        
-    end 
+      @rooms.values
+    end
 
     def make_reservation(room_id, start_date, end_date)
-     if !rooms_keys.include?(room_id)
-        raise ArgumentError.new("Room number doesn't exist")
-    end 
+      raise ArgumentError, "Room number doesn't exist" unless rooms.key?(room_id)
 
-     reservations_data = {id: @reservation_id.slice!,
-         room: room, 
-         start_date: start_date, 
-         end_date: end_date
-        }
+      room = @rooms[room_id]
+      unless list_of_available_rooms(start_date, end_date).include?(room)
+        raise ArgumentError, 'Room is not currently available'
+      end
 
-     new_reservation = Hotel::Reservations.new(reservations_data)
-     @reservations[reservation_id] = new_reservation 
-     return new_reservation
-    end 
+      reservation_data = {
+        id: @reservation_id.shift,
+        room: room,
+        start_date: start_date,
+        end_date: end_date
+      }
+
+      new_reservation = Hotel::Reservations.new(reservation_data)
+      @reservations[new_reservation.id] = new_reservation
+      new_reservation
+    end
 
     def find_reservation(date)
-        date = date
-        reservation_found = [] 
-        @reservations.each do |id, reservation|
-            if reservation.start_date <= date && reservation.end_date > date
-               reservation_found = reservation  
-            end 
-        end
-    return reservation_found.values
+      reservation_found = @reservations.select { |_id, reservation| reservation.start_date <= date && reservation.end_date > date }.values
+      reservation_found
     end
-    
+
     def reservation_total_cost(reservation_id)
       total_to_pay = @reservations[reservation_id].reservation_cost
-    return total_to_pay
-    end 
+      total_to_pay
+    end
 
-    # def list_of_reservations(start_date, end_date)
-    #     reserved_rooms = []
-    
+    def list_of_reservations(check_in, check_out)
+      reserved_rooms = []
+      (check_in..check_out).each do |date|
+        reserved_rooms += find_reservation(date).flat_map(&:room)
+      end
+      reserved_rooms.uniq
+    end
+
+    def list_of_available_rooms(check_in, check_out)
+      available_rooms = @rooms.values - list_of_reservations(check_in, check_out - 1)
+      available_rooms
+    end
   end
 end
