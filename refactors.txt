@@ -1,0 +1,5 @@
+Future me's to do:
+1. Helper method for date validation
+2. Write tests for all edge cases of booking
+3. Cleanup var names
+4. Implement block reservation
