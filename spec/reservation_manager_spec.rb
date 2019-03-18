@@ -65,10 +65,31 @@ describe "reserve_room method" do
 end
 
 describe "list_reservations" do
-  it "returns an array of reservations" do
-    reservations = @Reservation_Manager.list_reservations(Date.new(2019, 3, 31))
-    expect(reservations).must_be_kind_of Array
-    expect(reservations.first).must_be_kind_of Hotel::Reservation
+  before do
+    @hotel = Hotel::Reservation_Manager.new
+    @date = Date.new(2018, 6, 8)
+    @input_1 = { name: "Butter",
+                room_id: 1,
+                check_in_date: Date.new(2019, 4, 12),
+                check_out_date: Date.new(2019, 4, 15) }
+    @input_2 = { name: "Mooney",
+                room_number: 3,
+                check_in_date: Date.new(2019, 4, 9),
+                check_out_date: Date.new(2019, 4, 15) }
+    @names = ["Butter", "Mooney"]
+  end
+
+  it "returns an array of all reservations for that date" do
+    @hotel.reserve_room(@input_1)
+    @hotel.reserve_room(@input_2)
+    expect(@hotel.list_reservations(@date)).must_be_kind_of Array
+    @list = @hotel.list_reservations(@date)
+    @list.each do |reservation|
+      expect(@names.include?(reservation.name)).must_equal true
+    end
+  end
+  it "returns an error if no rooms booked on given date" do
+    expect { @hotel.list_reservations(@date) }.must_raise StandardError
   end
 end
 

@@ -54,7 +54,7 @@ module Hotel
         end
       end
       if reservations.empty?
-        return raise StandardError, "No rooms reserved on provided date."
+        return raise StandardError, "There are no rooms reserved on the requested date."
       else
         return reservations
       end
