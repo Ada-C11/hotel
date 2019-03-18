@@ -80,7 +80,7 @@ describe "Room class" do
         start_date: Date.new(2001, 2, 3),
         end_date: Date.new(2001, 2, 5),
         collection_rooms: @collection,
-        discounted_rate: 150,
+        discounted_rate: 0.2,
       )
       @room1.add_block(@block1)
       @room2.add_block(@block1)
