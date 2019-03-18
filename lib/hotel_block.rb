@@ -5,9 +5,10 @@ module HotelSystem
     def initialize(date_range:, rooms:, room_rate:)
       @date_range = date_range
       @rooms = rooms
-      @room_rate = room_rate
-    end
+      @room_rate = room_rate 
+    end 
 
     
   end
 end
+ 

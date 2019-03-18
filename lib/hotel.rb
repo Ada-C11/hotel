@@ -61,7 +61,7 @@ module HotelSystem
       @rooms.each do |hotel_room|
         reserved = room_reserved?(room_number: hotel_room.room_number, year: start_year, month: start_month, day: start_day)
         block_status = hotel_room.in_block?(year: start_year, month: start_month, day: start_day)
-        if reserved == false && block_status == false
+        if !reserved && !block_status
           return hotel_room
         end
       end
@@ -101,7 +101,7 @@ module HotelSystem
         puts "There are no reservations for that date."
         return nil
       else
-        return date_reservations
+        return date_reservations   
       end
     end
 
@@ -118,8 +118,8 @@ module HotelSystem
         puts "There are no available rooms for that date."
         return nil
       else
-        return available_rooms
-      end
+        return available_rooms 
+      end 
     end
 
     def create_block(start_year:, start_month:, start_day:, num_nights:, room_nums:, block_rate:)
@@ -136,7 +136,13 @@ module HotelSystem
             raise NotImplementedError, "Block can't be created, room #{room.room_number} is already booked during those dates."
           end
         end
-        room.add_block_nights(block_dates)
+        room.block_date_ranges.each do |block_date_ranges| 
+          overlap = block_date_ranges.overlap?(block_dates)
+          if overlap == true
+            raise NotImplementedError, "Block can't be created, room #{room.room_number} is already in a block during those dates."
+          end
+        end
+        room.add_block_date_ranges(block_dates)
       end
       block = HotelSystem::HotelBlock.new(date_range: block_dates, rooms: block_rooms, room_rate: block_rate)
       @blocks << block

@@ -24,7 +24,7 @@ module HotelSystem
       dates_array = []
       start_date = Date.new(start_year, start_month, start_day)
       dates_array << start_date
-      if num_nights
+      if num_nights 
         i = 1
         num_nights.times do
           date = start_date + i
@@ -36,14 +36,15 @@ module HotelSystem
     end
 
     def checkout
-      return self.date_list.last
+      last = self.date_list.last
+      return last
     end
 
     def include?(date)
       if date.class != Date
         raise ArgumentError, "Please enter an instance of the Date class."
       end
-      if self.date_list.include?(date)
+      if (date != self.checkout) && self.date_list.include?(date) 
         return true
       else
         return false

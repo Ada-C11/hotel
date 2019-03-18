@@ -222,7 +222,7 @@ describe "hotel class" do
       expect(march16res[0].room_number).must_equal 4
     end
 
-    it "will reserve a room that is set aside for a block if the date is the block's checkout day" do
+    it "will reserve a room that is set aside for a block if the given date is the block's checkout day" do
       @hotel.create_block(start_year: 2019, start_month: 3, start_day: 16, num_nights: 5, room_nums:[1,2,3], block_rate: 150)
 
       @hotel.reserve_room(start_year: 2019, start_month: 3, start_day: 21, num_nights: 3)
@@ -230,7 +230,7 @@ describe "hotel class" do
 
       expect(march21res.length).must_equal 1
       expect(march21res[0].room_number).must_equal 1
-    end
+    end 
   end
 
   describe "reservations_by_date method" do
@@ -309,12 +309,10 @@ describe "hotel class" do
       expect(@hotel.blocks[1]).wont_be_nil
     end
 
-    it "will add the block dates to the room's block_nights array" do
+    it "will add the block dates range to the room's block_date_ranges array" do
       status = @hotel.blocks[0].rooms[0].in_block?(year: 2019, month: 4, day: 22)
-      april23 = Date.new(2019, 4, 23)
         
       expect(status).must_equal true
-      expect(@hotel.rooms[3].block_nights.include?(april23)).must_equal true
     end
   end 
 end
