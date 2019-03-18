@@ -1,0 +1,5 @@
+To do:
+
+- Complete Block functionality
+- Loosen coupling between classes
+- Use more enumerables
