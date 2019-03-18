@@ -21,5 +21,14 @@ module BookingSystem
     def add_reservation(reservation)
       reservations << reservation
     end
+
+    def available?(date)
+      reservations.each do |reservation|
+        reservation.date_range.each do |res_date|
+          return false if date == res_date
+        end
+      end
+      return true
+    end
   end
 end
