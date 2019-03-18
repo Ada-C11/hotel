@@ -238,24 +238,31 @@ describe "hotel class" do
       3.times do
         @hotel.reserve_room(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4)
       end
+      @reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
     end
 
-    it "will return an array" do
-      reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
-        
-      expect(reservations).must_be_kind_of Array
+    it "will return an array" do   
+      expect(@reservations).must_be_kind_of Array
     end
 
-    it "each index in the returned array will hold a hash with the reservation information" do
-      reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
-        
-      expect(reservations[0]).must_be_kind_of HotelSystem::Reservation
+    it "each index in the returned array will hold an instance of Reservation" do
+      expect(@reservations[0]).must_be_kind_of HotelSystem::Reservation
     end
 
     it "will raise ArgumentError for invalid date entry" do
       expect{
         @hotel.reservations_by_date(year: 2019, month: 2, day: 30)
       }.must_raise ArgumentError
+    end
+
+    it "will return a reservation made from a hotel block" do
+      @hotel.create_block(start_year: 2019, start_month: 12, start_day: 5, num_nights: 4, room_nums: [11, 12], block_rate: 100)
+      @hotel.reserve_block_room(room_num: 11, block_id: 1)
+      block_res = @hotel.reservations.last
+      reservations = @hotel.reservations_by_date(year: 2019, month: 12, day: 5)
+
+      expect(reservations).must_include block_res
+      expect(reservations.length).must_equal 4
     end
   end
 
