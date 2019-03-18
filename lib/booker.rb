@@ -18,7 +18,7 @@ class RoomBooker < Date
   def book_reservation(check_in:, check_out:)
     date_request = DateRange.new(check_in: check_in, check_out: check_out)
     res_dates = date_request.dates_booked
-    find_room = find_available_room(check_in: check_in, check_out: check_out) #find available room
+    find_room = find_available_room(check_in: check_in, check_out: check_out)
     if find_room == nil
       raise ArgumentError, "No rooms are available for these dates"
     end
@@ -75,7 +75,7 @@ class RoomBooker < Date
 
   # working on blocked rooms
 
-  def reserve_blocks(check_in:, check_out:, rooms_needed:, discount_price:)
+  def reserve_block(check_in:, check_out:, rooms_needed:, discount_price:)
     raise ArgumentError if rooms_needed > 5
     block_rooms = []
 
