@@ -14,4 +14,4 @@ Commit and push this file to your project repo
 3. Order the tests in a more sequential order:
   a. First test is testing bullet point 1 in Wave 1;
   b. Second test is testing bullet point 2 in Wave 1 and so on.
-4. Use more built-in shortcut methods
+4. Use more built-in shortcut methods.
