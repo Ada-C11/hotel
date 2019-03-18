@@ -42,7 +42,7 @@ describe "reserve_room method" do
     @date_2 = Date.new(2018, 6, 9)
     @all_rooms_available = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     @input_1 = { name: "Kittywampus",
-                room_number: 2,
+                room_id: 2,
                 check_in_date: @date_1,
                 check_out_date: @date_2 }
   end
