@@ -18,10 +18,6 @@ describe "Room" do
         it "has a room number" do
             expect(@room.room).must_equal 4
         end
-
-        it "has a cost" do
-            expect(@room.cost).must_equal 200
-        end
     end
 
     describe "Room reservations" do

@@ -59,11 +59,11 @@ describe "Hotel Manager" do
             expect(@hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 5, 0.8)).must_be_kind_of HotelManagementSystem::Block
         end
 
-        it "raises an ArgumentError if a block is the wrong size" do
+        it "raises an exception if a block is the wrong size" do
             expect{@hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 6, 0.8)}.must_raise ArgumentError
         end
 
-        it "raises an ArgumentError if not enough rooms are available to block" do
+        it "raises an exception if not enough rooms are available to block" do
             hotelmanager = HotelManagementSystem::HotelManager.new
             start_date = '11th Mar 2019'
             end_date = '15th Mar 2019'
@@ -81,9 +81,9 @@ describe "Hotel Manager" do
             expect(@hotelmanager.list_blocks).must_be_kind_of Array
         end
 
-        # it "returns the cost of a block reservation" do
-        #     block = @hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 5, 0.8)
-        #     expect(@hotelmanager.cost_of_block(block)).must_equal
-        # end
+        it "returns the cost of a block reservation" do
+            block = @hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 5, 0.8)
+            expect(@hotelmanager.cost_of_block(block)).must_equal 3200.0
+        end
     end
 end

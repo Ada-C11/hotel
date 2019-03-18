@@ -8,6 +8,8 @@ module HotelManagementSystem
     class HotelManager
         attr_reader :reservations
 
+        COST = 200
+
         def initialize
             @reservations = []
             @rooms = []
@@ -70,7 +72,7 @@ module HotelManagementSystem
 
             raise ArgumentError, "Not enough rooms are available to create a block." if room_collection == nil
 
-            block = HotelManagementSystem::Block.new(start_date: start_date, end_date: end_date, room_collection: room_collection)
+            block = HotelManagementSystem::Block.new(start_date: start_date, end_date: end_date, room_collection: room_collection, discount_rate: discount_rate)
             @blocks << block
 
             return block
@@ -81,7 +83,8 @@ module HotelManagementSystem
         end
 
         def cost_of_block(block)
-            return block.total_cost
+            block = @blocks.find{|i| i == block}
+            return (block.end_date - block.start_date) * (COST) * (block.room_collection.length) * (block.discount_rate)
         end
     end
 end

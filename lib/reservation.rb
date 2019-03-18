@@ -6,6 +6,8 @@ module HotelManagementSystem
     class Reservation
         attr_reader :start_date, :end_date, :room
         attr_accessor :reservations
+
+        COST = 200
         
         def initialize(start_date:, end_date:, room: nil)
             @start_date = Date.parse(start_date.to_s)
@@ -28,9 +30,7 @@ module HotelManagementSystem
         end
 
         def total_cost
-            return duration * @room.cost
+            return duration * COST
         end
-
-
     end
 end
