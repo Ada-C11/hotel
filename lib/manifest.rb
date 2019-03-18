@@ -31,6 +31,15 @@ module Hotel
              end
     end
 
+    def find_unavailable_object(id:)
+      rooms.each do |room|
+        room.unavailable_list.each do |unavailable_object|
+          return unavailable_object if unavailable_object.id == id
+        end
+      end
+      return nil
+    end
+
     def list_unavailable_rooms_by_date(date:)
       return rooms.reject do |room|
                room.available?(date: date)

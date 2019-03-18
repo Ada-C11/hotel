@@ -11,7 +11,7 @@ module Hotel
     end
 
     def book(reservation:, room:, percent_discount: 0)
-        unless room.available_for_date_range?(date_range: reservation.date_range)
+      unless room.available_for_date_range?(date_range: reservation.date_range)
         raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
       end
       calculate_cost_of_booking(reservation: reservation, room: room, percent_discount: 0)
@@ -37,6 +37,9 @@ module Hotel
 
     def get_cost_of_booking(reservation:)
       return reservation.cost
+    end
+
+    def book_room_associated_with_block()
     end
   end
 end

@@ -64,6 +64,42 @@ describe "Manifest" do
     end
   end
 
+  describe "Manifest#find_unavailable_object" do
+    before do
+      booker_find = Hotel::Booker.new
+      @manifest_find = booker_find.manifest
+      reservation = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
+                                           check_out: Time.new.to_date + 4)
+      @reservation_id_reference = reservation.id
+      p reservation.id
+      block = Hotel::Block.new(check_in: Time.new.to_date + 5,
+                               check_out: Time.new.to_date + 10,
+                               percent_discount: 15)
+      @block_id_reference = block.id
+      p block.id
+      booker_find.book(reservation: reservation,
+                       room: @manifest_find.rooms[0])
+      booker_find.set_aside_block(block: block,
+                                  rooms_collection: [@manifest_find.rooms[3], @manifest_find.rooms[1], @manifest_find.rooms[2]])
+    end
+    it "will return unavailable object" do
+      p @block_id_reference
+      p @reservation_id_reference
+      expect(@manifest_find.find_unavailable_object(id: @block_id_reference)).must_be_kind_of Hotel::Unavailable
+      expect(@manifest_find.find_unavailable_object(id: @reservation_id_reference)).must_be_kind_of Hotel::Unavailable
+    end
+
+    it "return correct unavailable object if contained in rooms" do
+      expect(@manifest_find.find_unavailable_object(id: @block_id_reference)).wont_be_nil
+      expect(@manifest_find.find_unavailable_object(id: @block_id_reference)).must_equal @manifest_find.rooms[1].unavailable_list.last
+      expect(@manifest_find.find_unavailable_object(id: @reservation_id_reference)).must_equal @manifest_find.rooms[0].unavailable_list.last
+    end
+
+    it "returns nil if unavailable object is not in rooms" do
+      expect(@manifest_find.find_unavailable_object(id: "C1234567")).must_be_nil
+    end
+  end
+
   describe "Manifest#list_rooms" do
     it "returns an array" do
       expect(manifest.list_rooms).must_be_instance_of Array
