@@ -88,6 +88,11 @@ describe "BlockManager" do
 
     expect { block_manager_new.create_block(start_date, end_date, rooms, rate_discount) }.must_raise ArgumentError
   end
+
+  it "finds a block by id" do
+    block_new
+    expect(block_manager_new.find_block_by_id(id: 1)).must_be_instance_of Hotel::Block
+  end
 end
 
 # As a user of the hotel system,
@@ -117,7 +122,7 @@ end
 # block that includes that specific room for that specific date,
 # because it is unavailable
 #       Check blocks when creating a new block, if any of the rooms
-#       in the block I'm creating is in another block (raise ArgumentError?)
+#       in the block I'm creating is in another block (raise ArgumentError?) OK
 
 # I can check whether a given block has any rooms available
 #       Check a specific block by (id?) return a list of available rooms
