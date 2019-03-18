@@ -11,6 +11,6 @@ module Hotel
       @block_room_number = block_room_number
       @check_in = check_in
       @check_out = check_out
-    end # initialize
-  end # class
-end # module
+    end
+  end
+end

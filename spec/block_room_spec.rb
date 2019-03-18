@@ -15,6 +15,6 @@ module FrontDesk
 
     it "creates an instance of BlockRoom" do
       expect(@block_room).must_be_kind_of Hotel::BlockRoom
-    end # it
-  end # first describe
-end # module
+    end
+  end
+end
