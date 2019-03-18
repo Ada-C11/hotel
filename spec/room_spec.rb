@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 
 describe "Room" do
-  describe "#initialize" do
+  describe "initialize" do
     before do
       @test_room = BookingSystem::Room.new(room_num: 1)
     end
@@ -20,5 +20,16 @@ describe "Room" do
     end
   end
 
-  # Test for add_room is under hotel_spec - new_reservation
+  describe "make_rooms" do
+    before do
+      room_nums = (1..NUM_OF_ROOMS).to_a
+      @rooms = BookingSystem::Rooms.make_rooms(room_nums)
+    end
+
+    it "creates an array of 20 instances of Room" do
+      expect(@rooms).must_be_kind_of Array
+      expect(@rooms.length).must_equal 20
+      expect(@rooms[1]).must_be_kind_of BookingSystem::Room
+    end
+  end
 end
