@@ -1,6 +1,7 @@
 require 'date'
 require './spec/spec_helper.rb'
-require 'pry'
+require_relative 'errors.rb'
+
 ROOMS = (1..20).to_a
 module Hotel
   class Registry

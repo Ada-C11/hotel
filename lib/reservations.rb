@@ -1,5 +1,6 @@
 require 'date'
 require_relative "registry.rb"
+require_relative "errors.rb"
 COST = 200
 module Hotel
   class Reservation
@@ -27,11 +28,4 @@ module Hotel
       (COST * duration).to_f
     end
   end
-end
-
-module Errors
-  class BookingConflict < StandardError; end
-  class ValidationError < StandardError; end
-  class ReverseDates < StandardError; end
-  class NotThatKindofHotelPal < StandardError; end
 end
