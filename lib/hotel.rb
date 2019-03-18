@@ -1,14 +1,16 @@
 require_relative "room"
 require_relative "reservation"
+require_relative "block"
 
 module HotelSystem
   class Hotel
     attr_reader :all_rooms
-    attr_accessor :all_reservations
+    attr_accessor :all_reservations, :all_blocks
 
     def initialize
       @all_reservations = []
       @all_rooms = []
+      @all_blocks = []
       generate_rooms(20)
     end
 
@@ -55,6 +57,25 @@ module HotelSystem
         return room if room.date_available?(new_start_date, new_end_date)
       end
       return false
+    end
+
+    def hold_block(start_date, end_date, room_collection)
+      room_collection.each do |room|
+        raise ArgumentError, "Room #{room.number} is already in a block" if room.block_id != nil
+      end
+
+      block = HotelSystem::Block.new(start_date: start_date, end_date: end_date, room_collection: room_collection)
+
+      room_collection.each do |room|
+        room.block_id = block.id
+        discount_price = room.price - (room.price * block.discount_rate)
+        room.price = discount_price
+      end
+
+      @all_blocks << block
+    end
+
+    def reserve_block_room
     end
   end
 end

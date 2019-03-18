@@ -1,13 +1,12 @@
 module HotelSystem
   class Room
-    attr_reader :number, :price, :status, :block_id
-    attr_accessor :reservations
+    attr_reader :number
+    attr_accessor :reservations,  :block_id, :price
 
-    def initialize(number:, status: :NOT_BLOCKED, block_id: nil)
+    def initialize(number:, block_id: nil)
       @number = number
       @price = 200.00
       @reservations = []
-      @status = status.to_sym
       @block_id = block_id
     end
 

@@ -3,15 +3,15 @@ require "date"
 
 module HotelSystem
   class Block
-    attr_reader :start_date, :end_date, :room_collection, :block_id, :price_per_room, :discount_rate, :reservations
+    attr_reader :start_date, :end_date, :room_collection, :id, :discount_rate
+    attr_accessor :reservations
 
     def initialize(start_date:, end_date:, room_collection:)
       @start_date = start_date
       @end_date = end_date
       @room_collection = room_collection
       @reservations = []
-      @block_id = ((0...5).map { rand(10) }).join.to_s
-      @price_per_room = 200
+      @id = ((0...5).map { rand(10) }).join.to_s
       @discount_rate = 0.22
 
       room_collection_blockable?(room_collection)
@@ -19,12 +19,12 @@ module HotelSystem
     end
 
     def room_collection_blockable?(room_collection)
-      room_collection.each do |room|
+      @room_collection.each do |room|
         raise ArgumentError, "One of the rooms you entered is already reserved during the specified dates" if !room.date_available?(@start_date, @end_date)
       end
     end
 
-    def room_available?
+    def room_still_available?
       if @reservations.length < @room_collection.length
         return true
       else

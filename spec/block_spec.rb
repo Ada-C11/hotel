@@ -61,7 +61,7 @@ describe "Block class" do
     end
   end
 
-  describe "block_room_available? method" do
+  describe "room_still_available? method" do
     before do
       @hotel = HotelSystem::Hotel.new
     end
@@ -73,7 +73,7 @@ describe "Block class" do
     }
 
     it "returns true if there is a room available for reservation in the block" do
-      expect(block.room_available?).must_equal true
+      expect(block.room_still_available?).must_equal true
     end
 
     it "returns false if there is not a room available for reservation in the block" do
@@ -95,7 +95,7 @@ describe "Block class" do
                                           guest: "Sam")
       block.reservations << res3
 
-      expect(block.room_available?).must_equal false
+      expect(block.room_still_available?).must_equal false
     end
   end
 end

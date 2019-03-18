@@ -182,4 +182,70 @@ describe "Hotel class" do
       expect(@hotel.room_available?(Date.new(2019, 3, 11), Date.new(2019, 3, 15))).must_equal false
     end
   end
+
+  describe "hold_block method" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+    end
+
+    let (:already_blocked_room) { HotelSystem::Room.new(number: 1, block_id: "00000") }
+    let (:room1) { @hotel.all_rooms[1] }
+    let (:room2) { @hotel.all_rooms[2] }
+    let (:room3) { @hotel.all_rooms[3] }
+
+    it "raises an error if one of the rooms is already in another block" do
+      expect do
+        @hotel.hold_block(
+          start_date: Date.new(2019, 3, 11),
+          end_date: Date.new(2019, 3, 14),
+          room_collection: [already_blocked_room, room1, room2],
+        )
+      end.must_raise ArgumentError
+    end
+
+    it "can create an instance of a block" do
+      block = @hotel.hold_block(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        [room3, room1, room2]
+      )
+
+      expect(@hotel.all_blocks[0]).must_be_kind_of HotelSystem::Block
+    end
+
+    it "can change the block id of the rooms in its collection" do
+      block = @hotel.hold_block(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        [room3, room1, room2]
+      )
+
+      expect(room3.block_id).wont_be_nil
+      expect(room1.block_id).wont_be_nil
+      expect(room2.block_id).wont_be_nil
+    end
+
+    it "can change the price of the rooms in its collection" do
+      block = @hotel.hold_block(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        [room3, room1, room2]
+      )
+
+      expect(room3.price).must_equal 156.00
+      expect(room1.price).must_equal 156.00
+      expect(room2.price).must_equal 156.00
+    end
+
+    it "can add the instance of a block to the all_blocks array" do
+      block = @hotel.hold_block(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        [room3, room1, room2]
+      )
+
+      expect(@hotel.all_blocks.length).must_equal 1
+      expect(@hotel.all_blocks[0]).must_be_kind_of HotelSystem::Block
+    end
+  end
 end
