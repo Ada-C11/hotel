@@ -18,7 +18,6 @@ module Hotel
         rooms << Room.new(starting_id, cost)
         starting_id += 1
       end
-      @rooms = rooms
       return rooms
     end
   end
