@@ -30,7 +30,7 @@ describe "AllRooms class" do
         it "returns an array of room instances" do
             expect(@all_rooms.rooms_not_reserved(Date.parse("20190314"), Date.parse("20190318"))).must_be_instance_of Array
             rooms = @all_rooms.rooms_not_reserved(Date.parse("20190316"), Date.parse("20190318"))
-            expect(rooms[1]).must_be_kind_of Hotel::Room
+            expect(rooms[0]).must_be_kind_of Hotel::Room
 
         end
 

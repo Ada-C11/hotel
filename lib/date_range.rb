@@ -50,5 +50,5 @@ module Hotel
         return date_range.include?(check_date) 
       end
 
-    end
+    end 
   end  

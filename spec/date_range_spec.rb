@@ -5,6 +5,50 @@ describe "DateRange" do
         @check_in_date = Hotel::DateRange.check_in_date(2019, 02, 10)
         @check_out_date = Hotel::DateRange.check_out_date(2019, 02, 02)
     end
+
+    describe "self.valid_checkin_dates?" do
+
+        it "Returns false if given invalid checkin dates" do
+            expect(Hotel::DateRange.valid_checkin_dates?(2019, 45, 3)).must_equal false
+        end
+
+        it "Returns true if given valid checkin dates" do 
+            expect (Hotel::DateRange.valid_checkin_dates?(2019, 11, 13)).must_equal true
+        end
+    end
+
+    describe "self.valid_checkout_dates?" do
+
+        it "Returns false if given invalid checkout dates" do
+            expect(Hotel::DateRange.valid_checkout_dates?(2019, 55, 3)).must_equal false
+        end
+
+        it "Returns true if given valid checkin dates" do 
+            expect (Hotel::DateRange.valid_checkin_dates?(2019, 9, 13)).must_equal true
+        end
+    end
+
+    describe "self.check_in_dates" do
+
+        it "Returns a date object" do
+            expect(Hotel::DateRange.check_in_date(2019, 12, 03)).must_be_instance_of Date
+        end
+
+        it "Returns correct date object" do 
+            expect (Hotel::DateRange.check_in_date(2019, 11, 13)).must_equal Date.parse("20191113")
+        end
+    end
+
+    describe "self.check_out_dates" do
+
+        it "Returns a date object" do
+            expect(Hotel::DateRange.check_out_date(2019, 8, 03)).must_be_instance_of Date
+        end
+
+        it "Returns correct date object" do 
+            expect (Hotel::DateRange.check_out_date(2019, 07, 23)).must_equal Date.parse("20190723")
+        end
+    end
     
     it "Returns false if given invalid dates" do
        expect(Hotel::DateRange.valid_dates?(@check_in_date, @check_out_date)).must_equal false

@@ -42,7 +42,7 @@ module Hotel
       reservation = Hotel::Reservation.new(check_in_date, check_out_date, room)
       @all_reservations << reservation
       return reservation  
- 
+  
     end
 
     def list_all_rooms
