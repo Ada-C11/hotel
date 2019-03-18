@@ -18,10 +18,6 @@ class Reservation
     raise ArgumentError, "invalid status" if status_options.include?(block_room_status) == false
     @block_room_status = block_room_status
     @discount = discount
-
-    #raise an argument if not date class
-    #also probably should raise an argument that it needs to be in the future... but this could be some murakami style hotel
-
   end
 
   def cost

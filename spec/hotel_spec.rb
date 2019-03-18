@@ -18,8 +18,6 @@ describe "Hotel class" do
       expect(hotel.reservations).must_be_kind_of Array
     end
 
-    #it throws an argument error if it tries to book something already reserved
-
     it "returns a list of rooms" do
       expect(hotel.list_rooms().length).must_equal 20
     end
@@ -64,8 +62,6 @@ describe "Hotel class" do
       5.times do
         hotel.reserve_available_room(check_in: Date.new(2005, 2, 3), check_out: Date.new(2005, 2, 9))
       end
-
-      #honestly no idea why this doesn't work, it shows 15 when cutting and pasting in pry
       expect(hotel.available_rooms(check_in: Date.new(2005, 2, 3), check_out: Date.new(2005, 2, 9)).length).must_equal 15
     end
 
@@ -96,26 +92,4 @@ describe "Hotel class" do
       end
     end
   end
-
-  #it returns an array of available rooms
-  #it throws an argument error if there is no available room
-
 end
-
-#must check that it is available on the last day of the reservation
-#must check that it even if check in and check out day are clear, theres not a reservation between them
-
-# Two dates overlap if Date A compared to Date B:
-# - Same dates
-# - Overlaps in the front
-# - Overlaps in the back
-# - Completely contained
-# - Completely containing
-
-# Two dates are not overlapping if Date A compared to Date B:
-# - Completely before
-# - Completely after
-# - Ends on the checkin date
-# - Starts on the checkout date
-
-# return empty array if there are no available rooms
