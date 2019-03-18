@@ -63,10 +63,10 @@ describe "Booker" do
     end
   end
 
+  let(:valid_block) {
+    Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
+  }
   describe "Booker#set_up_block" do
-    let(:valid_block) {
-      Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
-    }
     it "will add block to each room in rooms_collection" do
       rooms_collect = [2, 3, 5].map do |id|
         manifest.find_room(id: id)
@@ -93,6 +93,17 @@ describe "Booker" do
       expect {
         booker.set_aside_block(block: valid_block, rooms_collection: [7, 6, 5, 4, 3, 4].map { |id| manifest.find_room(id: id) })
       }.must_raise InvalidBlock
+    end
+  end
+
+  describe "Book#book_room_associated_with_block" do
+    it "will create reservation and add it to room" do
+      before_booking_reservation_from_block = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
+                                                                     check_out: Time.new.to_date + 4)
+      room_7 = manifest.find_room(id: 7)
+      booker.book(reservation: before_booking_reservation_from_block, room: room_7)
+      booker.book_room_associated_with_block(block: valid_block, room: room_7)
+      expect(room_7.unavailable_list.last).wont_equal before_booking_reservation_from_block
     end
   end
 end

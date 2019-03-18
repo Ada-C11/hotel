@@ -39,7 +39,11 @@ module Hotel
       return reservation.cost
     end
 
-    def book_room_associated_with_block()
+    def book_room_associated_with_block(block:, room:)
+      book(reservation: Reservation.new(check_in: block.check_in,
+                                        check_out: block.check_out),
+           room: room,
+           percent_discount: block.percent_discount)
     end
   end
 end
