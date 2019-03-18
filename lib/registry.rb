@@ -28,11 +28,6 @@ module Hotel
       !@okay_rooms.empty?
     end
 
-    def list_available(check_in, check_out)
-      available?(check_in, check_out)
-      @okay_rooms
-    end
-
     def concurrences(date1, date2 = nil)
       inquery = Date.parse(date1)
       if date2
@@ -46,6 +41,11 @@ module Hotel
         end
       end
       concurrences
+    end
+
+    def list_available(check_in, check_out = nil)
+      available?(check_in, check_out)
+      @okay_rooms
     end
   end
 end

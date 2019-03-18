@@ -8,7 +8,7 @@ module Hotel
 
     def initialize(check_in, check_out, room)
       raise Errors::ValidationError if check_in.nil? || check_out.nil?
-      raise Errors::NotThatKindofHotelPal if check_in == check_out
+      raise Errors::NotThatKindaHotelPal if check_in == check_out
       raise Errors::ReverseDates if check_in > check_out
 
       @check_in = Date.parse(check_in)
