@@ -79,17 +79,18 @@ class RoomBooker < Date
 
     rooms_needed.times do
       room = find_available_room(check_in: check_in, check_out: check_out)
-      room.booked_on(check_in:check_in, check_out: check_out)
+      room.booked_on(check_in: check_in, check_out: check_out)
       block_of_rooms << room
     end
 
-    if block_of_rooms.length < rooms_needed 
+    if block_of_rooms.length < rooms_needed
       raise ArgumentError, "We cannot book this block reservation due to insufficient room availability"
-    elsif block_of_rooms > 5
+    elsif block_of_rooms.length > 5
       raise ArgumentError, "We cannot block more than 5 rooms per party."
+    end
 
     make_block = BlockParty.new(check_in: check_in, check_out: check_out, blocked_rooms: block_of_rooms, discount: 150)
-
+    binding.pry
     return make_block
   end
 end
