@@ -51,29 +51,10 @@ module Hotel
       @blocks[access_code] = new_block
     end
 
-    def list_block_reserved_rooms(access_code)
-      reserved_block_rooms = []
-      @blocks[access_code].block_reservations.each do |reservation| 
-        reserved_block_rooms << reservation.room.room_num
-      end
-      return reserved_block_rooms
-    end
-
-    def block_room_available?(access_code)
-      #check whether a given block has any rooms available
-      block_rooms  = @blocks[access_code].rooms.map { |room| room.room_num}
-      available_block_rooms = []
-      block_rooms.each do |block_room|
-        if !(list_block_reserved_rooms(access_code).include?(block_room))
-          available_block_rooms << block_room
-        end
-      end
-      return available_block_rooms
-    end
-
     def reserve_from_block(room_num, access_code)
       raise ArgumentError.new("Access code #{access_code} is invalid") if !(@blocks.keys.include?(access_code))
       raise ArgumentError.new("This block room has already been reserved.") if list_block_reserved_rooms(access_code).include?(room_num)
+      
       block = @blocks[access_code]
       room = block.rooms.find { |room| room.room_num == room_num }
       raise ArgumentError.new("Room #{room_num} is not available in this block") if room == nil
@@ -89,7 +70,6 @@ module Hotel
     end
 
     def find_reservation(date)
-      #returns reservations for a specified date
       reservation_by_date = []
       @reservations.each do |r|
         if r.date_range.is_included?(date)
@@ -121,6 +101,26 @@ module Hotel
       return block_rooms
     end
 
+    def list_block_reserved_rooms(access_code)
+      reserved_block_rooms = []
+      @blocks[access_code].block_reservations.each do |reservation| 
+        reserved_block_rooms << reservation.room.room_num
+      end
+      return reserved_block_rooms
+    end
+
+    def block_room_available?(access_code)
+      #check whether a given block has any rooms available
+      block_rooms  = @blocks[access_code].rooms.map { |room| room.room_num}
+      available_block_rooms = []
+      block_rooms.each do |block_room|
+        if !(list_block_reserved_rooms(access_code).include?(block_room))
+          available_block_rooms << block_room
+        end
+      end
+      return available_block_rooms
+    end
+
     def find_available_room(start_date, end_date)
       available_rooms = []
       @rooms.each do |room|
@@ -134,6 +134,5 @@ module Hotel
     def find_room(room_num)
       return @rooms.find { |room| room.room_num == room_num }
     end
-
   end
 end
