@@ -29,5 +29,9 @@ module Hotel
       end
       return false
     end
+
+    def has_unavailable_object?(unavailable_object:)
+      return true if unavailable_list.find { |unavail_obj| unavail_obj == unavailable_object }
+    end
   end
 end

@@ -40,6 +40,7 @@ module Hotel
     end
 
     def book_room_associated_with_block(block:, room:)
+      raise InvalidBlock.new("Room not in block") if room.unavailable_list.include?(block)
       book(reservation: Reservation.new(check_in: block.check_in,
                                         check_out: block.check_out),
            room: room,

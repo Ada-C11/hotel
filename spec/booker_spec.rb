@@ -105,5 +105,12 @@ describe "Booker" do
       booker.book_room_associated_with_block(block: valid_block, room: room_7)
       expect(room_7.unavailable_list.last).wont_equal before_booking_reservation_from_block
     end
+
+    it "will raise error if room is not part of block" do
+      room_12 = manifest.find_room(id: 12)
+      expect {
+        booker.book_room_associated_with_block(block: valid_block, room: room_12)
+      }.must_raise InvalidBlock
+    end
   end
 end
