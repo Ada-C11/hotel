@@ -7,6 +7,8 @@ require_relative "reservation.rb"
 
 module Hotel
   class Block
+    attr_reader :rooms, :discounted_rate, :check_in, :check_out
+
     def initialize(rooms:, discounted_rate:, check_in:, check_out:)
       @rooms = rooms
       @discounted_rate = discounted_rate
