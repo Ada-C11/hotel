@@ -35,6 +35,18 @@ module Hotel
       end
     end
 
+    def find_reservation_by_id(id:)
+      index = 0
+      if id.class == Integer
+        @reservations.find do |reservation|
+          if reservation.id == id
+            return reservation
+          end
+        end
+        raise ArgumentError, "Invalid reservation id"
+      end
+    end
+
     def validate_room_availability(start_date, end_date, room_selected)
       begin
         rooms_available = find_available_rooms(start_date, end_date)
@@ -55,16 +67,21 @@ module Hotel
       end
     end
 
-    def find_reservation_by_id(id:)
-      index = 0
-      if id.class == Integer
-        @reservations.find do |reservation|
-          if reservation.id == id
-            return reservation
-          end
-        end
-        raise ArgumentError, "Invalid reservation id"
+    def find_available_rooms(start_date, end_date)
+      reservations = find_reservation_by_date(start_date, end_date)
+      reserved_rooms = []
+      reservations.each do |reservation|
+        reserved_rooms << reservation.room_number
       end
+      return available_rooms(reserved_rooms)
+    end
+
+    def available_rooms(reserved_rooms)
+      available_rooms = rooms
+      reserved_rooms.each do |room|
+        available_rooms -= reserved_rooms
+      end
+      return available_rooms
     end
 
     def find_reservation_by_date(start_date_find, end_date_find)
@@ -83,16 +100,6 @@ module Hotel
           return reservations_found
         end
       end
-    end
-
-    def find_available_rooms(start_date, end_date)
-      reservations = find_reservation_by_date(start_date, end_date)
-      reserved_rooms = []
-      reservations.each do |reservation|
-        reserved_rooms << reservation.room_number
-      end
-      available_rooms = rooms - reserved_rooms
-      return available_rooms
     end
   end
 end
