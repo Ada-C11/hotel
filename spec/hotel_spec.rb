@@ -1,5 +1,6 @@
 require_relative "spec_helper"
 require "Date"
+require "pry"
 describe "Hotel class" do
   before do
     @rooms = []
@@ -77,8 +78,6 @@ describe "Hotel class" do
     end
 
     it "desired reservation starts before and ends during existing reservation " do
-      # new_reservation5 = @hotel.reserve_room(337, Date.new(2001, 3, 4), Date.new(2001, 3, 12), 15)
-      # @hotel.add_reservation(new_reservation5)
       start_date = Date.new(2001, 3, 2)
       end_date = Date.new(2001, 3, 6)
       expect(@hotel.available_rooms(start_date, end_date)).must_equal [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19]
@@ -146,21 +145,27 @@ describe "Hotel class" do
   describe "#reserve_hotel_block" do
     before do
       new_reservation = @hotel.reserve_room(Date.new(2001, 3, 5), Date.new(2001, 3, 7), 0)
-
       @collection_rooms = [@rooms[0], @rooms[1], @rooms[2], @rooms[3], @rooms[4]]
       start_date = Date.new(2001, 2, 5)
       end_date = Date.new(2001, 2, 10)
-      @discounted_rate = 150
-      @hotel_block_reserved = @hotel.reserve_hotel_block(1, start_date, end_date, @collection_rooms, @discounted_rate)
+      @discounted_rate = 0.2
+      @block_id = rand(1..100)
+      @hotel_block_reserved = @hotel.reserve_hotel_block(@block_id, start_date, end_date, @collection_rooms, @discounted_rate)
       expect(@hotel_block_reserved).must_be_kind_of Hotel::Block
-      @collection_rooms.each do |room|
-        room.add_block(@hotel_block_reserved)
-      end
     end
+
+    it "raises an argument error if more than 5 rooms are chosen in a block" do
+      start_date = Date.new(2001, 2, 5)
+      end_date = Date.new(2001, 2, 10)
+      other_collection = [@rooms[0], @rooms[1], @rooms[2], @rooms[3], @rooms[4], @rooms[5]]
+      expect { @hotel.reserve_hotel_block(@block_id, start_date, end_date, other_collection, @discounted_rate) }.must_raise ArgumentError
+    end
+
     it "raises an argument error if tries to create Hotel Block and one of the rooms is reserved for the given date range" do
       start_date = Date.new(2001, 3, 5)
       end_date = Date.new(2001, 3, 10)
-      expect { @hotel.reserve_hotel_block(1, start_date, end_date, @collection_rooms, @discounted_rate) }.must_raise ArgumentError
+      block_id2 = rand(1..100)
+      expect { @hotel.reserve_hotel_block(block_id2, start_date, end_date, @collection_rooms, @discounted_rate) }.must_raise ArgumentError
     end
 
     it "raises an error if tries to reserve a room that is set aside in a hotel block" do
@@ -173,21 +178,61 @@ describe "Hotel class" do
       @new_collection = [@collection_rooms[0], @rooms[5]]
       start_date = Date.new(2001, 2, 6)
       end_date = Date.new(2001, 2, 10)
-      expect { @hotel.reserve_hotel_block(1, start_date, end_date, @new_collection, @discounted_rate) }.must_raise ArgumentError
+      block_id2 = @hotel.create_block_id
+      expect { @hotel.reserve_hotel_block(block_id2, start_date, end_date, @new_collection, @discounted_rate) }.must_raise ArgumentError
     end
 
     it "is able to set aside a hotel block when the end date of one hotel block overlaps with the start date of another hotel block" do
       @new_collection = [@collection_rooms[0], @rooms[5]]
       start_date = Date.new(2001, 2, 10)
       end_date = Date.new(2001, 2, 17)
-      expect (@hotel.reserve_hotel_block(1, start_date, end_date, @new_collection, @discounted_rate)).must_be_kind_of Hotel::Block
+      block_id2 = @hotel.create_block_id
+      expect (@hotel.reserve_hotel_block(block_id2, start_date, end_date, @new_collection, @discounted_rate)).must_be_kind_of Hotel::Block
     end
 
     describe "#add_hotel_block" do
       it "adds block to hotel instance variable @hotel_block" do
-        @hotel.add_hotel_block(@hotel_block_reserved)
         expect(@hotel.hotel_blocks.length).must_equal 1
         expect(@hotel.hotel_blocks[0]).must_be_kind_of Hotel::Block
+      end
+    end
+
+    describe "Reserve room in hotel block" do
+      before do
+      end
+      it "can get a correct list of available rooms in a hotel block" do
+        collection_ids = @collection_rooms.map { |room| room.id }
+        expect(@hotel.available_rooms_block(@block_id)).must_equal collection_ids
+      end
+
+      it "reserves a room set aside in a hotel block" do
+        room_id = @collection_rooms[0].id
+        block_id = @hotel_block_reserved.id
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        collection_ids = @collection_rooms.map { |room| room.id }
+        avail_room_ids = collection_ids - [room_id]
+        expect(reserved_room).must_be_kind_of Hotel::Reservation
+        # binding.pry
+        expect(@hotel.available_rooms_block(@block_id)).must_equal avail_room_ids
+      end
+
+      it "user can see reservation made from a hotel block from the list of reservations for that date" do
+        room_id = @collection_rooms[0].id
+        block_id = @hotel_block_reserved.id
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        start_date = reserved_room.start_date
+        # should test #access_reservations for more dates
+        expect(@hotel.access_reservations(start_date).include?(reserved_room)).must_equal true
+      end
+
+      it "calculates the cost correctly for a given discounted rate" do
+        room_id = @collection_rooms[0].id
+        block_id = @hotel_block_reserved.id
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        start_date = reserved_room.start_date
+        end_date = reserved_room.end_date
+        expected_cost = (end_date - start_date).to_i * @collection_rooms[0].cost * (1 - @discounted_rate)
+        expect(reserved_room.total_cost).must_equal expected_cost
       end
     end
   end
