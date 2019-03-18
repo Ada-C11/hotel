@@ -1,0 +1,1 @@
+I'd like to get wave 3 working. Especially clean up reservations and play with an idea I have about having a reservations class, and also a block class. 
