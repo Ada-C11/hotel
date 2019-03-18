@@ -1,0 +1,7 @@
+1. Consider renaming reservation_array, blocked_rooms_array, and blocked_reservation_array something clear that does not include "array"
+2. Work on logic in make_block_reservation method (possibly adjust view_available_rooms method and use that like I do in make_reservation method
+3. Reservation class and ReservationManager class are fairly tightly coupled, 
+    a. Investigate feeding in instance of Reservation into ReservationManager instead of instantiating it in the class. 
+    b. The logic for sorting through arrays of instances of Reservation (reservation_array and blocked_reservation_array) in ReservationManager involves using .room, .duration, etc from Reservation class. I think that this also makes it more tightly coupled. Think about how to adjust this. 
+4. Limit keyword arguments to what they are necessary for - it doesn't make a lot of sense to have a default for end and start date, a reservation should *always* be instantiated with one, and if the user doesn't enter one, it's better to raise an error than assume a start date of today and an end date of tomorrow 
+5. DRY up tests by using more let 
