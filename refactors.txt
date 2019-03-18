@@ -1,0 +1,7 @@
+Changes to make:
+
+1. Reintroduce a Date Range class
+2. Find a more organized way to calculate block availability
+3. Calculate total cost of blocks with discounted rate
+4. Organize the hotel blocks class so that flow of methods is easier to understand
+5. Get rid of methods that do duplicate things
