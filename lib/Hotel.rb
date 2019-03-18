@@ -12,10 +12,11 @@ class Hotel
     if room == nil
       room = available_rooms(check_in: check_in, check_out: check_out).first
     end
+    if available_rooms(check_in: check_in, check_out: check_out).include?(room) == false
+      raise ArgumentError, "that room is not available"
+    end
     reservation = Reservation.new(check_in: check_in, check_out: check_out, room: room)
     @reservations << reservation
-    #add argument error if there is a booking already at that day
-
   end
 
   def list_rooms()
@@ -30,7 +31,8 @@ class Hotel
   end
 
   def available_rooms(check_in:, check_out:)
-    dates = (check_in..check_out - 1).to_a
+    #why is it if I include check out above, it doesn't work below
+    dates = (check_in..(check_out - 1)).to_a
     booked_rooms = []
     dates.each do |date|
       reservation_by_date(date).each do |res|
@@ -41,9 +43,19 @@ class Hotel
     return available_rooms
   end
 
-  def reserve_available_room(check_in:, check_out:)
+  def reserve_available_room(check_in:, check_out:, room: nil)
     available = available_rooms(check_in: check_in, check_out: check_out)
-    raise ArgumentError, "no available rooms" if available == nil
-    make_reservation(check_in: check_in, check_out: check_out, room: available.first)
+    raise ArgumentError, "no available rooms" if available.length == 0
+    if room == nil
+      make_reservation(check_in: check_in, check_out: check_out, room: available.first)
+    else
+      make_reservation(check_in: check_in, check_out: check_out, room: room)
+    end
+  end
+
+  def create_hotel_block(check_in:, check_out:, block_size:, block_name:, block_discount: nil)
+    raise ArgumentError, "block cannot be larger than 5" if block_size > 5
+    available = available_rooms(check_in: check_in, check_out: check_out)
+    raise ArgumentError, "there are not enough available rooms to reserve the block" if available.length < block_size
   end
 end
