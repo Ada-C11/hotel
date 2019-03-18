@@ -39,7 +39,7 @@ describe "ReservationManager class" do
       expect(first_reservation.all_dates[0]).must_equal Date.parse("Feb12")
       expect(first_reservation.room.number).must_be :<=, 20
       expect(first_reservation.room.number).must_be :>, 0
-      expect(first_reservation.block_name).must_equal nil
+      assert_nil(first_reservation.block_name, msg = nil)
     end
 
     it "adds the reservation to the room" do
@@ -218,7 +218,7 @@ describe "ReservationManager class" do
         if index == 0
           expect(@manager.reservations[index].booking_name).must_equal "Kaida"
         else
-          expect(@manager.reservations.last.booking_name).must_equal nil
+          assert_nil(@manager.reservations.last.booking_name, msg = nil)
         end
       end
       expect(@manager.reservations_by_date("jun22").first.booking_name).must_equal "Kaida"
