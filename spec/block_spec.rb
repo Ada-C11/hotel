@@ -64,4 +64,32 @@ describe "Block" do
       end
     end
   end
+  before do
+    valid_block.set_number_available(4)
+  end
+
+  describe "Block#Test methods related to number_available" do
+    it "saves the number passed to number_available" do
+      expect(valid_block.number_available).must_equal 4
+    end
+
+    it "decreases number available" do
+      2.times { valid_block.decrease_number_available }
+      expect(valid_block.number_available).must_equal 2
+    end
+
+    it "will check if room available, that is number_available > 0 will return true" do
+      expect(valid_block.has_room_available?).must_equal true
+    end
+
+    it "does not decrease past 0" do
+      10.times { valid_block.decrease_number_available }
+      expect(valid_block.number_available).must_equal 0
+    end
+
+    it "will check if room available, that is number_available < 0 will return false" do
+      10.times { valid_block.decrease_number_available }
+      expect(valid_block.has_room_available?).must_equal false
+    end
+  end
 end
