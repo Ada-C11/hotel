@@ -1,6 +1,16 @@
 require_relative "spec_helper"
 require "date"
 
+describe "Reservation class" do
+  it "lists all reservations" do
+    reservations = Hotel::Reservation.all
+
+    reservations.each do |reservation|
+      expect(reservation).must_be_kind_of Hotel::Reservation
+    end
+  end
+end
+
 describe "Room class" do
   it "must list all the rooms" do
     rooms = Hotel::Room.all
@@ -47,5 +57,19 @@ describe "Room class" do
     rooms.each do |room|
       expect(room).must_be_kind_of Hotel::Room
     end
+  end
+
+  it "can view a list of rooms that are not reserved for a given date range" do
+    rooms = Hotel::Room.load_test_data([
+      [Date.new(2019, 3, 13), Date.new(2019, 3, 15)],
+      [Date.new(2019, 3, 12), Date.new(2019, 3, 16)],
+      [Date.new(2019, 4, 16), Date.new(2019, 4, 18)],
+      [Date.new(2019, 5, 13), Date.new(2019, 6, 15)],
+    ])
+    dates = Date.new(2019, 3, 17), Date.new(2019, 3, 19)
+    available_rooms = Hotel::Room.new(Hotel::Room.all)
+    rooms_available = available_rooms.all_available_rooms_on(*dates)
+
+    expect(rooms_available.length).must_equal 20
   end
 end
