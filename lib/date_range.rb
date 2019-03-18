@@ -1,8 +1,5 @@
 require 'date'
 
-require_relative 'reservation'
-require_relative 'block'
-
 module Hotel
   class DateRange
     attr_reader :start_date, :end_date
