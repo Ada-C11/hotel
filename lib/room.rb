@@ -15,6 +15,8 @@ module Hotel
         return true
       elsif night
         return booked_nights.include?(night) ? false : true
+      else
+        raise ArgumentError, "Night or nights must be provided"
       end
     end
 
