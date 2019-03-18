@@ -75,6 +75,10 @@ module HotelGroup
         raise ArgumentError, "End time must be later than start time"
       end
 
+      if room && !@rooms.include?(room)
+        raise ArgumentError, "Invalid room"
+      end
+
       if room && (!room.is_available?(start_time, end_time) && !block)
         raise ArgumentError, "Room #{room.number} is unavailable"
       end
@@ -82,7 +86,7 @@ module HotelGroup
       room ||= find_available_rooms(start_time, end_time)[0]
 
       if !room
-        puts "No vacancy for the specified dates"
+        raise ArgumentError, "No vacancy for the specified dates"
       end
 
       reservation = Reservation.new(create_res_id, start_time, end_time, room)

@@ -84,6 +84,25 @@ describe "hotel class" do
     end
   end
 
+  it "raises an error when no rooms are available" do
+    @hotel.rooms = [HotelGroup::Room.new(1, 200)]
+    start_date = Date.new(2019, 7, 7)
+    end_date = Date.new(2019, 7, 9)
+    @hotel.make_reservation(start_date, end_date)
+
+    expect { @hotel.make_reservation(start_date, end_date) }.must_raise ArgumentError
+  end
+
+  it "raises an error when invalid room is passed to make_reservation" do
+    invalid_room = HotelGroup::Room.new(3, 200)
+
+    @hotel.rooms = [HotelGroup::Room.new(1, 200)]
+    start_date = Date.new(2019, 7, 7)
+    end_date = Date.new(2019, 7, 9)
+
+    expect { @hotel.make_reservation(start_date, end_date, room: invalid_room) }.must_raise ArgumentError
+  end
+
   describe "hotel block creation" do
     before do
       @hotel = HotelGroup::Hotel.new

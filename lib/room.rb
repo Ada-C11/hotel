@@ -82,7 +82,6 @@ module HotelGroup
     end
 
     def is_in_block?(block)
-      puts blocks.length
       blocks.each do |id|
         if id == block.id
           return true

@@ -35,7 +35,7 @@ describe "reservation class" do
     end
 
     it "prints itself nicely" do
-      expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total cost: $Total price for reservation 1: $600.00"
+      expect(@res.print_nicely).must_equal "Reservation 1: Room 3 from 2019-03-03 to 2019-03-06. Total price for reservation 1: $600.00"
     end
   end
 
