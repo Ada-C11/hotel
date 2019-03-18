@@ -28,11 +28,22 @@ module Hotel
           # puts "#{rooms_validated}"
         end
       end
-
       id = @blocks.length + 1
       new_block = Block.new(id, start_date, end_date, rooms, rate_discount)
       @blocks << new_block
       return new_block
+    end
+
+    def create_reservation_from_block(id, room) #(id, start_date, end_date, room, rate_discount)
+      block = find_block_by_id(id)
+      rooms_block = rooms_available_in_block(id)
+      if rooms_block.include?(room)
+        block.rooms.delete(room)
+        reservation_manager = Hotel::ReservationManager.new
+        reservation_manager.create_reservation(block.start_date, block.end_date, room)
+      else
+        raise ArgumentError, "The room does not belong to the block"
+      end
     end
 
     def validate_date_range(start_date, end_date)
@@ -92,11 +103,14 @@ module Hotel
         rooms_in_blocks << block.rooms #array
       end
 
-      available_rooms = rooms #MAYBE CAN PUT THIS IN AN AUXILIARY METHOD?? SO ITS THE SAME FOR BLOCK AND RESERVATION
+      return available_rooms(rooms_in_blocks)
+    end
+
+    def available_rooms(rooms_in_blocks)
+      available_rooms = rooms
       rooms_in_blocks.each do |rooms_block|
         available_rooms -= rooms_block
       end
-
       return available_rooms
     end
 
