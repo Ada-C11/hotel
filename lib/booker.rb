@@ -11,6 +11,7 @@ class RoomBooker < Date
   def initialize(rooms:)
     @rooms = rooms
     @reservations = []
+    @blocked_reservations = []
   end
 
   def book_reservation(check_in:, check_out:)
@@ -70,6 +71,23 @@ class RoomBooker < Date
       raise ArgumentError, "No rooms are available for the provided date range."
     end
     return open_rooms
+  end
+
+  # working on blocked rooms
+
+  def reserve_blocks(check_in:, check_out:, rooms_needed:, discount_price:)
+    raise ArgumentError if rooms_needed > 5
+    reserved_block = []
+
+    rooms_needed.times do |i|
+      room = find_available_room(check_in: check_in,  check_out: check_out )
+      reserved_block << room
+    end
+
+    if reserved_block.length < rooms_needed
+      raise ArgumentError, "We cannot book this block reservation due to insufficient room availability"
+    end
+
   end
 
 end
