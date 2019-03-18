@@ -1,3 +1,5 @@
+require "date"
+
 module HotelSystem
   class Room
     attr_reader :room_number, :reservations, :block_date_ranges
