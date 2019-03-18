@@ -40,7 +40,7 @@ module Hotel
       reservations << reservation
     end
 
-    def access_reservations(date) # this is wrong
+    def access_reservations(date)
       list_reservations = @reservations.select { |reservation| (Range.new(reservation.start_date, reservation.end_date)).include?(date) }
       return list_reservations.map { |reservation| reservation }
     end
@@ -94,7 +94,7 @@ module Hotel
         block = find_block(block_id)
         reserve_room(block.start_date, block.end_date, room_id, block_id)
       else
-        puts "can't reserve room in block"
+        puts "can't reserve room in block, there's a bug in your code"
       end
     end
   end
