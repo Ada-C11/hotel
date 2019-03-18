@@ -3,5 +3,4 @@ module Errors
   class ValidationError < StandardError; end
   class ReverseDates < StandardError; end
   class NotThatKindaHotelPal < StandardError; end
-  class BlockFull <StandardError; end
 end

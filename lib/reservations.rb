@@ -4,9 +4,9 @@ require_relative "errors.rb"
 COST = 200
 module Hotel
   class Reservation
-    attr_reader :check_in, :check_out, :room, :block_id
+    attr_reader :check_in, :check_out, :room
 
-    def initialize(check_in, check_out, room, block_id = nil)
+    def initialize(check_in, check_out, room)
       raise Errors::ValidationError if check_in.nil? || check_out.nil?
       raise Errors::NotThatKindaHotelPal if check_in == check_out
       raise Errors::ReverseDates if check_in > check_out
@@ -14,7 +14,6 @@ module Hotel
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       @room = room
-      @block_id = block_id
     end
 
     def range
@@ -26,8 +25,7 @@ module Hotel
     end
 
     def total
-      total = block_id ? ((COST * DISCOUNT) * duration).to_f : (COST * duration).to_f
-      total
+      (COST * duration).to_f
     end
   end
 end
