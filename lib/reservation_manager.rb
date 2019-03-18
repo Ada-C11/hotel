@@ -7,6 +7,7 @@ module Hotel
   class ReservationManager
     #add constant for room numbers
     MAX_ROOMS = 20
+    ROOM_RATE = 200
 
     def initialize
       @reservations = []
@@ -24,15 +25,15 @@ module Hotel
         raise ArgumentError, "There are no available rooms for this time period"
       else
         room_number = available_rooms(check_in, check_out).first
+        # reservation_rate = reservation_cost(check_in, check_out)
+
         new_reservation = Hotel::Reservation.new(room_number,
                                                  check_in,
                                                  check_out)
-
-        # @reservations << new_reservation
       end
       @reservations << new_reservation
 
-      return new_reservation
+      return @reservations
     end
 
     def reservations_by_date(start_date, end_date)
@@ -83,11 +84,8 @@ module Hotel
       end
 
       all_unavail_rooms = unavail_rooms + unavail_block_rms
-      # ap all_unavail_rooms
 
       all_avail_rooms = all_rooms.reject { |rm_num| all_unavail_rooms.include? rm_num }
-
-      # ap all_avail_rooms
 
       return all_avail_rooms
     end
@@ -106,8 +104,6 @@ module Hotel
                                                      check_out, block_id: block_id)
 
           @block << block_reservation
-          # return block_reservation
-
         end
       end
       return @block

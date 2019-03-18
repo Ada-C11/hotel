@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "Reservation instantiation" do
   it "is an instance of Reservation " do
-    trip = Hotel::Reservation.new(5, "dec 15, 2019", "dec 20, 2019")
+    trip = Hotel::Reservation.new(5, "dec 15, 2019", "dec 20, 2019", block_id: 2)
     expect(trip).must_be_kind_of Hotel::Reservation
   end
 

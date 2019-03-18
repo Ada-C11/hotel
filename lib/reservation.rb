@@ -20,8 +20,8 @@ module Hotel
       (check_out - check_in) * ROOM_RATE
     end
 
-    def block_room_cost
-      (check_out - check_in) * ROOM_RATE * 0.8
+    def block_room_cost(discount)
+      (check_out - check_in) * ROOM_RATE * discount
     end
   end
 end
