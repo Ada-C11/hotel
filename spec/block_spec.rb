@@ -18,7 +18,7 @@ describe "Block class" do
 
     start_date = Date.new(2001, 2, 5)
     end_date = Date.new(2001, 2, 10)
-    @discounted_rate = 150
+    @discounted_rate = 0.2
     @hotel_block_reserved = @hotel.reserve_hotel_block(1, start_date, end_date, @collection_rooms, @discounted_rate)
   end
   describe "Block instantiation" do
