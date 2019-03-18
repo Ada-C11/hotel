@@ -5,14 +5,14 @@ require_relative 'date_range'
 
 module HotelManagementSystem
     class HotelManager
-        # attr_reader :reservations # need to access for tests 
+        attr_reader :reservations
 
         def initialize
             @reservations = []
             @rooms = []
 
             1..20.times do |i|
-                room = HotelManagementSystem::Room.new(i + 1)
+                room = HotelManagementSystem::Room.new(room: i + 1)
                 @rooms << room
             end
         end
@@ -26,12 +26,25 @@ module HotelManagementSystem
                 raise ArgumentError, "You have entered an invalid date range."
             end
             
-            # assign a room that is available, this just assigns any room
-            room = @rooms.sample
-            reservation = HotelManagementSystem::Reservation.new(start_date, end_date, room)
+            # assigns first available room to reservation
+            room_assignment = list_available_rooms(start_date, end_date).first
+            raise ArgumentError, "There is no room available for these dates." if room_assignment == nil
+
+            reservation = HotelManagementSystem::Reservation.new(start_date: start_date, end_date: end_date, room: room_assignment)
             @reservations << reservation
             
             return reservation
+        end
+
+        def reservation_cost(reservation)
+            return reservation.total_cost
+        end
+
+        def list_available_rooms(start_date, end_date)
+            dates = start_date..end_date
+            res = reservations_by_date(reservations).map { |reservation| reservation.room }
+            available_rooms = @rooms - res
+            return available_rooms
         end
 
         def reservations_by_date(requested_date)
@@ -43,10 +56,6 @@ module HotelManagementSystem
             end
             
             return reservations_by_date
-        end
-
-        def reservation_cost(reservation)
-            return reservation.total_cost
         end
     end
 end

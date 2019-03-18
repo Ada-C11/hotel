@@ -22,6 +22,4 @@ describe "Date Range" do
     it "determines if requested date is not within range" do
         expect(HotelManagementSystem::DateRange.within_range?(Date.parse('15th Mar 2019'), Date.parse('11th Mar 2019'), Date.parse('18 Mar 2019'))).must_equal false
     end
-
-
 end
