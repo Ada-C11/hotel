@@ -3,3 +3,5 @@
 2. DRY up tests
 3. More coverage (currently at 95%)
 4. Add more edge case tests?
+5. Further flush out the block class
+  a. add more tests?
