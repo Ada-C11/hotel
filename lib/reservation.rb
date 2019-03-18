@@ -8,8 +8,16 @@ class Reservation
   def initialize(name:, room_id:, start_date:, end_date:)
     @name = name
     @room_id = room_id
-    @start_date = start_date
-    @end_date = end_date
+    if start_date.is_a? String
+      @start_date = Date.parse(start_date)
+    else
+      @start_date = start_date
+    end
+    if end_date.is_a? String
+      @end_date = Date.parse(end_date)
+    else
+      @end_date = end_date
+    end
     if @start_date > @end_date
       raise ArgumentError, "The start_date should be before the end_date"
     end
