@@ -32,6 +32,13 @@ module Hotel
     end
 
     def self.nights(check_in_date, check_out_date)
+      nights_stay = []
+      num_nights = (check_out_date - check_in_date)
+      num_nights.to_i.times do |x|
+        night = check_in_date + x
+        nights_stay << night
+      end
+      return nights_stay
     end
 
     # methods to create sorted list in anticipation of binary search
@@ -46,7 +53,30 @@ module Hotel
 
     # will build out binary methods here
 
-    def find_all_avail_rooms(check_in_date, check_out_date)
+    def find_all_avail_rooms(reservations_array, requested_dates)
+      min = 0
+      max = reservations_array.length
+
+      if reservations_array.first == nil
+        return false
+      end
+
+      while min < max
+        mid = (min + max) / 2
+        if !(requested_dates & reservations_array[mid].nights_stay).empty?
+          return true
+        elsif reservations_array[mid].check_in_date > requested_dates.first
+          max = mid - 1
+        elsif reservations_array[mid].check_in_date < requested_dates.first
+          min = mid + 1
+        end
+      end
+
+      if !(requested_dates & reservations_array[0].nights_stay).empty?
+        return true
+      end
+
+      return false
     end
   end
 end

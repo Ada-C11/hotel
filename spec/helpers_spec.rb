@@ -36,11 +36,11 @@ describe "link_room_id_with_reservation_id" do
     @reservation_1 = Hotel::Reservation.new(@input_2)
     @reservation_2 = Hotel::Reservation.new(@input_3)
 
-    Hotel::Helpers.link_room_id_with_reservation_id(@rooms, 1, @reservation)
+    Hotel::Helpers.link_room_id_with_reservation_id(@rooms, 1, @reservation_1)
     expect(@rooms.first.reservations.first.name).must_equal "Suki"
     expect(@rooms.first.reservations.first.room_id).must_equal 1
 
-    Hotel::Helpers.link_room_id_with_reservation_id(@rooms, 1, @reservation2)
+    Hotel::Helpers.link_room_id_with_reservation_id(@rooms, 1, @reservation_2)
     expect(@rooms.first.reservations.first.name).must_equal "Amos"
     expect(@rooms.first.reservations.first.room_id).must_equal 1
   end
