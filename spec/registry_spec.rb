@@ -44,8 +44,7 @@ describe "available? method" do
   end
 
   it "pushes available room numbers to okay_rooms array" do
-    before = @test_registry.okay_rooms.length
-    (5..19).each do |room|
+    before = @test_registry.okay_rooms.length (5..19).each do |room|
       @test_registry.reservations << Hotel::Reservation.new("2019/07/19", "2019/07/25", room)
     end
     @test_registry.available?("2019/07/19", "2019/07/25")

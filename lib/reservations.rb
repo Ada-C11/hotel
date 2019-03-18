@@ -11,6 +11,10 @@ module Hotel
     attr_reader :check_in, :check_out, :room
 
     def initialize(check_in, check_out, room)
+      raise Errors::ValidationError if check_in.nil? || check_out.nil?
+      raise Errors::NotThatKindofHotelPal if check_in == check_out
+      raise Errors::ReverseDates if check_in > check_out
+
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       @room = room
@@ -21,11 +25,11 @@ module Hotel
     end
 
     def duration
-      range.count
+      (range.count - 1)
     end
 
     def total
-      COST * duration
+      (COST * duration).to_f
     end
   end
 end

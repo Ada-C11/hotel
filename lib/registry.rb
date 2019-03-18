@@ -17,9 +17,7 @@ module Hotel
     end
 
     def available?(check_in, check_out)
-      booked = concurrences(check_in, check_out).map do |reservation|
-        reservation.room
-      end
+      booked = concurrences(check_in, check_out).map(&:room)
       @okay_rooms = ROOMS - booked
       !@okay_rooms.empty?
     end
@@ -40,12 +38,14 @@ module Hotel
         @reservations
       else
         raise Errors::BookingConflict
-   end
+      end
+    end
   end
-end
 end
 
 module Errors
   class BookingConflict < StandardError; end
   class ValidationError < StandardError; end
+  class ReverseDates < StandardError; end
+  class NotThatKindofHotelPal < StandardError; end
 end
