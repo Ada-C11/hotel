@@ -1,5 +1,3 @@
-require_relative "reservation"
-
 module Hotel
   class Block
     attr_reader :rooms, :start_date, :end_date, :discount_rate

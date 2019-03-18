@@ -1,5 +1,6 @@
 require_relative "room.rb"
 require_relative "reservation.rb"
+require_relative "block.rb"
 
 module Hotel
   class HotelManager
