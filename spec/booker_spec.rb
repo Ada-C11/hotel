@@ -161,4 +161,36 @@ describe "RoomBooker" do
       }.must_raise ArgumentError
     end
   end
+
+  describe "reserve block" do
+    let(:block_reservation) { RoomBooker.new(rooms: Room.hotel_rooms) }
+    let(:req_date_start) { "January 20th 2020" }
+    let(:req_date_end) { "January 23rd 2020" }
+
+    it "raises an exception when trying to book more than 5 rooms" do
+      expect {
+        block_reservation.reserve_block(check_in: req_date_start, check_out: req_date_end, rooms_needed: 6)
+      }.must_raise ArgumentError
+    end
+
+    it "can find and book available rooms" do
+      successful_block = block_reservation.reserve_block(check_in: req_date_start, check_out: req_date_end, rooms_needed: 3)
+
+      expect(successful_block.blocked_rooms.length).must_equal 3
+    end
+
+    # it "will raise an arument error for dates that are unavailable" do
+    #   test_reservations = RoomBooker.new(rooms: Room.hotel_rooms)
+    #   good_date_in = "March 1st 2021"
+    #   good_date_out = "March 4th 2021"
+    #   20.times do
+    #     test_reservations.book_reservation(check_in: good_date_in, check_out: good_date_out)
+    #   end
+
+    #   tester = block_reservation.reserve_block(check_in: good_date_in, check_out: good_date_out, rooms_needed: 3)
+    #   expect {
+    #     block_reservation.reserve_block(check_in: good_date_in, check_out: good_date_out, rooms_needed: 3)
+    #   }.must_raise ArgumentError
+    # end
+  end
 end

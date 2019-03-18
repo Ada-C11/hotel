@@ -90,7 +90,6 @@ class RoomBooker < Date
     end
 
     make_block = BlockParty.new(check_in: check_in, check_out: check_out, blocked_rooms: block_of_rooms, discount: 150)
-    binding.pry
     return make_block
   end
 end
