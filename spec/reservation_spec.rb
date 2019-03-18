@@ -22,7 +22,7 @@ describe "Reservation class" do
 
         it "raises an ArgumentError if neither a room nor a room number are provided" do
             expect{
-                room = HotelSystem::Reservation.new("cat")
+                room = HotelSystem::Reservation.new(id: 1, date_range: 25)
             }.must_raise ArgumentError
         end
 
