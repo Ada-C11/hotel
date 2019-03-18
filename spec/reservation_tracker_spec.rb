@@ -18,6 +18,11 @@ describe "ReservationTracker" do
     it "raise Argument Error when an unavailable room is reserved for a given day" do
       expect { @tracker.add_reservation("Ngoc", 3, "2019-12-9", "2019-12-23") }.must_raise ArgumentError
     end
+    it "allows reversation to start on the same day that another reservation for the same room ends" do
+      @tracker.add_reservation("Ngoc", 3, "2019-12-23", "2020-1-1")
+      res_no = @tracker.reservations.length
+      expect(res_no).must_equal 4
+    end
   end
 
   describe "ReservationTracker#reservations_by_date" do

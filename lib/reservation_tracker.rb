@@ -1,5 +1,5 @@
 require_relative "reservation"
-require_relative "room"
+require_relative "hotel_blocks"
 require "date"
 require "pry"
 
@@ -45,17 +45,20 @@ class ReservationTracker
   end
 
   def add_reservation(name, room_id, start_date, end_date)
-    available_room = list_avail_room(start_date, end_date)
-    if !available_room.include? room_id
-      raise ArgumentError, "The room is not available"
-    else
+    parsed_start_date = Date.parse(start_date)
+    parsed_end_date = Date.parse(end_date)
+    reservations_by_room = @reservations_per_room[room_id]
+    if reservations_by_room == nil || is_date_range_available?(parsed_start_date, parsed_end_date, reservations_by_room)
       @new_reservation = Reservation.new(name: name, room_id: room_id, start_date: start_date, end_date: end_date)
       @reservations << @new_reservation
       if @reservations_per_room[room_id] == nil
         @reservations_per_room[room_id] = []
       end
+      # end
+      @reservations_per_room[room_id] << @new_reservation
+    else
+      raise ArgumentError, "The room is not available"
     end
-    @reservations_per_room[room_id] << @new_reservation
   end
 end
 
