@@ -327,6 +327,12 @@ describe "hotel class" do
         @hotel.create_block(start_year: 2019, start_month: 4, start_day: 23, num_nights: 5, room_nums: [4, 5], block_rate: 150)
       }.must_raise NotImplementedError
     end
+
+    it "will raise an ArgumentError if more than 5 rooms are passed in" do
+      expect{
+        @hotel.create_block(start_year: 2019, start_month: 4, start_day: 23, num_nights: 5, room_nums: [4, 5, 6, 7, 8, 9], block_rate: 150)
+      }.must_raise ArgumentError
+    end
   end
 
   describe "reserve_block_room method" do

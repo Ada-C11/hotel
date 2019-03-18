@@ -124,6 +124,9 @@ module HotelSystem
 
     def create_block(start_year:, start_month:, start_day:, num_nights:, room_nums:, block_rate:)
       valid_date_entry?(start_year, start_month, start_day)
+      if room_nums.length > 5
+        raise ArgumentError, "A block can only contain a maximum of 5 rooms."
+      end
       block_dates = create_date_range(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
       if room_nums.class != Array
         raise ArgumentError, "Please enter an array of room numbers for room_nums, even if it has only one room number."
