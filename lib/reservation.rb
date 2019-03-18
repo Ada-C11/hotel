@@ -11,7 +11,7 @@ class Reservation
     @start_date = Date.parse(start_date)
     @end_date = Date.parse(end_date)
     if @start_date > @end_date
-      raise ArgumentError, "start_date or end_date has not been enterred or the start_date is after the end_date"
+      raise ArgumentError, "The start_date should be before the end_date"
     end
 
     @total_cost = total_cost
