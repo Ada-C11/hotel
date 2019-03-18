@@ -1,10 +1,10 @@
 1. ADD MORE TESTS. ALWAYS MORE TESTS.
 2. Refactor existing tests. They're not very DRY.
 3. Refactor overlap methods in block and reservation to handle both dates and date ranges
-4. Give blocks the ability to reserve their own rooms. Hotel does too much in its reserve_from_block method
-
-4. Many classes have similar methods. Try to implement an inheritance relationship with an abstract class.
-5. Find more class-specific methods (like what was previously add_res_to_block and add_res_to_room) that I can combine with duck typing
-6. Convert things to keyword args when possible
-7. See where I can make composition one-way (most of my composition relationships are currently 2-way)
-8. Try to implement CSV capabilities? (optional prompt #2)
+4. Refactor reservations by date and blocks by date to handle date ranges.
+5. Give blocks the ability to reserve their own rooms. Hotel does too much in its reserve_from_block method
+6. Many classes have similar methods. Try to implement an inheritance relationship with an abstract class.
+7. Find more class-specific methods (like what was previously add_res_to_block and add_res_to_room) that I can combine with duck typing
+8. Convert things to keyword args when possible
+9. See where I can make composition one-way (most of my composition relationships are currently 2-way)
+10. Try to implement CSV capabilities? (optional prompt #2)
