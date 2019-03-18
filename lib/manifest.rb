@@ -40,12 +40,6 @@ module Hotel
       return nil
     end
 
-    def list_unavailable_rooms_by_date(date:)
-      return rooms.reject do |room|
-               room.available?(date: date)
-             end
-    end
-
     def list_rooms_with_reservations_by_date(date:)
       return rooms.select do |room|
                room.reservation?(date: date)
