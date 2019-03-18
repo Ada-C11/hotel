@@ -13,9 +13,9 @@ describe "BlockManager" do
     block = block_manager_new.create_block(start_date, end_date, rooms, rate_discount)
   end
 
-  # let(:manager_new) do
-  #   Hotel::ReservationManager.new
-  # end
+  let(:manager_new) do
+    Hotel::ReservationManager.new
+  end
 
   # let(:reservation_generator) do
   #   # Reservation 1
@@ -98,6 +98,16 @@ describe "BlockManager" do
     block_new
     # puts "#{block_manager_new.rooms_available_in_block(1)}"
     expect(block_manager_new.rooms_available_in_block(1)).must_be_kind_of Array
+  end
+
+  it "creates a reservation for a room in the block" do
+    start_date = Time.parse("2019-02-24 14:08:45 -0700")
+    end_date = Time.parse("2019-02-28 14:08:45 -0700")
+    rooms = [1, 4, 6, 16, 19]
+    rate_discount = 10
+    block = block_manager_new.create_block(start_date, end_date, rooms, rate_discount)
+
+    expect(block_manager_new.create_reservation_from_block(1, 16)).must_be_instance_of Hotel::Reservation
   end
 end
 
