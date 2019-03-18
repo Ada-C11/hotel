@@ -17,7 +17,7 @@ module BookingSystem
     end
 
     def total_cost
-      cost, num_of_nights = 0, 0
+      num_of_nights = 0
       num_of_nights = date_range.count
       return @cost = num_of_nights * room.price
     end

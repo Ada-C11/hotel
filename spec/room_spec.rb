@@ -42,14 +42,14 @@ describe "Room" do
 
   # Tests for add_reservation grouped under hotel_spec#add_room
   
-  describe "available?" do
+  describe "is_available?" do
     before do
       @jan1 = Date.new(2020, 1, 1)
       @jan2 = Date.new(2020, 1, 2)
       @jan3 = Date.new(2020, 1, 3)
       @jan4 = Date.new(2020, 1, 4)
       @jan5 = Date.new(2020, 1, 5)
-      @test_res = @test_hotel.new_reservation(@test_room, @jan2, @jan4)
+      @test_res = @test_hotel.book_new_reservation(@test_room, @jan2, @jan4)
     end
 
     it "returns true for unreserved dates" do
