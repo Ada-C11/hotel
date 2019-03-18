@@ -3,7 +3,7 @@ require "pry"
 
 module Hotel
   class ReservationManager
-    attr_reader :reservation_array, :rooms
+    attr_reader :reservation_array, :rooms, :blocked_reservation_array
 
     def initialize
       @booked_rooms = []
@@ -27,15 +27,16 @@ module Hotel
       return new_reservation
     end
 
-    def make_block_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "hotel block")
+    def make_block_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "no name")
       new_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: room, cost: cost, block_name: block_name)
 
       @blocked_reservation_array.each do |blocked_res|
-        if blocked_res.reservation_dates == new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
-        elsif blocked_res.reservation_dates != new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
+        if blocked_res.reservation_dates != new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
           raise ArgumentError, "You must reserve a blocked hotel room for its entire duration"
         end
       end
+
+      @reservation_array << new_reservation
 
       res_to_remove = []
       @blocked_reservation_array.each do |blocked_res|
@@ -43,7 +44,7 @@ module Hotel
           res_to_remove << blocked_res
         end
       end
-      @reservation_array << new_reservation
+
       @blocked_reservation_array.delete(res_to_remove[0])
       @blocked_rooms_array.delete(res_to_remove[0].room)
 
@@ -118,8 +119,6 @@ module Hotel
       end_date = Date.parse(end_date)
       date_range = (start_date..end_date).to_a
 
-      # check for rooms not reserved
-      # no specifications given if this method should show blocked rooms or not. I chose for it to show blocked rooms as available, since they have not been booked yet.
       date_range[0..-2].each do |date|
         @reservation_array.each do |reservation|
           if reservation.reservation_dates[0..-2].include?(date)
