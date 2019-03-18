@@ -1,5 +1,9 @@
+require_relative "reservation_manager"
+
 module Hotel
-  class BlockManager
+  class BlockManager #< ReservationManager
+    attr_reader :blocks
+
     def initialize
       @blocks = []
       # activity(@blocks)
@@ -39,12 +43,22 @@ module Hotel
       rooms_block = rooms_available_in_block(id)
       if rooms_block.include?(room)
         block.rooms.delete(room)
-        reservation_manager = Hotel::ReservationManager.new
-        reservation_manager.create_reservation(block.start_date, block.end_date, room)
+        reservation_manager = Hotel::ReservationManager.new # THIS IS CREATING A NEW @reservations array... not what i want
+        reserva = reservation_manager.create_reservation(block.start_date, block.end_date, room)
+        # reserva = create_reservation(block.start_date, block.end_date, room)
+        # puts "#{reserva.room_number}"
+        # return reserva
       else
-        raise ArgumentError, "The room does not belong to the block"
+        raise ArgumentError, "The room does not exist within the block"
       end
     end
+
+    # def find_reservations_by_block(id)
+    #   block = find_block_by_id(id)
+    #   reservation_manager = Hotel::ReservationManager.new ## IT CREATES A NEW @reservations
+    #   reserva = reservation_manager.find_reservation_by_date(block.start_date, block.end_date)
+    #   return reserva
+    # end
 
     def validate_date_range(start_date, end_date)
       if start_date > end_date
