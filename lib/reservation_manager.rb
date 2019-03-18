@@ -44,5 +44,21 @@ module Hotel
       reservation = Hotel::Reservation.new(reserve)
       Hotel::Helpers.link_room_id_with_reservation_id(@rooms, input[:room_id], reservation)
     end
+
+    def list_reservations(date)
+      reservations = []
+      @rooms.each do |room|
+        index = Hotel::Helpers.sort_by_date(room.reservations, date)
+        if index == nil
+          next
+        elsif reservations << room.reservations[index]
+        end
+      end
+      if reservations.empty?
+        return raise StandardError, "No rooms reserved on provided date."
+      else
+        return reservations
+      end
+    end
   end
 end

@@ -36,10 +36,12 @@ module Hotel
 
     # methods to create sorted list in anticipation of binary search
 
-    def self.sort_by_date()
+    def self.sort_by_date(reservations_list)
+      reservations_list.sort! { |a, b| a.check_in_date <=> b.check_in_date }
     end
 
-    def self.sort_by_name()
+    def self.sort_by_name(block_list)
+      block_list.sort! { |a, b| a.first.block_name <=> b.first.block_name }
     end
 
     # will build out binary methods here
