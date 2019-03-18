@@ -17,11 +17,7 @@ module HotelSystem
     end
 
     def calculate_cost
-      # if @room.id != nil
-      #   return ('%.2f' % ((@end_date - @start_date) * @price)).to_f
-      # else
-        return ('%.2f' % ((@end_date - @start_date) * @price)).to_f
-      # end
+      return ("%.2f" % ((@end_date - @start_date) * @price)).to_f
     end
   end
 end

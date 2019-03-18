@@ -75,7 +75,19 @@ module HotelSystem
       @all_blocks << block
     end
 
-    def reserve_block_room
+    def reserve_block_room(start_date, end_date, room, block_id, guest)
+      desired_block = @all_blocks.detect { |block| block.id == block_id }
+
+      if desired_block == nil
+        raise ArgumentError, "The block entered does not exist or it does not have any rooms available for reseervation"
+      elsif desired_block.room_still_available?
+        reservation = HotelSystem::Reservation.new(room: room, start_date: start_date, end_date: end_date, guest: guest)
+        room.reservations << reservation
+        @all_reservations << reservation
+        desired_block.reservations << reservation
+        reservation.room.block_id = nil
+        reservation.room.price = 200
+      end
     end
   end
 end

@@ -29,17 +29,21 @@ describe "Hotel class" do
       @hotel = HotelSystem::Hotel.new
       @room = @hotel.all_rooms[0]
       5.times do
-        @hotel.reserve_room(@room,
-                            Date.new(2019, 3, 11),
-                            Date.new(2019, 3, 14),
-                            "Sam")
+        @hotel.reserve_room(
+          @room,
+          Date.new(2019, 3, 11),
+          Date.new(2019, 3, 14),
+          "Sam"
+        )
       end
 
       3.times do
-        @hotel.reserve_room(@room,
-                            Date.new(2019, 3, 12),
-                            Date.new(2019, 3, 14),
-                            "Sam")
+        @hotel.reserve_room(
+          @room,
+          Date.new(2019, 3, 12),
+          Date.new(2019, 3, 14),
+          "Sam"
+        )
       end
     end
 
@@ -56,18 +60,24 @@ describe "Hotel class" do
       @hotel = HotelSystem::Hotel.new
       @room = @hotel.all_rooms[0]
 
-      @hotel.reserve_room(@room,
-                          Date.new(2019, 3, 11),
-                          Date.new(2019, 3, 14),
-                          "Sam")
-      @hotel.reserve_room(@room,
-                          Date.new(2019, 3, 11),
-                          Date.new(2019, 3, 14),
-                          "Sam")
-      @hotel.reserve_room(@room,
-                          Date.new(2019, 3, 11),
-                          Date.new(2019, 3, 14),
-                          "Sam")
+      @hotel.reserve_room(
+        @room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
+      @hotel.reserve_room(
+        @room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
+      @hotel.reserve_room(
+        @room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
     end
 
     it "returns an array" do
@@ -87,18 +97,24 @@ describe "Hotel class" do
     let (:room) { hotel.all_rooms[0] }
 
     it "can add the reservation to the @all_reservations array" do
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Sam")
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Sam")
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Sam")
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
 
       expect(hotel.all_reservations.length).must_equal 3
       expect(hotel.all_reservations[0]).must_be_kind_of HotelSystem::Reservation
@@ -107,27 +123,35 @@ describe "Hotel class" do
     end
 
     it "can add the reservation to the assigned room's reservation array" do
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Sam")
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
       expect(room.reservations.length).must_equal 1
       expect(room.reservations[0]).must_be_kind_of HotelSystem::Reservation
     end
 
     it "can assign a room, that doesn't have other conflicting reservations, to the reservation if the selected room is not available" do
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 10),
-                         Date.new(2019, 3, 13),
-                         "Jon")
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Sam")
-      hotel.reserve_room(room,
-                         Date.new(2019, 3, 11),
-                         Date.new(2019, 3, 14),
-                         "Dee")
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 10),
+        Date.new(2019, 3, 13),
+        "Jon"
+      )
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Sam"
+      )
+      hotel.reserve_room(
+        room,
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        "Dee"
+      )
 
       expect(hotel.all_reservations[0].room.number).must_equal 1
       expect(hotel.all_reservations[1].room.number).must_equal 2
@@ -137,17 +161,21 @@ describe "Hotel class" do
 
     it "raises an error if no rooms are available at all during specified dates" do
       20.times do
-        hotel.reserve_room(room,
-                           Date.new(2019, 3, 10),
-                           Date.new(2019, 3, 13),
-                           "Jon")
+        hotel.reserve_room(
+          room,
+          Date.new(2019, 3, 10),
+          Date.new(2019, 3, 13),
+          "Jon"
+        )
       end
 
       expect do
-        hotel.reserve_room(room,
-                           Date.new(2019, 3, 11),
-                           Date.new(2019, 3, 14),
-                           "Zoe")
+        hotel.reserve_room(
+          room,
+          Date.new(2019, 3, 11),
+          Date.new(2019, 3, 14),
+          "Zoe"
+        )
       end.must_raise ArgumentError
     end
   end
@@ -157,16 +185,20 @@ describe "Hotel class" do
       @hotel = HotelSystem::Hotel.new
       @hotel.all_rooms.slice!(2..19)
 
-      @reservation1 = HotelSystem::Reservation.new(room: 1,
-                                                   start_date: Date.new(2019, 3, 10),
-                                                   end_date: Date.new(2019, 3, 12),
-                                                   guest: "Sam")
+      @reservation1 = HotelSystem::Reservation.new(
+        room: 1,
+        start_date: Date.new(2019, 3, 10),
+        end_date: Date.new(2019, 3, 12),
+        guest: "Sam",
+      )
       @hotel.all_rooms[0].reservations << @reservation1
 
-      @reservation2 = HotelSystem::Reservation.new(room: 2,
-                                                   start_date: Date.new(2019, 3, 14),
-                                                   end_date: Date.new(2019, 3, 16),
-                                                   guest: "Jan")
+      @reservation2 = HotelSystem::Reservation.new(
+        room: 2,
+        start_date: Date.new(2019, 3, 14),
+        end_date: Date.new(2019, 3, 16),
+        guest: "Jan",
+      )
       @hotel.all_rooms[1].reservations << @reservation2
     end
 
@@ -246,6 +278,94 @@ describe "Hotel class" do
 
       expect(@hotel.all_blocks.length).must_equal 1
       expect(@hotel.all_blocks[0]).must_be_kind_of HotelSystem::Block
+    end
+  end
+
+  describe "reserve_block_room method" do
+    before do
+      @hotel = HotelSystem::Hotel.new
+      @room1 = @hotel.all_rooms[1]
+      @room2 = @hotel.all_rooms[2]
+      @room3 = @hotel.all_rooms[3]
+
+      @block = @hotel.hold_block(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        [@room3, @room1, @room2]
+      )
+    end
+
+    it "can find the block associated with the block id" do
+      expect(@hotel.all_blocks.detect { |block| block.id == @room3.block_id }).must_be_kind_of HotelSystem::Block
+    end
+
+    it "raises an error if the block id entered isn't associated with any block" do
+      expect do
+        @hotel.reserve_block_room(
+          Date.new(2019, 3, 11),
+          Date.new(2019, 3, 14), @room1, "00000", "Sam"
+        )
+      end.must_raise ArgumentError
+    end
+
+    it "can add the reservation to that room's reservation list" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@room1.reservations.length).must_equal 1
+    end
+
+    it "can add the reservation to the all_reservations list" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@hotel.all_reservations.length).must_equal 1
+    end
+
+    it "can add the reservation to that block's list of reservations" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@hotel.all_blocks.length).must_equal 1
+    end
+
+    it "can create an instance of a reservation" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@room1.reservations[0]).must_be_kind_of HotelSystem::Reservation
+    end
+
+    it "can change the rooms block id back to nil" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@room1.block_id).must_be_nil
+    end
+
+    it "can change the rooms price back to 200" do
+      @hotel.reserve_block_room(
+        Date.new(2019, 3, 11),
+        Date.new(2019, 3, 14),
+        @room1, @room1.block_id, "Sam"
+      )
+
+      expect(@room1.price).must_equal 200
     end
   end
 end

@@ -16,10 +16,12 @@ describe "Room class" do
   describe "date_overlap method" do
     before do
       @room = HotelSystem::Room.new(number: 1)
-      @reservation = HotelSystem::Reservation.new(room: @room,
-                                                 start_date: Date.new(2019, 3, 11),
-                                                 end_date: Date.new(2019, 3, 14),
-                                                 guest: "Sam")
+      @reservation = HotelSystem::Reservation.new(
+        room: @room,
+        start_date: Date.new(2019, 3, 11),
+        end_date: Date.new(2019, 3, 14),
+        guest: "Sam",
+      )
       @room.reservations << @reservation
     end
 

@@ -1,6 +1,5 @@
 require "date"
 
-
 module HotelSystem
   class Block
     attr_reader :start_date, :end_date, :room_collection, :id, :discount_rate
