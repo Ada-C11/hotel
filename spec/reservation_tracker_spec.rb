@@ -48,4 +48,19 @@ describe "ReservationTracker" do
       expect(available_rooms.length).must_equal 18
     end
   end
+
+  describe "ReservationTracker#add_hotelblock" do
+    it "raises an exception when user attempts to create a Hotel Block in which at least one of the rooms is unavailable for the given date range" do
+      expect { @tracker.add_hotelblock("2019-4-11", "2019-4-15", [1, 5, 6, 7], 170) }.must_raise ArgumentError
+    end
+  end
+
+  describe "ReservationTracker#available_block_room" do
+    it "return the correct available room in a block" do
+      new_block = @tracker.add_hotelblock("2019-5-11", "2019-5-15", [1, 5, 6, 7], 170)
+      @tracker.add_reservation_for_block(new_block, "Ngoc", 6)
+      available_rooms = @tracker.avail_block_room(new_block)
+      expect (available_rooms.eql?([1, 5, 7])).must_equal true
+    end
+  end
 end

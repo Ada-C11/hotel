@@ -1,4 +1,6 @@
-class HotelBlocks
+require "date"
+
+class HotelBlock
   attr_reader :start_date, :end_date, :rooms, :discounted_rate
 
   def initialize(start_date:, end_date:, rooms:, discounted_rate:)
