@@ -44,7 +44,12 @@ module Hotel
       end
     end
 
-    def find_block_by_id(id:)
+    def rooms_available_in_block(id)
+      block = find_block_by_id(id)
+      return block.rooms
+    end
+
+    def find_block_by_id(id)
       index = 0
       if id.class == Integer
         @blocks.find do |reservation|
