@@ -139,19 +139,6 @@ describe "Manifest" do
     @booker.set_aside_block(block: Hotel::Block.new(check_in: @day1, check_out: @day2, percent_discount: 15), rooms_collection: @rooms_blocked_day1_day2)
     @booker.set_aside_block(block: Hotel::Block.new(check_in: @day1 + 200, check_out: @day2 + 250, percent_discount: 15), rooms_collection: @rooms_blocked_200_days_out)
   end
-  # describe "Manifest#list_unavailable_rooms_by_date" do
-  #   it "returns an Array" do
-  #     expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day1)).must_be_instance_of Array
-  #   end
-
-  #   it "correctly selects unavailable rooms" do
-  #     expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day1 + 1).sort_by { |room| room.id }).must_equal (@rooms_blocked_day1_day2 + @room_reserved_day1_day2).sort_by { |room| room.id }
-  #   end
-
-  #   it "returns an empty Array if no rooms reserved for given date" do
-  #     expect(@manifest_unavailable.list_unavailable_rooms_by_date(date: @day2 + 5)).must_equal []
-  #   end
-  # end
 
   describe "Manifest#list_rooms_with_reservations_by_date" do
     it "returns an Array" do
