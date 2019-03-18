@@ -108,6 +108,7 @@ describe "Booker" do
                                 percent_discount: 15)
       @booker_blocks.set_aside_block(block: @block, rooms_collection: collect_rooms)
     end
+
     it "will create reservation and add it to room" do
       before_booking_reservation_from_block = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
                                                                      check_out: Time.new.to_date + 4)
