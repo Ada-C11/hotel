@@ -12,6 +12,7 @@ module BookingSystem
       end
       @checkin_date = checkin_date
       @checkout_date = checkout_date
+      # Excludes checkout date for correct num of nights
       @date_range = (@checkin_date...@checkout_date)
     end
 

@@ -23,7 +23,7 @@ describe "Room" do
 
   describe "make_rooms" do
     before do
-      room_nums = (1..NUM_OF_ROOMS).to_a
+      room_nums = (1..NUM_OF_ROOMS)
       @rooms = BookingSystem::Room.make_rooms(room_nums)
     end
 
