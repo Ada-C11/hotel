@@ -33,5 +33,16 @@ module Hotel
     def see_rooms
       return @rooms
     end
+
+    def reserve_room(input)
+      find_all_avail_rooms(input[:check_in_date], input[:check_out_date])
+
+      reserve = { name: input[:name],
+                 room_number: input[:room_id],
+                 check_in_date: input[:check_in_date],
+                 check_out_date: input[:check_out_date] }
+      reservation = Hotel::Reservation.new(reserve)
+      Hotel::Helpers.link_room_id_with_reservation_id(@rooms, input[:room_id], reservation)
+    end
   end
 end
