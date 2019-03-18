@@ -15,5 +15,9 @@ module Hotel
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
     end
+
+    if @rooms != nil && @rooms.length > 5
+      raise ArgumentError, "Maximum of 5 rooms to a single block (currently #{@rooms.length})"
+    end
   end
 end

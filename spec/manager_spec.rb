@@ -106,7 +106,7 @@ describe "Manager class" do
       expect(@available_rooms.length).must_equal 18
     end
 
-    it "returns a string if there are no available rooms" do
+    it "returns an empty array if there are no available rooms" do
       100.times do
         @manager.reserve_room("2020-03-20", "2020-03-25")
       end
