@@ -21,7 +21,7 @@ module Hotel
       end
     end
 
-    def available?(check_in, check_out)
+    def available?(check_in, check_out = nil)
       booked = concurrences(check_in, check_out).map(&:room)
       @okay_rooms = ROOMS - booked
       !@okay_rooms.empty?
@@ -33,27 +33,18 @@ module Hotel
     end
 
     def concurrences(date1, date2 = nil)
+      inquery = Date.parse(date1)
       if date2
-        inquery = Date.parse(date1)
         outquery = Date.parse(date2)
-        concurrences = @reservations.select do |res|
-          inquery.between?(res.check_in, res.check_out) || outquery.between?(res.check_in, res.check_out)
+        concurrences = @reservations.select do |r|
+          inquery.between?(r.check_in, r.check_out) || outquery.between?(r.check_in, r.check_out)
         end
-        concurrences
       else
-        inquery = Date.parse(date1)
-        concurrences = @reservations.select do |res|
-          inquery.between?(res.check_in, res.check_out)
+        concurrences = @reservations.select do |r|
+          inquery.between?(r.check_in, r.check_out)
         end
-        concurrences
       end
+      concurrences
     end
   end
-end
-
-module Errors
-  class BookingConflict < StandardError; end
-  class ValidationError < StandardError; end
-  class ReverseDates < StandardError; end
-  class NotThatKindofHotelPal < StandardError; end
 end
