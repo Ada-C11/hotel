@@ -7,5 +7,7 @@
 3. Better variables names in testing files.
   improve layout, refactor so that less code is repeating.
 
-4. 
+4. Consider pulling out a date_validation module from Unavailable class. 
+
+
 
