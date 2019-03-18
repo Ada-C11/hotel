@@ -28,8 +28,17 @@ module BookingSystem
       @reservations << reservation
     end
 
+    # Possibly unneccessary?
     def new_reservation(room, checkin_date, checkout_date)
       reservation = BookingSystem::Reservation.new(room: room, checkin_date: checkin_date, checkout_date: checkout_date)
+      return reservation
+    end
+
+    def book_new_reservation(room, checkin_date, checkout_date)
+      (checkin_date...checkout_date).each do |day|
+        raise ArgumentError.new("Room#{room_num} is not available") if room.is_available?(day) == false
+      end
+      reservation = new_reservation(room, checkin_date, checkout_date)
       add_reservation(reservation)
       room.add_reservation(reservation)
       return reservation
@@ -40,21 +49,16 @@ module BookingSystem
       return @reservations.select {|reservation| reservation.date_range.include?(date)}
     end
 
-    def is_valid?(tentative_in, tentative_out)
-      return true if tentative_in >= checkout_date
-      if tentative_in < checkin_date
-        return true if tentative_out <= checkin_date
-      else return false
-      end
-    end
-
     def list_available_rooms(tentative_in, tentative_out)
-      raise ArgumentError.new("You haven't added any room to our hotel :/") if rooms.length == 0
-      available rooms = @rooms.select {|room| self.is_valid?(tentative_in, tentative_out)}
-      if available_rooms.length == 0
+      # raise ArgumentError.new("There is no room instantiated in our hotel") if rooms.length == 0
+      avail_rooms = @rooms
+      (tentative_in...tentative_out).each do |day|
+        avail_rooms.select! {|room| room.is_available?(day)}
+      end
+      if avail_rooms.length == 0
         raise ArgumentError.new("There is no available room")
       else
-        return available_rooms
+        return avail_rooms
       end
     end
   end

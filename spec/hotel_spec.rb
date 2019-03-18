@@ -53,7 +53,17 @@ describe "Hotel" do
 
   describe "new_reservation" do
     before do
-      @test_hotel.new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
+      @res = @test_hotel.new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
+    end
+
+    it "is of kind Reservation" do
+      expect(@res).must_be_kind_of BookingSystem::Reservation
+    end
+  end
+
+  describe "book_new_reservation" do
+    before do
+      @res = @test_hotel.book_new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
     end
 
     it "adds new reservation to Hotel's reservations" do
@@ -62,9 +72,29 @@ describe "Hotel" do
     end
 
     it "adds new reservation to Room's reservations" do
-      expect(@test_hotel.reservations[0]).must_be_kind_of BookingSystem::Reservation
+      expect(@test_hotel.reservations.first).must_be_kind_of BookingSystem::Reservation
       expect(@test_hotel.rooms.first.reservations.length).must_equal 1
     end
+
+    # it "returns array of available rooms for OK cases" do
+    #   # starts before, ends on checkin
+    #   expect(@test_room.is_available?(@jan1)).must_equal true
+    #   # starts before, ends before
+    #   # starts on checkout, ends after
+    #   # starts after, ends after
+    # end
+
+    # it "raises ArgumentError for invalid booking dates" do
+    #   # starts before, ends during
+    #   # starts during, ends after
+    #   # starts on checkin, ends on checkout
+    #   # starts before, ends on checkout
+    #   # starts on checkin, ends after
+    #   # starts during, ends during
+    #   # starts before and ends after
+    #   # starts during, ends on checkout
+    #   # starts on checkin, ends during
+    # end
   end
 
   describe "list_by_date" do
@@ -74,7 +104,7 @@ describe "Hotel" do
     end
 
     it "returns an array of all reservations on a given date" do
-      @test_hotel.new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
+      @test_hotel.book_new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
       reservations = @test_hotel.list_by_date(@checkin)
       expect(reservations).must_be_kind_of Array
       expect(reservations[0]).must_be_kind_of BookingSystem::Reservation
@@ -84,7 +114,7 @@ describe "Hotel" do
 
   describe "list_available_rooms" do
     before do
-      @test_res = @test_hotel.new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
+      @test_res = @test_hotel.book_new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
     end
 
      it "returns an array of all available rooms in the hotel" do
@@ -92,9 +122,9 @@ describe "Hotel" do
       expect(same_days).must_be_kind_of Array
       expect(same_days.count).must_equal 19
       
-      diff_days = @test_hotel.list_available_rooms(@jan1, @checkin)
-      expect(diff_days).must_be_kind_of Array
-      expect(diff_days.count).must_equal 20
+      # diff_days = @test_hotel.list_available_rooms(@jan1, @checkin)
+      # expect(diff_days).must_be_kind_of Array
+      # expect(diff_days.count).must_equal 20
     end
 
     it "raises an ArgumentError if there is no room available in the hotel" do
@@ -102,7 +132,7 @@ describe "Hotel" do
       new_hotel = BookingSystem::Hotel.new
       new_room = BookingSystem::Room.new(room_num: 1337)
       new_hotel.add_room(new_room)
-      new_res = new_hotel.new_reservation(new_room, @checkin, @checkout)
+      new_hotel.book_new_reservation(new_room, @checkin, @checkout)
       expect do
         new_hotel.list_available_rooms(@checkin, @checkout)
       end.must_raise ArgumentError
