@@ -60,11 +60,13 @@ describe "Reservation class" do
         @reservations << Hotel::Reservation.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"))
       end
     end
+
     it "will generate different id for each reservation and save it to the new instance" do
       expect(@reservations[0].id != @reservations[1].id).must_equal true
       expect(@reservations[1].id != @reservations[2].id).must_equal true
       expect(@reservations[2].id != @reservations[0].id).must_equal true
     end
+
     it "each id will start with 'R'" do
       3.times do |i|
         expect(@reservations[i].id[0] == "R").must_equal true

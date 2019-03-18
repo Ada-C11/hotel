@@ -29,6 +29,7 @@ describe "Manifest" do
         expect(room.cost_per_night).must_equal 1.11
       end
     end
+
     it "will setup rooms with of multiple groupings" do
       multi_manifest = Hotel::Manifest.new(rooms_to_set_up: [{ cost_per_night: 200, number_of_rooms: 3 },
                                                              { cost_per_night: 230, number_of_rooms: 5 }])
@@ -40,6 +41,7 @@ describe "Manifest" do
       end
     end
   end
+
   describe "Manifest#add_room_to_rooms" do
     it "will add new room to rooms" do
       old_last_room = manifest.rooms[-1]
@@ -139,7 +141,6 @@ describe "Manifest" do
     @booker.set_aside_block(block: Hotel::Block.new(check_in: @day1, check_out: @day2, percent_discount: 15), rooms_collection: @rooms_blocked_day1_day2)
     @booker.set_aside_block(block: Hotel::Block.new(check_in: @day1 + 200, check_out: @day2 + 250, percent_discount: 15), rooms_collection: @rooms_blocked_200_days_out)
   end
-
   describe "Manifest#list_rooms_with_reservations_by_date" do
     it "returns an Array" do
       expect(@manifest_unavailable.list_rooms_with_reservations_by_date(date: @day1)).must_be_instance_of Array

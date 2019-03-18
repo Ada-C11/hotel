@@ -46,4 +46,24 @@ describe "Unavailable class" do
       expect(valid_unavailable.valid_unavailable_dates?(check_in: past, check_out: date1)).must_equal false
     end
   end
+  describe "Unavailable#generate_confirmation_id" do
+    before do
+      @unavailables = []
+      3.times do
+        @unavailables << Hotel::Unavailable.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"))
+      end
+    end
+
+    it "will generate different id for each unavailable and save it to the new instance" do
+      expect(@unavailables[0].id != @unavailables[1].id).must_equal true
+      expect(@unavailables[1].id != @unavailables[2].id).must_equal true
+      expect(@unavailables[2].id != @unavailables[0].id).must_equal true
+    end
+
+    it "each id will start with number" do
+      3.times do |i|
+        expect(@unavailables[i].id[0].match(/\d/)).wont_be_nil
+      end
+    end
+  end
 end
