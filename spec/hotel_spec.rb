@@ -314,5 +314,26 @@ describe "hotel class" do
         
       expect(status).must_equal true
     end
+
+    it "will raise an exception if the given dates overlap with a block that already exists for that room" do
+      expect{
+        @hotel.create_block(start_year: 2019, start_month: 4, start_day: 23, num_nights: 5, room_nums: [4, 5], block_rate: 150)
+      }.must_raise NotImplementedError
+    end
+  end
+
+  describe "reserve_block_room method" do
+    before do
+      @hotel.create_block(start_year: 2019, start_month: 4, start_day: 20, num_nights: 5, room_nums: [4, 5, 6], block_rate: 150)
+      @hotel.reserve_block_room(room_num: 4, block_id: 1)
+      @block1 = @hotel.blocks[0]
+      @room4 = @hotel.rooms[3]
+    end
+
+    it "will remove the given room from the block's list of available rooms" do
+      expect(@block1.available_rooms.length).must_equal 2
+      expect(@block1.available_rooms).wont_include @room4
+    end
+  
   end 
 end

@@ -144,8 +144,36 @@ module HotelSystem
         end
         room.add_block_date_ranges(block_dates)
       end
-      block = HotelSystem::HotelBlock.new(date_range: block_dates, rooms: block_rooms, room_rate: block_rate)
+      block_id = create_block_id
+      block = HotelSystem::HotelBlock.new(id: block_id, date_range: block_dates, rooms: block_rooms, room_rate: block_rate)
       @blocks << block
+    end
+
+    def create_block_id
+      if @blocks.length == nil
+        return 1
+      else
+        id = @blocks.length + 1
+        return id
+      end
+    end
+
+    def find_block(num)
+      return @blocks.find { |block| block.id == num }
+    end
+
+    def reserve_block_room(room_num:, block_id:)
+      room = find_room(room_num)
+      block = find_block(block_id)
+      if block.available_rooms.include?(room)
+        res_id = create_reservation_id
+        block_res = HotelSystem::Reservation.new(id: res_id, room: room, room_number: room_num, date_range: block.date_range, nightly_rate: block.room_rate)
+        @reservations << block_res
+        room.reservations << block_res
+        block.available_rooms.delete(room)
+      else
+        raise NotImplementedError, "Sorry, that room is not available or is not a part of that block."
+      end
     end
 
   end
