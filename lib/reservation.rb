@@ -3,7 +3,7 @@ require "pry"
 
 module Hotel
   class Reservation
-    attr_reader :start_date, :end_date, :room, :cost, :rooms, :block_name
+    attr_reader :start_date, :end_date, :room, :cost, :block_name
 
     def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "no name")
       @start_date = start_date
@@ -30,7 +30,7 @@ module Hotel
     end
 
     def total_cost
-      trip_cost = duration * @cost
+      trip_cost = duration * cost
       return trip_cost
     end
   end

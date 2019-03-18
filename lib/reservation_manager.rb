@@ -3,7 +3,7 @@ require "pry"
 
 module Hotel
   class ReservationManager
-    attr_reader :reservation_array, :rooms, :block_name
+    attr_reader :reservation_array, :rooms
 
     def initialize
       @booked_rooms = []
