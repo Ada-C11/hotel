@@ -9,14 +9,8 @@ module BookingSystem
     attr_accessor :rooms
 
     def initialize(rooms: [], reservations: [])
-      # Hotel is now initialized with 20 instances of Room
-      i = 1
-      while i <= NUM_OF_ROOMS
-        room = BookingSystem::Room.new(room_num: i)
-        i += 1
-      end
-      rooms << room
-      @rooms = rooms
+      # Rooms instantiation is now handled by Room, single responsibility
+      @rooms = BookingSystem::Room.new(1, NUM_OF_ROOMS)
       @reservations = reservations
     end
 
