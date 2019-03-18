@@ -51,8 +51,9 @@ module Hotel
       block_list.sort! { |a, b| a.first.block_name <=> b.first.block_name }
     end
 
-    def find_all_avail_rooms(reservations_array, requested_dates)
-      min = 0
+    # FIX - there is a bug somewhere in this method
+    def find_all_avail_rooms(check_in_date, check_out_date)
+      requested_dates = (check_in_date...check_out_date).to_a
       max = reservations_array.length
 
       if reservations_array.first == nil
@@ -78,10 +79,60 @@ module Hotel
     end
   end
 
-  # will build out binary methods here, will play with CS fun if I get to it
-  def self.binary_search_for_avail_room
+  # binary
+
+  # FIX - there is a bug somewhere in this method
+  def self.binary_search_for_avail_room(reservations_array, requested_dates)
+    # returns false if the room is unreserved/available
+    min = 0
+    max = reservations_array.length
+
+    if reservations_array.first == nil
+      return false
+    end
+
+    while min < max
+      mid = (min + max) / 2
+      if !(requested_dates & reservations_array[mid].nights_of_stay).empty?
+        return true
+      elsif reservations_array[mid].check_in_date > requested_dates.first
+        max = mid - 1
+      elsif reservations_array[mid].check_in_date < requested_dates.first
+        min = mid + 1
+      end
+    end
+
+    if !(requested_dates & reservations_array[0].nights_of_stay).empty?
+      return true
+    end
+
+    return false
   end
 
-  def self.binary_search_for_reservations_by_date
+  def self.binary_search_for_reservations_by_date(reservations_array, date)
+    # returns nil if no reservation exists on that date
+    min = 0
+    max = reservations_array.length
+
+    if reservations_array.first == nil
+      return nil
+    end
+
+    while min < max
+      mid = (min + max) / 2
+      if reservations_array[mid].nights_stay.include?(date)
+        return mid
+      elsif reservations_array[mid].check_in_date > date
+        max = mid - 1
+      elsif reservations_array[mid].check_in_date < date
+        min = mid + 1
+      end
+    end
+
+    if reservations_array[0].nights_stay.include?(date)
+      return 0
+    end
+
+    return nil
   end
 end

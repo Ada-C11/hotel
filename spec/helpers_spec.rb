@@ -95,37 +95,37 @@ describe "self.binary_find_avail_room" do
   # same dates - rejects
   it "returns true, if the reservation request shares the same dates as a reserved room" do
     @array_of_possible_dates = Hotel::Helpers.nights(@date_1, @date_2)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal true
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal true
   end
 
   # start date overlaps the middle of existing reservation - rejects
   it "returns true if check in date is in the middle dates of a reserved room" do
     @array_of_possible_dates = Hotel::Helpers.nights(@date_3, @date_4)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal true
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal true
   end
 
   # end date overlaps the middle of existing reservation - rejects
   it "returns true if the check out date is in the middle dates of a reserved room" do
     @requested_dates = Hotel::Helpers.nights(@date_5, @date_6)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal true
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal true
   end
 
   # occurs within the existing date range - rejects
   it "returns true if the reservation check in date and check out date is in the middle dates of a reserved room" do
-    @requested_dates = Hotel::Helpers.generate_nights(@date_3, @date_4)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal true
+    @requested_dates = Hotel::Helpers.nights(@date_3, @date_4)
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal true
   end
 
   # returns false - overlap on checkin/out days is acceptable
   it "returns false if the reservation check in date is on the check out day of another reservation" do
-    @requested_dates = Hotel::Helpers.generate_nights(@date_2, @date_6)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal false
+    @requested_dates = Hotel::Helpers.nights(@date_2, @date_6)
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal false
   end
 
   # returns false - overlap on checkin/out days is acceptable
   it "returns false if the reservation check out date is on the check in day of another reservation" do
-    @requested_dates = Hotel::Helpers.generate_nights(@date_5, @date_1)
-    expect(Hotel::Helpers.binary_find_avail_room(@reservations_array, @requested_dates)).must_equal false
+    @requested_dates = Hotel::Helpers.nights(@date_5, @date_1)
+    expect(Hotel::Helpers.binary_search_for_avail_room(@reservations_array, @requested_dates)).must_equal false
   end
 end
 
