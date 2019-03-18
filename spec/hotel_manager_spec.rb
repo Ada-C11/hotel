@@ -2,12 +2,8 @@ require_relative "spec_helper"
 
 describe "Hotel Manager" do
     describe "Room instantiation" do
-        before do
-            @hotelmanager = HotelManagementSystem::HotelManager.new
-        end
-    
         it "list rooms" do 
-            expect(@hotelmanager.list_rooms).must_be_kind_of Array
+            expect(HotelManagementSystem::HotelManager.new.list_rooms).must_be_kind_of Array
         end
     end
     
@@ -44,7 +40,7 @@ describe "Hotel Manager" do
                 hotelmanager.reserve(start_date, end_date)
             end
         
-            expect{                    hotelmanager.reserve(start_date, end_date)}.must_raise ArgumentError
+            expect{hotelmanager.reserve(start_date, end_date)}.must_raise ArgumentError
 
         end
 
@@ -56,5 +52,38 @@ describe "Hotel Manager" do
             expect(arraylength2).must_equal 1
             expect(@hotelmanager.reservations_by_date('13th Mar 2019')).must_be_kind_of Array
         end
+
+        # testing for blocks
+
+        it "creates a room block" do
+            expect(@hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 5, 0.8)).must_be_kind_of HotelManagementSystem::Block
+        end
+
+        it "raises an ArgumentError if a block is the wrong size" do
+            expect{@hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 6, 0.8)}.must_raise ArgumentError
+        end
+
+        it "raises an ArgumentError if not enough rooms are available to block" do
+            hotelmanager = HotelManagementSystem::HotelManager.new
+            start_date = '11th Mar 2019'
+            end_date = '15th Mar 2019'
+
+            19.times do
+                start_date = '11th Mar 2019'
+                end_date = '15th Mar 2019'
+                hotelmanager.reserve(start_date, end_date)
+            end
+
+            expect{hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 2, 0.8)}.must_raise ArgumentError
+        end
+
+        it "returns all room blocks" do
+            expect(@hotelmanager.list_blocks).must_be_kind_of Array
+        end
+
+        # it "returns the cost of a block reservation" do
+        #     block = @hotelmanager.block_rooms('11th Mar 2019', '15th Mar 2019', 5, 0.8)
+        #     expect(@hotelmanager.cost_of_block(block)).must_equal
+        # end
     end
 end

@@ -5,6 +5,7 @@ require_relative 'date_range'
 module HotelManagementSystem
     class Reservation
         attr_reader :start_date, :end_date, :room
+        attr_accessor :reservations
         
         def initialize(start_date:, end_date:, room: nil)
             @start_date = Date.parse(start_date.to_s)
@@ -19,7 +20,7 @@ module HotelManagementSystem
                 raise ArgumentError, "Reservation can not be created. Room is invalid."
             end
 
-            # room.add_reservation(self) # add reservation to list of reservations?
+            room.add_reservation(self) # add reservation to list of reservations?
         end
 
         def duration
