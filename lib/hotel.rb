@@ -14,6 +14,10 @@ module BookingSystem
       @reservations = reservations
     end
 
+    def add_room(room)
+      @rooms << room
+    end
+    
     def list_all_rooms
       # Evaluates length first, bypasses .map method if there is no room
       return rooms if rooms.length == 0

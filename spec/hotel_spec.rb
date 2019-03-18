@@ -3,7 +3,7 @@ require_relative "./spec_helper"
 describe "Hotel" do
   before do
     @test_hotel = BookingSystem::Hotel.new
-    @test_room = @test_hotel.rooms[1]
+    @test_room = BookingSystem::Room.new(room_num: 1337)
     @checkin = Date.new(2020, 1, 2)
     @checkout = Date.new(2020, 1, 4)
   end
