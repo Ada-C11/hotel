@@ -47,6 +47,7 @@ module Hotel
                                         check_out: block.check_out),
            room: room,
            percent_discount: block.percent_discount)
+      block.decrease_number_available
     end
   end
 end

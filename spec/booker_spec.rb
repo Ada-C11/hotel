@@ -112,8 +112,6 @@ describe "Booker" do
       before_booking_reservation_from_block = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
                                                                      check_out: Time.new.to_date + 4)
       room_2 = manifest.find_room(id: 2)
-      p room_2.unavailable_list
-      p @block
       @booker_blocks.book(reservation: before_booking_reservation_from_block, room: room_2)
       @booker_blocks.book_room_with_block(block: @block, room: room_2)
       expect(room_2.unavailable_list.last).wont_equal before_booking_reservation_from_block
@@ -124,6 +122,14 @@ describe "Booker" do
       expect {
         @booker_blocks.book_room_with_block(block: @block, room: room_12)
       }.must_raise InvalidBlock
+    end
+
+    it "decrements number available instance variable in block " do
+      before_adding_reservation_from_block = @block.number_available
+      room_3 = manifest.find_room(id: 3)
+      @booker_blocks.book_room_with_block(block: @block, room: room_3)
+      after_adding_reservation_from_block = @block.number_available
+      expect(before_adding_reservation_from_block - 1).must_equal after_adding_reservation_from_block
     end
   end
 end
