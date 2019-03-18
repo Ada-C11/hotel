@@ -32,11 +32,11 @@ module Hotel
             this_rooms_reservations = [room]
             this_rooms_reservations << (res.date_range_string_array.first + " through " + res.date_range_string_array.last)
           end
-          res_on_date << this_rooms_reservations
+          res_on_date << this_rooms_reservations unless this_rooms_reservations == nil
         end
       end
 
-      return res_on_date # array with room and reservations
+      return res_on_date # array with [[1, "2019-06-10 through 2019-06-12"], [room_num, "date through date"], etc]
     end
 
     def ck_avail(ckin, ckout, room_num)
