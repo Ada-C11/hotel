@@ -49,7 +49,7 @@ describe "Room" do
       @jan3 = Date.new(2020, 1, 3)
       @jan4 = Date.new(2020, 1, 4)
       @jan5 = Date.new(2020, 1, 5)
-      @test_res = @test_hotel.book_new_reservation(@test_room, @jan2, @jan4)
+      @test_res = @test_hotel.new_reservation(@test_room, @jan2, @jan4)
     end
 
     it "returns true for unreserved dates" do
