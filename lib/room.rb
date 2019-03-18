@@ -11,13 +11,10 @@ module BookingSystem
       @reservations = reservations
     end
 
-    def self.instantiate_rooms(start_room_num, num_of_rooms)
-      i = start_room_num
-      while i <= num_of_rooms
-        room = BookingSystem::Room.new(room_num: i)
-        i += 1
+    def self.make_rooms(room_nums)
+      rooms = room_nums.map do |num|
+        BookingSystem::Room.new(room_num: num)
       end
-      rooms << room
       return rooms
     end
 

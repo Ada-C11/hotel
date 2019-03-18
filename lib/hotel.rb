@@ -9,8 +9,8 @@ module BookingSystem
     attr_accessor :rooms
 
     def initialize(rooms: [], reservations: [])
-      # Rooms instantiation is now handled by Room, single responsibility
-      @rooms = BookingSystem::Room.new(1, NUM_OF_ROOMS)
+      # Rooms instantiation is now handled by Room, single responsibility principle
+      @rooms = BookingSystem::Room.make_rooms(rooms)
       @reservations = reservations
     end
 
