@@ -91,7 +91,13 @@ describe "BlockManager" do
 
   it "finds a block by id" do
     block_new
-    expect(block_manager_new.find_block_by_id(id: 1)).must_be_instance_of Hotel::Block
+    expect(block_manager_new.find_block_by_id(1)).must_be_instance_of Hotel::Block
+  end
+
+  it "returns rooms available " do
+    block_new
+    # puts "#{block_manager_new.rooms_available_in_block(1)}"
+    expect(block_manager_new.rooms_available_in_block(1)).must_be_kind_of Array
   end
 end
 
