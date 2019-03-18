@@ -44,7 +44,7 @@ describe "available? method" do
   end
 
   it "pushes available room numbers to okay_rooms array" do
-    before = @test_registry.okay_rooms.length (5..19).each do |room|
+    before = (5..19).each do |room|
       @test_registry.reservations << Hotel::Reservation.new("2019/07/19", "2019/07/25", room)
     end
     @test_registry.available?("2019/07/19", "2019/07/25")
@@ -54,7 +54,24 @@ describe "available? method" do
   end
 end
 
-describe "book_room" do
+describe "method for getting all the rooms reserved on a given date" do
+  before do
+    r1 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 1)
+    r2 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 2)
+    r3 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 3)
+    r4 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 4)
+    @test_registry = Hotel::Registry.new
+    @test_registry.reservations.push(r1, r2, r3, r4)
+  end
+
+  it "accurately reports array of registrations given a single date string" do
+  expect @test_registry.concurrences("2019/07/21").must_be_instance_of Array
+  expect @test_registry.concurrences("2019/07/21")[1].must_be_instance_of Hotel::Reservation
+  expect @test_registry.concurrences("2019/07/20").count.must_equal(4)
+  end
+end
+
+  describe "book_room" do
   before do
     @test_registry = Hotel::Registry.new
     @test_registry.book_room("2019/07/19", "2019/07/25")
