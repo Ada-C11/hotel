@@ -52,12 +52,6 @@ module Hotel
              end
     end
 
-    def list_available_rooms_by_date(date:)
-      return rooms.select do |room|
-               room.available?(date: date)
-             end
-    end
-
     def list_available_rooms_by_date_range(date_range:)
       return rooms.select do |room|
                room.available_for_date_range?(date_range: date_range)

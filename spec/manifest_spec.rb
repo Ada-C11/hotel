@@ -167,28 +167,6 @@ describe "Manifest" do
     end
   end
 
-  describe "Manifest#list_available_rooms_by_date" do
-    it "returns an Array" do
-      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1)).must_be_instance_of Array
-    end
-
-    it "correctly selects available rooms" do
-      available_day1_day2 = @manifest_unavailable.rooms.reject do |room|
-        (@room_reserved_day1_day2 + @rooms_blocked_day1_day2).include?(room)
-      end
-      expect(@manifest_unavailable.list_available_rooms_by_date(date: @day1 + 1)).must_equal available_day1_day2
-    end
-
-    it "returns an empty Array if all rooms reserved for given date" do
-      manifest_all_rooms_booked = Hotel::Booker.new.manifest
-      (1..manifest_all_rooms_booked.rooms.length).each do |id|
-        room = manifest_all_rooms_booked.find_room(id: id)
-        @booker.book(reservation: Hotel::Reservation.new(check_in: @day1, check_out: @day2), room: room)
-      end
-      expect(manifest_all_rooms_booked.list_available_rooms_by_date(date: @day1 + 1)).must_equal []
-    end
-  end
-
   describe "Manifest#list_available_rooms_by_date_range" do
     before do
       @available_day1_day2 = @manifest_unavailable.rooms.reject do |room|
