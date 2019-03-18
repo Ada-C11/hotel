@@ -53,13 +53,13 @@ describe "Room" do
     end
 
     it "returns true for unreserved dates" do
-      expect(@test_room.available?(@jan1)).must_equal true
-      expect(@test_room.available?(@jan5)).must_equal true
+      expect(@test_room.is_available?(@jan1)).must_equal true
+      expect(@test_room.is_available?(@jan5)).must_equal true
     end
 
     it "returns false for reserved dates" do
-      expect(@test_room.available?(@jan2)).must_equal false
-      expect(@test_room.available?(@jan3)).must_equal false
+      expect(@test_room.is_available?(@jan2)).must_equal false
+      expect(@test_room.is_available?(@jan3)).must_equal false
     end
 
     # edge case of check-in on jan 4 must return true
