@@ -25,8 +25,7 @@ describe "Reservation Class" do
 
     it "throws ArgumentError when check-out date is before the check-in date." do
       expect do
-        Reservation.new(id: 2, check_in: "2019-05-14", check_out: "2019-05-13", cost: 200,
-                        hotel_block: nil)
+        Reservation.new(id: 2, check_in: "2019-05-14", check_out: "2019-05-13", cost: 200)
       end.must_raise ArgumentError
     end
 
@@ -37,6 +36,11 @@ describe "Reservation Class" do
     it "provides duration in days" do
       expect(@reservation.duration).must_equal 4
       puts "This reservation is #{@reservation.duration} days."
+    end
+
+    it "calculates the total cost of the stay" do
+      expect(@reservation.total_cost).must_equal 800
+      puts "This reservation will cost $#{@reservation.total_cost}."
     end
 
     # it "is set up for specific attributes and data types" do
