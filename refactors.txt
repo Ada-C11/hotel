@@ -7,3 +7,5 @@
 3.  Is "Block" just another type of Reservation?  Consider making Block a child of Reservation.
 
 4.  Make test dates for specs more consistent (currently some key off of the Date gem, others are set strings)
+
+5.  Consider setting a cap to how far into the future one can make a reservation.
