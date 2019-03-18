@@ -7,6 +7,7 @@ module Hotel
     def initialize(check_in:, check_out:, percent_discount:)
       super(check_in: check_in, check_out: check_out)
       @percent_discount = percent_discount
+      @number_available = nil
     end
 
     # Can only set once.

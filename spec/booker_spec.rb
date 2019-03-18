@@ -97,19 +97,32 @@ describe "Booker" do
   end
 
   describe "Book#book_room_associated_with_block" do
+    before do
+      @booker_blocks = Hotel::Booker.new
+      @manifest_block = @booker_blocks.manifest
+      collect_rooms = [2, 3, 5].map do |id|
+        manifest.find_room(id: id)
+      end
+      @block = Hotel::Block.new(check_in: Time.new.to_date + 5,
+                                check_out: Time.new.to_date + 10,
+                                percent_discount: 15)
+      @booker_blocks.set_aside_block(block: @block, rooms_collection: collect_rooms)
+    end
     it "will create reservation and add it to room" do
       before_booking_reservation_from_block = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
                                                                      check_out: Time.new.to_date + 4)
-      room_7 = manifest.find_room(id: 7)
-      booker.book(reservation: before_booking_reservation_from_block, room: room_7)
-      booker.book_room_associated_with_block(block: valid_block, room: room_7)
-      expect(room_7.unavailable_list.last).wont_equal before_booking_reservation_from_block
+      room_2 = manifest.find_room(id: 2)
+      p room_2.unavailable_list
+      p @block
+      @booker_blocks.book(reservation: before_booking_reservation_from_block, room: room_2)
+      @booker_blocks.book_room_associated_with_block(block: @block, room: room_2)
+      expect(room_2.unavailable_list.last).wont_equal before_booking_reservation_from_block
     end
 
     it "will raise error if room is not part of block" do
       room_12 = manifest.find_room(id: 12)
       expect {
-        booker.book_room_associated_with_block(block: valid_block, room: room_12)
+        @booker_blocks.book_room_associated_with_block(block: @block, room: room_12)
       }.must_raise InvalidBlock
     end
   end

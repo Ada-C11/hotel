@@ -71,20 +71,16 @@ describe "Manifest" do
       reservation = Hotel::Reservation.new(check_in: Time.new.to_date + 1,
                                            check_out: Time.new.to_date + 4)
       @reservation_id_reference = reservation.id
-      p reservation.id
       block = Hotel::Block.new(check_in: Time.new.to_date + 5,
                                check_out: Time.new.to_date + 10,
                                percent_discount: 15)
       @block_id_reference = block.id
-      p block.id
       booker_find.book(reservation: reservation,
                        room: @manifest_find.rooms[0])
       booker_find.set_aside_block(block: block,
                                   rooms_collection: [@manifest_find.rooms[3], @manifest_find.rooms[1], @manifest_find.rooms[2]])
     end
     it "will return unavailable object" do
-      p @block_id_reference
-      p @reservation_id_reference
       expect(@manifest_find.find_unavailable_object(id: @block_id_reference)).must_be_kind_of Hotel::Unavailable
       expect(@manifest_find.find_unavailable_object(id: @reservation_id_reference)).must_be_kind_of Hotel::Unavailable
     end
