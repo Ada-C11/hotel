@@ -4,3 +4,4 @@ HotelBlock doesn't do a lot on its own. See whether HotelBlock could be a subcla
 
 Add more functionality to CLI
 
+Use .select more when appropriate
