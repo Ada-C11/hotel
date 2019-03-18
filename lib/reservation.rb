@@ -1,13 +1,13 @@
 
 module Hotel
   class Reservation
-    attr_reader :id, :start_date, :end_date, :room_number
+    attr_reader :id, :start_date, :end_date, :room
 
-    def initialize(id, start_date, end_date, room_number)
+    def initialize(id, start_date, end_date, room)
       @id = id
       @start_date = start_date
       @end_date = end_date
-      @room_number = room_number
+      @room = room
       @total_nights = total_nights
       @total_cost = total_cost
     end
