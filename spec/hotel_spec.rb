@@ -334,6 +334,18 @@ describe "hotel class" do
       expect(@block1.available_rooms.length).must_equal 2
       expect(@block1.available_rooms).wont_include @room4
     end
+
+    it "will raise an error if that room is already reserved" do
+      expect{
+        @hotel.reserve_block_room(room_num: 4, block_id: 1)
+      }.must_raise NotImplementedError
+    end
+
+    it "will raise an error if that roomm isn't part of the block" do
+      expect{
+        @hotel.reserve_block_room(room_num: 9, block_id: 1)
+      }.must_raise NotImplementedError
+    end
   
   end 
 end
