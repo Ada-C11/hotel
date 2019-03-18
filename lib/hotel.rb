@@ -81,6 +81,10 @@ module HotelGroup
 
       room ||= find_available_rooms(start_time, end_time)[0]
 
+      if !room
+        puts "No vacancy for the specified dates"
+      end
+
       reservation = Reservation.new(create_res_id, start_time, end_time, room)
 
       room.add_reservation(reservation)
