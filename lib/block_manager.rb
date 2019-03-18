@@ -44,6 +44,18 @@ module Hotel
       end
     end
 
+    def find_block_by_id(id:)
+      index = 0
+      if id.class == Integer
+        @blocks.find do |reservation|
+          if reservation.id == id
+            return reservation
+          end
+        end
+        raise ArgumentError, "Invalid reservation id"
+      end
+    end
+
     def validate_room_availability(start_date, end_date, room_selected)
       begin
         rooms_available = find_available_rooms(start_date, end_date)
