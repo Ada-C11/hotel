@@ -14,7 +14,7 @@ module Hotel
       unless room.available_for_date_range?(date_range: reservation.date_range)
         raise RoomNotAvailable.new("Room #{room.id} not available for requested dates")
       end
-      calculate_cost_of_booking(reservation: reservation, room: room, percent_discount: 0)
+      calculate_cost_of_booking(reservation: reservation, room: room, percent_discount: percent_discount)
       room.unavailable_list << reservation
       return room
     end
@@ -33,7 +33,7 @@ module Hotel
     end
 
     def calculate_cost_of_booking(reservation:, room:, percent_discount: 0)
-      reservation.cost = room.cost_per_night.to_f * reservation.duration_in_days * ((100 - percent_discount) / 100)
+      reservation.cost = room.cost_per_night * reservation.duration_in_days * (100 - percent_discount) / 100.0
     end
 
     def get_cost_of_booking(reservation:)

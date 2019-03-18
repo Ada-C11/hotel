@@ -132,5 +132,11 @@ describe "Booker" do
       after_adding_reservation_from_block = @block.number_available
       expect(before_adding_reservation_from_block - 1).must_equal after_adding_reservation_from_block
     end
+
+    it "calculates cost of reservation from block correctly" do
+      room_3 = manifest.find_room(id: 3)
+      @booker_blocks.book_room_with_block(block: @block, room: room_3)
+      expect(room_3.unavailable_list[-1].cost).must_equal 850.0
+    end
   end
 end
