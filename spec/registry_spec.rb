@@ -15,7 +15,15 @@ end
 describe "concurrences method" do
   before do
     @test_registry = Hotel::Registry.new
+    (1..4).each do |room|
+      @test_registry.reservations << Hotel::Reservation.new("2019/07/19", "2019/07/25", room)
+    end
   end
+  it "accurately reports array of registrations given a single date string" do
+    expect @test_registry.concurrences("2019/07/21").must_be_instance_of(Array)
+    expect @test_registry.concurrences("2019/07/21")[1].must_be_instance_of(Hotel::Reservation)
+    expect @test_registry.concurrences("2019/07/20").count.must_equal(4)
+    end
 
   it "returns empty array when no reservations during dates" do
     expect(@test_registry.concurrences("1066/10/14", "1066/10/15").empty?).must_equal(true)
@@ -51,23 +59,6 @@ describe "available? method" do
     after = @test_registry.okay_rooms.length
     expect(before).wont_equal(after)
     expect(@test_registry.okay_rooms).must_equal([20])
-  end
-end
-
-describe "method for getting all the rooms reserved on a given date" do
-  before do
-    r1 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 1)
-    r2 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 2)
-    r3 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 3)
-    r4 = Hotel::Reservation.new("2019/07/19", "2019/07/25", 4)
-    @test_registry = Hotel::Registry.new
-    @test_registry.reservations.push(r1, r2, r3, r4)
-  end
-
-  it "accurately reports array of registrations given a single date string" do
-  expect @test_registry.concurrences("2019/07/21").must_be_instance_of Array
-  expect @test_registry.concurrences("2019/07/21")[1].must_be_instance_of Hotel::Reservation
-  expect @test_registry.concurrences("2019/07/20").count.must_equal(4)
   end
 end
 

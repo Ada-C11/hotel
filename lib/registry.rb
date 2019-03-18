@@ -27,6 +27,11 @@ module Hotel
       !@okay_rooms.empty?
     end
 
+    def list_available(check_in, check_out)
+      available?(check_in, check_out)
+      @okay_rooms
+    end
+
     def concurrences(date1, date2 = nil)
       if date2
         inquery = Date.parse(date1)
@@ -34,13 +39,14 @@ module Hotel
         concurrences = @reservations.select do |res|
           inquery.between?(res.check_in, res.check_out) || outquery.between?(res.check_in, res.check_out)
         end
-      elsif
+        concurrences
+      else
         inquery = Date.parse(date1)
         concurrences = @reservations.select do |res|
-          res.range.include?(inquery)
+          inquery.between?(res.check_in, res.check_out)
         end
+        concurrences
       end
-      concurrences
     end
   end
 end
