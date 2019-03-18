@@ -57,10 +57,6 @@ module Hotel
         end
       end
 
-      # if list.length == 0
-      #   puts "Sorry, we're booked!  Try another date."
-      # end
-
       return list
     end
 
