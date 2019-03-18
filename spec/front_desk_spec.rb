@@ -334,7 +334,7 @@ describe "FrontDesk class" do
     let(:room_rate) { 160 }
     let(:block) { frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: room_collection, room_rate: room_rate) }
 
-    it "raises error or something if no rooms are available in a specific block" do
+    it "raises error if no rooms are available in a specific block" do
       block
       frontdesk.reserve_room_in_block(id: 1)
       frontdesk.reserve_room_in_block(id: 1)
