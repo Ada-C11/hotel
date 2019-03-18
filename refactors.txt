@@ -1,0 +1,8 @@
+create module to make the list of rooms for input
+testing -- cleaner code to run before tests in "before - do" statements
+test organization - what is put in each spec file
+use the methods for creating ids in the tests, rather than creating random numbers of them within the tests
+don't need to use object for block -- can replace with hash
+uncouple blocks and reservations from room by not storing them as lists within room
+fix the cost error
+coverage 95% for all

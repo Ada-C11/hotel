@@ -15,7 +15,10 @@ module Hotel
 
     def calc_total_cost
       cost = (end_date - start_date).to_i * room.cost
+      p !block_id.nil?
+      p block_id
       if !block_id.nil?
+        p "Here"
         cost = cost - cost * discount
       end
       return cost
