@@ -1,0 +1,17 @@
+Usually by the end of a project, we can look back on what we made with a clearer understanding of what we actually needed. In industry, this is a great time to do a refactor of some sort. For this project however, you're off the hook... for the moment. We will be revisiting our Hotel project submissions later on on the course, and you may want to make some changes at that point.
+
+In order to keep track of your current thoughts about design refactoring, as part of project submission, please log down design thoughts with the following process:
+
+Create a new file in the project called refactors.txt
+In that file, make a short list of the changes that you could make, such as naming conventions, etc.
+These notes will be used by you in a few weeks, so make sure that they are detailed enough that someone else could understand your thinking and follow your directions
+Commit and push this file to your project repo
+
+
+**********************************************************************************************************
+1. Give methods descriptive names that more accurately describe what they do.
+2. Try to split up responsibilities for methods that are handling more than one responsibility.
+3. Order the tests in a more sequential order:
+  a. First test is testing bullet point 1 in Wave 1;
+  b. Second test is testing bullet point 2 in Wave 1 and so on.
+4. Use more built-in shortcut methods
