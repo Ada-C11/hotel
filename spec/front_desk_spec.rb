@@ -58,36 +58,36 @@ describe "FrontDesk class" do
       expect { frontdesk.reserve_room(check_in: "feb5", check_out: "feb3") }.must_raise ArgumentError
     end
 
-    it "raises an ArgumentError if no room is available for date range" do
+    it "raises an AvailabilityError if no room is available for date range" do
       20.times do
         frontdesk.reserve_room(check_in: "feb9", check_out: "feb10")
       end
-      expect { frontdesk.reserve_room(check_in: "feb9", check_out: "feb10") }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb9", check_out: "feb10") }.must_raise AvailabilityError
     end
 
-    it "raises an ArgumentError if room is requested for same dates" do
+    it "raises an AvailabilityError if room is requested for same dates" do
       frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7)
-      expect { frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7) }.must_raise AvailabilityError
     end
 
-    it "raises an ArgumentError if room is requested for dates that overlap in the front" do
+    it "raises an AvailabilityError if room is requested for dates that overlap in the front" do
       frontdesk.reserve_room(check_in: "feb3", check_out: "feb4", room_number: 7)
-      expect { frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7) }.must_raise AvailabilityError
     end
 
-    it "raises an ArgumentError if room is requested for dates that overlap in the back" do
+    it "raises an AvailabilityError if room is requested for dates that overlap in the back" do
       frontdesk.reserve_room(check_in: "feb3", check_out: "feb5", room_number: 7)
-      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 7) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 7) }.must_raise AvailabilityError
     end
 
-    it "raises an ArgumentError if room is requested for a range that is contained by another reservation" do
+    it "raises an AvailabilityError if room is requested for a range that is contained by another reservation" do
       frontdesk.reserve_room(check_in: "feb3", check_out: "feb6", room_number: 7)
-      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 7) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 7) }.must_raise AvailabilityError
     end
 
-    it "raises an ArgumentError if room is requested for a range that is containing another reservation" do
+    it "raises an AvailabilityError if room is requested for a range that is containing another reservation" do
       frontdesk.reserve_room(check_in: "feb3", check_out: "feb6", room_number: 7)
-      expect { frontdesk.reserve_room(check_in: "feb2", check_out: "feb7", room_number: 7) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb2", check_out: "feb7", room_number: 7) }.must_raise AvailabilityError
     end
   end
 
@@ -216,12 +216,12 @@ describe "FrontDesk class" do
   end
 
   describe "Create block" do
-    let(:range) { [Date.new(2019, 2, 4), Date.new(2019, 2, 5)] }
     let(:room_collection) { [1, 2, 3] }
     let(:room_collection2) { [4, 5, 6] }
     let(:room_rate) { 160 }
     let(:block) {
-      frontdesk.create_block(range: range,
+      frontdesk.create_block(check_in: "feb4",
+                             check_out: "feb5",
                              room_collection: room_collection,
                              room_rate: room_rate)
     }
@@ -230,37 +230,87 @@ describe "FrontDesk class" do
       expect(block).must_be_kind_of Hotel::Block
     end
 
-    it "raises an argument error if any of the rooms are not available for range of dates" do
+    it "assigns rooms if just number of rooms is provided" do
+      b = frontdesk.create_block(check_in: "feb4",
+                                 check_out: "feb5",
+                                 room_rate: room_rate,
+                                 number_of_rooms: 4)
+
+      expect(b).must_be_kind_of Hotel::Block
+    end
+
+    it "raises ArgumentError if neither room collection nor number of rooms are provided" do
+      expect {
+        frontdesk.create_block(check_in: "feb4",
+                               check_out: "feb5",
+                               room_rate: room_rate)
+      }.must_raise ArgumentError
+    end
+
+    it "raises ArgumentError if room collection is provided and number of rooms provided does not match length" do
+      expect {
+        frontdesk.create_block(check_in: "feb4",
+                               check_out: "feb5",
+                               room_rate: room_rate,
+                               room_collection: [1, 2, 3],
+                               number_of_rooms: 4)
+      }.must_raise ArgumentError
+    end
+
+    it "continues if room collection is provided and number of rooms provided matches length" do
+      b = frontdesk.create_block(check_in: "feb4",
+                                 check_out: "feb5",
+                                 room_rate: room_rate,
+                                 room_collection: [1, 2, 3],
+                                 number_of_rooms: 3)
+      expect(b).must_be_kind_of Hotel::Block
+
+      one = frontdesk.find_room_by_number(room_number: 1)
+      two = frontdesk.find_room_by_number(room_number: 2)
+      three = frontdesk.find_room_by_number(room_number: 3)
+      expect(b.rooms).must_equal [one, two, three]
+    end
+
+    it "raises an AvailabilityError if any of the rooms are not available for range of dates" do
       frontdesk.reserve_room(check_in: "feb4", check_out: "feb7", room_number: 1)
-      expect { block }.must_raise ArgumentError
+      expect { block }.must_raise AvailabilityError
     end
 
     it "does not raise an argument error if they try to book 5 rooms for block" do
-      expect(frontdesk.create_block(range: range, room_collection: [1, 2, 3, 4, 5], room_rate: room_rate)).must_be_kind_of Hotel::Block
+      expect(frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: [1, 2, 3, 4, 5], room_rate: room_rate)).must_be_kind_of Hotel::Block
     end
 
     it "raises an argument error if they try to book more than 5 rooms for block" do
       rooms = [1, 2, 3, 4, 5, 6]
-      expect { frontdesk.create_block(range: range, room_collection: rooms, room_rate: room_rate) }.must_raise ArgumentError
+      expect { frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: rooms, room_rate: room_rate) }.must_raise ArgumentError
+    end
+
+    it "raises an argument error if they try to book more than 5 unspecified rooms for block" do
+      rooms = [1, 2, 3, 4, 5, 6]
+      expect { frontdesk.create_block(check_in: "feb4", check_out: "feb5", number_of_rooms: 6, room_rate: room_rate) }.must_raise ArgumentError
     end
 
     it "can reserve room that is not in rooms set aside for block on date" do
       expect(frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 4)).must_be_kind_of Hotel::Reservation
     end
 
+    it "can reserve unspecified room" do
+      expect(frontdesk.reserve_room(check_in: "feb4", check_out: "feb5")).must_be_kind_of Hotel::Reservation
+    end
+
     it "cannot reserve room that is set aside for block on date" do
       block
-      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 1) }.must_raise ArgumentError
+      expect { frontdesk.reserve_room(check_in: "feb4", check_out: "feb5", room_number: 1) }.must_raise AvailabilityError
     end
 
     it "can reserve block when another block is booked for different rooms on date" do
       block
-      expect(frontdesk.create_block(range: range, room_collection: room_collection2, room_rate: room_rate)).must_be_kind_of Hotel::Block
+      expect(frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: room_collection2, room_rate: room_rate)).must_be_kind_of Hotel::Block
     end
 
     it "cannot reserve block that is set aside for another block on date" do
       block
-      expect { frontdesk.create_block(range: range, room_collection: room_collection, room_rate: room_rate) }.must_raise ArgumentError
+      expect { frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: room_collection, room_rate: room_rate) }.must_raise AvailabilityError
     end
 
     it "can check if any rooms are available in a specific block" do
@@ -278,15 +328,11 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find block by id" do
-  end
-
   describe "Reserve room in block" do
-    let(:range) { [Date.new(2019, 2, 4), Date.new(2019, 2, 5)] }
     let(:room_collection) { [1, 2, 3] }
     let(:room_collection2) { [4, 5, 6] }
     let(:room_rate) { 160 }
-    let(:block) { frontdesk.create_block(range: range, room_collection: room_collection, room_rate: room_rate) }
+    let(:block) { frontdesk.create_block(check_in: "feb4", check_out: "feb5", room_collection: room_collection, room_rate: room_rate) }
 
     it "raises error or something if no rooms are available in a specific block" do
       block

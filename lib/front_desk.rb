@@ -12,9 +12,9 @@ module Hotel
     attr_reader :rooms, :reservations, :blocks
 
     def initialize
-      @reservations = []
-
       @rooms = generate_rooms_array
+
+      @reservations = []
 
       @blocks = []
     end
@@ -28,7 +28,7 @@ module Hotel
       end
 
       if room && !room.available?(nights: nights)
-        raise ArgumentError, "That room is not available for those dates"
+        raise AvailabilityError, "That room is not available for those dates"
       end
 
       room ||= assign_room(nights: nights)
@@ -57,7 +57,9 @@ module Hotel
         raise AvailabilityError, "Room #{room.number} is not available in block" unless block.rooms.include?(room)
       end
 
-      room ||= block.rooms.first
+      first_open_room_in_block = block.rooms.first
+
+      room ||= first_open_room_in_block
 
       reservation = Hotel::Reservation.new(room: room,
                                            nights: block.nights,
@@ -86,42 +88,48 @@ module Hotel
     end
 
     def open_rooms(check_in: nil, check_out: nil, nights: nil)
-      unless (check_in && check_out) || nights
-        raise ArgumentError, "Either check in and check out dates or a list of nights must be given"
-      end
+      validate_date_arguments(check_in: check_in, check_out: check_out, nights: nights)
 
       nights ||= generate_nights(check_in: check_in, check_out: check_out)
 
       rooms.select { |room| room.available?(nights: nights) }
     end
 
-    def create_block(range:, room_collection:, room_rate:)
-      # ASSUME FOR NOW THAT:
-      ### range is an array of Dates, check-in to check-out
-      ### room_collection is an array of room numbers
-      ### room_rate is an integer price per night
+    def create_block(check_in:, check_out:, room_collection: nil, number_of_rooms: nil, room_rate:)
+      unless room_collection || number_of_rooms
+        raise ArgumentError, "Must include room_collection or number_of_rooms"
+      end
 
-      validate_size(room_collection: room_collection)
+      if room_collection && number_of_rooms
+        unless room_collection.length == number_of_rooms
+          raise ArgumentError, "Number of rooms does not match room_collection length"
+        end
+      end
 
-      rooms = room_collection.map { |room_number| find_room_by_number(room_number: room_number) }
+      nights = generate_nights(check_in: check_in, check_out: check_out)
+      number_of_rooms = room_collection.length if room_collection
+      validate_size(number_of_rooms: number_of_rooms) if number_of_rooms
+
+      rooms = []
+      if number_of_rooms && !room_collection
+        number_of_rooms.times { rooms << assign_room(nights: nights) }
+      elsif room_collection
+        rooms = room_collection.map { |room_number| find_room_by_number(room_number: room_number) }
+      end
 
       rooms.each do |room|
         validate_room(room: room)
-        raise ArgumentError, "Rooms are unavailable for that date range" unless room.available?(nights: range)
+        raise AvailabilityError, "Rooms are unavailable for that date range" unless room.available?(nights: nights)
       end
 
-      # this part is confunsing a little
-
-      range.pop
-
-      block = Hotel::Block.new(nights: range,
+      block = Hotel::Block.new(nights: nights,
                                room_collection: rooms,
                                room_rate: room_rate,
                                id: blocks.length + 1)
 
       blocks << block
 
-      rooms.each { |room| room.book(nights: range) }
+      rooms.each { |room| room.book(nights: nights) }
 
       return block
     end
@@ -140,13 +148,13 @@ module Hotel
 
       validate_dates(check_in: check_in, check_out: check_out)
 
-      (check_in...check_out).to_a # not including checkout day
+      (check_in...check_out).to_a # doesn't include checkout day
     end
 
     def assign_room(nights:)
       open = open_rooms(nights: nights)
 
-      raise ArgumentError, "No rooms available for those dates" if open.empty?
+      raise AvailabilityError, "No rooms available for those dates" if open.empty?
 
       return open.first
     end
@@ -163,12 +171,19 @@ module Hotel
       raise ArgumentError, "Block doesn't exist" unless block
     end
 
-    def validate_size(room_collection:)
-      raise ArgumentError, "Block can contain maximum of 5 rooms" if room_collection.length > 5
+    def validate_size(number_of_rooms:)
+      max_rooms_for_block = 5
+      raise ArgumentError, "Block can contain maximum of 5 rooms" if number_of_rooms > max_rooms_for_block
     end
 
     def validate_dates(check_in:, check_out:)
       raise ArgumentError, "Reservation must be at least one day long" if check_in >= check_out
+    end
+
+    def validate_date_arguments(check_in: nil, check_out: nil, nights: nil)
+      unless (check_in && check_out) || nights
+        raise ArgumentError, "Either check in and check out dates or a list of nights must be given"
+      end
     end
   end
 end
