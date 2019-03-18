@@ -9,7 +9,8 @@ class BlockParty
       raise ArgumentError, "ID must be a positive number, given #{id}..."
     end
 
-    @id = id
+    @check_in = check_in
+    @check_out = check_out
     @blocked_rooms ||= []
   end
 end
