@@ -68,13 +68,21 @@ describe "Room" do
       expect(manifest.rooms[2].available?(date: @day1)).must_equal true
     end
   end
+
   describe "Room#has_unavailable_object?" do
     it "will return true if room has object in unavailable_list" do
       expect(@room.has_unavailable_object?(unavailable_object: @pend_reservation)).must_equal true
     end
 
     it "will return false if room does not have object in unavailable_list" do
-      expect(@room.has_unavailable_object?(unavailable_object: Hotel::Reservation.new(check_in: @day1 + 100, check_out: @day2 + 100)))
+      expect(@room.has_unavailable_object?(unavailable_object: Hotel::Reservation.new(check_in: @day1 + 100, check_out: @day2 + 100))).must_equal false
+    end
+  end
+  describe "Room#remove_unavailable_object" do
+    it "will remove object" do
+      expect(@room.has_unavailable_object?(unavailable_object: @pend_reservation)).must_equal true
+      @room.remove_unavailable_object(unavailable_object: @pend_reservation)
+      expect(@room.has_unavailable_object?(unavailable_object: @pend_reservation)).must_equal false
     end
   end
 end

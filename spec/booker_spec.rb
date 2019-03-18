@@ -115,14 +115,14 @@ describe "Booker" do
       p room_2.unavailable_list
       p @block
       @booker_blocks.book(reservation: before_booking_reservation_from_block, room: room_2)
-      @booker_blocks.book_room_associated_with_block(block: @block, room: room_2)
+      @booker_blocks.book_room_with_block(block: @block, room: room_2)
       expect(room_2.unavailable_list.last).wont_equal before_booking_reservation_from_block
     end
 
     it "will raise error if room is not part of block" do
       room_12 = manifest.find_room(id: 12)
       expect {
-        @booker_blocks.book_room_associated_with_block(block: @block, room: room_12)
+        @booker_blocks.book_room_with_block(block: @block, room: room_12)
       }.must_raise InvalidBlock
     end
   end
