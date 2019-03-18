@@ -78,7 +78,7 @@ describe "lists_rooms" do
   end
 
   it "returns an array of rooms" do
-    room = @Reservation_Manager.list_rooms(Date.new(2019, 3, 31))
+    room = @Reservation_Manager.see_rooms(Date.new(2019, 3, 31))
     expect(room).must_be_kind_of Array
     expect(room.first).must_be_kind_of Hotel::Room
   end
@@ -90,6 +90,6 @@ describe "lists_rooms" do
   end
 
   it "returns rooms array" do
-    expect(@Reservation_Manager.list_rooms).length.must_equal 20
+    expect(@Reservation_Manager.see_rooms).length.must_equal 20
   end
 end

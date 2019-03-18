@@ -29,13 +29,12 @@ module Hotel
       return rooms
     end
 
-    # Wave 1 requirement - User can access list of all rooms in hotel
     def see_rooms
       return @rooms
     end
 
     def reserve_room(input)
-      find_all_avail_rooms(input[:check_in_date], input[:check_out_date])
+      Hotel::Helpers.find_all_avail_rooms(input[:check_in_date], input[:check_out_date])
 
       reserve = { name: input[:name],
                  room_number: input[:room_id],

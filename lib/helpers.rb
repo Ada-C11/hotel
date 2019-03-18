@@ -51,8 +51,6 @@ module Hotel
       block_list.sort! { |a, b| a.first.block_name <=> b.first.block_name }
     end
 
-    # will build out binary methods here
-
     def find_all_avail_rooms(reservations_array, requested_dates)
       min = 0
       max = reservations_array.length
@@ -78,5 +76,12 @@ module Hotel
 
       return false
     end
+  end
+
+  # will build out binary methods here, will play with CS fun if I get to it
+  def self.binary_search_for_avail_room
+  end
+
+  def self.binary_search_for_reservations_by_date
   end
 end
