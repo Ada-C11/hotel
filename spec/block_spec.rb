@@ -35,15 +35,15 @@ describe "Block" do
   let(:past) { Date.new(2019, 02, 13) }
   describe "Block#valid_date_range?" do
     it "check_in is before check_out" do
-      expect(valid_block.valid_date_range?(date1, date2)).must_equal true
+      expect(valid_block.valid_unavailable_dates?(check_in: date1, check_out: date2)).must_equal true
     end
 
     it "check_in is same as end" do
-      expect(valid_block.valid_date_range?(date2, date2)).must_equal false
+      expect(valid_block.valid_unavailable_dates?(check_in: date2, check_out: date2)).must_equal false
     end
 
     it "check_in is before today" do
-      expect(valid_block.valid_date_range?(past, date1)).must_equal false
+      expect(valid_block.valid_unavailable_dates?(check_in: past, check_out: date1)).must_equal false
     end
   end
   describe "Block#generate_confirmation_id" do

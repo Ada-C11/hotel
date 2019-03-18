@@ -7,13 +7,13 @@ module Hotel
     def initialize(check_in:, check_out:)
       @check_in = check_in
       @check_out = check_out
-      unless valid_date_range?(@check_in, @check_out)
+      unless valid_unavailable_dates?(check_in: @check_in, check_out: @check_out)
         raise InvalidDateRangeError.new()
       end
       @id = generate_confirmation_id
     end
 
-    def valid_date_range?(check_in, check_out)
+    def valid_unavailable_dates?(check_in:, check_out:)
       return check_in < check_out && check_in >= Time.new.to_date
     end
 
