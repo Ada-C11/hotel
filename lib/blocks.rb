@@ -1,7 +1,7 @@
 require "date"
 
 class BlockParty
-  attr_reader :id, :price, :block_rooms, :booked_on
+  attr_reader :blocked_rooms, :total_cost
   ROOM_BLOCK = 5
 
   def initialize(check_in:, check_out: blocked_rooms: nil, discount:)
@@ -13,6 +13,10 @@ class BlockParty
     @check_out = check_out
     @blocked_rooms ||= []
     @discount = discount
+  end
+
+  def self.total_cost
+    discount * (@check_in...check_out)
   end
 end
 

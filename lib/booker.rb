@@ -19,9 +19,11 @@ class RoomBooker < Date
     date_request = DateRange.new(check_in: check_in, check_out: check_out)
     res_dates = date_request.dates_booked
     find_room = find_available_room(check_in: check_in, check_out: check_out)
+
     if find_room == nil
       raise ArgumentError, "No rooms are available for these dates"
     end
+
     reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: res_dates, room_booked: find_room)
 
     find_room.booked_on(check_in: check_in, check_out: check_out)
@@ -35,15 +37,11 @@ class RoomBooker < Date
   end
 
   def find_room_id(id:)
-    return rooms.find do |room|
-             room.id == id
-           end
+    return rooms.find { |room| room.id == id }
   end
 
   def find_available_room(check_in:, check_out:)
-    found_room = rooms.select do |room|
-      room.room_available?(check_in: check_in, check_out: check_out)
-    end
+    found_room = rooms.select { |room| room.room_available?(check_in: check_in, check_out: check_out) }
     return found_room[0]
   end
 
@@ -75,19 +73,23 @@ class RoomBooker < Date
 
   # working on blocked rooms
 
-  def reserve_block(check_in:, check_out:, rooms_needed:, discount_price:)
+  def reserve_block(check_in:, check_out:, rooms_needed:)
     raise ArgumentError if rooms_needed > 5
-    block_rooms = []
+    block_of_rooms = []
 
-    rooms_needed.times do |i|
+    rooms_needed.times do
       room = find_available_room(check_in: check_in, check_out: check_out)
-      block_rooms << room
+      room.booked_on(check_in:check_in, check_out: check_out)
+      block_of_rooms << room
     end
 
-    if reserved_block.length < rooms_needed
+    if block_of_rooms.length < rooms_needed 
       raise ArgumentError, "We cannot book this block reservation due to insufficient room availability"
-    end
+    elsif block_of_rooms > 5
+      raise ArgumentError, "We cannot block more than 5 rooms per party."
 
-    block = BlockParty.new(id:)
+    make_block = BlockParty.new(check_in: check_in, check_out: check_out, blocked_rooms: block_of_rooms, discount: 150)
+
+    return make_block
   end
 end
