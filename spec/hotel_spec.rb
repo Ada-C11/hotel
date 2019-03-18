@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
 describe "hotel" do
-  setup do
+  before do
     @seventh = Time.parse("2018-07-07")
     @eleventh = Time.parse("2018-07-11")
   end
@@ -12,19 +12,21 @@ describe "hotel" do
 
   let(:booked_hotel) do
     booked_hotel = Hotel.new
-    # Book some rooms! use a loop?
-    booked_hotel.make_reservation(@seventh, @eleventh)
+    (Hotel::NUM_ROOMS - 5).times do
+      booked_hotel.make_reservation(@seventh, @eleventh)
+    end
   end
 
   let(:fully_booked_hotel) do
     fully_booked_hotel = Hotel.new
-    # Book so many rooms that some date ranges are fully occupied.
-    #for loop? over the number of rooms?
+    Hotel::NUM_ROOMS.times do
+      fully_booked_hotel.make_reservation(@seventh, @eleventh)
+    end
   end
 
-  it "gets rooms" do
-    #it gets an array of rooms
-    #has 20 rooms
+  it "get rooms" do
+    rooms = empty_hotel.get_rooms
+    expect(rooms.length).must_equal Hotel::NUM_ROOMS
   end
 
   describe "makes reservation" do
@@ -58,13 +60,10 @@ describe "hotel" do
   it "get reservations inclusive" do
     # gets a reservation that is inclusive
     #make a hotel that has reservations
+
   end
 
   describe 'validate date range' do
-    before do
-
-    end
-
     it 'invalid date range throws exception' do
       expect{empty_hotel.validate_date_range(@eleventh, @seventh)}.must_raise ArgumentError
     end

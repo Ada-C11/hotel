@@ -3,6 +3,8 @@ require 'set'
 require_relative 'reservation'
 
 class Hotel
+  NUM_ROOMS = 20
+
   # rooms 1-20, reservations
   def initialize()
     @reservations = []
@@ -10,7 +12,7 @@ class Hotel
 
   # Access the list of all of the rooms in the hotel.
   def get_rooms
-    Set[1..20]
+    (1..NUM_ROOMS).to_set
   end
 
   def make_reservation(start_date, end_date)
