@@ -79,7 +79,7 @@ describe "Block" do
     end
 
     it "will check if room available, that is number_available > 0 will return true" do
-      expect(valid_block.has_room_available?).must_equal true
+      expect(valid_block.has_room_available_for_reservation?).must_equal true
     end
 
     it "does not decrease past 0" do
@@ -89,7 +89,7 @@ describe "Block" do
 
     it "will check if room available, that is number_available < 0 will return false" do
       10.times { valid_block.decrease_number_available }
-      expect(valid_block.has_room_available?).must_equal false
+      expect(valid_block.has_room_available_for_reservation?).must_equal false
     end
   end
 end
