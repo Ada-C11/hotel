@@ -46,6 +46,7 @@ describe "Block" do
       expect(valid_block.valid_unavailable_dates?(check_in: past, check_out: date1)).must_equal false
     end
   end
+
   describe "Block#generate_confirmation_id" do
     before do
       @blocks = []
@@ -53,21 +54,23 @@ describe "Block" do
         @blocks << Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
       end
     end
+
     it "will generate different id for each block and save it to the new instance" do
       expect(@blocks[0].id != @blocks[1].id).must_equal true
       expect(@blocks[1].id != @blocks[2].id).must_equal true
       expect(@blocks[2].id != @blocks[0].id).must_equal true
     end
+
     it "each id will start with 'B'" do
       3.times do |i|
         expect(@blocks[i].id[0] == "B").must_equal true
       end
     end
   end
+
   before do
     valid_block.set_number_available(4)
   end
-
   describe "Block#Test methods related to number_available" do
     it "saves the number passed to number_available" do
       expect(valid_block.number_available).must_equal 4
