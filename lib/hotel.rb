@@ -20,7 +20,9 @@ class Hotel
 
   def make_reservation(start_date, end_date)
     id = @reservations.length + 1
-    # raise ArgumentEror if the available rooms is empty
+    if load_availables(start_date, end_date).length == 0
+      raise ArgumentError, "all the rooms are booked for this date range"
+    end
     room = load_availables(start_date, end_date).sample
     reservation = Reservation.new(id, room, start_date, end_date)
     @reservations.push(reservation)
@@ -30,25 +32,17 @@ class Hotel
 
   def make_block(rooms, start_date, end_date)
     id = @blocks.length + 1
-    a
-    rooms.each do |room|
-      if !load_available.include?(room)
-        raise ArgumentError, "This room is booked for this date range and can't be in the block"
-        rooms.delete(room)
-      end
-      block = Block.new(id, rooms, start_date, end_date)
-      @blocks << block
-      return block
-    end
+    block = Block.new(id, rooms, start_date, end_date)
+    @blocks.push(block)
+    return block
   end
 
-  def reserved_rooms
+  def free_rooms
     reserved = []
     @reservations.each do |reservation|
       reserved << reservation.room
     end
-    #return @rooms - reserved_rooms.uniq
-    return reserved
+    return @rooms - reserved.uniq
   end
 
   def load_availables(start_date, end_date)
@@ -59,8 +53,7 @@ class Hotel
         available_rooms << reservation.room
       end
     end
-    #all_available = (available_rooms + free_rooms).uniq
-    all_available = (available_rooms + (@rooms - reserved_rooms)).uniq
+    all_available = (available_rooms + free_rooms).uniq
     return all_available
   end
 

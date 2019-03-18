@@ -5,7 +5,12 @@ class Block < Reservation
 
   def initialize(id, rooms, start_date, end_date)
     super
-    @rooms = []
+    @rooms = rooms
+    # @rooms.each do |room|
+    #   room.reservations.each do |reservation|
+    #     raise ArgumentError, "can't make this block, room is not available for that date range"
+    #   end
+    # end
     @room_rate = room_rate
     @cost = ((@dates.length) - 1) * (@room_rate.to_i)
     @dates = date_range

@@ -67,6 +67,20 @@ describe Hotel do
       expect(reservations3.length).must_equal 1
     end
   end
+  describe "free rooms" do
+    it "load all the rooms that have no reservations" do
+      start_date1 = Date.new(2018, 3, 5)
+      end_date1 = start_date1 + 3
+      reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      expect(@hotel.free_rooms).must_be_kind_of Array
+      expect(@hotel.free_rooms.length).must_equal 19
+
+      start_date2 = Date.new(2018, 3, 5)
+      end_date2 = start_date2 + 3
+      reservation2 = @hotel.make_reservation(start_date2, end_date2)
+      expect(@hotel.free_rooms.length).must_equal 18
+    end
+  end
 
   describe "load availables method" do
     before do
@@ -112,6 +126,25 @@ describe Hotel do
       start_date = Date.new(2018, 3, 6)
       end_date = start_date + 1
       expect(@hotel.load_availables(start_date, end_date).length).must_equal 17
+    end
+  end
+
+  describe "make block" do
+    before do
+      start_date1 = Date.new(2018, 3, 5)
+      end_date1 = start_date1 + 3
+      rooms = [1, 2, 3, 4, 5]
+
+      @block1 = @hotel.make_block(rooms, start_date1, end_date1)
+    end
+    it "makes a new block with the given dates and the date range" do
+      expect(@block1).must_be_instance_of Block
+    end
+    it "adds the block to the blocks array of the hotel" do
+      expect(@hotel.blocks).must_be_kind_of Array
+      expect(@hotel.blocks.length).must_equal 1
+      expect(@hotel.blocks[0].rooms.length).must_equal 5
+      expect(@hotel.blocks[1]).must_equal nil
     end
   end
 end
