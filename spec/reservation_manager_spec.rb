@@ -3,18 +3,18 @@ require "pry"
 
 describe "ReservationManager class" do
   let (:reservation_manager) do
-    ReservationManager.new
+    Hotel::ReservationManager.new
   end
 
   describe "initialize" do
     it "Creates an instance of ReservationManager" do
-      expect(reservation_manager).must_be_instance_of ReservationManager
+      expect(reservation_manager).must_be_instance_of Hotel::ReservationManager
     end
   end
 
   describe "make_reservation method" do
     it "make_reservation method can make an instance of reservation" do
-      expect(reservation_manager.make_reservation(room: "1")).must_be_instance_of Reservation
+      expect(reservation_manager.make_reservation(room: "1")).must_be_instance_of Hotel::Reservation
     end
     it "make_reservation adds a reservation to an array of reservations" do
       my_reservation = reservation_manager.make_reservation(room: "1")
@@ -64,7 +64,7 @@ describe "ReservationManager class" do
   describe "make_block_reservation" do
     it "Allows user to book a room that is blocked for a certain date range if it is for the entire block duration" do
       reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100, block_name: "cat convention")
-      expect (reservation_manager.make_block_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "18", cost: 100, block_name: "cat convention")).must_be_instance_of Reservation
+      expect (reservation_manager.make_block_reservation(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", room: "18", cost: 100, block_name: "cat convention")).must_be_instance_of Hotel::Reservation
     end
     it "raises an error if you do not book the entire duration of the block" do
       reservation_manager.hotel_block(start_date: "2nd Jan 2019", end_date: "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100, block_name: "kitty con")
