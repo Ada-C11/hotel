@@ -3,7 +3,7 @@ require_relative "./spec_helper"
 describe "Hotel" do
   before do
     @test_hotel = BookingSystem::Hotel.new
-    @test_room = BookingSystem::Room.new(room_num: 1337)
+    @test_room = @test_hotel.rooms[1]
     @checkin = Date.new(2020, 1, 2)
     @checkout = Date.new(2020, 1, 4)
   end
@@ -99,13 +99,13 @@ describe "Hotel" do
     it "raises an ArgumentError for overlaping booking" do
       # starts before, ends during
       # starts during, ends after
-      # exact overlap
+      # starts on checkin, ends on checkout
       # starts before, ends on checkout
       # starts on checkin, ends after
       # starts during, ends during
       # starts before and ends after
       # starts during, ends on checkout
-      # starts on checkout, ends during
+      # starts on checkin, ends during
     end
 
     it "returns array of available rooms for OK cases" do

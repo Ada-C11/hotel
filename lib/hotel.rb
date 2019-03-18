@@ -9,12 +9,15 @@ module BookingSystem
     attr_accessor :rooms
 
     def initialize(rooms: [], reservations: [])
+      # Hotel is now initialized with 20 instances of Room
+      i = 1
+      while i <= NUM_OF_ROOMS
+        room = BookingSystem::Room.new(room_num: i)
+        i += 1
+      end
+      rooms << room
       @rooms = rooms
       @reservations = reservations
-    end
-
-    def add_room(room)
-      @rooms << room
     end
 
     def list_all_rooms
@@ -47,10 +50,17 @@ module BookingSystem
       return false
     end
 
-    # Rewrite this
-    def list_available_rooms(date)
-      raise ArgumentError.new("There is no room") if rooms.length == 0
-      available_rooms = @rooms.select {|room| self.reserved?(date)}
+    def is_valid?(tentative_in, tentative_out)
+      return true if tentative_in >= checkout_date
+      if tentative_in < checkin_date
+        return true if tentative_out <= checkin_date
+      else return false
+      end
+    end
+
+    def list_available_rooms(tentative_in, tentative_out)
+      raise ArgumentError.new("You haven't added any room to our hotel :/") if rooms.length == 0
+      available rooms = @rooms.select {|room| self.is_valid?(tentative_in, tentative_out)}
       if available_rooms.length == 0
         raise ArgumentError.new("There is no available room")
       else

@@ -10,7 +10,7 @@ describe "Reservation" do
                                                   checkout_date: @checkout)
   end
 
-  describe "#initialize" do
+  describe "initialize" do
     it "creates an instance of Reservation " do
       expect(@reservation).must_be_kind_of BookingSystem::Reservation
     end
@@ -41,7 +41,7 @@ describe "Reservation" do
     end
   end
 
-  describe "#total_cost" do
+  describe "total_cost" do
     it "calculates total cost of a reservation" do
       expect(@reservation.total_cost).must_equal ((@checkout - @checkin) * STANDARD_RATE)
     end
