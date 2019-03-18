@@ -25,7 +25,7 @@ describe "Reservation class" do
 
     it "throws an argument error at other wonky dates" do
       expect { Hotel::Reservation.new("2019/07/20", "2019/07/20", 5) }.must_raise
-      Errors::NotThatKindofHotelPal
+      Errors::NotThatKindaHotelPal
       expect { Hotel::Reservation.new("2015-07-21", "2015-07-20", 5) }.must_raise
       Errors::ReverseDates
     end
