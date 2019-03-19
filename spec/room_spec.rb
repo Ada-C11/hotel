@@ -1,16 +1,6 @@
 require_relative "spec_helper"
 require "date"
 
-describe "Reservation class" do
-  it "lists all reservations" do
-    reservations = Hotel::Reservation.all
-
-    reservations.each do |reservation|
-      expect(reservation).must_be_kind_of Hotel::Reservation
-    end
-  end
-end
-
 describe "Room class" do
   it "must list all the rooms" do
     rooms = Hotel::Room.all

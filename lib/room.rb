@@ -1,14 +1,4 @@
-require "pry"
-
 module Hotel
-  class Reservation
-    def self.all
-      10.times.map do
-        Hotel::Reservation.new
-      end
-    end
-  end
-
   class Room
     def self.all
       return @all_rooms if @all_rooms
@@ -28,7 +18,8 @@ module Hotel
     def self.reservations_on(date)
       Hotel::Room.all.map do |room|
         room if room.reservation_date_range.include?(date)
-      end.compact
+      end
+        .compact
     end
 
     # def self.all_available_rooms_on(in_date, out_date)
@@ -37,15 +28,13 @@ module Hotel
 
     attr_reader :reservation_date_range, :room_number
 
-    COST = 200.00
-
     def initialize(room_number)
       @room_number = room_number
     end
 
     def reserve_date_range(in_date, out_date)
+      raise ArgumentError, "Check out date is before check in date" if out_date <= in_date
       @reservation_date_range = in_date...out_date
-      raise ArgumentError, "Check out date is before check in date" if in_date > out_date
     end
 
     def reserved_on?(in_date, out_date)
@@ -58,7 +47,7 @@ module Hotel
     end
 
     def total_cost
-      (COST * @reservation_date_range.to_a.length).round(2)
+      (200.00 * @reservation_date_range.to_a.length).round(2)
     end
   end
 end
