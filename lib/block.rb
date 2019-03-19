@@ -1,8 +1,8 @@
 
 module Hotel
   class Block
-    attr_reader :block_id, :room_ids, :check_in_date, :check_out_date, :discount_rate
-    attr_accessor :rooms_info
+    attr_reader :block_id, :room_ids, :rooms_info, :check_in_date, :check_out_date, :discount_rate
+    # attr_accessor :rooms_info
 
     def initialize(block_id:, room_ids:, check_in_date:, check_out_date:, discount_rate:)
       @block_id = block_id

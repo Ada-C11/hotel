@@ -98,6 +98,7 @@ module Hotel
         discount_rate: discount_rate,
       )
       @blocks << new_block
+      store_blocks_in_csv
     end
 
     # I can check whether a given block has any rooms available
@@ -118,6 +119,12 @@ module Hotel
       block.rooms_info.each do |current_room_id, status|
         block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
       end
+
+      # block.rooms_info.each do |current_room_id, status|
+      #   p status
+      # end
+
+      # ap @blocks
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -126,6 +133,9 @@ module Hotel
       )
       # I can see a reservation made from a hotel block
       add_reservation(new_reservation)
+      # store_reservations_in_csv
+      # update block to take into consideration the changed status of the reserved room
+      store_blocks_in_csv
     end
 
     # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
@@ -162,6 +172,32 @@ module Hotel
 
     def add_reservation(new_reservation)
       @reservations << new_reservation
+      store_reservations_in_csv
+    end
+
+    def store_reservations_in_csv
+      reservations_csv = CSV.open("support/reservations.csv", "w+", write_headers: true, headers: ["reservation_id", "room_id", "check_in_date", "check_out_date"])
+      @reservations.each do |reservation|
+        reservation_hash = { "reservation_id" => reservation.reservation_id,
+                            "room_id" => reservation.room_id,
+                            "check_in_date" => reservation.check_in_date,
+                            "check_out_date" => reservation.check_out_date }
+        reservations_csv << reservation_hash
+      end
+    end
+
+    def store_blocks_in_csv
+      blocks_csv = CSV.open("support/blocks.csv", "w+", write_headers: true, headers: ["block_id", "rooms_info", "check_in_date", "check_out_date", "discount_rate"])
+      @blocks.each do |block|
+        block_hash = {
+          "block_id" => block.block_id,
+          "rooms_info" => block.rooms_info,
+          "check_in_date" => block.check_in_date,
+          "check_out_date" => block.check_out_date,
+          "discount_rate" => block.discount_rate,
+        }
+        blocks_csv << block_hash
+      end
     end
 
     def self.validate_id(id)
@@ -171,3 +207,9 @@ module Hotel
     end
   end
 end
+
+rm = Hotel::ReservationManager.new
+rm.reserve(room_id: 1, check_in_date: "2019-12-01", check_out_date: "2019-12-15")
+rm.create_block(room_ids: [2, 3], check_in_date: "2019-11-01", check_out_date: "2019-11-15", discount_rate: 0.10)
+rm.reserve_from_block(room_id: 3, block_id: 1)
+# p rm.blocks

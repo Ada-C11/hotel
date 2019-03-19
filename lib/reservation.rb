@@ -15,11 +15,6 @@ module Hotel
       @check_out_date = Date.parse(check_out_date)
     end
 
-    # def cost
-    #   num_nights = @check_out_date - @check_in_date
-    #   return Hotel::Room.new(1).cost * num_nights
-    # end
-
     def self.load_all
       return @reservations || []
     end
