@@ -1,0 +1,2 @@
+class NoRoomsAvailableInBlock < StandardError
+end
