@@ -9,35 +9,35 @@ describe "Reservation_Manager" do
   end
 
   it "has an array of all rooms in hotel" do
-    expect(@hotel.rooms).must_be_kind_of Array
+    expect(@Reservation_Manager.rooms).must_be_kind_of Array
   end
 
   it "has 20 rooms in the hotel" do
-    expect(@hotel.rooms.length).must_equal 20
+    expect(@Reservation_Manager.rooms.length).must_equal 20
   end
 
   it "each index of the array is an instance of class" do
-    expect(@hotel.rooms[0]).must_be_kind_of Hotel::Room
+    expect(@Reservation_Manager.rooms[0]).must_be_kind_of Hotel::Room
   end
 end
 
 describe "see_rooms method" do
   before do
-    @hotel = Hotel::Reservation_Manager.new
+    @Reservation_Manager = Hotel::Reservation_Manager.new
   end
 
   it "returns an Array of rooms in hotel" do
-    expect(@hotel.see_rooms).must_be_kind_of Array
+    expect(@Reservation_Manager.see_rooms).must_be_kind_of Array
   end
 
   it "returns an Array of correct length" do
-    expect(@hotel.see_rooms.length).must_equal 20
+    expect(@Reservation_Manager.see_rooms.length).must_equal 20
   end
 end
 
 describe "reserve_room method" do
   before do
-    @hotel = Hotel::Reservation_Manager.new
+    @Reservation_Manager = Hotel::Reservation_Manager.new
     @date_1 = Date.new(2018, 6, 6)
     @date_2 = Date.new(2018, 6, 9)
     @all_rooms_available = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -48,25 +48,25 @@ describe "reserve_room method" do
   end
 
   it "adds a reservation to the array of all reservations for a room" do
-    @hotel.reserve_room(@input_1)
-    expect(@hotel.rooms[1].reservations[0].name).must_equal "Kittywampus"
+    @Reservation_Manager.reserve_room(@input_1)
+    expect(@Reservation_Manager.rooms[1].reservations[0].name).must_equal "Kittywampus"
   end
 
-  it "checks against room availbility and returns an Argument error if the date range is filled." do
+  it "checks against room availibility and returns an Argument error if the date range is filled." do
     @all_rooms_available.each do |i|
       @input_2 = { name: "Moony",
                   room_id: i,
                   check_in_date: @date_1,
                   check_out_date: @date_2 }
-      @hotel.reserve_room(@input_2)
+      @Reservation_Manager.reserve_room(@input_2)
     end
-    expect { @hotel.reserve_room(@input_1) }.must_raise ArgumentError
+    expect { @Reservation_Manager.reserve_room(@input_1) }.must_raise ArgumentError
   end
 end
 
 describe "list_reservations" do
   before do
-    @hotel = Hotel::Reservation_Manager.new
+    @Reservation_Manager = Hotel::Reservation_Manager.new
     @date = Date.new(2018, 6, 8)
     @input_1 = { name: "Butter",
                 room_id: 1,
@@ -80,16 +80,16 @@ describe "list_reservations" do
   end
 
   it "returns an array of all reservations for that date" do
-    @hotel.reserve_room(@input_1)
-    @hotel.reserve_room(@input_2)
-    expect(@hotel.list_reservations(@date)).must_be_kind_of Array
-    @list = @hotel.list_reservations(@date)
+    @Reservation_Manager.reserve_room(@input_1)
+    @Reservation_Manager.reserve_room(@input_2)
+    expect(@Reservation_Manager.list_reservations(@date)).must_be_kind_of Array
+    @list = @Reservation_Manager.list_reservations(@date)
     @list.each do |reservation|
       expect(@names.include?(reservation.name)).must_equal true
     end
   end
   it "returns an error if no rooms booked on given date" do
-    expect { @hotel.list_reservations(@date) }.must_raise StandardError
+    expect { @Reservation_Manager.list_reservations(@date) }.must_raise StandardError
   end
 end
 
