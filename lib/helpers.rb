@@ -52,7 +52,7 @@ module Hotel
     end
 
     # FIX - there is a bug somewhere in this method
-    def find_all_avail_rooms(check_in_date, check_out_date)
+    def self.find_all_avail_rooms(check_in_date, check_out_date)
       requested_dates = (check_in_date...check_out_date).to_a
       max = reservations_array.length
 
