@@ -24,6 +24,7 @@ module Hotel
       self.class.validate_date_range(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
+
       # I want an exception raised if I try to reserve a room that is unavailable for a given day
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
       new_reservation = Hotel::Reservation.new(
@@ -120,11 +121,6 @@ module Hotel
         block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
       end
 
-      # block.rooms_info.each do |current_room_id, status|
-      #   p status
-      # end
-
-      # ap @blocks
       new_reservation = Hotel::Reservation.new(
         reservation_id: @reservations.length + 1,
         room_id: room_id,
@@ -133,7 +129,6 @@ module Hotel
       )
       # I can see a reservation made from a hotel block
       add_reservation(new_reservation)
-      # store_reservations_in_csv
       # update block to take into consideration the changed status of the reserved room
       store_blocks_in_csv
     end
@@ -207,9 +202,3 @@ module Hotel
     end
   end
 end
-
-rm = Hotel::ReservationManager.new
-rm.reserve(room_id: 1, check_in_date: "2019-12-01", check_out_date: "2019-12-15")
-rm.create_block(room_ids: [2, 3], check_in_date: "2019-11-01", check_out_date: "2019-11-15", discount_rate: 0.10)
-rm.reserve_from_block(room_id: 3, block_id: 1)
-# p rm.blocks

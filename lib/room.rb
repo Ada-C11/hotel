@@ -2,7 +2,7 @@ require "csv"
 
 module Hotel
   class Room
-    # attr_reader :room_id
+    # to allow the user to set different rates for rooms
     attr_accessor :room_id, :cost
 
     def initialize(room_id:, cost: self.class.cost)
@@ -18,19 +18,6 @@ module Hotel
       return 20
     end
 
-    # def self.load_all
-    #   @all_rooms = []
-    #   self.num_rooms.times do |id|
-    #     room = self.new(id + 1, cost: self.cost)
-    #     @all_rooms << room
-    #   end
-    #   return @all_rooms
-    # end
-
-    # @all_rooms = []
-
-    # read rooms' data from rooms.csv
-    # ROOM_DATA_DIRECTORY = "support/rooms.csv"
     def self.load_all
       return CSV.read(
                "support/rooms.csv",
