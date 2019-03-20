@@ -1,7 +1,7 @@
 require_relative "spec_helper.rb"
 
 describe "Wave 1" do
-  describe "DateLogic.date_range_include?" do
+  describe "Calendar.date_range_include?" do
     before do
       @hotel = Hotel::RoomReservation.new
 
