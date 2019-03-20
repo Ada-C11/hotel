@@ -53,38 +53,85 @@ describe "Hotel" do
 
   describe "new_reservation" do
     before do
-      @res = @test_hotel.new_reservation(@test_hotel.rooms.first, @checkin, @checkout)
+      @room1 = @test_hotel.rooms.first
+      @res = @test_hotel.new_reservation(@room1, @checkin, @checkout)
     end
 
     it "adds new reservation to Hotel's reservations" do
       expect(@test_hotel.reservations.first).must_be_kind_of BookingSystem::Reservation
       expect(@test_hotel.reservations.length).must_equal 1
+      expect(@test_hotel.reservations.first.room.room_num).must_equal @room1.room_num
     end
 
     it "adds new reservation to Room's reservations" do
       expect(@test_hotel.reservations.first).must_be_kind_of BookingSystem::Reservation
       expect(@test_hotel.rooms.first.reservations.length).must_equal 1
+      expect(@test_hotel.rooms.first.reservations.first.room.room_num).must_equal @room1.room_num
     end
 
-    # it "returns array of available rooms for OK cases" do
-    #   # starts before, ends on checkin
-    #   expect(@test_room.is_available?(@jan1)).must_equal true
-    #   # starts before, ends before
-    #   # starts on checkout, ends after
-    #   # starts after, ends after
-    # end
+    it "creates a new reservation, valid case: starts before, ends on checkin" do
+      @test_hotel.new_reservation(@room1, @jan1, @checkin)
+      expect(@test_hotel.reservations.last).must_be_kind_of BookingSystem::Reservation
+      expect(@test_hotel.reservations.length).must_equal 2
+      expect(@test_hotel.reservations.last.room.room_num).must_equal @room1.room_num
+    end
 
-    # it "raises ArgumentError for invalid booking dates" do
-    #   # starts before, ends during
-    #   # starts during, ends after
-    #   # starts on checkin, ends on checkout
-    #   # starts before, ends on checkout
-    #   # starts on checkin, ends after
-    #   # starts during, ends during
-    #   # starts before and ends after
-    #   # starts during, ends on checkout
-    #   # starts on checkin, ends during
-    # end
+    it "creates a new reservation, valid case: starts before, ends before" do
+      @test_hotel.new_reservation(@room1, @jan1-1, @jan1)
+      expect(@test_hotel.reservations.last).must_be_kind_of BookingSystem::Reservation
+      expect(@test_hotel.reservations.length).must_equal 2
+      expect(@test_hotel.reservations.last.room.room_num).must_equal @room1.room_num
+    end
+
+    it "creates a new reservation, valid case: starts on checkout, ends after" do
+      @test_hotel.new_reservation(@room1, @checkout, @jan5)
+      expect(@test_hotel.reservations.last).must_be_kind_of BookingSystem::Reservation
+      expect(@test_hotel.reservations.length).must_equal 2
+      expect(@test_hotel.reservations.last.room.room_num).must_equal @room1.room_num
+    end
+
+    it "creates a new reservation, valid case: starts after, ends after" do
+      @test_hotel.new_reservation(@room1, @jan5, @jan5+1)
+      expect(@test_hotel.reservations.last).must_be_kind_of BookingSystem::Reservation
+      expect(@test_hotel.reservations.length).must_equal 2
+      expect(@test_hotel.reservations.last.room.room_num).must_equal @room1.room_num
+    end
+    
+    it "raises ArgumentError for invalid booking dates" do
+    # starts during, ends after
+    expect do
+      @test_hotel.new_reservation(@room1, @jan3, @jan5)
+    end.must_raise ArgumentError
+    
+    # starts on checkin, ends on checkout
+    expect do
+      @test_hotel.new_reservation(@room1, @checkin, @checkout)
+    end.must_raise ArgumentError
+    # starts before, ends on checkout
+    expect do
+      @test_hotel.new_reservation(@room1, @jan1, @checkout)
+    end.must_raise ArgumentError
+    # starts on checkin, ends after
+    expect do
+      @test_hotel.new_reservation(@room1, @checkin, @jan5)
+    end.must_raise ArgumentError
+    # starts during, ends during
+    expect do
+      @test_hotel.new_reservation(@room1, @checkin, @jan3)
+    end.must_raise ArgumentError
+    # starts before and ends after
+    expect do
+      @test_hotel.new_reservation(@room1, @jan1, @jan5)
+    end.must_raise ArgumentError
+    # starts during, ends on checkout
+    expect do
+      @test_hotel.new_reservation(@room1, @jan3, @checkout)
+    end.must_raise ArgumentError
+    # starts on checkin, ends during
+    expect do
+      @test_hotel.new_reservation(@room1, @checkin, @jan3)
+    end.must_raise ArgumentError
+    end
   end
 
   describe "list_by_date" do
@@ -111,10 +158,6 @@ describe "Hotel" do
       same_days = @test_hotel.list_available_rooms(@checkin, @checkout)
       expect(same_days).must_be_kind_of Array
       expect(same_days.count).must_equal 19
-      
-      # diff_days = @test_hotel.list_available_rooms(@jan1, @checkin)
-      # expect(diff_days).must_be_kind_of Array
-      # expect(diff_days.count).must_equal 20
     end
 
     it "raises an ArgumentError if there is no room available in the hotel" do

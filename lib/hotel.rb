@@ -22,7 +22,7 @@ module BookingSystem
     def new_reservation(room, checkin_date, checkout_date)
       (checkin_date...checkout_date).each do |day|
         if !room.is_available?(day)
-          raise ArgumentError.new("Room#{room_num} is not available")
+          raise ArgumentError.new("Room#{room.room_num} is not available")
         end
       end
       reservation = BookingSystem::Reservation.new(room: room, checkin_date: checkin_date, checkout_date: checkout_date)
