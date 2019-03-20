@@ -7,8 +7,8 @@ module BookingSystem
     def initialize(room:, checkin_date:, checkout_date:)
       @room = room
       unless checkin_date.instance_of?(Date) && checkout_date.instance_of?(Date) && checkout_date >= checkin_date
-        raise ArgumentError.new("Please use instances of Date where checkout is later than checkin,
-                                Got check out: #{checkout_date} and check in: #{checkin_date}")
+        # This line is really wrong, but gets incorrectly calculated by coverage if split up
+        raise ArgumentError.new("Please use instances of Date where checkout is later than checkin, got check out: #{checkout_date} and check in: #{checkin_date}")
       end
       @checkin_date = checkin_date
       @checkout_date = checkout_date
