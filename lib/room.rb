@@ -1,20 +1,13 @@
 module Hotel
   class Room
-    # add status, and if part of a hotel block; that way a customer can reserve it within a hotel block?
-    # alternatively, when reserving room, can have method that checks if room requested is in hotel block
-    # for that given date range
-    # should each room in hotel block be added as a reservation?
+    attr_reader :id, :cost, :reservations, :block
 
-    # adds block object
-    attr_reader :id, :cost, :reservations, :block, :status
-
-    def initialize(id:, cost: 200, reservations: nil, block: nil, status: :AVAILABLE)
+    def initialize(id:, cost: 200, reservations: nil, block: nil)
       @id = id
       @cost = cost
       raise ArgumentError, "Cost not valid" if cost.nil? || cost / 1 < 0
       @reservations ||= []
       @block ||= []
-      @status = status
     end
 
     def add_reservation(reservation)

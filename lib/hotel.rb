@@ -16,6 +16,7 @@ module Hotel
       # find room object with room ID
       room = find_room(room_id)
       new_reservation = Reservation.new(id: create_reservation_id, start_date: start_date, end_date: end_date, room: room, block_id: block_id, discount: discount)
+      # p new_reservation.block_id
       add_reservation(new_reservation)
       room.add_reservation(new_reservation)
 
@@ -89,10 +90,10 @@ module Hotel
       hotel_blocks << block
     end
 
-    def reserve_room_hotel_block(room_id, block_id)
+    def reserve_room_hotel_block(room_id, block_id, discount)
       if available_rooms_block(block_id).include?(room_id)
         block = find_block(block_id)
-        reserve_room(block.start_date, block.end_date, room_id, block_id)
+        reserve_room(block.start_date, block.end_date, room_id, block_id, discount)
       else
         puts "can't reserve room in block, there's a bug in your code"
       end

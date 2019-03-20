@@ -8,17 +8,14 @@ module Hotel
       @end_date = end_date
       raise ArgumentError if end_date <= start_date
       @room = room
-      @total_cost = calc_total_cost
       @block_id = block_id
       @discount = discount
+      @total_cost = calc_total_cost
     end
 
     def calc_total_cost
       cost = (end_date - start_date).to_i * room.cost
-      p !block_id.nil?
-      p block_id
       if !block_id.nil?
-        p "Here"
         cost = cost - cost * discount
       end
       return cost

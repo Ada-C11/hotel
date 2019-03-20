@@ -208,7 +208,7 @@ describe "Hotel class" do
       it "reserves a room set aside in a hotel block" do
         room_id = @collection_rooms[0].id
         block_id = @hotel_block_reserved.id
-        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id, @discounted_rate)
         collection_ids = @collection_rooms.map { |room| room.id }
         avail_room_ids = collection_ids - [room_id]
         expect(reserved_room).must_be_kind_of Hotel::Reservation
@@ -219,7 +219,7 @@ describe "Hotel class" do
       it "user can see reservation made from a hotel block from the list of reservations for that date" do
         room_id = @collection_rooms[0].id
         block_id = @hotel_block_reserved.id
-        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id, @discounted_rate)
         start_date = reserved_room.start_date
         # should test #access_reservations for more dates
         expect(@hotel.access_reservations(start_date).include?(reserved_room)).must_equal true
@@ -228,7 +228,7 @@ describe "Hotel class" do
       it "calculates the cost correctly for a given discounted rate" do
         room_id = @collection_rooms[0].id
         block_id = @hotel_block_reserved.id
-        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id)
+        reserved_room = @hotel.reserve_room_hotel_block(room_id, block_id, @discounted_rate)
         start_date = reserved_room.start_date
         end_date = reserved_room.end_date
         expected_cost = (end_date - start_date).to_i * @collection_rooms[0].cost * (1 - @discounted_rate)
