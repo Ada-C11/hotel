@@ -1,3 +1,4 @@
+
 module Hotel
   class HotelLedger
     attr_reader :all_reservations
@@ -14,41 +15,44 @@ module Hotel
       [*(1..20)]
     end
 
-    def self.load_test_data(test_dates)
-      @all_rooms = test_dates.each_with_index.map do |dates, i|
-        r = Hotel::HotelLedger.new(i + 1)
-        r.reserve_date_range(dates[0], dates[1])
-        r
-      end
-    end
-
-    def reservations_on(date)
+    def reservations_on(in_date, out_date = nil)
       reservations.select do |reservation|
-        (reservation[:in_date]..reservation[:out_date]).include?(date)
+        reservation_range = (reservation[:in_date]...reservation[:out_date])
+        if !out_date
+          reservation_range.include?(in_date)
+        else
+          overlap = (reservation_range.to_a & (in_date...out_date).to_a)
+          overlap.any?
+        end
       end
     end
 
-    # def all_available_rooms_on(in_date, out_date)
-    #   available_rooms = (Hotel::HotelLedger.all - Hotel::HotelLedger.reservations_on(@reservation_date_range))
-    # end
+    def all_available_rooms_on(in_date, out_date)
+      reserved_rooms = reservations_on(in_date, out_date).map do |reservation|
+        reservation[:room_number]
+      end
+      available_rooms = (rooms - reserved_rooms)
+    end
 
-    def reserve_date_range(in_date, out_date)
+    def make_reservation(room_number, in_date, out_date)
       raise ArgumentError, "Check out date is before check in date" if out_date <= in_date
+      raise ArgumentError, "Room is unavailable" if reservations_on(in_date, out_date).map do |reservation|
+        reservation[:room_number]
+      end.include?(room_number)
+
       reservation = {
-        room_number: rooms.first,
+        room_number: room_number,
         in_date: in_date,
         out_date: out_date,
       }
       @all_reservations << reservation
     end
 
-    # def reserved_on?(in_date, out_date)
-    #   overlap = (@reservation_date_range.to_a & (in_date...out_date).to_a)
-    #   overlap.any?
-    # end
+    COST = 200
 
-    # def total_cost
-    #   (200.00 * @reservation_date_range.to_a.length).round(2)
-    # end
+    def total_cost(room_number:, in_date:, out_date:)
+      reservation_date_range = (in_date...out_date).to_a
+      (COST * reservation_date_range.length).round(2)
+    end
   end
 end
