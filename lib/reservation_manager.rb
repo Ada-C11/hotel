@@ -193,6 +193,7 @@ module Hotel
         }
         blocks_csv << block_hash
       end
+      blocks_csv.close()
     end
 
     def self.validate_id(id)
