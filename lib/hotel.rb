@@ -4,7 +4,7 @@ class Hotel
   attr_reader :reservations
 
   def initialize
-    @room = [1..20]
+    @room = (1..20).to_a
     @reservations = []
   end
 
