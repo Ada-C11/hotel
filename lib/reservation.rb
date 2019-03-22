@@ -8,6 +8,8 @@ class Reservation
     @end_date = Date.parse(end_date)
     @room_number = room_number
     @rate = rate
+
+    raise ArgumentError if @start_date > @end_date
   end
 
   def calculate_cost
