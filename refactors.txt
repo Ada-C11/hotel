@@ -1,0 +1,9 @@
+Refactors for Hotel:
+
+1. Implement block functionality (hint: it's 80% written as of the penultimate commit before first pull request)
+
+2. Shape up the three-step method-chain process for booking rooms into something more streamlined.
+
+3. Consider splitting out another class hereabout or thereabout ... we didn't mean to get this, er, aerodynamic and it might backfire when the blocks come in, or in terms of readability.
+
+4. Figure out what the heck 3 lines the tests aren't covering and cover them.
