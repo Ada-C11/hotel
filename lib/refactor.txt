@@ -1,0 +1,7 @@
+Project Refactors
+
+1. Wave 3 (block functionality)
+
+2. Refactor methods to make them more DRY
+
+3. Make tests cleaner & possibly reorganize 
