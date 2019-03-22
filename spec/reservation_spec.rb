@@ -1,13 +1,12 @@
-require 'spec_helper.rb'
-require 'date'
+require "spec_helper.rb"
+require "date"
 
 describe "Reservation class" do
-
   describe "initialize" do
     it "returns an instance of reservation object" do
       check_in = Date.parse("2019/09/17")
       check_out = Date.parse("2019/09/18")
-      duration = Hotel::Time_Interval.new(check_in, check_out)
+      duration = Hotel::TimeInterval.new(check_in, check_out)
       expect(Hotel::Reservation.new(duration, 1, 1)).must_be_instance_of Hotel::Reservation
     end
   end
@@ -16,7 +15,7 @@ describe "Reservation class" do
     before do
       check_in = Date.parse("2019/09/17")
       check_out = Date.parse("2019/09/18")
-      duration = Hotel::Time_Interval.new(check_in, check_out)
+      duration = Hotel::TimeInterval.new(check_in, check_out)
       @r = Hotel::Reservation.new(duration, 1, 1)
     end
 
@@ -33,7 +32,7 @@ describe "Reservation class" do
     it "returns accurate total costs for a single room booked for 3 nights" do
       check_in = Date.parse("2019/09/17")
       check_out = Date.parse("2019/09/20")
-      duration = Hotel::Time_Interval.new(check_in, check_out)
+      duration = Hotel::TimeInterval.new(check_in, check_out)
       r = Hotel::Reservation.new(duration, 1, 200)
       expect(r.total_cost).must_equal 600
     end

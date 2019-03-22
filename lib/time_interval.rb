@@ -1,6 +1,7 @@
-require 'date'
+require "date"
+
 module Hotel
-  class Time_Interval
+  class TimeInterval
     attr_reader :check_in, :check_out
 
     def initialize(check_in, check_out)
@@ -13,8 +14,8 @@ module Hotel
     end
 
     def overlap?(time_interval)
-      return !(time_interval.check_out <= @check_in || 
-              @check_out <= time_interval.check_in)
+      return !(time_interval.check_out <= @check_in ||
+               @check_out <= time_interval.check_in)
     end
 
     def has_date?(date)
