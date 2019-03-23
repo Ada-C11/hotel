@@ -1,0 +1,11 @@
+1. reduce dependencies within the ReservationManager class by creating more 
+helper methods within the class, and also in the Room & Reservation classes
+
+2. refactor to somehow make attr_writer for booking_name in Reservation class
+private??
+
+3. I have a feeling that the code would be cleaner if I used Date ranges instead
+of arrays of dates...even though I started with Date ranges and switched to 
+arrays, and now I want to switch back. huff.
+
+4. Do you need the Room Class? Can it be eliminated?
