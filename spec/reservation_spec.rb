@@ -25,10 +25,4 @@ describe "Hotel::Reservation" do
       expect { Hotel::Reservation.new(check_in_date: "2019-03-12", check_out_date: "2019-03-15") }.must_raise ArgumentError
     end
   end
-
-  # describe "cost" do
-  #   it "calculates the total cost correctly" do
-  #     expect(reservation.cost).must_be_close_to 600.0
-  #   end
-  # end
 end

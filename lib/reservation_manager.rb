@@ -1,6 +1,7 @@
 require_relative "reservation"
 require_relative "room"
 require_relative "block"
+require_relative "date_range"
 require "awesome_print"
 
 module Hotel
@@ -19,9 +20,7 @@ module Hotel
     def reserve(room_id:, check_in_date:, check_out_date:)
       self.class.validate_id(room_id)
       # I want exception raised when an invalid date range is provided
-      self.class.validate_date(check_in_date)
-      self.class.validate_date(check_out_date)
-      self.class.validate_date_range(check_in_date, check_out_date)
+      Hotel::DateRange.new(check_in_date, check_out_date)
       available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
 
       # I want an exception raised if I try to reserve a room that is unavailable for a given day
@@ -32,8 +31,7 @@ module Hotel
 
     # I can access the list of reservations for a specific date, so that I can track reservations by date
     def list_reservations(date:)
-      self.class.validate_date(date)
-      date = Date.parse(date)
+      date = Hotel::DateRange.validate_date(date)
       reservations = self.reservations.select do |reservation|
         date >= reservation.check_in_date && date < reservation.check_out_date
       end
@@ -49,16 +47,12 @@ module Hotel
 
     # I can view a list of rooms that are not reserved for a given date range
     def find_available_rooms(check_in_date:, check_out_date:)
-      self.class.validate_date(check_in_date)
-      self.class.validate_date(check_out_date)
-      self.class.validate_date_range(check_in_date, check_out_date)
-      check_in_date = Date.parse(check_in_date)
-      check_out_date = Date.parse(check_out_date)
-      na_reservations = get_na_objects(@reservations, check_in_date, check_out_date)
+      Hotel::DateRange.new(check_in_date, check_out_date)
+      na_reservations = Hotel::DateRange.get_na_objects(@reservations, check_in_date, check_out_date)
       na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
 
       # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve or create a block for that specific room for that specific date
-      na_blocks = get_na_objects(@blocks, check_in_date, check_out_date)
+      na_blocks = Hotel::DateRange.get_na_objects(@blocks, check_in_date, check_out_date)
       na_room_ids_blocks = []
       na_blocks.each do |block|
         block.room_ids.each do |i|
@@ -77,9 +71,7 @@ module Hotel
     # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
     def create_block(room_ids:, check_in_date:, check_out_date:, discount_rate:)
       room_ids.each { |room_id| self.class.validate_id(room_id) }
-      self.class.validate_date(check_in_date)
-      self.class.validate_date(check_out_date)
-      self.class.validate_date_range(check_in_date, check_out_date)
+      Hotel::DateRange.new(check_in_date, check_out_date)
       available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
 
       # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
@@ -140,29 +132,6 @@ module Hotel
         check_in_date: check_in_date,
         check_out_date: check_out_date,
       )
-    end
-
-    def self.validate_date(date)
-      raise ArgumentError, "Date cannot be nil" if date == nil
-      raise ArgumentError, "Date must be a String" if date.class != String
-      raise ArgumentError, "Date must be in the format yyyy-mm-dd" if date !~ /^(\d{4})\-(\d{1,2})\-(\d{1,2})$/
-      groups = date.match(/^(\d{4})\-(\d{1,2})\-(\d{1,2})$/)
-      raise ArgumentError, "Month cannot be larger than 12" if groups[2].to_i > 12
-      raise ArgumentError, "Day cannot be larger than 31" if groups[3].to_i > 31
-    end
-
-    def self.validate_date_range(start_date, end_date)
-      start_date = Date.parse(start_date)
-      end_date = Date.parse(end_date)
-      raise ArgumentError, "Check_out_date must be after check_in_date" if end_date < start_date
-    end
-
-    def get_na_objects(array_object, check_in_date, check_out_date)
-      return array = array_object.select do |object|
-               check_in_date < object.check_out_date && check_in_date >= object.check_in_date ||
-               check_out_date > object.check_in_date && check_out_date < object.check_out_date ||
-               check_in_date < object.check_in_date && check_out_date > object.check_out_date
-             end
     end
 
     def add_reservation(new_reservation)
