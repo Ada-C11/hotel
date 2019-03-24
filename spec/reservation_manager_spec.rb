@@ -73,19 +73,29 @@ describe "Reservation Manager" do
     end
   end
 
-#   describe "search reservation by date method" do 
-#     before do 
-#       @frontdesk = Hotel::ReservationManager.new(4)
-#       @check_in = Date.new(2019,3,15)
-#       @check_out = Date.new(2019,3,18)
-#     end
-     
-#     it "allows you to check reservations by a specific date" do
-#        @frontdesk.book_reservation(1, @check_in, @check_out)
-#        check = @frontdesk.res_by_date(@check_in)
-#        expect(check[0]).must_be_instance_of(Hotel::Reservation)
-#     end
-#  end  
+  describe "search reservation by date method" do 
+    before do 
+      @frontdesk.book_reservation(1,
+        Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,9)))
+      @frontdesk.book_reservation(1,
+        Hotel::DateRange.new(Date.new(2019,4,11), Date.new(2019,4,12)))
+      @frontdesk.book_reservation(5,
+        Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,8)))
+      @res_list = @frontdesk.res_by_date(Date.new(2019,3,7))
+    end
+
+    it 'returns an empty array if there are no reservations during selected date' do
+      expect(@frontdesk.res_by_date(Date.new(2002,3,15)) ).must_be_instance_of(Array)
+    end
+
+    it "returns array of all booked reservations" do
+      expect(@res_list).must_be_instance_of(Array)
+      @res_list.each do |reservation|
+        expect(reservation).must_be_instance_of(Hotel::Reservation)
+      end
+    end
+ end  
+
 
 #   describe "room availability method" do
 #     before do
