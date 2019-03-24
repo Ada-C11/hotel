@@ -22,6 +22,8 @@ module Hotel
 
     def room_availability(check_in, check_out)
       booked_rooms = []
+      @reservations.each do |reservation|
+      end
     end
 
 
@@ -61,6 +63,4 @@ module Hotel
     # end
  
   end
-
-  # not able to create a pull request?
-end  
+end 
