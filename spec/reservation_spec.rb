@@ -39,14 +39,5 @@ describe "Reservation Class" do
       expect(@reservation.total_cost).must_equal 800
       puts "This reservation will cost $#{@reservation.total_cost}."
     end
-
-    # it "is set up for specific attributes and data types" do
-    #   [:check_in, :check_out, :rooms].each do |prop|
-    #     expect(@reservation).must_respond_to prop
-    #   end
-    #   expect(@reservation.check_in).must_be_kind_of Date
-    #   expect(@reservation.check_out).must_be_kind_of Date
-    #   # expect(@reservation.rooms).must_be_kind_of Integer
-    # end
   end
 end
