@@ -11,7 +11,7 @@ module Hotel
 
     def hotel_rooms
       rooms = [*1..20]
-      return rooms
+      return rooms 
     end
 
     #  basic reservation methods
@@ -20,10 +20,15 @@ module Hotel
       @reservations << reservation
     end
 
+    # check if a date range has been taken and store it in booked rooms array
     def room_availability(check_in, check_out)
       booked_rooms = []
       @reservations.each do |reservation|
+        if reservation.date_range.daterange_check(check_in, check_out)
+          booked_rooms << reservation.room_number
+        end
       end
+      return hotel_rooms - booked_rooms
     end
 
 

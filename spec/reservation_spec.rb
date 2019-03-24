@@ -20,7 +20,6 @@ describe "Reservation" do
     it "should return the total cost of the reservation" do
       expect(@new_reservation.total_cost).must_equal(800)
     end
-
   end
 
 end

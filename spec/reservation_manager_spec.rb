@@ -28,6 +28,28 @@ describe "Reservation Manager" do
 
   end
 
+  describe 'room availability method' do
+    it "returns available rooms" do 
+      [*1..5].each do |room|
+        @frontdesk.book_reservation(room, Hotel::DateRange.new(Date.new(2019,3,15),Date.new(2019,3,18)))
+      end
+      expect(@frontdesk.room_availability(Date.new(2019,3,15), Date.new(2019,3,18))).must_equal([*6..20])
+    end
+
+    it "returns empty array if all rooms are booked" do
+      [*1..20].each do |room|
+        @frontdesk.book_reservation(room, Hotel::DateRange.new(Date.new(2019,3,15),Date.new(2019,3,18)))
+      end
+      expect(@frontdesk.room_availability(Date.new(2019,3,15), Date.new(2019,3,18))).must_equal([])
+      # expect(@frontdesk.room_availability(Date.new(2019,3,11), Date.new(2019,3,13))).must_equal([])
+    end
+  end
+
+  describe "book reservation method" do
+
+  
+  end
+
 #   describe "search reservation by date method" do 
 #     before do 
 #       @frontdesk = Hotel::ReservationManager.new(4)
