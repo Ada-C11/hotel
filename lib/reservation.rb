@@ -6,20 +6,14 @@ module Hotel
   
     def initialize(room_number, date_range, cost: 200)
       @room_number = room_number 
-      @check_in = check_in
-      if check_out < check_in
-        raise ArgumentError, "Check out date cannot be before check in date"
-      else
-        @check_out = check_out
-      end
+      @date_range = date_range
       @cost = cost
 
     end
 
     def total_cost
-      days_spent = self.check_out - self.check_in
       if cost == 200
-        return days_spent * 200
+        return @date_range.total_stay * cost
       else
         return days_spent * 100
       end
