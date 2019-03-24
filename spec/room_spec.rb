@@ -12,4 +12,10 @@ describe "Room" do
       expect(Hotel::Room.cost).must_be_kind_of Float
     end
   end
+
+  describe "num_rooms" do
+    it "contains 20 rooms" do
+      expect(Hotel::Room.num_rooms).must_equal 20
+    end
+  end
 end
