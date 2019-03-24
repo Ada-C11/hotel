@@ -22,17 +22,11 @@ module Hotel
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
-      available_room_ids = available_rooms.map { |room| room.room_id }
+      available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
 
       # I want an exception raised if I try to reserve a room that is unavailable for a given day
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
-      new_reservation = Hotel::Reservation.new(
-        reservation_id: @reservations.length + 1,
-        room_id: room_id,
-        check_in_date: check_in_date,
-        check_out_date: check_out_date,
-      )
+      new_reservation = new_reservation(room_id, check_in_date, check_out_date)
       add_reservation(new_reservation)
     end
 
@@ -61,6 +55,7 @@ module Hotel
       check_in_date = Date.parse(check_in_date)
       check_out_date = Date.parse(check_out_date)
       na_reservations = get_na_objects(@reservations, check_in_date, check_out_date)
+      na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
 
       # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve or create a block for that specific room for that specific date
       na_blocks = get_na_objects(@blocks, check_in_date, check_out_date)
@@ -71,11 +66,12 @@ module Hotel
         end
       end
 
-      na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
       na_room_ids = (na_room_ids_blocks + na_room_ids_reservations).uniq
-      return @rooms.reject do |room|
-               na_room_ids.include?(room.room_id)
-             end
+      available_rooms = @rooms.reject do |room|
+        na_room_ids.include?(room.room_id)
+      end
+
+      return available_rooms.map { |room| room.room_id }
     end
 
     # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
@@ -84,8 +80,7 @@ module Hotel
       self.class.validate_date(check_in_date)
       self.class.validate_date(check_out_date)
       self.class.validate_date_range(check_in_date, check_out_date)
-      available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
-      available_room_ids = available_rooms.map { |room| room.room_id }
+      available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
 
       # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
       room_ids.each do |room_id|
@@ -120,16 +115,12 @@ module Hotel
       block.rooms_info.each do |current_room_id, status|
         block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
       end
+      check_in_date = block.check_in_date.to_s
+      check_out_date = block.check_out_date.to_s
+      new_reservation = new_reservation(room_id, check_in_date, check_out_date)
 
-      new_reservation = Hotel::Reservation.new(
-        reservation_id: @reservations.length + 1,
-        room_id: room_id,
-        check_in_date: block.check_in_date.to_s,
-        check_out_date: block.check_out_date.to_s,
-      )
       # I can see a reservation made from a hotel block
       add_reservation(new_reservation)
-      # update block to take into consideration the changed status of the reserved room
       store_blocks_in_csv
     end
 
@@ -141,6 +132,15 @@ module Hotel
     end
 
     private
+
+    def new_reservation(room_id, check_in_date, check_out_date)
+      Hotel::Reservation.new(
+        reservation_id: @reservations.length + 1,
+        room_id: room_id,
+        check_in_date: check_in_date,
+        check_out_date: check_out_date,
+      )
+    end
 
     def self.validate_date(date)
       raise ArgumentError, "Date cannot be nil" if date == nil

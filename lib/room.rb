@@ -2,7 +2,7 @@ require "csv"
 
 module Hotel
   class Room
-    # to allow the user to set different rates for rooms
+    # using attr_accessor to allow the user to set different rates for rooms
     attr_accessor :room_id, :cost
 
     def initialize(room_id:, cost: self.class.cost)
