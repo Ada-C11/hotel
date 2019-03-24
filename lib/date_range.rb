@@ -24,7 +24,7 @@ module Hotel
       return total_nights
     end
 
-
+    
     
   end
 end
