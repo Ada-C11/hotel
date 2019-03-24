@@ -10,6 +10,7 @@ module Hotel
       @cost = cost
     end
 
+    # make it a class so that it's easy to generate data into CSV files
     def self.cost
       return 200.00
     end

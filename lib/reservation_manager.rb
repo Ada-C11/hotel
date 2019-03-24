@@ -21,7 +21,8 @@ module Hotel
       self.class.validate_id(room_id)
       # I want exception raised when an invalid date range is provided
       Hotel::DateRange.new(check_in_date, check_out_date)
-      available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
+      available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
+      available_room_ids = available_rooms.map { |room| room.room_id }
 
       # I want an exception raised if I try to reserve a room that is unavailable for a given day
       raise ArgumentError, "Room #{room_id} is not available for this date range!" if available_room_ids.include?(room_id) == false
@@ -61,18 +62,19 @@ module Hotel
       end
 
       na_room_ids = (na_room_ids_blocks + na_room_ids_reservations).uniq
-      available_rooms = @rooms.reject do |room|
-        na_room_ids.include?(room.room_id)
-      end
+      return available_rooms = @rooms.reject do |room|
+               na_room_ids.include?(room.room_id)
+             end
 
-      return available_rooms.map { |room| room.room_id }
+      # return available_rooms.map { |room| room.room_id }
     end
 
     # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
     def create_block(room_ids:, check_in_date:, check_out_date:, discount_rate:)
       room_ids.each { |room_id| self.class.validate_id(room_id) }
       Hotel::DateRange.new(check_in_date, check_out_date)
-      available_room_ids = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
+      available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
+      available_room_ids = available_rooms.map { |room| room.room_id }
 
       # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
       room_ids.each do |room_id|
@@ -87,6 +89,7 @@ module Hotel
       )
       @blocks << new_block
       store_blocks_in_csv
+      return new_block
     end
 
     # I can check whether a given block has any rooms available
@@ -114,6 +117,7 @@ module Hotel
       # I can see a reservation made from a hotel block
       add_reservation(new_reservation)
       store_blocks_in_csv
+      return new_reservation
     end
 
     # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
