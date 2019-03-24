@@ -119,8 +119,9 @@ module Hotel
     # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
     def set_room_rate(room_id:, room_rate:)
       @rooms.each do |room|
-        room.cost = room_rate if room.room_id == room_id
+        room.cost = room_rate.to_f if room.room_id == room_id
       end
+      store_room_rates_in_csv
     end
 
     private
@@ -163,6 +164,18 @@ module Hotel
         blocks_csv << block_hash
       end
       blocks_csv.close()
+    end
+
+    def store_room_rates_in_csv
+      rooms_csv = CSV.open("support/rooms.csv", "w+", write_headers: true, headers: ["room_id", "cost"])
+      @rooms.each do |room|
+        room_hash = {
+          "room_id" => room.room_id,
+          "cost" => room.cost.to_f,
+        }
+        rooms_csv << room_hash
+      end
+      rooms_csv.close()
     end
 
     def self.validate_id(id)
