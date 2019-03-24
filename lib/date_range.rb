@@ -24,7 +24,10 @@ module Hotel
       return total_nights
     end
 
-    
+    def date_check(date)
+      valid_date = (date >= @check_in && date < @check_out)
+      return valid_date
+    end
     
   end
 end

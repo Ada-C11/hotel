@@ -20,7 +20,9 @@ module Hotel
       @reservations << reservation
     end
 
-
+    def room_availability(check_in, check_out)
+      booked_rooms = []
+    end
 
 
 

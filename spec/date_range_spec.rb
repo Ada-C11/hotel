@@ -33,4 +33,13 @@ describe "DateRange class" do
     end
   end
 
+  describe 'date check method' do
+    it 'returns true if valid date is within daterange' do
+        expect( @test_daterange.date_check(Date.new(2019,3,12)) ).must_equal(true)
+        expect( @test_daterange.date_check(Date.new(2019,3,13)) ).must_equal(true)
+        expect( @test_daterange.date_check(Date.new(2019,3,14)) ).must_equal(true)
+    end
+
+  end
+
 end
