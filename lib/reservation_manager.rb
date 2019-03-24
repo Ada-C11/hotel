@@ -16,8 +16,13 @@ module Hotel
 
     #  basic reservation methods
     def book_reservation(room, date_range)
+      # raising the error but test says nothing was raised
+      unless room_availability(date_range.check_in, date_range.check_out).include?(room)
+        raise ArgumentError, "The room you've selected is not available for these dates."
+      end
       reservation = Hotel::Reservation.new(room, date_range)
       @reservations << reservation
+      return reservation
     end
 
     # check if a date range has been taken and store it in booked rooms array
@@ -25,7 +30,7 @@ module Hotel
       booked_rooms = []
       @reservations.each do |reservation|
         if reservation.date_range.daterange_check(check_in, check_out)
-          booked_rooms << reservation.room_number
+          booked_rooms << reservation.room
         end
       end
       return hotel_rooms - booked_rooms

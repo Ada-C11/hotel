@@ -2,10 +2,10 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader  :room_number, :date_range, :cost
+    attr_reader  :room, :date_range, :cost
   
-    def initialize(room_number, date_range, cost: 200)
-      @room_number = room_number 
+    def initialize(room, date_range, cost: 200)
+      @room = room
       @date_range = date_range
       @cost = cost
 

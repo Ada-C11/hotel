@@ -41,13 +41,36 @@ describe "Reservation Manager" do
         @frontdesk.book_reservation(room, Hotel::DateRange.new(Date.new(2019,3,15),Date.new(2019,3,18)))
       end
       expect(@frontdesk.room_availability(Date.new(2019,3,15), Date.new(2019,3,18))).must_equal([])
-      # expect(@frontdesk.room_availability(Date.new(2019,3,11), Date.new(2019,3,13))).must_equal([])
+      expect(@frontdesk.room_availability(Date.new(2019,3,11), Date.new(2019,3,16))).must_equal([])
     end
   end
 
   describe "book reservation method" do
+    before do
+      @reservations = []
+      @test_range = Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,15))
+    end
+     
+    it "stores booked reservations in reservations array" do
+      res1 = @frontdesk.book_reservation(1, @test_range)
+      @reservations << res1
 
-  
+      expect(@reservations.length).must_equal(1)    
+    end
+
+    it "raises an error if the room is not available" do
+      expect{@frontdesk.book_reservation(1,
+          Hotel::DateRange.new(Date.new(2019,3,12), Date.new(2019,3,13)))
+          }.must_raise(ArgumentError)
+    end
+
+    it 'booking a date returns an instance of reservation' do
+      reservation = @frontdesk.book_reservation(1,
+        Hotel::DateRange.new(Date.new(2019,3,12), Date.new(2019,3,13)))
+      expect(reservation).must_be_instance_of(Hotel::Reservation)
+      expect(reservation.date_range.check_in).must_equal(Date.new(2019,3,12))
+      expect(reservation.date_range.check_out).must_equal(Date.new(2019,3,13))
+    end
   end
 
 #   describe "search reservation by date method" do 
