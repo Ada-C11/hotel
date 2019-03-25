@@ -18,16 +18,6 @@ describe "Reservation Manager" do
     expect(@frontdesk.hotel_rooms.length).must_equal(20)
   end
 
-  describe "book reservation method" do
-    before do
-      @frontdesk = Hotel::ReservationManager
-      @frontdesk.book_reservation(1, Date.new(2019,3,15), Date.new(2019,3,18))
-      @frontdesk.book_reservation(1, Date.new(2019,4,10), Date.new(2019,3,12))
-      @frontdesk.book_reservation(2, Date.new(2019,3,12), Date.new(2019,3,17))
-    end
-
-  end
-
   describe 'room availability method' do
     it "returns available rooms" do 
       [*1..5].each do |room|

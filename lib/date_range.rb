@@ -16,7 +16,6 @@ module Hotel
       if total_stay <= 0
         raise ArgumentError, "Invalid date range provided."
       end
-
     end
 
     def total_stay

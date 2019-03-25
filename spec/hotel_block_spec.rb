@@ -2,19 +2,18 @@ require_relative 'spec_helper.rb'
 
 describe "Hotel Block" do
   before do
-    @check_in = Date.new(2019,3,15)
-    @check_out = Date.new(2019,3,18)
+   @test_range = Hotel::DateRange.new(Date.new(2019,3,15), Date.new(2019,3,18))
   end
 
-  # describe "Create a Hotel Block" do
-  #   it "should create an instance of the hotel block class" do
-  #     expect(Hotel::HotelBlock.new([*1..5], @check_in, @check_out)).must_be_instance_of(Hotel::HotelBlock)
-  #   end 
-
+  describe "Create a Hotel Block" do
+    it "should create an instance of the hotel block class" do
+      expect(Hotel::HotelBlock.new([*1..5], @test_range)).must_be_instance_of(Hotel::HotelBlock)
+    end 
+ 
   #   it "raises an argument error for booking more than 5 rooms" do
   #     expect{Hotel::HotelBlock.new([*1..6], @check_in, @check_out, 100)}.must_raise(ArgumentError)
   #   end
-  # end 
+  end 
 
   # describe "add reservation method" do
   #   before do

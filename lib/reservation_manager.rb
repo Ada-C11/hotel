@@ -44,7 +44,7 @@ module Hotel
           res_list << reservation
         end
       end
-      return res_list
+      return res_list.empty? ? [] : res_list
     end
 
 

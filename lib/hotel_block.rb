@@ -1,35 +1,27 @@
 module Hotel
   class HotelBlock
-    attr_reader :room, :check_in, :check_out, :cost, :reservations, :hotel
+    attr_reader :rooms, :date_range, :cost
 
-    def initialize(room, check_in, check_out, cost = 200)
-      if room.length > 5
+    def initialize(rooms, date_range, cost = 100)
+      if rooms.length > 5
         raise ArgumentError, "Blocks cannot be more than 5 rooms."
       end
       
-      @hotel ||= hotel
-      @room = room
-      @check_in = check_in
-      @check_out = check_out
+      @rooms = rooms
+      @date_range = date_range
       @cost = cost
       @reservations = []
     end
 
-    # def add_reservation(room, check_in, check_out, cost)
-
-    #   if dates_match(check_in, check_out) == false
-    #     raise ArgumentError, "The date range provided does not match this block."
-    #   end
-      
-    #   unless rooms_available.include?(room)
-    #     raise ArgumentError, "There are no available rooms."
-    #   end
-    
-    #   reservation = Hotel::Reservation.new(room, check_in, check_out)
-    #   # shovel into room reservations array
-    #   @reservations << reservation
-    #   return reservation
-    # end
+    def book_block_reservation(room, date_range)
+      if rooms.length > 5
+        raise ArgumentError, "You cannot book more than 5 rooms."
+      end
+   
+      reservation = Hotel::Reservation.new(room, check_in, check_out)
+      @reservations << reservation
+      return reservation
+    end
 
     # # check to see if check in and check out match instances of check in and check out
     # def dates_match(check_in, check_out)

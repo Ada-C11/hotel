@@ -8,7 +8,6 @@ module Hotel
       @room = room
       @date_range = date_range
       @cost = cost
-
     end
 
     def total_cost
