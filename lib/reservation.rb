@@ -14,7 +14,7 @@ module Hotel
       if cost == 200
         return @date_range.total_stay * cost
       else
-        return days_spent * 100
+        return @date_range * 100
       end
     end
     
