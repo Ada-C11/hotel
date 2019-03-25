@@ -33,15 +33,24 @@ describe "Reservation Manager" do
       expect(@frontdesk.room_availability(Date.new(2019,3,15), Date.new(2019,3,18))).must_equal([])
       expect(@frontdesk.room_availability(Date.new(2019,3,11), Date.new(2019,3,16))).must_equal([])
     end
+
+     it "a reservation is allowed to start the same day another ends" do
+#       @check_in5 = Date.new(2019,3,18)
+#       @check_out5 = Date.new(2019,3,20)
+#       @reservation5 = @frontdesk.book_reservation(@check_in5, @check_out5)
+      
+#       expect(@reservation5).must_be_kind_of(Hotel::Reservation)
+    end
   end
 
   describe "book reservation method" do
     before do
-      @reservations = []
       @test_range = Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,15))
     end
      
     it "stores booked reservations in reservations array" do
+      @reservations = []
+
       res1 = @frontdesk.book_reservation(1, @test_range)
       @reservations << res1
 
@@ -49,6 +58,8 @@ describe "Reservation Manager" do
     end
 
     it "raises an error if the room is not available" do
+      @frontdesk.book_reservation(1, @test_range)
+
       expect{@frontdesk.book_reservation(1,
           Hotel::DateRange.new(Date.new(2019,3,12), Date.new(2019,3,13)))
           }.must_raise(ArgumentError)
