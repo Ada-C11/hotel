@@ -1,0 +1,10 @@
+1 - I would like to make a Room class because although it is unnecessary for this
+project I think it would lend itself to greater future proofing as new rooms could
+be added with new attributes as well (like cost differences)
+
+2 - Test data read from a CSV file could have been more thorough and led to better
+tests
+
+3 - I'm not sure that I like Calendar being a separate module but I'm not sure how
+to better rework it
+
