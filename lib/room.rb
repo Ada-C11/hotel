@@ -50,12 +50,7 @@ module Hotel
     end
 
     def get_reservation_on_date(date)
-      @reservations.each do |reservation|
-        if reservation.has_date?(date)
-          return reservation
-        end
-      end
-      return nil
+      return @reservations.find { |reservation| reservation.has_date?(date) }
     end
 
     def block_dates(reserved_dates)
@@ -66,12 +61,7 @@ module Hotel
     end
 
     def has_blocked_dates?(time_interval)
-      @block_intervals.each do |interval|
-        if interval.equals?(time_interval)
-          return true
-        end
-      end
-      return false
+      return @block_intervals.any? { |interval| interval.equals?(time_interval) }
     end
 
     def is_available_in_block?(time_interval)
