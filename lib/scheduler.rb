@@ -21,9 +21,7 @@ module Hotel
       list = Array.new
       @rooms.each_key { |id|
         r = @rooms[id].get_reservation_on_date(date)
-        if !r.nil?
-          list << r
-        end
+        list << r unless r.nil?
       }
       return list
     end
