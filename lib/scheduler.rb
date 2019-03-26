@@ -41,11 +41,11 @@ module Hotel
     def create_block(date_range, room_ids, discounted_rate)
       room_ids.each do |id|
         if !@rooms[id].is_available?(date_range)
-          raise ArgumentError, "One of the rooms in your block is not available."
+          raise RoomNotAvailableError, "One of the rooms in your block is not available."
         end
       end
 
-      block = Hotel::Block.new(@next_block_id, room_ids, date_range, discounted_rate)
+      block = Block.new(@next_block_id, room_ids, date_range, discounted_rate)
       @blocks[block.block_id] = block
       @next_block_id = @next_block_id + 1
 

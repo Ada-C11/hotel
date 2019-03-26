@@ -1,5 +1,5 @@
 require "date"
-require "spec_helper.rb"
+require_relative "spec_helper"
 
 describe "time_interval class" do
   describe "initialize" do

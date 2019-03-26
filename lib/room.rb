@@ -2,7 +2,7 @@ module Hotel
   class Room
     attr_reader :room_id
 
-    RATE = 200.freeze
+    RATE = 200
     private_constant :RATE
 
     def initialize(room_id)
@@ -13,10 +13,10 @@ module Hotel
 
     def reserve(reserved_dates)
       if !is_available?(reserved_dates)
-        raise ArgumentError, "The room you want to reserve is not available."
+        raise RoomNotAvailableError, "The room you want to reserve is not available."
       end
 
-      r = Hotel::Reservation.new(reserved_dates, @room_id, RATE)
+      r = Reservation.new(reserved_dates, @room_id, RATE)
       @reservations << r
       return r
     end
@@ -24,14 +24,14 @@ module Hotel
     def reserve_block(reserved_dates, discount_rate)
       @block_intervals.each do |interval|
         if interval.equals?(reserved_dates)
-          r = Hotel::Reservation.new(reserved_dates, @room_id, discount_rate)
+          r = Reservation.new(reserved_dates, @room_id, discount_rate)
           @reservations << r
           @block_intervals.delete(interval)
           return r
         end
       end
 
-      raise ArgumentError, "You cannot reserve this room"
+      raise RoomNotAvailableError, "You cannot reserve this room"
     end
 
     def is_available?(time_interval)
@@ -60,7 +60,7 @@ module Hotel
 
     def block_dates(reserved_dates)
       if !is_available?(reserved_dates)
-        raise ArgumentError, "You cannot block out these dates"
+        raise RoomNotAvailableError, "You cannot block out these dates"
       end
       @block_intervals << reserved_dates
     end

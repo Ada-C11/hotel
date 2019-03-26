@@ -1,4 +1,4 @@
-require "spec_helper.rb"
+require_relative "spec_helper"
 require "date"
 
 describe "Room class" do
@@ -55,11 +55,11 @@ describe "Room class" do
       expect(@room.get_reservation_on_date(Date.parse("2019-04-01")).room_id).must_equal 9
     end
 
-    it "raises an argument error when there is an attempt to add an overlapped reservation" do
+    it "raises an error when there is an attempt to add an overlapped reservation" do
       @room.reserve(Hotel::TimeInterval.new(Date.parse("2019-04-01"), Date.parse("2019-04-03")))
       expect {
         @room.reserve(Hotel::TimeInterval.new(Date.parse("2019-04-01"), Date.parse("2019-04-03")))
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
   end
 
@@ -72,7 +72,7 @@ describe "Room class" do
       reserved_dates = Hotel::TimeInterval.new(Date.parse("2019-10-14"), Date.parse("2019-10-18"))
       expect {
         room.reserve_block(reserved_dates, 180)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
 
     it "successfully reserve a block" do
@@ -114,7 +114,7 @@ describe "Room class" do
 
       expect {
         room.block_dates(duration_two)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
 
     it "throws an exception if dates are unavailable because of non-block reservations" do
@@ -123,7 +123,7 @@ describe "Room class" do
 
       expect {
         room.block_dates(duration)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
   end
 end

@@ -1,4 +1,4 @@
-require "spec_helper.rb"
+require_relative "spec_helper"
 require "date"
 
 describe "Scheduler class" do
@@ -46,12 +46,12 @@ describe "Scheduler class" do
       expect(reservations[0].total_cost).must_equal 600
     end
 
-    it "raises an argument error when booking on the same duration for the same room" do
+    it "raises an error when booking on the same duration for the same room" do
       @scheduler.reserve_room(0, @date_range)
       test_duration = Hotel::TimeInterval.new(Date.parse("2019-06-13"), Date.parse("2019-06-16"))
       expect {
         @scheduler.reserve_room(0, test_duration)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
 
     it "successfully adds same date range to two different rooms" do
@@ -138,29 +138,28 @@ describe "Scheduler class" do
       Hotel::Scheduler.new(6)
     }
 
-    it "raises an argument error if at least one of the rooms is unavailable for a given date range" do
+    it "raises an error if at least one of the rooms is unavailable for a given date range" do
       scheduler.reserve_room(0, Hotel::TimeInterval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")))
       room_ids = [0, 2, 5]
       discounted_rate = 180
       expect {
         scheduler.create_block(Hotel::TimeInterval.new(Date.parse("2019-05-01"), Date.parse("2019-05-04")),
                                room_ids, discounted_rate)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
 
-    it "raises an argument error when there is an attempt to reserve a room that is part of a block" do
+    it "raises an error when there is an attempt to reserve a room that is part of a block" do
       room_ids = [0, 2, 5]
       discounted_rate = 180
       scheduler.create_block(Hotel::TimeInterval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")),
                              room_ids, discounted_rate)
 
       expect {
-        scheduler.reserve_room(0, Hotel::TimeInterval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")),
-                               room_ids, discounted_rate)
-      }.must_raise ArgumentError
+        scheduler.reserve_room(0, Hotel::TimeInterval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")))
+      }.must_raise Hotel::RoomNotAvailableError
     end
 
-    it "raises an argument error when there is an attempt to create a block that overlaps with existing blocks" do
+    it "raises an error when there is an attempt to create a block that overlaps with existing blocks" do
       room_ids = [0, 2, 5]
       discounted_rate = 180
       scheduler.create_block(Hotel::TimeInterval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")),
@@ -170,7 +169,7 @@ describe "Scheduler class" do
         room_ids = [2, 3, 4]
         scheduler.create_block(Hotel::TimeInterval.new(Date.parse("2019-05-15"), Date.parse("2019-05-20")),
                                room_ids, discounted_rate)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::RoomNotAvailableError
     end
   end
 
