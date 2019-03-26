@@ -1,6 +1,6 @@
 # Design Activity
 
-Question | Answer
+Questions | Answer
 ---     | ---
 What classes does each implementation include? Are the lists the same?|Implementation A includes class `CartEntry`, `ShoppingCart`, and `Order`. Implmentation B also includes the same classes.
 Write down a sentence to describe each class.|`CartEntry` represents each time a customer add an item into a cart. For example, customer can add two books (price of $2.00 per book). This is considered one cart entry. `ShoppingCart` represents the customer's final shopping list, including all the items added to cart. `Order` represents the customer's final bill.
@@ -8,8 +8,8 @@ How do the classes relate to each other? It might be helpful to draw a diagram o
 What data does each class store? How (if at all) does this differ between the two implementations?|`CartEntry` knows about one single product (its price and quantities). `ShoppingCart` knows about multiple `CartEntry` objects and stores them in an array called `entries`. `Order` knows about one single `ShoppingCart`. Implementation A reveals information about class `CartEntry` all the way down to the `Order` class when the `Order` class tries to calculate the final bill. Implementation B, however, hides the attributes of `CartEntry` class by adding a helper function `price` in the `ShoppingCart` class to calculate the total price of all the items in the cart. 
 What methods does each class have? How (if at all) does this differ between the two implementations?|In implementation A, class `CartEntry` and class `ShoppingCart` only have public constructors. Class `Order` has a public constructor and handles all of the calculations of the final bill through `total_price` method.
 Consider the Order#total_price method. In each implementation:
-Is logic to compute the price delegated to "lower level" classes like ShoppingCart and CartEntry, or is it retained in Order?
-Does total_price directly manipulate the instance variables of other classes?
-If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
-Which implementation better adheres to the single responsibility principle?
-Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+Is logic to compute the price delegated to "lower level" classes like ShoppingCart and CartEntry, or is it retained in Order?|In implementation A, the logic to compute the price was all retained in class `Order`. In implementation B, that logic was handled in the `ShoppingCart` class as well as the `CartEntry` class.
+Does total_price directly manipulate the instance variables of other classes?|`total_price` method does not directly manipulate the instance variables of other classes. It only tries to pull out the information needed to do the calculations.
+If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?|If there is an option to buy the items in bulk, implementation B will be easier to change. For example, we can add an if conditional statement in `price` method in `CartEntry` class to say if the quantities are above certain threshold, some discounts will be applied to that particular product.
+Which implementation better adheres to the single responsibility principle?|Implementation B is better adhere the single responsibility principle.
+Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?|Implementation B is more loosely coupled, because if there are any changes to the attributes of `CartEntry` class, we will only need to make local changes in `CartEntry` and do not need to correct anything else in `ShoppingCart` class and `Order` class.
