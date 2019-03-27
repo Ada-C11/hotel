@@ -77,5 +77,17 @@
 
   Implementation B.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Hotel Revisited
+
+  In Reservation class I was checking the size of the block, populating the array that holds room numbers of rooms booked in blocks, and calculating the total_cost of the reservation (both for a single room reservation and a block reservation) in the initialize method. 
+  
+  In the refactor, I made additional methods in the class and moved those calculations and checks into the methods. As a result of this, the initialize method looks much cleaner and easier to read. 
+
+  I was also passing the variables @total_cost and @room_blocks as parameters in the initialize. I realized I did not need to do that because neither the price nor the room_blocks is needed in as an argument in an instance of Reservation. 
+
+  I also tidied up my code in FrontDesk class by using each loops instead of for loops and dividing up the responsibilty of the make_reservation method between two new helper methods that check whether we are trying to book a room already booked and for date overlaps for room bookings.
+
 
 
