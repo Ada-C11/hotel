@@ -7,15 +7,15 @@ describe "create instance of Reservation class" do
     room_id = 2
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,7)
-    reservation = Booking::Reservation.new(room_id, checkin_date, checkout_date)
-    expect(reservation).must_be_kind_of Booking::Reservation
+    reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date)
+    expect(reservation).must_be_kind_of Hotel::Reservation
   end
 
   it "raises an error if checkout date is before checkin date" do 
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,3)
 
-    expect{Booking::Reservation.new(2, checkin_date, checkout_date)}.must_raise ArgumentError
+    expect{Hotel::Reservation.new(2, checkin_date, checkout_date)}.must_raise ArgumentError
   end
 end
 
@@ -25,7 +25,7 @@ describe "total_cost method" do
     room_id = 2
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,7)
-    @reservation = Booking::Reservation.new(room_id, checkin_date, checkout_date)
+    @reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date)
   end
   it "calculates total cost for room booking" do
     expect(@reservation.total_cost).must_equal 600

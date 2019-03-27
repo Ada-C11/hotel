@@ -1,7 +1,6 @@
 require 'date'
-# # require_relative 'hotel.rb'
 
-module Booking
+module Hotel
   class Block
 
     attr_reader :checkin_date, :checkout_date, :requested_rooms, :discounted_rate, :party_name, :room_block, :block_of_rooms, :all_rooms, :max_rooms, :room_numbers, :hotel, :all_reservations

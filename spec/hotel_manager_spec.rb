@@ -4,13 +4,13 @@ require_relative 'spec_helper'
 
 describe "hotel_manager initalize" do 
   it "raises an error if a hotel has more than 20 rooms" do 
-    expect {hotel = Booking::Hotel_Manager.new(21)}.must_raise ArgumentError
+    expect {hotel = Hotel::Hotel_Manager.new(21)}.must_raise ArgumentError
   end
 end
 
 describe "@all_rooms variable" do
   it "provides a list of all rooms in the hotel" do
-    hotel = Booking::Hotel_Manager.new(5)
+    hotel = Hotel::Hotel_Manager.new(5)
 
     expect(hotel.all_rooms).must_be_kind_of Array
     expect(hotel.all_rooms[4]).must_equal 5
@@ -21,7 +21,7 @@ describe "add_reservation method" do
   before do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
-    @hotel = Booking::Hotel_Manager.new(4)
+    @hotel = Hotel::Hotel_Manager.new(4)
   end
 
   it "adds the Reservation to a list of reservations" do
@@ -34,7 +34,7 @@ describe "reservation_by_date" do
   before do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
-    @hotel = Booking::Hotel_Manager.new(4)
+    @hotel = Hotel::Hotel_Manager.new(4)
     
     @checkin_date2 = Date.new(2019,1,4)
     @checkout_date2 = Date.new(2019,1,8)
@@ -45,7 +45,7 @@ describe "reservation_by_date" do
     @hotel.add_reservation(@checkin_date, @checkout_date)
 
     check = @hotel.reservations_by_date(@checkin_date)
-    expect(check[0]).must_be_kind_of Booking::Reservation
+    expect(check[0]).must_be_kind_of Hotel::Reservation
     expect(check.length).must_equal 2
     expect(check[0].checkin_date).must_equal @checkin_date
   end
@@ -53,7 +53,7 @@ end
 
 describe "check_availability method" do
   before do
-    @hotel = Booking::Hotel_Manager.new(5)
+    @hotel = Hotel::Hotel_Manager.new(5)
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     
@@ -110,7 +110,7 @@ describe "check_availability method" do
     @checkout_date5 = Date.new(2019,1,9)
 
     @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
-    expect(@reservation5).must_be_kind_of Booking::Reservation
+    expect(@reservation5).must_be_kind_of Hotel::Reservation
   end
 
 end

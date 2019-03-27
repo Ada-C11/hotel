@@ -1,9 +1,9 @@
 require 'date'
 require 'pry'
 
-module Booking
+module Hotel
   class Hotel_Manager
-    attr_accessor :all_reservations, :all_rooms, :available_rooms, :all_blocks
+    attr_reader :all_reservations, :all_rooms, :available_rooms, :all_blocks
 
     def initialize(max_rooms)
       if max_rooms > 20
@@ -11,55 +11,58 @@ module Booking
       else
         @all_rooms = [*1..max_rooms]
       end
+      @room_rate = 200
       @all_reservations = []
       @available_rooms = []
       @all_blocks = [] 
     end
 
     
-    def add_reservation(checkin_date, checkout_date, room: nil, cost: 200)
-      @all_reservations ||= []
-      res_array = []
-      if room == nil
-        reservation = Booking::Reservation.new(check_availability(checkin_date, checkout_date).first, checkin_date, checkout_date)
-      elsif room != nil
-        reservation = Booking::Reservation.new(room, checkin_date, checkout_date) 
+    def add_reservation(room, checkin_date, checkout_date)
+
+      unless @all_rooms.include?(room)
+        raise ArgumentError, "There is no room #{room} available"
       end
+
+      unless check_availability(checkin_date, checkout_date).include?(room)
+        raise ArgumentError, "That room is already reserved"
+      end
+  
+      reservation = Hotel::Reservation.new((room, checkin_date, checkout_date)
       @all_reservations << reservation
-      res_array << reservation.room_number
-      
-      @available_rooms = check_availability(checkin_date, checkout_date) - res_array
 
       return reservation
     end
 
     def reservations_by_date(date)
-      list = []
-      @all_reservations.each do |reservation|
-        if date == reservation.checkin_date
-          list << reservation
-        end
-      end
-      return list
+      @all_reservations.select {|reservation| reservation.contains(date)}
     end
 
     def check_availability(checkin_date, checkout_date)
-      unavail_rooms = []
-      all_reservations.each do |reservation|
-        if (checkin_date <= reservation.checkin_date && checkout_date >= reservation.checkin_date) || 
-          (checkin_date <= reservation.checkout_date && checkout_date >= reservation.checkout_date) ||
-          (checkin_date >= reservation.checkin_date && checkout_date <= reservation.checkout_date)
-          
-            unavail_rooms << reservation.room_number
-        end
+
+      dates = Date_Range.new(checkin_date, checkout_date)
+      available_rooms = @all_rooms
+
+      overlapping_blocks = @blocks.select do |block|
+        block.overlaps(dates)
       end
-      if @available_rooms == nil
-        raise ArgumentError, "There are no available rooms for that date."
-      else
-        @available_rooms = all_rooms - unavail_rooms
+
+      blocked_rooms = overlapping_blocks.reduce([]) do |check, block|
+        check += block.rooms
       end
+
+      available_rooms -= blocked_rooms
+
+      overlapping_rooms = @reservations.select do |reservation|
+        reservation.overlaps(dates)
+      end
+      reserved_rooms = overlapping_rooms.map do |reservation|
+        reservation.room
+      end
+
+      available_rooms -= reserved_rooms
       
-      return @available_rooms
+      return available_rooms
     end
     
 # END OF CLASS
