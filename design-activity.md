@@ -40,3 +40,9 @@
     - Implementation B
 - Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
     - Implementation B
+
+- Changes to Hotel
+    - Move validate_size to Block
+        - Make max_rooms a constant
+    - Date validation -- where to? (Interval/DateRange class? Parent class for Block & Reservation?)
+    - Move create_block logic to Block (tough bc coupled)
