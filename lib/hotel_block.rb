@@ -3,7 +3,7 @@ require 'date'
 module Hotel
   class Block < Date_Range
 
-    attr_reader :requested_rooms, :discounted_rate
+    attr_reader :requested_rooms, :discounted_rate, :available_rooms, :reserved_rooms
     
     def initialize(requested_rooms, checkin_date, checkout_date, discounted_rate)
       @requested_rooms = requested_rooms

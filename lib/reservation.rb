@@ -12,8 +12,7 @@ module Hotel
       end
   
       def total_cost
-        total = nights_stayed * @cost
-        return total
+       return nights_stayed * @cost
       end
   end
 end
