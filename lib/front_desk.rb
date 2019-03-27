@@ -3,8 +3,7 @@ require_relative "block_room"
 
 module Hotel
   class FrontDesk
-    # attr_reader :all_rooms, :reservations_record, :block_reservations_only, :reserved_rooms_in_blocks
-    attr_accessor :all_rooms, :reservations_record, :block_reservations_only, :reserved_rooms_in_blocks
+    attr_reader :all_rooms, :reservations_record, :block_reservations_only, :reserved_rooms_in_blocks
 
     def initialize
       @all_rooms = [*(1..20)] # => makes array with elements from 1 to 20
@@ -39,31 +38,44 @@ module Hotel
         first_room_number: new_first_room_number,
         check_in: new_check_in,
         check_out: new_check_out,
-        total_cost: @total_cost,
-        room_blocks: @room_blocks,
+        # total_cost: @total_cost,
+        # room_blocks: @room_blocks,
       )
       return booking
+    end
+
+    def room_overlap?(old_first_room_no, new_first_room_number, new_last_room_no, old_last_room_no)
+      if ((old_first_room_no >= new_first_room_number && old_first_room_no <=     new_last_room_no) ||
+        (old_last_room_no >= new_first_room_number && old_last_room_no <= new_last_room_no) || ((old_first_room_no <= new_first_room_number) && (old_first_room_no <= new_last_room_no) && (old_last_room_no >= new_first_room_number) && (old_last_room_no >= new_last_room_no)))
+        return true
+      else
+        return false
+      end
+    end
+
+    def date_overlap?(new_check_in, old_check_in, old_check_out, new_check_out)
+      if ((new_check_in >= old_check_in) && (new_check_in < old_check_out)) ||
+               ((new_check_out >= i.check_in) && (new_check_out < i.check_out))
+              raise ArgumentError, "No BLOCK 4 U. This room is unavailable."
+      else
+        return false
+      end
     end
 
     def make_reservation(new_booking_ref, new_number_of_rooms, new_first_room_number, new_check_in, new_check_out)
       if (@reservations_record.length == 0)
         booking = reservation_template(new_booking_ref, new_number_of_rooms, new_first_room_number, new_check_in, new_check_out)
       else
-        for i in (0...@reservations_record.length)
-          old_first_room_no = @reservations_record[i].first_room_number
-          old_last_room_no = @reservations_record[i].first_room_number + @reservations_record[i].number_of_rooms - 1
+        @reservations_record.each do |i|
+          old_first_room_no = i.first_room_number
+          old_last_room_no = i.first_room_number + i.number_of_rooms - 1
           new_last_room_no = new_first_room_number + new_number_of_rooms - 1
 
-          if ((old_first_room_no >= new_first_room_number && old_first_room_no <= new_last_room_no) ||
-              (old_last_room_no >= new_first_room_number && old_last_room_no <= new_last_room_no) ||
-              ((old_first_room_no <= new_first_room_number) && (old_first_room_no <= new_last_room_no) && (old_last_room_no >= new_first_room_number) && (old_last_room_no >= new_last_room_no)))
-            if ((new_check_in >= @reservations_record[i].check_in) && (new_check_in < @reservations_record[i].check_out)) ||
-               ((new_check_out >= @reservations_record[i].check_in) && (new_check_out < @reservations_record[i].check_out))
-              raise ArgumentError, "No BLOCK 4 U. This room is unavailable."
-            else
+          if room_overlap?(old_first_room_no, new_first_room_number, new_last_room_no, old_last_room_no) == true
+            if date_overlap?(new_check_in, i.check_in, i.check_out, new_check_out) == false
               booking = reservation_template(new_booking_ref, new_number_of_rooms, new_first_room_number, new_check_in, new_check_out)
             end
-          else
+          else # room_overlap == false
             booking = reservation_template(new_booking_ref, new_number_of_rooms, new_first_room_number, new_check_in, new_check_out)
           end
         end
@@ -77,10 +89,9 @@ module Hotel
 
     def get_reservations_by_date(date)
       reservations_by_date_list = Array.new
-
-      for index in (0...@reservations_record.length)
-        if ((@reservations_record[index].check_in <= date) && (@reservations_record[index].check_out > date))
-          reservations_by_date_list.push(@reservations_record[index])
+      @reservations_record.each do |element| 
+        if element.check_in <= date && element.check_out > date
+          reservations_by_date_list << element
         end
       end
       return reservations_by_date_list
@@ -90,18 +101,19 @@ module Hotel
       reservations_at_date = get_reservations_by_date(date)
 
       available_rooms = Array.new
-      for room_idx in (0...@all_rooms.length)
+
+      @all_rooms.each do |room|
         room_booked = false
-        for res_idx in (0...reservations_at_date.length)
-          for i in (0..@reservations_record[res_idx].room_blocks.length - 1)
-            if (reservations_at_date[res_idx].first_room_number + i == @all_rooms[room_idx])
+        reservations_at_date.each do |res|
+          for i in (0...res.room_blocks.length)
+            if (res.first_room_number + i == room)
               room_booked = true
               break
             end
           end
         end
         if (room_booked == false)
-          available_rooms << @all_rooms[room_idx]
+          available_rooms << room
         end
       end
 
@@ -110,9 +122,9 @@ module Hotel
 
     #### BLOCK METHODS ####
     def add_block_reservations
-      for i in (0...@reservations_record.length)
-        if (@reservations_record[i].number_of_rooms > 1)
-          @block_reservations_only << @reservations_record[i]
+      @reservations_record.each do |element|
+        if element.number_of_rooms > 1
+          @block_reservations_only << element
         end
       end
     end
@@ -128,11 +140,11 @@ module Hotel
     end
 
     def make_reservation_in_block(block_room_booking_ref, block_room_number, block_check_in, block_check_out)
-      for i in (0...@block_reservations_only.length)
-        if @block_reservations_only[i].room_blocks.include?(block_room_number)
-          if ((@block_reservations_only[i].check_in == block_check_in) &&
-              (@block_reservations_only[i].check_out == block_check_out))
-            block_room_booking = block_room_reservation_template(block_room_booking_ref, block_room_number, block_check_in, block_check_out)
+      booking_in_block = ""
+      @block_reservations_only.each do |element| 
+        if element.room_blocks.include?(block_room_number) 
+          if (element.check_in == block_check_in) && (element.check_out == block_check_out)
+            booking_in_block = block_room_reservation_template(block_room_booking_ref, block_room_number, block_check_in, block_check_out)
           else
             raise ArgumentError, "Dates must match block dates."
           end
@@ -140,7 +152,7 @@ module Hotel
           raise ArgumentError, "This room is not part of any block."
         end
       end
-      return block_room_booking
+      return booking_in_block
     end
 
     def add_block_room_reservation(new_reservation)
@@ -149,10 +161,9 @@ module Hotel
 
     def block_reservations_by_date(date)
       block_reservations_by_date_list = Array.new
-
-      for index in (0...@block_reservations_only.length)
-        if ((@block_reservations_only[index].check_in <= date) && (@block_reservations_only[index].check_out > date))
-          block_reservations_by_date_list.push(@block_reservations_only[index])
+      @block_reservations_only.each do |block_element| 
+        if block_element.check_in <= date && block_element.check_out > date
+          block_reservations_by_date_list << block_element
         end
       end
       return block_reservations_by_date_list
@@ -163,9 +174,10 @@ module Hotel
 
       rooms_in_blocks = Array.new
       available_rooms_in_block = Array.new
-      for i in (0...block_reservations_at_date.length)
-        for j in (0...block_reservations_at_date[i].room_blocks.length)
-          rooms_in_blocks << block_reservations_at_date[i].room_blocks[j]
+
+      block_reservations_at_date.each do |i|
+        i.room_blocks.each do |j|
+          rooms_in_blocks << j
         end
       end
       return rooms_in_blocks
@@ -174,10 +186,11 @@ module Hotel
     def block_room_availability(date)
       rooms_in_blocks = all_rooms_in_blocks(date)
       rooms_available_in_blocks = Array.new
-      for i in (0...rooms_in_blocks.length)
-        for j in (0...@reserved_rooms_in_blocks.length)
-          if !(@reserved_rooms_in_blocks[j].block_room_number == rooms_in_blocks[i])
-            rooms_available_in_blocks << rooms_in_blocks[i]
+
+      rooms_in_blocks.each do |i|
+        @reserved_rooms_in_blocks.each do |j|
+          if !(j.block_room_number == i)
+            rooms_available_in_blocks << i
           end
         end
       end
