@@ -25,7 +25,7 @@ describe "add_reservation method" do
   end
 
   it "adds the Reservation to a list of reservations" do
-    @hotel.add_reservation(@checkin_date, @checkout_date)
+    @hotel.add_reservation(1, @checkin_date, @checkout_date)
     expect(@hotel.all_reservations.length).must_equal 1
   end
 end
@@ -41,8 +41,8 @@ describe "reservation_by_date" do
     
   end
   it "allows you to look up reservations by a specific date" do 
-    @hotel.add_reservation(@checkin_date2, @checkout_date2)
-    @hotel.add_reservation(@checkin_date, @checkout_date)
+    @hotel.add_reservation(2, @checkin_date2, @checkout_date2)
+    @hotel.add_reservation(3, @checkin_date, @checkout_date)
 
     check = @hotel.reservations_by_date(@checkin_date)
     expect(check[0]).must_be_kind_of Hotel::Reservation
@@ -57,12 +57,12 @@ describe "check_availability method" do
     @checkin_date = Date.new(2019,1,4)
     @checkout_date = Date.new(2019,1,7)
     
-    @reservation = @hotel.add_reservation(@checkin_date, @checkout_date)
+    @reservation = @hotel.add_reservation(1, @checkin_date, @checkout_date)
 
     @checkin_date2 = Date.new(2019,1,4)
     @checkout_date2 = Date.new(2019,1,7)
     
-    @reservation2 = @hotel.add_reservation(@checkin_date2, @checkout_date2)
+    @reservation2 = @hotel.add_reservation(2, @checkin_date2, @checkout_date)
   end
 
   it "checks if booked room number is included in array available rooms" do
@@ -98,9 +98,9 @@ describe "check_availability method" do
 
     
 
-    @reservation3 = @hotel.add_reservation(@checkin_date3, @checkout_date3)
-    @reservation4 = @hotel.add_reservation(@checkin_date4, @checkout_date4)
-    @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
+    @reservation3 = @hotel.add_reservation(3, @checkin_date3, @checkout_date3)
+    @reservation4 = @hotel.add_reservation(4, @checkin_date4, @checkout_date4)
+    @reservation5 = @hotel.add_reservation(5, @checkin_date5, @checkout_date5)
 
     expect{@hotel.check_availability(@checkin_date5, @checkout_date5)}.must_raise ArgumentError
   end
@@ -109,9 +109,52 @@ describe "check_availability method" do
     @checkin_date5 = Date.new(2019,1,7)
     @checkout_date5 = Date.new(2019,1,9)
 
-    @reservation5 = @hotel.add_reservation(@checkin_date5, @checkout_date5)
+    @reservation5 = @hotel.add_reservation(1, @checkin_date5, @checkout_date5)
     expect(@reservation5).must_be_kind_of Hotel::Reservation
   end
 
+end
+
+describe "create_block method" do
+  before do
+    @hotel = Hotel::Hotel_Manager.new(5)
+    @checkin_date = Date.new(2019,1,4)
+    @checkout_date = Date.new(2019,1,7)
+    @block = Hotel::Block.new([1,3,4,5], @checkin_date, @checkout_date, 150)
+  end
+  
+  it "creates a hotel_block" do
+   expect(@block).must_be_kind_of Hotel::Block
+   expect(@block.requested_rooms).must_be_kind_of Array
+   expect(@block.requested_rooms[1]).must_be_kind_of Integer
+  end
+
+  it "removes the block rooms from available_rooms array" do
+    expect(@hotel.available_rooms).wont_include 5
+  end
+end
+
+describe "reserve room from block method" do
+  before do 
+    @hotel = Hotel::Hotel_Manager.new(8)
+    @checkin_date = Date.new(2019,1,4)
+    @checkout_date = Date.new(2019,1,7)
+
+    @checkin_date2 = Date.new(2019,1,5)
+    @checkout_date2 = Date.new(2019,1,8)
+
+    @block = Hotel::Block.new([1,2,3,4], @checkin_date, @checkout_date, 150)
+    @reservation = @hotel.reserve_from_block(@block)
+  end
+  
+  it "can reserve a specific room from the block" do
+    
+    expect(@reservation).must_be_kind_of Hotel::Reservation
+  end
+
+  it "can add that reservation to the hotel's list of reservations" do
+    expect(@hotel.all_reservations[0]).must_be_kind_of Hotel::Reservation
+    expect(@hotel.all_reservations[0].room_number).must_equal 4
+  end
 end
 

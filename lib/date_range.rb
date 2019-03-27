@@ -5,9 +5,9 @@ module Hotel
     attr_reader :checkin_date, :checkout_date
 
     def initialize(checkin_date, checkout_date)
-      unless checkout_date > checkin_date
-        raise ArgumentError, "These dates are invalid."
-      end
+      # unless checkout_date > checkin_date
+      #   raise ArgumentError, "These dates are invalid."
+      # end
 
       @checkin_date = checkin_date
       @checkout_date = checkout_date

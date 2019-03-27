@@ -7,7 +7,7 @@ describe "create instance of Reservation class" do
     room_id = 2
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,7)
-    reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date)
+    reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date, 200)
     expect(reservation).must_be_kind_of Hotel::Reservation
   end
 
@@ -25,7 +25,7 @@ describe "total_cost method" do
     room_id = 2
     checkin_date = Date.new(2019,1,4)
     checkout_date = Date.new(2019,1,7)
-    @reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date)
+    @reservation = Hotel::Reservation.new(room_id, checkin_date, checkout_date, 200)
   end
   it "calculates total cost for room booking" do
     expect(@reservation.total_cost).must_equal 600
