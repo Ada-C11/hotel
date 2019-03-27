@@ -30,5 +30,5 @@
         - Implementation B is easier to modify because we wouldn't need to change the code inside any of the classes.
     - Which implementation better adheres to the single responsibility principle?
         - Implementation B better adheres to the single responsibility principle.
-    - Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+- Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
         - Implementation B is more loosely coupled.
