@@ -1,19 +1,12 @@
 require_relative "reservation"
 
 class Reservation_manager
-  attr_reader :reservations, :pending_reservations_for_blocks
+  attr_reader :reservations, :pending_reservations_for_blocks, :all_rooms
 
   def initialize
     @reservations = []
     @pending_reservations_for_blocks = []
-  end
-
-  def all_rooms
-    @all_rooms = []
-    20.times do |number|
-      @all_rooms << number + 1
-    end
-    return @all_rooms
+    @all_rooms = (1..20).to_a
   end
 
   def find_available_rooms(check_in_day, check_out_day)
