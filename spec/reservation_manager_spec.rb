@@ -2,6 +2,7 @@ require_relative "spec_helper"
 
 require "awesome_print"
 require "date"
+require "minitest/skip_dsl"
 
 describe "manager" do
   let (:manager) {
@@ -22,14 +23,12 @@ describe "manager" do
 
   describe "Reservation_manager instantiation" do
     it "is an instance of Reservation Manager" do
-      manager
       expect(manager).must_be_kind_of Hotel::ReservationManager
     end
   end
 
   describe "all_rooms method" do
     it "can list all rooms in the hotel" do
-      manager
       expect(manager.all_rooms.length).must_equal 20
     end
   end
@@ -38,6 +37,7 @@ describe "manager" do
     it "can make a new reservation" do
       reservation1
       expect(reservation1.length).must_equal 1
+      expect(reservation1[0].status).must_equal "reserved"
     end
 
     it "raises an ArgumentError when there are no available rooms" do
@@ -56,7 +56,6 @@ describe "manager" do
       start_date = "march 14, 2019"
       end_date = "march 16, 2019"
       list_reservations = manager.reservations_by_date(start_date, end_date)
-      ap list_reservations
 
       expect(list_reservations.length).must_equal 1
     end
@@ -140,7 +139,10 @@ describe "manager" do
       reservation2
       new_block = manager.make_block(5, "march 15, 2019", "march 20, 2019", 1)
       vacant_rooms = manager.available_rooms("march 15, 2019", "march 20, 2019")
-      expect(new_block.length).must_equal 5
+
+      block = new_block.select { |room| room.status == "blocked" }
+
+      expect(block.length).must_equal 5
       expect(vacant_rooms.length).must_equal 13
     end
 
@@ -161,8 +163,10 @@ describe "manager" do
   describe "check_block_availability method" do
     it "Will show rooms still available in a specified block" do
       block1
+      block2
       id = 1
       avail_rooms = manager.check_block_availability(id)
+      ap avail_rooms
       expect(avail_rooms.length).must_equal 5
     end
 

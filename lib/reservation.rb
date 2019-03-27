@@ -2,7 +2,7 @@ require "date"
 
 module Hotel
   class Reservation
-    attr_reader :room_number, :check_in, :check_out, :block_id
+    attr_reader :room_number, :check_in, :check_out, :status, :block_id
     ROOM_RATE = 200
 
     def initialize(room_number, check_in, check_out, block_id: nil)
@@ -13,6 +13,12 @@ module Hotel
 
       if @check_out < @check_in
         raise ArgumentError, "Invalid dates, checkout date must be after checkin date."
+      end
+
+      if @block_id == nil
+        @status = "reserved"
+      else
+        @status = "blocked"
       end
     end
 

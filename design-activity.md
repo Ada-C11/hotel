@@ -37,3 +37,7 @@ Implementation B
 Implementation B is more loosely coupled, it knows less about other classes, particularly Order knows less about CartEntry.
 
 
+**Changes to Hotel**
+In my refactoring file I had wanted to include another parameter in Reservation so that when a block of rooms is created it would just say it was a block, but it could then be changed when that room was reserved. I assumed that I could just make that change from a method in ReservationManager, but thinking about it more that would mean that ReservationManager was manipulating the instance variables of another class. I figured out that I could write a method in Reservation that makes this change and I can just call that method from ReservationManager.
+
+By making the above change, I'll have to refactor a number of methods in ReservationManager. This should streamline my methods in ReservationManager.
