@@ -60,19 +60,19 @@ module Hotel
           1201,
           5,
           1,
-          Date.new(2019, 3, 20),
-          Date.new(2019, 3, 24),
+          Date.today,
+          Date.today + 3,
         )
         @concierge.add_reservation(reservation_1)
         expect(reservation_1.booking_ref).must_equal 1201
         expect(reservation_1.number_of_rooms).must_equal 5
         expect(reservation_1.first_room_number).must_equal 1
         expect(@concierge.reservations_record.length).must_equal 1
-        expect(@concierge.reservations_record[0].total_cost).must_equal 3200.00
+        expect(@concierge.reservations_record[0].total_cost).must_equal 2400.00
         expect(@concierge.reservations_record[0].room_blocks[4]).must_equal 5
         expect(@concierge.reservations_record[0].room_blocks.length).must_equal 5
-        expect(reservation_1.check_in).must_equal Date.new(2019, 3, 20)
-        expect(reservation_1.check_out).must_equal Date.new(2019, 3, 24)
+        expect(reservation_1.check_in).must_equal Date.today
+        expect(reservation_1.check_out).must_equal Date.today + 3
       end
     end
 
