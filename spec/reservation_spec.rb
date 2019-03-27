@@ -10,13 +10,11 @@ module FrontDesk
           booking_ref: 1201,
           number_of_rooms: 3,
           first_room_number: 10,
-          check_in: Date.new(2019, 3, 19),
-          check_out: Date.new(2019, 3, 22),
-          total_cost: @total_cost,
-          room_blocks: @room_blocks,
-        )
-      end # before
-      it "creates an instance of Reservation" do
+          check_in: Date.today,
+          check_out: Date.today + 7,
+          )
+        end # before
+        it "creates an instance of Reservation" do
         expect(@reservation).must_be_kind_of Hotel::Reservation
       end # it
 
@@ -26,7 +24,7 @@ module FrontDesk
       end # it
 
       it "calculates total cost of a block with discounted rate" do
-        expect(@reservation.total_cost).must_equal 1440.0
+        expect(@reservation.total_cost).must_equal 3360.0
       end # it
     end # 2nd describe
 
@@ -39,9 +37,7 @@ module FrontDesk
             first_room_number: 10,
             check_in: Date.new(2019, 3, 25),
             check_out: Date.new(2019, 3, 22),
-            total_cost: @total_cost,
-            room_blocks: @room_blocks,
-          ))
+            ))
         }.must_raise ArgumentError
       end # it
 
@@ -53,8 +49,6 @@ module FrontDesk
             first_room_number: 10,
             check_in: Date.new(2019, 3, 12),
             check_out: Date.today,
-            total_cost: @total_cost,
-            room_blocks: @room_blocks,
           ))
         }.must_raise ArgumentError
       end # it
@@ -67,8 +61,6 @@ module FrontDesk
             first_room_number: 10,
             check_in: Date.new(2019, 4, 25),
             check_out: Date.new(2019, 4, 30),
-            total_cost: @total_cost,
-            room_blocks: @room_blocks,
           ))
         }.must_raise ArgumentError
       end # end
@@ -81,12 +73,10 @@ module FrontDesk
             first_room_number: 18,
             check_in: Date.new(2019, 4, 25),
             check_out: Date.new(2019, 4, 30),
-            total_cost: @total_cost,
-            room_blocks: @room_blocks,
           ))
         }.must_raise ArgumentError
       end # end
-    end # describe
+     end # describe
 
     describe "Initialize method for single room" do
       before do
@@ -96,8 +86,6 @@ module FrontDesk
           first_room_number: 15,
           check_in: Date.new(2019, 5, 20),
           check_out: Date.new(2019, 5, 24),
-          total_cost: @total_cost,
-          room_blocks: @room_blocks,
         )
       end # before
 
