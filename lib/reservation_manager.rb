@@ -115,27 +115,23 @@ module Hotel
       }
 
       return avail_block_rms
-
-      # avail_block_rms = []
-      # @block.each do |room|
-      #   if room.block_id == id
-      #     avail_block_rms << room.room_number
-      #   end
-      # end
-      # return avail_block_rms
     end
 
-    #     def reserve_block_room(id)
-    #       num_rooms = 0
-    #       @block.each do |room|
-    #         if room.block_id == id
-    #           @reservations_blocks << room
-    #           @block.delete(room)
-    #           num_rooms += 1
-    #           break if (num_rooms == 1)
-    #         end
-    #       end
-    #       return @reservations_blocks
-    #     end
+    def reserve_block_room(id)
+      find_room = check_block_availability(id).first
+      return find_room.reserve_block_rm
+    end
+
+    # num_rooms = 0
+    # @block.each do |room|
+    #   if room.block_id == id
+    #     @reservations_blocks << room
+    #     @block.delete(room)
+    #     num_rooms += 1
+    #     break if (num_rooms == 1)
+    #   end
+    # end
+    # return @reservations_blocks
+    # end
   end
 end

@@ -180,24 +180,28 @@ describe "manager" do
   end
 
   describe "reserve_block_room method" do
-    it "can reserve a room in a specified block by moving to @reservations and removing it from @block" do
+    it "can reserve a room in a specified block by changing the room's status from 'blocked' to 'reserved'" do
       block1
       id = 1
       reserved_room = manager.reserve_block_room(id)
-      expect(reserved_room.length).must_equal 1
-      expect(reserved_room[0].block_id).must_equal 1
-      expect(block1.length).must_equal 4
+      ap reserved_room
+      expect(reserved_room.block_id).must_equal 1
+      # expect(res)
+
+      # expect(reserved_room.length).must_equal 1
+      # expect(reserved_room[0].block_id).must_equal 1
+      # expect(block1.length).must_equal 4
     end
 
-    it "Will show the reserved room from the block in @reservations for that specific date range" do
-      block1
-      reservation2
-      id = 1
-      start_date = "march 18, 2019"
-      end_date = "march 20, 2019"
-      reserved_room = manager.reserve_block_room(id)
-      all_reservations = manager.reservations_by_date(start_date, end_date)
-      expect(all_reservations.length).must_equal 2
-    end
+    #   it "Will show the reserved room from the block in @reservations for that specific date range" do
+    #     block1
+    #     reservation2
+    #     id = 1
+    #     start_date = "march 18, 2019"
+    #     end_date = "march 20, 2019"
+    #     reserved_room = manager.reserve_block_room(id)
+    #     all_reservations = manager.reservations_by_date(start_date, end_date)
+    #     expect(all_reservations.length).must_equal 2
+    #   end
   end
 end
