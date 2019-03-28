@@ -36,3 +36,12 @@
 
 9. Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
     Implementation B! This is because instance variables are only ever used within the class itself and are wrapped in instance methods if they need to be called by another class. Like question #7 suggests, if things need to change (like @unit_price) it won't be too difficult because that instance variable is only ever used within one class. 
+
+*******
+
+Thoughts on my Hotel program:
+
+- After reading the two implementations for the online shopping cart, I realized that my ReservationTracker is directly manipulating Reservation's instance variables in maaaany places. This wasn't something I had initially put in my refactor.txt file because I didn't even really think about it. 
+- I think I will tackle this problem instead of the other things I mentioned in my refactor.txt because it most directly relates to this issue of SRP and loosely coupled classes. 
+- To implement this, I will add more helper methods to my Reservation class that will do some of the work that ReservationManager is doing. This will reduce the amount that ReservationManager is directly manipulating Reservation's instance variables. 
+- If I have time, I will also look to implement this to a HotelBlock class, since a lot of that direct manipulation from ReservationManager also appears when it works with blocks. If I don't complete this portion, I understand the logic of why this would make sense to implement and hopefully at a future date I can do so :). 
