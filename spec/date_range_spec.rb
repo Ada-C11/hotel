@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "spec_helper"
 
 describe "validate date method" do
   it "raises an ArgumentError if date is not a string" do

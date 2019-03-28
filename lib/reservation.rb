@@ -16,7 +16,7 @@ module Hotel
     end
 
     def self.load_all
-      return @reservations || []
+      return []
     end
   end
 end
