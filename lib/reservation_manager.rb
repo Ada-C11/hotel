@@ -13,16 +13,12 @@ module Hotel
     def initialize
       @rooms = Hotel::Room.load_all
       @reservations = []
-      # @reservations = Hotel::Reservation.load_all
       @blocks = []
-      # @blocks = Hotel::Block.load_all
     end
 
     # I can reserve an available room for a given date range
     def reserve(room_id:, check_in_date:, check_out_date:)
       self.class.validate_id(room_id)
-      # I want exception raised when an invalid date range is provided
-      # Hotel::DateRange.new(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
 
@@ -71,7 +67,6 @@ module Hotel
     # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
     def create_block(room_ids:, check_in_date:, check_out_date:, discount_rate:)
       room_ids.each { |room_id| self.class.validate_id(room_id) }
-      Hotel::DateRange.new(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
 
