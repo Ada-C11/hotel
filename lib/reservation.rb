@@ -17,6 +17,14 @@ class Reservation
     end
   end
 
+  def overlaps(check_in, check_out)
+    return !(check_out <= @check_in_day || check_in >= @check_out_day)
+  end
+
+  def contains(date)
+    return (date >= @check_in_day && date < @check_out_day)
+  end
+
   def calculate_total_cost
     duration_of_stay = (@check_out_day - @check_in_day).to_i
     total_cost = @room_rate * duration_of_stay
