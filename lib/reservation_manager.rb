@@ -91,20 +91,18 @@ class Reservation_manager
 
     possible_reservations = []
 
-    if rooms_available_in_block.length > 0
-      @pending_reservations_for_blocks.each do |possible_res|
-        if possible_res.reservation_id == block_id
-          if rooms_available_in_block.include?(possible_res.room_number)
-            possible_reservations << possible_res
-          end
+    raise ArgumentError, "There are no available rooms left for this block." if rooms_available_in_block.length < 1
+
+    @pending_reservations_for_blocks.each do |possible_res|
+      if possible_res.reservation_id == block_id
+        if rooms_available_in_block.include?(possible_res.room_number)
+          possible_reservations << possible_res
         end
       end
-      chosen_reservation = possible_reservations.sample
-      @reservations << chosen_reservation
-      return chosen_reservation
-    else
-      raise ArgumentError, "There are no available rooms left for this block."
     end
+    chosen_reservation = possible_reservations.sample
+    @reservations << chosen_reservation
+    return chosen_reservation
   end
 
   def find_reservations(date)
