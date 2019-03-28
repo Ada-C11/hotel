@@ -12,15 +12,17 @@ module Hotel
 
     def initialize
       @rooms = Hotel::Room.load_all
-      @reservations = Hotel::Reservation.load_all
-      @blocks = Hotel::Block.load_all
+      @reservations = []
+      # @reservations = Hotel::Reservation.load_all
+      @blocks = []
+      # @blocks = Hotel::Block.load_all
     end
 
     # I can reserve an available room for a given date range
     def reserve(room_id:, check_in_date:, check_out_date:)
       self.class.validate_id(room_id)
       # I want exception raised when an invalid date range is provided
-      Hotel::DateRange.new(check_in_date, check_out_date)
+      # Hotel::DateRange.new(check_in_date, check_out_date)
       available_rooms = find_available_rooms(check_in_date: check_in_date, check_out_date: check_out_date)
       available_room_ids = available_rooms.map { |room| room.room_id }
 
@@ -42,31 +44,28 @@ module Hotel
     # I can get the total cost for a given reservation
     def total_cost(reservation_id:)
       reservation = @reservations.find { |current_reservation| current_reservation.reservation_id == reservation_id }
-      num_nights = reservation.check_out_date - reservation.check_in_date
-      return num_nights * Hotel::Room.cost
+      reservation.total_cost
     end
 
     # I can view a list of rooms that are not reserved for a given date range
     def find_available_rooms(check_in_date:, check_out_date:)
-      Hotel::DateRange.new(check_in_date, check_out_date)
-      na_reservations = Hotel::DateRange.get_na_objects(@reservations, check_in_date, check_out_date)
-      na_room_ids_reservations = na_reservations.map { |reservation| reservation.room_id }
+      date_range = Hotel::DateRange.new(check_in_date, check_out_date)
+      overlap_reservations = date_range.overlap_blocks_reservations(@reservations, check_in_date, check_out_date)
+      overlap_room_ids_reservations = overlap_reservations.map { |reservation| reservation.room_id }
 
       # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve or create a block for that specific room for that specific date
-      na_blocks = Hotel::DateRange.get_na_objects(@blocks, check_in_date, check_out_date)
-      na_room_ids_blocks = []
-      na_blocks.each do |block|
+      overlap_blocks = date_range.overlap_blocks_reservations(@blocks, check_in_date, check_out_date)
+      overlap_room_ids_blocks = []
+      overlap_blocks.each do |block|
         block.room_ids.each do |i|
-          na_room_ids_blocks << i
+          overlap_room_ids_blocks << i
         end
       end
 
-      na_room_ids = (na_room_ids_blocks + na_room_ids_reservations).uniq
+      overlap_room_ids = (overlap_room_ids_blocks + overlap_room_ids_reservations).uniq
       return available_rooms = @rooms.reject do |room|
-               na_room_ids.include?(room.room_id)
+               overlap_room_ids.include?(room.room_id)
              end
-
-      # return available_rooms.map { |room| room.room_id }
     end
 
     # I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
@@ -122,9 +121,8 @@ module Hotel
 
     # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
     def set_room_rate(room_id:, room_rate:)
-      @rooms.each do |room|
-        room.cost = room_rate.to_f if room.room_id == room_id
-      end
+      room = @rooms.find { |room| room.room_id == room_id }
+      room.cost = room_rate.to_f
       store_room_rates_in_csv
     end
 

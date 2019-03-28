@@ -1,2 +1,2 @@
 block_id,rooms_info,check_in_date,check_out_date,discount_rate
-1,"{2=>:AVAILABLE, 3=>:AVAILABLE}",2019-03-10,2019-03-15,0.1
+1,"{1=>:AVAILABLE, 2=>:AVAILABLE, 3=>:AVAILABLE}",2019-03-10,2019-03-15,0.1

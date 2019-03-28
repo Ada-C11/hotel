@@ -20,9 +20,5 @@ module Hotel
     def total_cost
       return (@check_out_date - @check_in_date) * @rate
     end
-
-    # def self.load_all
-    #   return []
-    # end
   end
 end

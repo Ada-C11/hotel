@@ -17,8 +17,8 @@ module Hotel
       raise ArgumentError, "Maximum number of room_ids is 5!" if room_ids.length > 5
     end
 
-    def self.load_all
-      @blocks = []
-    end
+    # def self.load_all
+    #   @blocks = []
+    # end
   end
 end
