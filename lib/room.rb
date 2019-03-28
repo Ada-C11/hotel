@@ -72,13 +72,8 @@ module HotelGroup
       end
 
       reservations.each do |res|
-        if !(res.start_time...res.end_time).include?(start_time) && !(res.start_time + 1..res.end_time).include?(end_time) &&
-           !(start_time...end_time).include?(res.start_time) &&
-           !(start_time + 1..end_time).include?(res.end_time)
-          return false
-        end
+        return res.overlap?(start_time, end_time)
       end
-      return true
     end
 
     def is_in_block?(block)

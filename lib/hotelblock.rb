@@ -1,7 +1,6 @@
-require_relative "reservation"
+
 require_relative "room"
 require_relative "csv_record"
-require_relative "hotel"
 
 module HotelGroup
   class HotelBlock < CsvRecord
@@ -22,14 +21,6 @@ module HotelGroup
       @rooms = rooms
     end
 
-    def connect(rooms_array)
-      rooms_array.each.with_index do |room, index|
-        @rooms[index] = room
-        room.add_block_id(@id)
-        room.block_price = room.price - room.price * discount
-      end
-    end
-
     def print_nicely
       formatted_rooms = ""
       rooms.each do |room|
@@ -39,12 +30,8 @@ module HotelGroup
     end
 
     def show_unreserved_rooms
-      results = []
-      rooms.each do |room|
-        if !room.has_reservation?(start_time, end_time)
-          results << room
-        end
-      end
+      results = rooms.select { |room| !room.has_reservation?(start_time, end_time) }
+
       return results
     end
 

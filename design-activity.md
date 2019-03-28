@@ -40,3 +40,10 @@ Implementation B. The classes in B are each responsible for knowing their own pr
 `Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?`
 
 B, again, because it doesn't require the Order class to know anything about the state of ShoppingCart in order to calculate total_price. It would be easy to change ShoppingCart or CartEntry without needing to change anything about Order.
+
+
+`Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.`
+
+My HotelBlock class does some work directly with Room (when connecting the room IDs, as they are read in from the CSV file, to the room objects with which they correspond), and I could shift that responsibility to Hotel, which is in charge of connecting reservations and blocks with rooms. I can also remove some references to Reservation from inside Room (comparing new reservation dates to see if there is overlap with an existing reservation). I no longer think (as I wrote in refactor.txt) that HotelBlock should inherit from Hotel, or that Hotel and HotelBlock should inherit from a common superclass, because I don't think they have enough in common in terms of state and behavior.
+
+I did take a look at the reference implementation and am unsure whether it's worth trying to shoehorn my implementation into that sort of format. I think my implementation is a little different in that it allows the user to reserve/block particular rooms instead of the first available, so it was more important for Room to be its own class and have each room object know about its own availability. I'm hoping that, with practice, I will be able to define classes based more on abstract concepts (like DateRange) and less on domain objects, as described in POODR. 

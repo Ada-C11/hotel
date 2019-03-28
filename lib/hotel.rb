@@ -24,8 +24,9 @@ module HotelGroup
           room_obj = find_room(room_id)
           room_array << room_obj
           room_obj.add_block_id(block.id)
+          room_obj.block_price = room_obj.price - room_obj.price * block.discount
         end
-        block.connect(room_array)
+        block.rooms = room_array
       end
       return blocks
     end
@@ -139,9 +140,8 @@ module HotelGroup
         room.set_unavailable(start_time, end_time)
         rooms_array << room
       end
-      hotel_block = HotelBlock.new(id, start_time, end_time, rooms, discount)
+      hotel_block = HotelBlock.new(id, start_time, end_time, rooms_array, discount)
 
-      hotel_block.rooms = rooms_array
       @blocks << hotel_block
 
       return hotel_block

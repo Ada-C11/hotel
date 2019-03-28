@@ -1,6 +1,4 @@
 
-require "date"
-
 require_relative "csv_record"
 require_relative "room"
 
@@ -27,7 +25,13 @@ module HotelGroup
     end
 
     def includes_date?(date)
-      return start_time <= date && end_time >= date ? true : false
+      return start_time <= date && end_time >= date
+    end
+
+    def overlap?(start_date, end_date)
+      return (start_time...end_time).include?(start_date) || (start_time + 1..end_time).include?(end_date) ||
+               (start_date...end_date).include?(start_time) ||
+               (start_date + 1..end_date).include?(end_time)
     end
 
     def print_nicely
@@ -38,8 +42,8 @@ module HotelGroup
       end
     end
 
-    def connect(room)
-      @room = room
+    def connect(room_obj)
+      @room = room_obj
       return self
     end
 
