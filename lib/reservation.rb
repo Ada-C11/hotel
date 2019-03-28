@@ -29,5 +29,10 @@ module Hotel
     def block_room_cost(discount)
       (check_out - check_in) * ROOM_RATE * discount
     end
+
+    def reserve_block_rm
+      @status = "reserved"
+      return @status
+    end
   end
 end
