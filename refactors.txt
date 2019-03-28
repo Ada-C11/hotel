@@ -1,0 +1,8 @@
+Changes that could be made:
+- naming conventions, etc.
+- Add functionality for actual ranges (___...___) for date parameters
+- Create more helper methods?? (Room availability error, e.g.)
+- Clarify when a constant is used and when a number is hard-coded
+    - Especially important if standard rate or number of rooms change, for example.
+- Where are my custom errors supposed to be defined?
+- Maybe: Move some functionality from FrontDesk to others while preserving loose coupling

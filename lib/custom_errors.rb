@@ -1,0 +1,2 @@
+class AvailabilityError < StandardError
+end

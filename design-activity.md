@@ -1,0 +1,48 @@
+- What classes does each implementation include? Are the lists the same?
+    - Implementation A includes the following classes:
+        - CartEntry
+        - ShoppingCart
+        - Order
+    - Implementation B include the same classes.
+- Write down a sentence to describe each class.
+    - CartEntry: Keeps track of individual items added to cart.
+    - ShoppingCart: Keeps track of cartful of items. 
+    - Order: Calculates price of purchasing cartful of items.
+- How do the classes relate to each other? It might be helpful to draw a diagram on a whiteboard or piece of paper.
+    - An Order contains one ShoppingCart.
+    - A ShoppingCart contains many CartEntry(s). 
+- What **data** does each class store? How (if at all) does this differ between the two implementations?
+    - Implementation A: 
+        - CartEntry stores unit_price and quantity
+        - ShoppingCart stores entries
+        - Order stores SALES_TAX, cart, and total_price (and price of a single cart entry, although not explicitly stored)
+    - Implementation B: 
+        - CartEntry stores unit_price, quantity, and price (of single CartEntry)
+        - ShoppingCart stores entries and price (sum of all entries)
+        - Order stores SALES_TAX, cart, and total_price
+- What **methods** does each class have? How (if at all) does this differ between the two implementations?
+    - Implementation A: 
+        - They all have initialize methods, and Order has a total_price method.
+    - Implementation B:
+        - They all have initialize methods, and they all have different price methods.
+- Consider the `Order#total_price` method. In each implementation:
+    - Is logic to compute the price delegated to "lower level" classes like `ShoppingCart` and `CartEntry`, or is it retained in `Order`?
+    - Does `total_price` directly manipulate the instance variables of other classes?
+        - Implementation A:
+            - The logic to compute the price is not delegated to "lower level" classes
+            - total_price directly manipulates the instance variables of other classes
+        - Implementation B:
+            - The logic to compute price is delegated to "lower level" classes
+            - total_price does not directly manipulate the instance variables of other classes
+- If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
+    - In this case, we would want to change the unit price of a CartEntry depending on the quantity. This would be easier to do in Implementation B's CartEntry#price method.
+- Which implementation better adheres to the single responsibility principle?
+    - Implementation B
+- Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+    - Implementation B
+
+- Changes to Hotel
+    - Move validate_size to Block
+        - Make max_rooms a constant
+    - Date validation -- where to? (Interval/DateRange class? Parent class for Block & Reservation?)
+    - Move create_block logic to Block (tough bc coupled)
