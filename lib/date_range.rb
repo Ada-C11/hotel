@@ -1,9 +1,11 @@
 module Hotel
   class DateRange
     def initialize(check_in_date, check_out_date)
-      self.class.validate_date(check_in_date)
-      self.class.validate_date(check_out_date)
+      check_in_date = self.class.validate_date(check_in_date)
+      check_out_date = self.class.validate_date(check_out_date)
       validate_date_range(check_in_date, check_out_date)
+      @check_in_date = check_in_date
+      @check_out_date = check_out_date
     end
 
     def self.validate_date(date)
@@ -20,13 +22,11 @@ module Hotel
       raise ArgumentError, "Check_out_date must be after check_in_date" if end_date < start_date
     end
 
-    def self.get_na_objects(array_object, check_in_date_string, check_out_date_string)
-      check_in_date = self.validate_date(check_in_date_string)
-      check_out_date = self.validate_date(check_out_date_string)
-      return array = array_object.select do |object|
-               check_in_date < object.check_out_date && check_in_date >= object.check_in_date ||
-               check_out_date > object.check_in_date && check_out_date < object.check_out_date ||
-               check_in_date < object.check_in_date && check_out_date > object.check_out_date
+    def overlap_blocks_reservations(blocks_reservations, check_in_date, check_out_date)
+      return array = blocks_reservations.select do |object|
+               @check_in_date < object.check_out_date && @check_in_date >= object.check_in_date ||
+               @check_out_date > object.check_in_date && @check_out_date < object.check_out_date ||
+               @check_in_date < object.check_in_date && @check_out_date > object.check_out_date
              end
     end
   end
