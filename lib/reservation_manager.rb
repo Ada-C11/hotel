@@ -16,6 +16,7 @@ class Reservation_manager
 
     date_range_of_interest = (check_in...check_out).to_a
 
+    # ******
     overlap_reservations = @reservations.select do |reservation|
       reservation.overlaps(check_in, check_out)
     end 
@@ -25,6 +26,7 @@ class Reservation_manager
     end 
 
     available_rooms -= reserved_rooms
+    # *******
 
     @pending_reservations_for_blocks.each do |pending_block_reservation|
       date_range = (pending_block_reservation.check_in_day...pending_block_reservation.check_out_day).to_a
@@ -108,9 +110,9 @@ class Reservation_manager
 
   def find_reservations(date)
     date = Date.parse(date)
-    reservations_with_date = @reservations.select do |reservation|
-      date.between?(reservation.check_in_day, reservation.check_out_day)
-    end
-    return reservations_with_date
+
+    @reservations.select do |reservation|
+      reservation.contains(date)
+    end 
   end
 end

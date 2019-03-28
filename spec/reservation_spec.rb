@@ -43,6 +43,17 @@ describe "Reservation" do
       expect(my_res.overlaps(check_in, check_out)).must_equal false
     end
   end
+  describe "contains method" do
+    it "returns true if date is contained within check-in and check-out days" do
+      contained_date = Date.parse("5th April 2019")
+      expect(my_res.contains(contained_date)).must_equal true
+    end 
+
+    it "returns false if date is not contained within check-in and check-out dates" do
+      excluded_date = Date.parse("12th August 2019")
+      expect(my_res.contains(excluded_date)).must_equal false
+    end 
+end
 
   describe "calculate_total_cost" do
     it "returns an integer" do
