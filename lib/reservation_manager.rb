@@ -16,14 +16,15 @@ class Reservation_manager
 
     date_range_of_interest = (check_in...check_out).to_a
 
-    @reservations.each do |reservation|
-      date_range = (reservation.check_in_day...reservation.check_out_day).to_a
-      combined_range = date_range + date_range_of_interest
+    overlap_reservations = @reservations.select do |reservation|
+      reservation.overlaps(check_in, check_out)
+    end 
 
-      if combined_range.length != combined_range.uniq.length
-        available_rooms.delete(reservation.room_number)
-      end
-    end
+    reserved_rooms = overlap_reservations.map do |reservation|
+      reservation.room_number
+    end 
+
+    available_rooms -= reserved_rooms
 
     @pending_reservations_for_blocks.each do |pending_block_reservation|
       date_range = (pending_block_reservation.check_in_day...pending_block_reservation.check_out_day).to_a
