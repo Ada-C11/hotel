@@ -33,7 +33,7 @@
 - Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
         - Implementation B is more loosely coupled.
 # Revisiting Hotel
-###Changes I would make to improve my Hotel's design:
+### Changes I would make to improve my Hotel's design:
 - Delegate some of the responsibilities to other classes such as Reservation, Block, Room and DateRange
     - Move total_cost method to Reservation
     - Have a DateRange instance method called overlap which takes another DateRange as a parameter and returns true if the two date range instance overlap and false if they do not. Then the ReservationManager could loop through reservations checking to see if the new one overlaps with the existing reservations.
