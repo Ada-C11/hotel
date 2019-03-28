@@ -35,3 +35,8 @@ Implementation B adheres to the single responsibility principle. The methods in 
 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 Implementation B is more loosely coupled because Order does not need to know how price of each entry is computated. That is found in CartEntry which is more related to its responsibility. 
+
+
+Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+
+Yes, the booker class in my original hotel takes on too many responsibillities that can be delegated to classes with more direct information. One example of this is the add_to_room method in booker. This method directly edits an instance variable of the Room class by adding a given reservation to that room's reservation list. This would be better as a method in the Room class where a reservation is added to the room's list and the booker class does not need to know how this is done. This design would be more loosely coupled. 

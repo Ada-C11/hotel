@@ -50,7 +50,7 @@ module Hotel
         end
 
         def add_to_room(room: , reservation: )
-            room.reservations.push(reservation)
+            room.add_reservation(reservation)
         end
 
         def add_to_reservation_list(reservation)

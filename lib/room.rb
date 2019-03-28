@@ -19,6 +19,10 @@ module Hotel
             return status
         end
 
+        def add_reservation(reservation)
+            reservations.push(reservation)
+        end
+
         def self.load_rooms
             rooms = []
             20.times do |i|
