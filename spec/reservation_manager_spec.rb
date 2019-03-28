@@ -30,6 +30,25 @@ describe "ReservationManager" do
                                   check_in_date: "2019-03-12",
                                   check_out_date: "2019-03-15")
     }
+
+    it "raises ArgumentError if id is smaller than 0 or is not an Integer" do
+      expect {
+        Hotel::ReservationManager.new.reserve(room_id: -1,
+                                              check_in_date: "2019-03-12",
+                                              check_out_date: "2019-03-15")
+      }.must_raise ArgumentError
+      expect {
+        Hotel::ReservationManager.new.reserve(room_id: nil,
+                                              check_in_date: "2019-03-12",
+                                              check_out_date: "2019-03-15")
+      }.must_raise ArgumentError
+      expect {
+        Hotel::ReservationManager.new.reserve(room_id: "string",
+                                              check_in_date: "2019-03-12",
+                                              check_out_date: "2019-03-15")
+      }.must_raise ArgumentError
+    end
+
     it "can reserve an available room and adds a new reservation to the list of reservations" do
       before_reserve = reservation_manager.reservations.length
       new_reservation
@@ -39,7 +58,13 @@ describe "ReservationManager" do
 
     it "cannot reserve unavailable rooms" do
       new_reservation
-      expect { reservation_manager.reserve(new_reservation) }.must_raise ArgumentError
+      expect {
+        reservation_manager.reserve(
+          room_id: 1,
+          check_in_date: "2019-03-13",
+          check_out_date: "2019-03-14",
+        )
+      }.must_raise ArgumentError
     end
 
     it "cannot reserve a room set in the block" do
@@ -52,6 +77,30 @@ describe "ReservationManager" do
                                     check_in_date: "2019-03-12",
                                     check_out_date: "2019-03-14")
       }.must_raise ArgumentError
+    end
+
+    it "can reserve a room on the same day a previous reservation ends" do
+      new_reservation
+      before_2nd_reserve = reservation_manager.reservations.length
+      reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-15", check_out_date: "2019-03-17")
+      after_2nd_reserve = reservation_manager.reservations.length
+      expect(after_2nd_reserve - before_2nd_reserve).must_equal 1
+    end
+
+    it "can reserve a room whose check-out-day is on the same day another one begins" do
+      new_reservation
+      before_2nd_reserve = reservation_manager.reservations.length
+      reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-10", check_out_date: "2019-03-12")
+      after_2nd_reserve = reservation_manager.reservations.length
+      expect(after_2nd_reserve - before_2nd_reserve).must_equal 1
+    end
+
+    it "can reserve 2 different rooms on the same dates" do
+      new_reservation
+      before_2nd_reserve = reservation_manager.reservations.length
+      reservation_manager.reserve(room_id: 2, check_in_date: "2019-03-12", check_out_date: "2019-03-15")
+      after_2nd_reserve = reservation_manager.reservations.length
+      expect(after_2nd_reserve - before_2nd_reserve).must_equal 1
     end
   end
 
@@ -78,6 +127,15 @@ describe "ReservationManager" do
                                   check_out_date: "2019-04-15")
       expect(reservation_manager.list_reservations(date: "2019-03-14").length).must_equal 2
       expect(reservation_manager.list_reservations(date: "2019-04-14").length).must_equal 1
+    end
+
+    it "lists the right reservations" do
+      new_reservation = reservation_manager.reserve(room_id: 1, check_in_date: "2019-03-12", check_out_date: "2019-03-15")
+      reservations = reservation_manager.list_reservations(date: "2019-03-14")
+      expect(reservations[0].reservation_id).must_equal 1
+      expect(reservations[0].room_id).must_equal 1
+      expect(reservations[0].check_in_date).must_equal Date.parse("2019-03-12")
+      expect(reservations[0].check_out_date).must_equal Date.parse("2019-03-15")
     end
   end
 
@@ -116,6 +174,21 @@ describe "ReservationManager" do
       expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-11", check_out_date: "2019-03-14").length).must_equal 0
     end
 
+    it "a room that is booked is not listed as available" do
+      reserve_03_10_03_15
+      available_rooms = reservation_manager.find_available_rooms(check_in_date: "2019-03-10", check_out_date: "2019-03-15")
+      expect(available_rooms.find { |room| room.room_id == 1 }).must_equal nil
+    end
+
+    it "at least one of the expected available rooms is available " do
+      reserve_03_10_03_15
+      available_rooms = reservation_manager.find_available_rooms(check_in_date: "2019-03-10", check_out_date: "2019-03-15")
+      room = available_rooms.find { |room| room.room_id == 2 }
+      expect(room.room_id).must_equal 2
+      room = available_rooms.find { |room| room.room_id == 3 }
+      expect(room.room_id).must_equal 3
+    end
+
     it "returns the right number of rooms when check_in_date is the same as the reserved check_out_date " do
       reserve_03_17_03_20
       expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-20", check_out_date: "2019-03-22").length).must_equal 20
@@ -126,7 +199,7 @@ describe "ReservationManager" do
       expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-12", check_out_date: "2019-03-12").length).must_equal 19
     end
 
-    it "returns the right number of rooms when check_out_date is within the reserved rate range " do
+    it "returns the right number of rooms when check_out_date is within the reserved date range " do
       reserve_03_10_03_15
       expect(reservation_manager.find_available_rooms(check_in_date: "2019-03-09", check_out_date: "2019-03-11").length).must_equal 19
     end
