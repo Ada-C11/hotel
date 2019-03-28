@@ -18,7 +18,17 @@ describe "Reservation class" do
         expect(@reservation.id).must_be_kind_of Integer
         expect(@reservation.room).must_be_kind_of Integer
         expect(@reservation.start_date).must_be_kind_of String
-    end    
+    end  
+      
+    it "raises an error for an invalid date" do
+     @reservation = Hotel::Reservation.new(
+          id: 1, 
+          room: 5, 
+          start_date:"219-1-1",
+          end_date:"2019-1-10")
+          
+      expect((@reservation.date_range).valid_date?(date_range)).must_raise ArgumentError   
+    end
   end 
   
   
@@ -73,5 +83,5 @@ describe "Reservation class" do
         expect(@reservation.date_range.start_date).must_equal @reservation2.date_range.start_date
     end
  
-  end
+    end
   end

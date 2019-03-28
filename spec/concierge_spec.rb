@@ -97,7 +97,6 @@ describe "Concierge class" do
       before do 
         @concierge = Hotel::Concierge.new
         res1 = @concierge.reserve_room("2019-01-01", "2019-01-04")
-        # res3 = @concierge.reserve_room("2020-1-10", "2020-1-20")
       end
       
       it "returns a list of available rooms" do

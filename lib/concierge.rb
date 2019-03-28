@@ -3,7 +3,7 @@ require "pry"
 
 require_relative "room"
 require_relative "reservation"
-require_relative "date_range"
+require_relative "date_range.rb"
 
 module Hotel
   class Concierge
@@ -23,14 +23,13 @@ module Hotel
         room.status == :AVAILABLE
       end
       
-
-      
       reservation = Reservation.new(
         id: @reservations.length + 1, 
         room: available_room, 
         start_date: start_date, 
-        end_date: end_date
-      )     
+        end_date: end_date,
+      
+       )     
       
       @reservations << reservation
       available_room.add_reservation(reservation)                                   
@@ -57,7 +56,7 @@ module Hotel
           
           rooms_w_res.each do |room|
             room.reservations.each do |res|
-              if (res.date_range).overlap_date_range?(date_range)
+              if (res.date_range).overlap?(date_range)
                 rooms_w_res.delete(room)
               end
             end
@@ -68,6 +67,9 @@ module Hotel
         return available_rooms  
     end
 
+  
+ 
+ 
  
   end # end Concierge Class
 end # end Hotel Module

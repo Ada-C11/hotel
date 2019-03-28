@@ -1,11 +1,12 @@
 require "date"
 
 require_relative "room"
-require_relative "date_range"
+require_relative "date_range.rb"
 
 module Hotel
   class Reservation
-    attr_reader :id, :room, :start_date, :end_date, :total_cost, :date_range
+    attr_reader :id, :room, :start_date, :end_date, :total_cost 
+    attr_accessor :date_range
     
     def initialize(id:, room:, start_date:, end_date:, date_range: nil)
       @id = id
@@ -17,6 +18,7 @@ module Hotel
       if Date.parse(end_date) < Date.parse(start_date)
         raise ArgumentError, "End date cannot be before start date"
       end 
+      
     end
     
     
@@ -25,12 +27,12 @@ module Hotel
     end
     
     def date_range=(date_range)
-      start_date = date_range.start_date
-      end_date = date_range.end_date
+      @start_date = date_range.start_date
+      @end_date = date_range.end_date
     end
     
     def include_date?(date)
-      if start_date <= date || date  >= end_date
+      if @start_date <= date || date  >= @end_date
         return true
       else
         return false
