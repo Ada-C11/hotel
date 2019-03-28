@@ -108,9 +108,7 @@ class Reservation_manager
   def find_reservations(date)
     date = Date.parse(date)
     reservations_with_date = @reservations.select do |reservation|
-      if date.between?(reservation.check_in_day, reservation.check_out_day)
-        reservation
-      end
+      date.between?(reservation.check_in_day, reservation.check_out_day)
     end
     return reservations_with_date
   end
