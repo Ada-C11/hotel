@@ -33,11 +33,9 @@ describe "Reservation" do
   describe "reserve_block_rm" do
     it "Reserves a blocked room by changing the status from 'blocked' to 'reserved'" do
       block
-      ap block
       expect(block.status).must_equal "blocked"
 
       block.reserve_block_rm
-      ap block
       expect(block.status).must_equal "reserved"
     end
   end
