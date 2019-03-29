@@ -36,6 +36,11 @@ module Hotel
       return reserved_nights
     end
 
+    def change_block_status(name)
+      @name = name
+      @block_availability = :UNAVAILABLE
+    end
+
     def cost
       return @block_reference == "N/A" ? @num_of_nights * REG_PRICE : @num_of_nights * BLOCK_PRICE
     end

@@ -28,12 +28,23 @@ describe "calucate_reserved_nights" do
   end
 end
 
+describe "change_block_status" do
+  before do
+    @reservation = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @reservation3 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @reservation.change_block_status(@reservation3.name)
+  end
+  it "changes name of block reservation" do
+    expect(@reservation.name).must_equal "Amy Martinsen"
+  end
+  it "changes status of block reservation" do
+    expect(@reservation.block_availability).must_equal :UNAVAILABLE
+  end
+end
+
 describe "Reservation.cost method" do
   before do
-    @frontdesk = Hotel::Frontdesk.new
     @reservation = Hotel::Reservation.new("Amy Martinsen", "2015-05-20", 3)
-    @block_res = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
-    @frontdesk.request_block(@block_res, 2)
     @reservation3 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "SCIFI PARTY")
   end
   it "calculates the correct cost for a regular reservation" do
