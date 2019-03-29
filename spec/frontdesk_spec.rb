@@ -1,5 +1,6 @@
 require "date"
 require_relative "spec_helper"
+require "pry"
 
 describe "Frontdesk.new" do
   before do
@@ -58,10 +59,12 @@ describe "Frontdesk request_reservation with block_reference" do
   before do
     @frontdesk = Hotel::Frontdesk.new
     @block_res = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
-    @frontdesk.request_block(@block_res, 5)
+    @frontdesk.request_block(@block_res, 2)
     @reservation3 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "SCIFI PARTY")
     @frontdesk.request_reservation(@reservation3)
-    @reservation4 = Hotel::Reservation.new("Mollie Bullis", "2019-07-08", 2, block_reference: "SCIFI PARTY")
+    @reservation4 = Hotel::Reservation.new("Graham Bullis", "2019-07-08", 2, block_reference: "SCIFI PARTY")
+    @reservation5 = Hotel::Reservation.new("Mollie Bullis", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @reservation6 = Hotel::Reservation.new("Renee Bennett", "2019-07-08", 3, block_reference: "SCIFI PARTY")
   end
   it "adjusts the reservation cost based on blocked status" do
     expect(@block_res.cost).must_equal 450
@@ -71,6 +74,10 @@ describe "Frontdesk request_reservation with block_reference" do
   end
   it "returns ArgumentError if block reservation doesn't have the correct dates" do
     expect { @frontdesk.request_reservation(@reservation4) }.must_raise ArgumentError
+  end
+  it "raises in ArgumentError if there are no available rooms left in the block" do
+    @frontdesk.request_reservation(@reservation5)
+    expect { @frontdesk.request_reservation(@reservation6) }.must_raise ArgumentError
   end
 end
 

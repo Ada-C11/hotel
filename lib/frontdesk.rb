@@ -28,6 +28,7 @@ module Hotel
           end
         end
       end
+      raise ArgumentError, "There are no available reservations for this block."
     end
 
     def assign_room_number(reservation)
@@ -47,7 +48,7 @@ module Hotel
 
     def request_block(reservation, num_of_rooms)
       if num_of_rooms > 5 || num_of_rooms < 2
-        raise ArgumentError, "You can reserve a maximum of 5 available rooms in a block"
+        raise ArgumentError, "You can reserve a minumum of 2 and a maximum of 5 available rooms in a block"
       end
       available_rooms = find_available_rooms(reservation.reserved_nights)
       if available_rooms.length >= num_of_rooms
