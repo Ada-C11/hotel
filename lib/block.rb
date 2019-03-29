@@ -17,8 +17,16 @@ module Hotel
       raise ArgumentError, "Maximum number of room_ids is 5!" if room_ids.length > 5
     end
 
-    # def self.load_all
-    #   @blocks = []
-    # end
+    def check_available_rooms
+      return rooms_info.select do |room_id, status|
+               status == :AVAILABLE
+             end
+    end
+
+    def reserve_room(room_id:)
+      rooms_info.each do |current_room_id, status|
+        rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
+      end
+    end
   end
 end

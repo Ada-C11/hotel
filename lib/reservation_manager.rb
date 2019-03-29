@@ -91,9 +91,7 @@ module Hotel
       self.class.validate_id(block_id)
       block = @blocks.find { |current_block| current_block.block_id == block_id }
       raise ArgumentError, "Block #{block_id} is not found" if block == nil
-      return block.rooms_info.select do |room_id, status|
-               status == :AVAILABLE
-             end
+      return block.check_available_rooms
     end
 
     # I can reserve a specific room from a hotel block
@@ -101,9 +99,7 @@ module Hotel
       self.class.validate_id(room_id)
       self.class.validate_id(block_id)
       block = @blocks.find { |block| block.block_id == block_id }
-      block.rooms_info.each do |current_room_id, status|
-        block.rooms_info[current_room_id] = :UNAVAILABLE if current_room_id == room_id
-      end
+      block.reserve_room(room_id: room_id)
       check_in_date = block.check_in_date.to_s
       check_out_date = block.check_out_date.to_s
       new_reservation = new_reservation(room_id, check_in_date, check_out_date)
@@ -117,7 +113,7 @@ module Hotel
     # Optional Enhancement: Add functionality that allows for setting different rates for different rooms
     def set_room_rate(room_id:, room_rate:)
       room = @rooms.find { |room| room.room_id == room_id }
-      room.cost = room_rate.to_f
+      room.change_rate(new_rate: room_rate)
       store_room_rates_in_csv
     end
 

@@ -20,6 +20,10 @@ module Hotel
       return 20
     end
 
+    def change_rate(new_rate:)
+      @cost = new_rate.to_f
+    end
+
     def self.load_all
       return CSV.read(
                "support/rooms.csv",
