@@ -1,0 +1,44 @@
+# Answers to Prompts
+- What classes does each implementation include? Are the lists the same?
+    - Both implementations include classes CartEntry, ShoppingCart, and Order. The lists are the same.
+- Write down a sentence to describe each class.
+    - CartEntry takes in each item to get unit price and quantity
+    - ShoppingCart collects all the entries and calculates their subtotal prices
+    - Order calculates total price of all the items/entries.
+- How do the classes relate to each other? It might be helpful to draw a diagram on a whiteboard or piece of paper.
+    - Order takes in the subtotal price of all entries from ShoppingCart, and ShoppingCart calculates takes in each entry from CartEntry to calculate to the subtotal price.
+- What data does each class store? How (if at all) does this differ between the two implementations?
+    - Implementation A
+        - CartEntry stores unit price and quantity
+        - ShoppingCart stores the collection of all entries
+        - Order stores sales tax, an instance of ShoppingCart, and total price
+    - Implementation B
+        - CartEntry stores unit price, quantity, and price of each entry
+        - ShoppingCart stores the collection of entries and the order's subtotal price
+        - Order stores sales tax, an instance of ShoppingCart and total price
+    - The difference between the 2 implementations is that the classes CartEntry and ShoppingCart in implementation A don't calculate prices, while those in implementation B do.
+- Consider the Order#total_price method. In each implementation:
+    -   Is logic to compute the price delegated to "lower level" classes like ShoppingCart and CartEntry, or is it retained in Order?
+        - In implementation A, logic to compute the price is not delegated to lower level classes. It's all calculated in the Order class.
+        - In implementation B, logic to compute the price is delegated to CartEntry and ShoppingCart.
+    -   Does total_price directly manipulate the instance variables of other classes?
+        -   Implementation A: yes, it does when looping through the entries array and getting unit price and quantity from ShoppingCart and CartEntry.
+        -   Implementation B: no. It gets only gets the subtotal price by calling the price method from ShoppingCart.
+    - If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
+        -  Implementation A: The code in Order class would need to be changed to account for the discount for items bought in bulk.
+        - Implementation B: We can add another class, say Discount, to create a new instance of ShoppingCart to count the number of entries and then get the subtotal price by calling the method price in order to apply the discount.
+        - Implementation B is easier to modify because we wouldn't need to change the code inside any of the classes.
+    - Which implementation better adheres to the single responsibility principle?
+        - Implementation B better adheres to the single responsibility principle.
+- Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+        - Implementation B is more loosely coupled.
+# Revisiting Hotel
+### Changes I would make to improve my Hotel's design:
+- Delegate some of the responsibilities to other classes such as Reservation, Block, Room and DateRange
+    - Move total_cost method to Reservation
+    - Have a DateRange instance method called overlap which takes another DateRange as a parameter and returns true if the two date range instance overlap and false if they do not. Then the ReservationManager could loop through reservations checking to see if the new one overlaps with the existing reservations.
+    - Fix the initialize method in the DateRange class and use it more properly
+    - Use more enumerable
+    - Add more tests to account for edge cases especially in the reserve method
+- These changes would make my design adheres more to OOP design.
+

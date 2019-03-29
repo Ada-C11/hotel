@@ -1,0 +1,9 @@
+Changes that I could make:
+    1. Simplify my algorithm to my get_na_objects method in the ReservationManager class: 
+        Currently this class contains a long code of comparison operators. I could make it
+        shorter and more simple, making it easier to understand and to change for later use.
+    2. Simplify my self.validate_date method in DateRange class. There are a lot of Raise ArgumentErrors
+        statements. I think I could shorten them using another logic, or use StandardError.
+    3. DRY out my code. The code in most of my methods are long, thus reducing readability.
+        For example, my find_available_rooms method in the ReservationManager
+        class is long. It could be more simplified.
