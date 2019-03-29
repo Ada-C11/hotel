@@ -37,17 +37,18 @@ class BookingCentral
     return random_available_room
   end
 
-  def reserve_room(check_in:, check_out:, room: assign_room(check_in, check_out))
-    if list_available_rooms(check_in, check_out) == []
+  def reserve_room(check_in:, check_out:, room: nil)
+    room ||= assign_room(check_in, check_out)
+    unless room
       raise ArgumentError, "There is no availability for the dates provided."
-    else
-      new_reservation = Reservation.new(
-        check_in: check_in, 
-        check_out: check_out, 
-        room: assign_room(check_in, check_out))
-      @all_reservations << new_reservation
-      return new_reservation
     end
+
+    new_reservation = Reservation.new(
+      check_in: check_in, 
+      check_out: check_out, 
+      room: assign_room(check_in, check_out))
+    @all_reservations << new_reservation
+    return new_reservation
   end
 
   def block_rooms(check_in:, check_out:, number_of_rooms:, rooms:, discount_rate:)
