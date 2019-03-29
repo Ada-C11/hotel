@@ -1,0 +1,5 @@
+1. Add a change_room method in frontdesk to accommodate guest preferences,
+while also taking into account availability.
+2. Refactor the cost method in reservations to accommodate custom pricing.
+3. Consider getting rid of Room class - should it be nested inside frontdesk?
+4. Explore creating a CLI for the frontdesk staff.
