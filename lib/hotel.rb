@@ -72,10 +72,6 @@ module HotelGroup
     end
 
     def make_reservation(start_time, end_time, room: nil, block: nil)
-      if (start_time <=> end_time) == 1
-        raise ArgumentError, "End time must be later than start time"
-      end
-
       if room && !@rooms.include?(room)
         raise ArgumentError, "Invalid room"
       end

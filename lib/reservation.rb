@@ -7,6 +7,10 @@ module HotelGroup
     attr_accessor :id, :room, :start_time, :end_time, :block_reservation
 
     def initialize(id, start_time, end_time, room)
+      if (start_time <=> end_time) == 1
+        raise ArgumentError, "End time must be later than start time"
+      end
+
       @start_time = start_time
       @end_time = end_time
       @room = room
