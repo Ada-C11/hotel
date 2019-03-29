@@ -113,6 +113,11 @@ describe "Frontdesk request_block" do
   it "raises an ArgumentError when user requests more than 5 rooms" do
     expect { @frontdesk.request_block(@block_res, 6) }.must_raise ArgumentError
   end
+
+  it "raises an ArgumentError when user requests less than 2 rooms" do
+    expect { @frontdesk.request_block(@block_res, 1) }.must_raise ArgumentError
+  end
+
   it "raises an ArgumentError when no rooms are available" do
     block_res_2 = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
     block_res_3 = Hotel::Reservation.new("Agatha Christie", "2019-07-08", 3, block_reference: "MYSTERY PARTY")

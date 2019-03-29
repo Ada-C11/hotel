@@ -46,7 +46,7 @@ module Hotel
     end
 
     def request_block(reservation, num_of_rooms)
-      if num_of_rooms > 5
+      if num_of_rooms > 5 || num_of_rooms < 2
         raise ArgumentError, "You can reserve a maximum of 5 available rooms in a block"
       end
       available_rooms = find_available_rooms(reservation.reserved_nights)
