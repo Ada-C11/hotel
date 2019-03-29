@@ -80,7 +80,7 @@ describe "hotel class" do
     end
 
     it "finds available rooms for a start and end time" do
-      expect(@hotel.find_available_rooms(@start_time2, @end_time2).count).must_equal 19
+      expect(@hotel.find_available_rooms(@hotel.reservations[0].start_time, @hotel.reservations[0].end_time).count).must_equal 19
     end
   end
 
@@ -127,27 +127,25 @@ describe "hotel class" do
     end
 
     it "raises an error if one of the rooms is unavailable for the given date range" do
-      expect { @hotel.create_hotel_block(@start_time, @end_time, [@hotel.reservations[2].room.number]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(@hotel.reservations[0].start_time, @hotel.reservations[0].end_time, [@hotel.reservations[0].room.number]) }.must_raise ArgumentError
     end
 
     it "creates HotelGroup::HotelBlock object if rooms are available" do
-      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [12, 14])
 
       expect(block).must_be_kind_of HotelGroup::HotelBlock
     end
 
     it "won't reserve a room that is already part of a block" do
-      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [1])
 
-      room = @hotel.rooms[0]
-
-      expect { @hotel.make_reservation(@start_time4, @end_time4, room: room) }.must_raise ArgumentError
+      expect { @hotel.make_reservation(@start_time4, @end_time4, 1) }.must_raise ArgumentError
     end
 
     it "won't create a block if a room is already part of another block" do
-      block = @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number, @hotel.rooms[1].number])
+      block = @hotel.create_hotel_block(@start_time4, @end_time4, [17, 18])
 
-      expect { @hotel.create_hotel_block(@start_time4, @end_time4, [@hotel.rooms[0].number]) }.must_raise ArgumentError
+      expect { @hotel.create_hotel_block(@start_time4, @end_time4, [17, 18]) }.must_raise ArgumentError
     end
 
     describe "reserve_block_room" do

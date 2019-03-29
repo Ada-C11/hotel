@@ -14,11 +14,17 @@ module HotelGroup
       @start_time = start_time
       @end_time = end_time
 
-      if rooms.count > 5
+      if rooms.length > 5
         raise ArgumentError, "Maximum of 5 rooms allowed in a block"
       end
 
       @rooms = rooms
+    end
+
+    def overlap?(start_date, end_date)
+      return (start_time...end_time).include?(start_date) || (start_time + 1..end_time).include?(end_date) ||
+               (start_date...end_date).include?(start_time) ||
+               (start_date + 1..end_date).include?(end_time)
     end
 
     def print_nicely

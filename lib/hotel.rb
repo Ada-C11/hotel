@@ -23,7 +23,7 @@ module HotelGroup
         block.rooms.each do |room_id|
           room_obj = find_room(room_id)
           room_array << room_obj
-          room_obj.add_block_id(block.id)
+          room_obj.add_block(block)
           room_obj.block_price = room_obj.price - room_obj.price * block.discount
         end
         block.rooms = room_array
@@ -135,13 +135,15 @@ module HotelGroup
           raise ArgumentError, "Room #{room.number} is not available on the given dates:#{start_time} #{end_time}"
         end
 
-        room.add_block_id(id)
-
-        room.set_unavailable(start_time, end_time)
+        # room.set_unavailable(start_time, end_time)
         rooms_array << room
       end
+
       hotel_block = HotelBlock.new(id, start_time, end_time, rooms_array, discount)
 
+      rooms_array.each do |room|
+        room.add_block(hotel_block)
+      end
       @blocks << hotel_block
 
       return hotel_block

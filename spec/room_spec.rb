@@ -97,11 +97,6 @@ describe "room class" do
       expect(@room.is_available?(start_to_check, end_to_check)).must_equal false
     end
 
-    it "raises an error if room is reserved for unavailable dates" do
-      @room.add_reservation(@res)
-      expect { @room.add_reservation(@res) }.must_raise ArgumentError
-    end
-
     it "allows a reservation to begin on the same day another ends" do
       @room.add_reservation(@res)
       @room.add_reservation(@res3)
@@ -119,8 +114,7 @@ describe "room class" do
     it "has_reservation? returns false if room is unavailable (part of a block) but unreserved" do
       start_time = Date.new(2019, 6, 6)
       end_time = Date.new(2019, 6, 9)
-      @room.set_unavailable(start_time, end_time)
-      @room.add_reservation(@res)
+      new_block = @hotel.create_hotel_block(start_time, end_time, [@room.number])
 
       expect(@room.has_reservation?(start_time, end_time)).must_equal false
     end

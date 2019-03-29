@@ -9,7 +9,6 @@ module HotelGroup
       @number = number
       @price = price
       @block_price = price * 0.8
-      @unavailable_dates = []
       @reservations = []
       @blocks = []
     end
@@ -26,43 +25,27 @@ module HotelGroup
 
     def connect(res)
       reservations << res
-      set_unavailable(res.start_time, res.end_time)
       return self
     end
 
     def add_reservation(res)
-      if has_reservation?(res.start_time, res.end_time)
-        raise ArgumentError, "Room #{number} is already reserved for this date range"
-      end
       reservations << res
-      set_unavailable(res.start_time, res.end_time)
     end
 
     def is_available?(start_time, end_time)
-      if unavailable_dates == []
+      if blocks == [] && reservations == []
         return true
       end
-      unavailable_dates.each do |date_array|
-        res_start = date_array[0]
-        res_end = date_array[1]
-
-        if (res_start...res_end).include?(start_time) || (res_start + 1..res_end).include?(end_time) ||
-           (start_time...end_time).include?(res_start) ||
-           (start_time + 1..end_time).include?(res_end)
-          return false
-        end
+      blocks.each do |block|
+        return false if block.overlap?(start_time, end_time)
       end
+      return false if has_reservation?(start_time, end_time)
+
       return true
     end
 
-    def set_unavailable(start_time, end_time)
-      unavailable_dates << [start_time, end_time]
-    end
-
-    def add_block_id(id)
-      if !blocks.include?(id)
-        @blocks << id
-      end
+    def add_block(block)
+      @blocks << block
       return self
     end
 
@@ -70,15 +53,17 @@ module HotelGroup
       if reservations.count == 0
         return false
       end
-
       reservations.each do |res|
-        return res.overlap?(start_time, end_time)
+        if res.overlap?(start_time, end_time)
+          return true
+        end
       end
+      return false
     end
 
     def is_in_block?(block)
-      blocks.each do |id|
-        if id == block.id
+      blocks.each do |block_obj|
+        if block_obj.id == block.id
           return true
         end
       end

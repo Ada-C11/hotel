@@ -17,7 +17,10 @@ describe "HotelGroup::HotelBlock class" do
     end
 
     it "returns an error if the number of rooms > 5" do
-      expect { HotelGroup::HotelBlock.new(1, @start_time, @end_time, [@room1, @room2, @room3, @room1, @room2, @room3]) }.must_raise ArgumentError
+      room4 = HotelGroup::Room.new(4, 200)
+      room5 = HotelGroup::Room.new(5, 200)
+      room6 = HotelGroup::Room.new(6, 200)
+      expect { HotelGroup::HotelBlock.new(1, @start_time, @end_time, [@room1, @room2, @room3, room4, room5, room6], 0.8) }.must_raise ArgumentError
     end
   end
 
