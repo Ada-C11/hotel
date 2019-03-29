@@ -22,7 +22,7 @@ module HotelSystem
 
     def self.create_rooms(room_numbers)
       rooms = room_numbers.map do |num|
-        new_room = HotelSystem::Room.new(id: num)
+        HotelSystem::Room.new(id: num)
       end
       return rooms
     end

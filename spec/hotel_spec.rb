@@ -251,7 +251,7 @@ describe "Hotel" do
       end
 
       it "Reserves all rooms in the block for the time frame, so they cannot get booked through normal means" do
-        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
+        @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         @room_array.each do |room|
           expect {
             @hotel.book_reservation(@room, @arrive_day, @depart_day)
@@ -260,7 +260,7 @@ describe "Hotel" do
       end
 
       it "cannot book another block that includes any rooms that are included in another block for the same night" do
-        block = @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
+        @hotel.create_block(@room_array, @arrive_day, @depart_day, 0.2)
         expect {
           @hotel.create_block([@room_two, @room_three], "2019-02-12", "2019-02-17", 0.2)
         }.must_raise ArgumentError

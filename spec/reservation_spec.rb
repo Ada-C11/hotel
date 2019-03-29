@@ -19,13 +19,13 @@ describe "Reservation" do
 
     it "Raises an ArgumentError if arrive date is before depart date" do
       expect {
-        invalid_reservation = HotelSystem::Reservation.new(room: @room, arrive_day: @depart_day, depart_day: @arrive_day)
+        HotelSystem::Reservation.new(room: @room, arrive_day: @depart_day, depart_day: @arrive_day)
       }.must_raise ArgumentError
     end
 
     it "Raises an ArgumentError if arrive date is the same as depart date" do
       expect {
-        invalid_reservation = HotelSystem::Reservation.new(room: @room, arrive_day: @depart_day, depart_day: @depart_day)
+        HotelSystem::Reservation.new(room: @room, arrive_day: @depart_day, depart_day: @depart_day)
       }.must_raise ArgumentError
     end
   end
