@@ -30,9 +30,16 @@ end
 
 describe "Reservation.cost method" do
   before do
+    @frontdesk = Hotel::Frontdesk.new
     @reservation = Hotel::Reservation.new("Amy Martinsen", "2015-05-20", 3)
+    @block_res = Hotel::Reservation.new("Octavia Butler", "2019-07-08", 3, block_reference: "SCIFI PARTY")
+    @frontdesk.request_block(@block_res, 2)
+    @reservation3 = Hotel::Reservation.new("Amy Martinsen", "2019-07-08", 3, block_reference: "SCIFI PARTY")
   end
-  it "calculates the correct reservation cost" do
+  it "calculates the correct cost for a regular reservation" do
     expect(@reservation.cost).must_equal 600
+  end
+  it "calculates the correct cost for a block reservation" do
+    expect(@reservation3.cost).must_equal 450
   end
 end

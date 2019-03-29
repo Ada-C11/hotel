@@ -66,9 +66,9 @@ describe "Frontdesk request_reservation with block_reference" do
     @reservation5 = Hotel::Reservation.new("Mollie Bullis", "2019-07-08", 3, block_reference: "SCIFI PARTY")
     @reservation6 = Hotel::Reservation.new("Renee Bennett", "2019-07-08", 3, block_reference: "SCIFI PARTY")
   end
-  it "adjusts the reservation cost based on blocked status" do
-    expect(@block_res.cost).must_equal 450
-  end
+  # it "adjusts the reservation cost based on blocked status" do
+  #   expect(@block_res.cost).must_equal 450
+  # end
   it "changes reservations block status to :UNAVAILABLE" do
     expect(@reservation3.block_availability).must_equal :UNAVAILABLE
   end
