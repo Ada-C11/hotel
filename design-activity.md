@@ -31,3 +31,6 @@ A: Imp B, because each lower-level class is responsible for calculating its own 
 Q: Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
 A: B!
+
+Revisiting Hotel:
+In order to handle block reservations within my Frontdesk class, I currently have to modify the Reservation object's @block_availability instance variable within the Frontdesk class, and therefore have an attr_accessor for that variable within Frontdesk. I'd like to create a more loose coupling by adding a helper method in my Reservation class to change the @block_availability instance variable within the class itself.
