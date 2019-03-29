@@ -2,7 +2,7 @@ require "date"
 
 module Hotel
   class Frontdesk
-    attr_accessor :rooms, :reservations, :block_reservations
+    attr_accessor :rooms, :reservations, :block_reservations, :block_availability, :name
 
     def initialize
       @rooms = create_rooms(20)
@@ -21,8 +21,8 @@ module Hotel
             if res.reserved_nights != reservation.reserved_nights
               raise ArgumentError, "Reservations for #{res.block_reference} must be booked from #{res.checkin_date} to #{res.checkout_date}."
             else
-              res.instance_variable_set(:@block_availability, :UNAVAILABLE)
-              res.instance_variable_set(:@name, reservation.name)
+              res.block_availability = :UNAVAILABLE
+              res.name = reservation.name
               return reservation
             end
           end
