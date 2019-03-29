@@ -92,31 +92,6 @@ describe "Frontdesk find_reservation_by_date" do
   end
 end
 
-describe "Frontdesk find_available_rooms" do
-  before do
-    @frontdesk = Hotel::Frontdesk.new
-    pending_res1 = Hotel::Reservation.new("Agatha Christie", "2019-05-20", 2)
-    pending_res2 = Hotel::Reservation.new("Nnedi Okorafor", "2019-05-20", 2)
-    @reservation1 = @frontdesk.request_reservation(pending_res1)
-    @reservation2 = @frontdesk.request_reservation(pending_res2)
-  end
-  it "returns an array of available rooms" do
-    dates = @reservation1.reserved_nights
-    available_rooms = @frontdesk.find_available_rooms(dates)
-    expect(available_rooms).must_be_instance_of Array
-    expect(available_rooms[0]).must_be_instance_of Hotel::Room
-    expect(available_rooms.length).must_equal 18
-  end
-  it "returns an empty array if no available rooms" do
-    reservation3 = Hotel::Reservation.new("Agatha Christie", "2019-05-20", 2)
-    18.times do
-      @frontdesk.request_reservation(reservation3)
-    end
-    dates = reservation3.reserved_nights
-    expect (@frontdesk.find_available_rooms(dates)).must_equal []
-  end
-end
-
 describe "Frontdesk request_block" do
   before do
     @frontdesk = Hotel::Frontdesk.new
@@ -129,7 +104,6 @@ describe "Frontdesk request_block" do
     expect(@blocked_rooms).must_be_instance_of Array
     expect(@blocked_rooms[2]).must_be_instance_of Hotel::Reservation
     expect(@blocked_rooms.length).must_equal 5
-    expect(@frontdesk.find_available_rooms(@dates).length).must_equal 15
     expect(@frontdesk.find_reservation_by_date(date).length).must_equal 5
     expect(@frontdesk.block_reservations).must_be_instance_of Hash
     expect(@frontdesk.block_reservations.length).must_equal 1

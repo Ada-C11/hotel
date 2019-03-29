@@ -30,17 +30,6 @@ module Hotel
       end
     end
 
-    def find_available_rooms(dates)
-      available_rooms = []
-      @rooms.each do |room|
-        overlap = room.availability & dates
-        if overlap.length == 0
-          available_rooms << room
-        end
-      end
-      return available_rooms
-    end
-
     def assign_room_number(reservation)
       available_rooms = find_available_rooms(reservation.reserved_nights)
       if available_rooms.length == 0
@@ -102,6 +91,17 @@ module Hotel
     end
 
     private
+
+    def find_available_rooms(dates)
+      available_rooms = []
+      @rooms.each do |room|
+        overlap = room.availability & dates
+        if overlap.length == 0
+          available_rooms << room
+        end
+      end
+      return available_rooms
+    end
 
     def create_rooms(number_of_rooms)
       room_list = []
