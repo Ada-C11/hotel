@@ -8,13 +8,8 @@ class BookingCentral
   
   def initialize
     @blocks = []
-    @rooms = []
+    @rooms = (1..20).to_a
     @all_reservations = []
-
-    (1..20).each do |number|
-      room = Room.new(number, room_reservations: [])
-      @rooms << room
-    end
   end
 
   def reservations_by_date(check_in, check_out)
@@ -28,7 +23,7 @@ class BookingCentral
   def list_available_rooms(check_in, check_out)
     asking_date = DateRange.generate_date_range(check_in, check_out)
     available_rooms = @rooms - (reservations_by_date(check_in, check_out)).map{ |reservation| reservation.room }
-    available_rooms -= @rooms.select{ |room| room.blocked == true }
+    #available_rooms -= @rooms.select{ |room| room.blocked == true }
     return available_rooms
   end
 
@@ -56,7 +51,7 @@ class BookingCentral
     number_of_rooms.times do |i|
       room = assign_room(check_in, check_out)
       @rooms << room
-      @rooms.map{ |room| room.blocked == true }
+      #@rooms.map{ |room| room.blocked == true }
     end
 
     if available_rooms.count < number_of_rooms
@@ -84,7 +79,7 @@ class BookingCentral
     if blocks == []
       raise ArgumentError, "There are no blocked rooms at the moment."
     else
-      blocked_rooms = @rooms.select{ |room| room.blocked == true }
+      blocked_rooms = @rooms.select{ |room| room }
     end
     return blocked_rooms
   end
