@@ -1,0 +1,7 @@
+Check on the block discount and make sure it's applying the discount appropriately for each block reservation.
+
+HotelBlock doesn't do a lot on its own. See whether HotelBlock could be a subclass of Hotel? They both have rooms, although it doesn't make sense for HotelBlock to also have blocks. Maybe both classes could be subclasses of something else that has rooms. Think about what that could be called.
+
+Add more functionality to CLI
+
+Use .select more when appropriate
