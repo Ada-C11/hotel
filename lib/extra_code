@@ -1,0 +1,72 @@
+
+
+
+
+
+
+
+
+# BLOCK AS METHOD
+
+
+  
+#     def hotel_block(checkin_date, checkout_date, requested_rooms, discounted_rate)
+    #   @room_block = []
+    #   @block_of_rooms ||= []
+    #   i = 0
+      
+    #   if @block_of_rooms - requested_rooms == nil
+    #     raise ArgumentError, "That room is already in a block."
+    #   elsif requested_rooms.length > 5
+    #     raise ArgumentError, "A block can have 5 rooms maximum."
+    #   else
+    #     requested_rooms.each do |number|
+    #       unless check_availability(checkin_date, checkout_date).include?(requested_rooms[i]) 
+    #         raise ArgumentError, "This room is not available for your selected dates."
+    #       else
+    #         @all_rooms.each do |room|
+    #           if room.number == requested_rooms[i]
+                
+    #             reserved_room = room
+                
+    #             # reserved_room = Booking::Room.new(number, checkin_date: checkin_date, checkout_date: checkout_date)
+    #             @room_block << reserved_room
+    #           end
+    #         end
+    #       i += 1
+    #       end
+    #     end
+    #   end
+    #     # room_numbers = @room_block.map do |room|
+    #     #   room.number
+    #     # end
+
+    #     # @available_rooms = @available_rooms - room_numbers
+    #   return @room_block
+    # end
+
+#     def block_availability(block)
+#       available_rooms = []
+#       block.each do |room|
+#         available_rooms << room.number
+#       end
+#       return available_rooms
+#     end
+
+#     def reserve_room_from_block(block, number)
+      
+#       if block_availability(block).include?(number)
+
+#         # book_room = block.find {|room| room.number == number }
+#         #binding.pry
+        
+#       else
+#         raise ArgumentError, "This room is not available for this block"
+#       end
+#       # puts block[0]
+#       # book_room.checkin_date
+      
+#       # reservation = add_reservation(block[0].checkin_date, block[0].checkout_date, room: book_room.number)
+#       # binding.pry
+#       return reservation
+#     end
