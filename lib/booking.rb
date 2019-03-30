@@ -29,12 +29,11 @@ module Hotel
         end
       end
       taken_rooms = taken_rooms.uniq.sort!
-      avail_rooms = []
-      @rooms.each do |room|
-        if (taken_rooms.include? room.id) == false
-          avail_rooms << room
-        end
+      
+      avail_rooms = @rooms.reject do |room|
+        taken_rooms.include? room.id
       end
+
       if avail_rooms.empty? 
         raise ArgumentError, "No rooms are available for those dates" 
       end
