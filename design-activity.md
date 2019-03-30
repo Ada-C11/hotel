@@ -125,3 +125,87 @@ How do the classes relate to each other? It might be helpful to draw a diagram o
 8. Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
     - Implementation B is more loosely coupled.
+
+________________________HOTEL________________________
+
+Changes that will need to be made to improve the design.
+
+Integrate BlockManager and ReservationsManager in one class.
+
+Determine the methods that belong to the Block class and take them out of the manager.
+
+
+
+Analysis
+
+What is this class's responsibility?
+You should be able to describe it in a single sentence.
+
+    - BlockManager
+        - manages the operations needed for a block. Inherits from RandBTemplate.
+
+    - Block
+        - Creates an instance of Block.
+
+    - ReservationManager
+        - Manages the operations needed for a reservation. inherits from RandBTemplate.
+
+    - Reservation
+        - Creates an instance of Reservation.
+        - Calculates total nights
+        - Calculates total cost
+
+    - RandBTemplate
+        -  It's a template to ReservationManager and BlockManager. 
+
+
+Is this class responsible for exactly one thing? 
+
+    - BlockManager
+    yes, but it's unnecessary 
+
+    - Block 
+    yes
+
+    - ReservationManager
+    There are lot of things happening in it reevaluate...
+      
+    - Reservation
+     yes 
+
+    - RandBTemplate
+There is not need to have this class.
+
+
+Does this class take on any responsibility that should be delegated to "lower level" classes?
+
+    - BlockManager
+        
+
+    - Block
+    block needs to have responsibilities that have been assigned to block manager
+        
+    - ReservationManager
+    I am not sure what responsibilities need to be delegated
+      
+    - Reservation
+    This one is fine.
+     
+
+    - RandBTemplate
+    Make this class go away.
+    
+
+Is there code in other classes that directly manipulates this class's instance variables?
+
+    - BlockManager
+
+    - Block
+        
+    - ReservationManager
+      
+    - Reservation
+     
+
+    - RandBTemplate
+    
