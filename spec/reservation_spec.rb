@@ -8,6 +8,21 @@ describe "Reservation" do
     end
   end
 
+  describe "includes_date?" do
+    before do
+      @reservation = Hotel::Reservation.new(checkin: "April 1, 2019", checkout: "April 5, 2019")
+    end
+    it "Returns true if dates includes the given date" do
+      date_check = @reservation.includes_date?("April 1, 2019")
+      expect(date_check).must_equal true
+    end
+
+    it "Returns false if dates includes the given date" do
+      date_check = @reservation.includes_date?("March 1, 2019")
+      expect(date_check).must_equal false
+    end
+  end
+
   describe "reservation_dates" do
     it "Returns an array of dates for each night of the reservation" do
       dates = Hotel::Reservation.reservation_dates("April 1, 2019", "April 5, 2019")

@@ -29,26 +29,19 @@ module Hotel
         end
       end
       taken_rooms = taken_rooms.uniq.sort!
-      
+
       avail_rooms = @rooms.reject do |room|
         taken_rooms.include? room.id
       end
 
-      if avail_rooms.empty? 
-        raise ArgumentError, "No rooms are available for those dates" 
+      if avail_rooms.empty?
+        raise ArgumentError, 'No rooms are available for those dates'
       end
       return avail_rooms
     end
 
     def find_reservation(date)
-      res_by_date = []
-      date = (Date.parse(date)).to_s
-      @reservations.each do |res|
-        if res.dates.any? date
-          res_by_date << res
-        end
-      end
-      return res_by_date
+      return @reservations.select { |res| res.includes_date?(date) }
     end
   end
 end

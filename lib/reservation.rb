@@ -11,6 +11,15 @@ module Hotel
       @room = room
     end
 
+    def includes_date?(date)
+      date = (Date.parse(date)).to_s
+      return dates.any? date
+    end
+
+    def total_cost
+      return @nights * room.cost
+    end
+    
     def self.reservation_dates(checkin, checkout)
       checkin = Date.parse(checkin)
       checkout = Date.parse(checkout)
@@ -18,7 +27,7 @@ module Hotel
     end
 
     def self.num_nights(checkin, checkout)
-      return (Hotel::Reservation.reservation_dates(checkin, checkout)).length
+      return Hotel::Reservation.reservation_dates(checkin, checkout).length
     end
 
     def self.validate_dates(checkin, checkout)
@@ -36,8 +45,5 @@ module Hotel
       end
     end
 
-    def total_cost
-      return @nights * room.cost
-    end
   end
 end
