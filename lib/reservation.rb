@@ -43,5 +43,14 @@ module Hotel
         raise ArgumentError, "Can't make a reservation for the past, homie. #{check_in}"
       end
     end
+
+    def self.new_reservation(check_in, check_out, available_room, id)
+      reservation = Reservation.new(
+        check_in: check_in,
+        check_out: check_out,
+        room: available_room,
+        id: id,
+      )
+    end
   end
 end

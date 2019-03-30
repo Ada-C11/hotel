@@ -31,12 +31,8 @@ module Hotel
         available_room = available_room_list[0]
       end
 
-      reservation = Reservation.new(
-        check_in: check_in,
-        check_out: check_out,
-        room: available_room,
-        id: @reservations.length + 1,
-      )
+      reservation_id = @reservations.length + 1
+      reservation = Reservation.new_reservation(check_in, check_out, available_room, reservation_id)
 
       available_room.add_reservation(reservation)
       @reservations << reservation
