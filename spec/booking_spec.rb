@@ -53,12 +53,21 @@ describe "Booking" do
   end
 
   describe "find_reservation" do
-    it "Returns a collection of Reservations for a specific date" do
+    before do
       @booking.request_reservation("May 1, 2020", "May 5, 2020")
       @booking.request_reservation("May 3, 2020", "May 5, 2020")
+    end
+
+    it "Returns a collection of Reservations for a specific date" do
       res_date = @booking.find_reservation("May 3, 2020")
       expect(res_date).must_be_kind_of Array
       expect(res_date.first).must_be_kind_of Hotel::Reservation
+      expect(res_date.length).must_equal 2
+    end
+
+    it "Omits reservations that don't include the date" do
+      @booking.request_reservation("June 3, 2020", "June 5, 2020")
+      res_date = @booking.find_reservation("May 3, 2020")
       expect(res_date.length).must_equal 2
     end
   end
