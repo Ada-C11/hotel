@@ -13,8 +13,7 @@ module Hotel
       Reservation.validate_dates(checkin, checkout)
       date_range = Reservation.reservation_dates(checkin, checkout)
       room = check_availability(date_range).first
-      num_nights = Reservation.nights(checkin, checkout)
-      reservation = Hotel::Reservation.new(checkin: checkin, checkout: checkout, nights: num_nights, dates: date_range, room: room)
+      reservation = Hotel::Reservation.new(checkin: checkin, checkout: checkout, room: room)
       @reservations << reservation
       room.add_reservation(reservation)
       return reservation

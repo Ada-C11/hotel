@@ -2,12 +2,12 @@ require "date"
 
 module Hotel
   class Reservation
-    attr_reader :checkin, :checkout, :dates, :nights, :room
-    def initialize(checkin:, checkout:, nights: nil, dates: nil, room: nil)
+    attr_reader :checkin, :checkout, :nights, :dates, :room
+    def initialize(checkin:, checkout:, room: nil)
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
-      @nights = nights
-      @dates = dates
+      @nights = Hotel::Reservation.num_nights(checkin, checkout)
+      @dates = Hotel::Reservation.reservation_dates(checkin, checkout)
       @room = room
     end
 
@@ -17,7 +17,7 @@ module Hotel
       return (checkin.to_s..(checkout-1).to_s).to_a
     end
 
-    def self.nights(checkin, checkout)
+    def self.num_nights(checkin, checkout)
       return (Hotel::Reservation.reservation_dates(checkin, checkout)).length
     end
 

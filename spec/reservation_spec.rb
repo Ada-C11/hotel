@@ -18,8 +18,8 @@ describe "Reservation" do
 
   describe "nights" do
     it "Returns the number of nights for a reservation" do
-      num_nights = Hotel::Reservation.nights("April 1, 2019", "April 5, 2019")
-      expect(num_nights).must_equal 4
+      nights = Hotel::Reservation.num_nights("April 1, 2019", "April 5, 2019")
+      expect(nights).must_equal 4
     end
   end
 
