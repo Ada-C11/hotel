@@ -11,7 +11,7 @@ module Hotel
 
     def initialize
       @rooms = (1..20).map do |room_number|
-        Hotel::Room.new(room_number: room_number)
+        Room.new(room_number: room_number)
       end
 
       @reservations = []
