@@ -48,7 +48,7 @@ describe "Booking" do
       end
       expect {
         @booking.check_availability(["2020-04-01", "2020-04-02", "2020-04-03", "2020-04-04"])
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
   end
 
@@ -103,7 +103,7 @@ describe "Booking" do
       end
       expect {
         @booking.request_reservation("April 10, 2020", "April 15, 2020")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
 
     it "Raises an error if a reservation is requested that starts during a time range where no rooms are available" do
@@ -112,7 +112,7 @@ describe "Booking" do
       end
       expect {
         @booking.request_reservation("April 12, 2020", "April 18, 2020")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
     
     it "Raises an error if a reservation is requested that ends during a time range where no rooms are available" do
@@ -121,7 +121,7 @@ describe "Booking" do
       end
       expect {
         @booking.request_reservation("April 6, 2020", "April 13, 2020")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
 
     it "Raises an error if the reservation request starts and ends after a date range where no rooms are available" do
@@ -130,7 +130,7 @@ describe "Booking" do
       end
       expect {
         @booking.request_reservation("April 6, 2020", "April 18, 2020")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
 
     it "Raises an error if the reservation request starts and ends in the middle of a date range where no rooms are available" do
@@ -139,7 +139,7 @@ describe "Booking" do
       end
       expect {
         @booking.request_reservation("April 11, 2020", "April 13, 2020")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
   end
 end

@@ -3,7 +3,10 @@ require_relative "reservation.rb"
 
 module Hotel
   class Booking
+    class UnavailableRoomError < StandardError; end
+
     attr_accessor :rooms, :reservations
+
     def initialize
       @rooms = []
       @reservations = []
@@ -35,7 +38,7 @@ module Hotel
       end
 
       if avail_rooms.empty?
-        raise ArgumentError, 'No rooms are available for those dates'
+        raise UnavailableRoomError, 'No rooms are available for those dates'
       end
       return avail_rooms
     end

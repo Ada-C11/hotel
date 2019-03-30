@@ -42,21 +42,21 @@ describe "Reservation" do
     it "Raises an error if one or both of the dates is in the past" do
       expect {
         Hotel::Reservation.validate_dates("April 1, 1999", "April 5, 2019")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Reservation::InvalidDateError
 
       expect {
         Hotel::Reservation.validate_dates("April 1, 2019", "April 5, 1999")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Reservation::InvalidDateError
 
       expect {
         Hotel::Reservation.validate_dates("April 1, 1999", "April 5, 1999")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Reservation::InvalidDateError
     end
 
     it "Raises an error if the checkout date is before the checkin date" do
       expect {
         Hotel::Reservation.validate_dates("April 5, 2019", "April 1, 2019")
-      }.must_raise ArgumentError
+      }.must_raise Hotel::Reservation::InvalidDateError
     end
   end
 

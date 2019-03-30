@@ -2,7 +2,10 @@ require "date"
 
 module Hotel
   class Reservation
+    class InvalidDateError < StandardError; end
+
     attr_reader :checkin, :checkout, :nights, :dates, :room
+
     def initialize(checkin:, checkout:, room: nil)
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
@@ -35,13 +38,13 @@ module Hotel
       checkout = Date.parse(checkout)
       today = Date.today
       if checkin < today
-        raise ArgumentError, "Date cannot be in the past"
+        raise InvalidDateError, "Date cannot be in the past"
       end
       if checkout < today
-        raise ArgumentError, "Date cannot be in the past"
+        raise InvalidDateError, "Date cannot be in the past"
       end
       if checkout < checkin
-        raise ArgumentError, "Checkout cannot occur before checkin"
+        raise InvalidDateError, "Checkout cannot occur before checkin"
       end
     end
 
