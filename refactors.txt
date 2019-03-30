@@ -1,0 +1,11 @@
+1.  Maybe it isn't necessary to use the 'list_available_rooms' method in 'reserve_rooms' for Hotel::Manager.
+    Consider iterating over @rooms with 'is_available?', and breaking the loop at the first available room.
+
+2.  Manager, Reservation and Rooms are currently tightly coupled.  Consider making wrapper methods that
+    isolate the creation of new Reservation and Room instances.
+
+3.  Is "Block" just another type of Reservation?  Consider making Block a child of Reservation.
+
+4.  Make test dates for specs more consistent (currently some key off of the Date gem, others are set strings)
+
+5.  Consider setting a cap to how far into the future one can make a reservation.
