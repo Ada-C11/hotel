@@ -10,10 +10,7 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = (1..20).map do |room_number|
-        Room.new(room_number: room_number)
-      end
-
+      @rooms = Room.generate_rooms(20)
       @reservations = []
     end
 
@@ -34,7 +31,7 @@ module Hotel
         available_room = available_room_list[0]
       end
 
-      reservation = Hotel::Reservation.new(
+      reservation = Reservation.new(
         check_in: check_in,
         check_out: check_out,
         room: available_room,

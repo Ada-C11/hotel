@@ -25,5 +25,14 @@ module Hotel
       end
       return true
     end
+
+    private
+
+    def self.generate_rooms(number_of_rooms)
+      rooms = (1..number_of_rooms).map do |room_number|
+        Room.new(room_number: room_number)
+      end
+      return rooms
+    end
   end
 end
