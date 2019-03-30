@@ -15,14 +15,16 @@ class RoomBooker < Date
     @blocked_reservations = []
   end
 
-  
-  def book_reservation(date_request)
-    find_room = find_available_room(date_request)
+  def book_reservation(check_in:, check_out:)
+    date_request = DateRange.new(check_in: check_in, check_out: check_out)
+    res_dates = date_request.dates_booked
+    find_room = find_available_room(check_in: check_in, check_out: check_out)
 
     if find_room == nil
       raise ArgumentError, "No rooms are available for these dates"
     end
-    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: date_request, room_booked: find_room)
+
+    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: res_dates, room_booked: find_room)
 
     find_room.booked_on(check_in: check_in, check_out: check_out)
     @reservations.push(reservation_request)
@@ -38,8 +40,8 @@ class RoomBooker < Date
     return rooms.find { |room| room.id == id }
   end
 
-  def find_available_room(date_request)
-    found_room = rooms.select { |room| room.room_available?(date_request) }
+  def find_available_room(check_in:, check_out:)
+    found_room = rooms.select { |room| room.room_available?(check_in: check_in, check_out: check_out) }
     return found_room[0]
   end
 
@@ -58,10 +60,10 @@ class RoomBooker < Date
     return nil
   end
 
-  def get_available_rooms(date_request)
+  def get_available_rooms(check_in:, check_out:)
     open_rooms = []
     @rooms.each do |room|
-      room.room_available?(date_request) ? open_rooms << room : next
+      room.room_available?(check_in: check_in, check_out: check_out) ? open_rooms << room : next
     end
     if open_rooms.length == 0
       raise ArgumentError, "No rooms are available for the provided date range."
@@ -71,7 +73,7 @@ class RoomBooker < Date
 
   # working on blocked rooms
 
-  def reserve_block(dates: date_request, rooms_needed:)
+  def reserve_block(check_in:, check_out:, rooms_needed:)
     raise ArgumentError if rooms_needed > 5
     block_of_rooms = []
 
