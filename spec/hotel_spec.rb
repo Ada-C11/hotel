@@ -22,18 +22,27 @@ describe Hotel do
     hotel = Hotel.new
     reservation = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
     hotel.add_reservation(reservation)
-    expect(hotel.list_reservations_by_date(Date.parse("2019-05-04"))).must_include reservation
+    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-05"))).must_include reservation
   end
 
   it "list reservations for date with no reservations" do
     hotel = Hotel.new
     reservation = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
     hotel.add_reservation(reservation)
-    expect(hotel.list_reservations_by_date(Date.parse("2019-06-04"))).wont_include reservation
+    expect(hotel.list_reservations_by_date_range(Date.parse("2019-06-04"), Date.parse("2019-06-05"))).wont_include reservation
   end
 
   it "list reservations when not reservations have been made" do
     hotel = Hotel.new
-    expect(hotel.list_reservations_by_date(Date.parse("2019-05-04"))).must_equal []
+    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-05"))).must_equal []
+  end
+
+  it "raises argument error when new reservation is in conflict with existing reservations" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+    reservation2 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+
+    expect { hotel.add_reservation(reservation2) }.must_raise RuntimeError
   end
 end

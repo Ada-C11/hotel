@@ -15,6 +15,7 @@ class Reservation
 
   def calculate_cost
     nights = (@end_date - @start_date)
+    nights = nights.to_i
     total_cost = nights * @rate
     return total_cost
   end
