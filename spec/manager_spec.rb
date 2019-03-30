@@ -37,7 +37,7 @@ describe "Manager class" do
   describe "reserve_room method" do
     before do
       @previous = @manager.reservations.length
-      @reservation = @manager.reserve_room("2019-3-20", "2019-3-21")
+      @reservation = @manager.reserve_room("2020-3-20", "2020-3-21")
     end
     it "can make a reservation" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
@@ -61,7 +61,7 @@ describe "Manager class" do
     end
 
     it "allows someone to reserve a specific room" do
-      reservation = @manager.reserve_room("2019-3-20", "2019-3-21", room_selection: 3)
+      reservation = @manager.reserve_room("2020-3-20", "2020-3-21", room_selection: 3)
       expect(reservation.room.room_number).must_equal 3
     end
 
@@ -73,10 +73,10 @@ describe "Manager class" do
   describe "list_reservations_on method" do
     it "can list reservations associated with a specific date" do
       5.times do
-        reservation = @manager.reserve_room("2019-3-20", "2019-3-25")
+        reservation = @manager.reserve_room("2020-3-20", "2020-3-25")
       end
 
-      list = @manager.list_reservations_on("2019-3-23")
+      list = @manager.list_reservations_on("2020-3-23")
 
       expect(list.length).must_equal 5
       expect(list[0]).must_be_kind_of Hotel::Reservation

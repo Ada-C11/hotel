@@ -72,6 +72,8 @@ module Hotel
           list << reservation
         end
       end
+
+      return list
     end
   end
 end
