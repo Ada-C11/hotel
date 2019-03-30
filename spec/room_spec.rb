@@ -1,10 +1,21 @@
 require_relative 'spec_helper'
 
 describe "Room" do
+  before do 
+    @room = Hotel::Room.new(1, 300)
+  end
   describe "#initialize" do
     it "Creates an instance of Room" do
-      room = Hotel::Room.new(1, 300)
-      expect(room).must_be_kind_of Hotel::Room
+      expect(@room).must_be_kind_of Hotel::Room
+    end
+  end
+
+  describe "add_reservation" do
+    it "Adds the reservation to @reservations" do
+      expect(@room.reservations).must_equal []
+      reservation = Hotel::Reservation.new(checkin: "April 10, 2020", checkout: "April 15, 2020", room: @room)
+      @room.add_reservation(reservation)
+      expect(@room.reservations.length).must_equal 1
     end
   end
 
