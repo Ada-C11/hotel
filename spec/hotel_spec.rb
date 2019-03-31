@@ -32,7 +32,7 @@ describe Hotel do
     expect(hotel.list_reservations_by_date_range(Date.parse("2019-06-04"), Date.parse("2019-06-05"))).wont_include reservation
   end
 
-  it "list reservations when not reservations have been made" do
+  it "list reservations when no reservations have been made" do
     hotel = Hotel.new
     expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-05"))).must_equal []
   end
@@ -44,5 +44,41 @@ describe Hotel do
     reservation2 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
 
     expect { hotel.add_reservation(reservation2) }.must_raise RuntimeError
+  end
+
+  it "raises argument error when new reservation with dates that fall within another reservation" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+    reservation2 = Reservation.new(start_date: "2019-05-04", end_date: "2019-05-04", room_number: 5)
+
+    expect { hotel.add_reservation(reservation2) }.must_raise RuntimeError
+  end
+
+  it "raises argument error when new reservation with start date that falls within another reservation" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+    reservation2 = Reservation.new(start_date: "2019-05-04", end_date: "2019-05-06", room_number: 5)
+
+    expect { hotel.add_reservation(reservation2) }.must_raise RuntimeError
+  end
+
+  it "raises argument error when new reservation with end date that falls within another reservation" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+    reservation2 = Reservation.new(start_date: "2019-05-01", end_date: "2019-05-04", room_number: 5)
+
+    expect { hotel.add_reservation(reservation2) }.must_raise RuntimeError
+  end
+
+  it "list reservations for date with reservations with overlapping start date and end date" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+    reservation2 = Reservation.new(start_date: "2019-05-05", end_date: "2019-05-07", room_number: 5)
+    hotel.add_reservation(reservation2)
+    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-06"))).must_include reservation2
   end
 end
