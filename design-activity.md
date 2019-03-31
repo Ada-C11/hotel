@@ -1,3 +1,5 @@
+##### Activity: Evaluating Responsibility
+
 <ol>
 <li>
 What classes does each implementation include? Are the lists the same?
@@ -54,5 +56,38 @@ Does total_price directly manipulate the instance variables of other classes?
 
 <li>Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
     Implementation B is more loosely coupled because the Order class knows less about the ShoppingCart class. It only knows the method name #price in B whereas in A, it knows how to loop through the data in the ShoppingCart class and access the instance variables of the CartEntry objects.
+</li>
+</ol>
+
+#####Revisiting Hotel
+<ol>
+<li>What is this class's responsibility?
+You should be able to describe it in a single sentence.
+    - Manager: This class manages the data structure and behaviors of all reservations.
+    - Reservation: The Reservation class makes reservation objects, which includes calculating the length and base cost of the stay.
+</li>
+
+<li>Is this class responsible for exactly one thing?
+    - Manager: yes, I think so
+    - Reservation: yes
+</li>
+
+<li>Does this class take on any responsibility that should be delegated to "lower level" classes?
+    - Manager: no
+    - Reservation: no
+</li>
+
+<li>Is there code in other classes that directly manipulates this class's instance variables?
+    - manager: yes; the ck_avail method accesses the ckout_date and ckin_date attributes of specific instances of reservation (for example: res_last.ckout_date)
+    - reservation: no
+</li>
+
+<li>Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+
+    See Line 52 in manager prior to changes.
+    The ck_avail method accesses the ckout_date and ckin_date attributes of specific instances of reservation (for example: res_last.ckout_date). This makes Manager tightly coupled to Reservation. To improve this design, I need to move the logic that checks a requested date range against the check-in and check-out dates of existing reservation instances to the Reservation class. Then I can call that method in the Manager class and pass it two reservations to check, instead of accessing the reservations' attributes directly.
+
+    Similarly, Line 33 of Manager directly accesses the date_range_string_array attribute of a reservation object. To decouple this, I need to make a method in Reservation called "includes_date" to check check if the date passed into list_reservations_for_date is included in that room's date_range_string_array. This method will return true/false.
+    
 </li>
 </ol>
