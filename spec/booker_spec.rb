@@ -2,8 +2,9 @@ require_relative "spec_helper"
 
 describe "RoomBooker" do
   before do 
-  @hotel = RoomBooker.new(rooms: Room.hotel_rooms)
+  @hotel = RoomBooker.new
   end
+
   describe "instantiation" do
     it "creates an instance of RoomBooker" do
       expect(@hotel).must_be_kind_of RoomBooker
@@ -19,19 +20,7 @@ describe "RoomBooker" do
     it "tracks reservations, rooms and room rate" do 
       @hotel.must_respond_to :reservations
       @hotel.must_respond_to :rooms
-    end
-  end
-
-  describe "rooms" do
-    it "all items in list are an instance of Room" do
-      @hotel.rooms.each do |room|
-        expect(room).must_be_kind_of Room
-      end
-    end
-
-    it "records room id correctly" do
-      expect(@hotel.rooms.first.id).must_equal 1
-      expect(@hotel.rooms.last.id).must_equal 20
+      @hotel.must_respond_to :rate
     end
   end
 
@@ -44,81 +33,69 @@ describe "RoomBooker" do
    it "raises an error for an unavailable room" do 
     room = 3
      @hotel.book_reservation(3, @checkin, @checkout)
+
+     expect{
+       @hotel.book_reservation(3, @checkin, @checkout)
+     }.must_raise RoomBooker::NotReservableError
    end
 
+   it "returns a booked reservation" do 
+    reservation = @hotel.book_reservation(2, @checkin, @checkout)
+
+    expect(reservation).must_be_kind_of Reservation
+    expect(reservation.check_in).must_equal @checkin
+    expect(reservation.check_out).must_equal @checkout
+
+    expect(@hotel.reservations).must_include reservation
+   end
+  end
+  describe "list reservations" do 
+    before do 
+      @date = Date.new(2019, 10, 01)
+    end
+
+    it "includes reservations for that date" do
+      @hotel.book_reservation(12, @date-2, @date+2)
+      
+      expect(@hotel.list_reservations(@date).length).must_equal 1
+    end
+
+    it "returns an empty array with no reservations on that date" do
+      @hotel.book_reservation(12, @date+2, @date+4)
+
+      expect(@hotel.list_reservations(@date).length).must_equal 0
+    end
+
+    it "returns an empty list if no reservations for that date" do
+      expect(@hotel.reservations.length).must_equal 0
+      expect(@hotel.list_reservations(@date).length).must_equal 0
+    end
+  end
+
+  describe "find available room" do 
+    before do 
+      @date = Date.parse("October 12 2019")
+    end
     
-  #   it "will book dates that are adjacent to pre-existing dates" do
-  #     pre_adj = "March 1st 2021"
-  #     aligned = "March 4th 2021"
-  #     @another_hotel.book_reservation(check_in: pre_adj, check_out: aligned)
+    it "shows all rooms available if nothing is reserved already" do 
+      all_rooms = @hotel.rooms
+      
+      expect(@hotel.find_available_room(@date, @date+1)).must_equal all_rooms
+    end
 
-  #     expect(@another_hotel.reservations.length).must_equal 21
-  #   end
+    it "returns only rooms not booked for given date range" do 
+      room = 1
+      @hotel.book_reservation(room, @date-2, @date+2)
+      
+      expect(@hotel.find_available_room(@date, @date+1)).must_equal (@hotel.rooms - [room])
+    end
 
-  #   it "will book dates that are adjacent to pre-existing dates" do
-  #     post_align = "March 7th 2021"
-  #     post_adj = "March 8th 2021"
-  #     @another_hotel.book_reservation(check_in: post_align, check_out: post_adj)
+    it "will show full availability for a non-overlapping reservation" do 
+      all_rooms = @hotel.rooms
+      room = 1
+      @hotel.book_reservation(room, @date-6, @date-4)
 
-  #     expect(@another_hotel.reservations.length).must_equal 21
-  #   end
-  # end
-
-  # describe "get available rooms" do
-  #   before do
-  #     incoming_allowed = "March 2nd 2021"
-  #     outgoing_allowed = "March 6th 2021"
-  #     20.times do
-  #       hotel.book_reservation(check_in: incoming_allowed, check_out: outgoing_allowed)
-  #     end
-  #   end
-
-  #   it "will find rooms that are available on specific dates" do
-  #     available_rooms = hotel.get_available_rooms(check_in: "March 5th", check_out: "March 6th")
-
-  #     expect(available_rooms).must_be_kind_of Array
-  #     expect(available_rooms.length).must_equal 20
-  #   end
-
-  #   it "will raise an exception for a date conflict of any kind" do
-  #     going_in = "March 1st 2021"
-  #     conflicts_out = "March 5th 2021"
-
-  #     expect {
-  #       hotel.get_available_rooms(check_in: going_in, check_out: conflicts_out)
-  #     }.must_raise ArgumentError
-  #   end
-  # end
-
-  # describe "reserve block" do
-  #   let(:block_reservation) { RoomBooker.new(rooms: Room.hotel_rooms) }
-  #   let(:req_date_start) { "January 20th 2020" }
-  #   let(:req_date_end) { "January 23rd 2020" }
-
-  #   it "raises an exception when trying to book more than 5 rooms" do
-  #     expect {
-  #       block_reservation.reserve_block(check_in: req_date_start, check_out: req_date_end, rooms_needed: 6)
-  #     }.must_raise ArgumentError
-  #   end
-
-  #   it "can find and book available rooms" do
-  #     successful_block = block_reservation.reserve_block(check_in: req_date_start, check_out: req_date_end, rooms_needed: 3)
-
-  #     expect(successful_block.blocked_rooms.length).must_equal 3
-  #   end
-
-    # it "will raise an arument error for dates that are unavailable" do
-    #   test_reservations = RoomBooker.new(rooms: Room.hotel_rooms)
-    #   good_date_in = "March 1st 2021"
-    #   good_date_out = "March 4th 2021"
-    #   20.times do
-    #     test_reservations.book_reservation(check_in: good_date_in, check_out: good_date_out)
-    #   end
-
-    #   tester = block_reservation.reserve_block(check_in: good_date_in, check_out: good_date_out, rooms_needed: 3)
-    #   expect {
-    #     block_reservation.reserve_block(check_in: good_date_in, check_out: good_date_out, rooms_needed: 3)
-    #   }.must_raise ArgumentError
-    # end
+      expect(@hotel.find_available_room(@date, @date+1)).must_equal all_rooms
+    end
   end
 end
