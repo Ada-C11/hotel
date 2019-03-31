@@ -11,9 +11,18 @@ module Hotel
       # This creates an array of strings for each date in the range. For example:
       # ['2019-06-11', '2019-06-12', '2019-06-13', '2019-06-14']
       @num_nights_of_stay = (ckout_date - ckin_date).to_i
-      @base_cost = num_nights_of_stay * Room::COST_PER_NIGHT
+      @base_cost = calculate_cost
 
       raise ArgumentError, "Check out date must be after check in date." if ckin_date >= ckout_date
+    end
+
+    def calculate_cost
+      cost = num_nights_of_stay * Room::COST_PER_NIGHT
+    end
+
+    def does_not_conflict_with_date_range(ckin, ckout)
+      #return true if this instance does not conflict with the given date range
+      return (ckout <= @ckin_date) || (@ckout_date <= ckin)
     end
   end
 

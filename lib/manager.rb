@@ -52,11 +52,13 @@ module Hotel
       if res_array_to_check.length == 0
         return true
       elsif res_array_to_check.length == 1
-        (res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date) ? true : false
+        #(res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date)
+        return res_0.does_not_conflict_with_date_range(ckin, ckout)
       else # there is more than one reservation in the array
         # check left and right ends of the reservation array
         return true if (ckout <= res_0.ckin_date)
         return true if (res_last.ckout_date <= ckin)
+
         # check date gaps between reservations
         i = 0
         while i <= res_array_to_check.length - 2
@@ -75,8 +77,8 @@ module Hotel
 
     def find_avail_rooms_for_dates(ckin, ckout)
       avail_rooms = []
-      puts "find_avail_rooms_for_dates, rooms_res_hash is:"
-      p @rooms_reservations_hash
+      # puts "find_avail_rooms_for_dates, rooms_res_hash is:"
+      # p @rooms_reservations_hash
 
       @rooms_reservations_hash.each do |room_num, reservations|
         avail_rooms << room_num if reservations.empty?
