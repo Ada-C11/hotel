@@ -36,9 +36,9 @@ module HotelSystem
       return reservation
     end
 
-    def book_reservation(room, first_day, last_day)
-      arrive_day = create_date_object(first_day)
-      depart_day = create_date_object(last_day)
+    def book_reservation(room, arrive, depart)
+      arrive_day = create_date_object(arrive)
+      depart_day = create_date_object(depart)
       (arrive_day...depart_day).each do |day|
         raise ArgumentError, "Room not avaiable for that date" if !is_room_availabile?(room, day)
       end
@@ -54,24 +54,24 @@ module HotelSystem
 
     def reservations_by_date(date)
       date_object = create_date_object(date)
-      reservations_on_date = @reservations.select { |res| res.date_range.include?(date_object) }
+      reservations_on_date = @reservations.select { |res| res.include?(date_object) }
       reservations_on_date.reject! do |res|
         res if res.class == HotelSystem::BlockReservation && res.status == :AVAILABLE
       end
       return reservations_on_date
     end
 
-    def get_available_rooms(first_day, last_day)
+    def get_available_rooms(arrive_day, depart_day)
       available_rooms = @rooms.clone
-      (first_day...last_day).each do |day|
+      (arrive_day...depart_day).each do |day|
         date_obj = create_date_object(day)
         available_rooms.reject! { |room| is_room_availabile?(room, date_obj) == false }
       end
       return available_rooms
     end
 
-    def create_block(rooms, first_day, last_day, discount)
-      new_block = HotelSystem::Block.new(rooms: rooms, first_day: create_date_object(first_day), last_day: create_date_object(last_day), discount: discount)
+    def create_block(rooms, arrive_day, depart_day, discount)
+      new_block = HotelSystem::Block.new(rooms: rooms, arrive_day: create_date_object(arrive_day), depart_day: create_date_object(depart_day), discount: discount)
       new_block.reservations.each do |reservation|
         add_reservation(reservation)
       end

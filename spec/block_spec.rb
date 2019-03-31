@@ -4,10 +4,10 @@ describe "Block" do
   describe "initialize" do
     before do
       @rooms = []
-      @first_day = Date.parse("2019-01-01")
-      @last_day = Date.parse("2019-01-06")
+      @arrive_day = Date.parse("2019-01-01")
+      @depart_day = Date.parse("2019-01-06")
       @discount = 0.2
-      @new_block = HotelSystem::Block.new(rooms: @rooms, first_day: @first_day, last_day: @last_day, discount: @discount)
+      @new_block = HotelSystem::Block.new(rooms: @rooms, arrive_day: @arrive_day, depart_day: @depart_day, discount: @discount)
     end
     it "Creates an instance of Block" do
       expect(@new_block).must_be_kind_of HotelSystem::Block
@@ -16,26 +16,26 @@ describe "Block" do
     it "has readable instance variables" do
       expect(@new_block.rooms).must_equal []
       expect(@new_block.reservations).must_equal []
-      expect(@new_block.last_day).must_equal @last_day
-      expect(@new_block.first_day).must_equal @first_day
+      expect(@new_block.depart_day).must_equal @depart_day
+      expect(@new_block.arrive_day).must_equal @arrive_day
       expect(@new_block.discount).must_equal @discount
     end
 
     it "raises an ArgumentError if passed in a nevative discount" do
       expect {
-        create_block(2, @first_day, @last_day, -0.5)
+        create_block(2, @arrive_day, @depart_day, -0.5)
       }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if passed in a number over 1" do
       expect {
-        create_block(2, @first_day, @last_day, 1.1)
+        create_block(2, @arrive_day, @depart_day, 1.1)
       }.must_raise ArgumentError
     end
 
     it "raises an ArgumentError if started with mroe than 5 rooms" do
       expect {
-        create_block(6, @first_day, @last_day, 0.5)
+        create_block(6, @arrive_day, @depart_day, 0.5)
       }.must_raise ArgumentError
     end
   end
@@ -56,8 +56,8 @@ describe "Block" do
       expect {
         HotelSystem::Block.new(
           rooms: [@room, @room_two],
-          first_day: Date.parse("2017-05-07"),
-          last_day: Date.parse("2017-05-10"),
+          arrive_day: Date.parse("2017-05-07"),
+          depart_day: Date.parse("2017-05-10"),
           discount: 0,
         )
       }.must_raise ArgumentError
@@ -66,8 +66,8 @@ describe "Block" do
     it "Accepts rooms that have a reservation that ends on the first day of the block" do
       block = HotelSystem::Block.new(
         rooms: [@room, @room_two],
-        first_day: Date.parse("2017-05-08"),
-        last_day: Date.parse("2017-05-10"),
+        arrive_day: Date.parse("2017-05-08"),
+        depart_day: Date.parse("2017-05-10"),
         discount: 0,
       )
       expect(block).must_be_kind_of HotelSystem::Block
@@ -77,8 +77,8 @@ describe "Block" do
     it "Accepts rooms that have a reservation the starts on the last day of the block" do
       block = HotelSystem::Block.new(
         rooms: [@room, @room_two],
-        first_day: Date.parse("2017-05-03"),
-        last_day: Date.parse("2017-05-06"),
+        arrive_day: Date.parse("2017-05-03"),
+        depart_day: Date.parse("2017-05-06"),
         discount: 0,
       )
       expect(block).must_be_kind_of HotelSystem::Block
@@ -90,12 +90,12 @@ describe "Block" do
       @room = HotelSystem::Room.new(id: 1)
       @room_two = HotelSystem::Room.new(id: 2)
       @room_three = HotelSystem::Room.new(id: 3)
-      @first_day = Date.parse("2017-05-03")
-      @last_day = Date.parse("2017-05-06")
+      @arrive_day = Date.parse("2017-05-03")
+      @depart_day = Date.parse("2017-05-06")
       @block = HotelSystem::Block.new(
         rooms: [@room, @room_two, @room_three],
-        first_day: @first_day,
-        last_day: @last_day,
+        arrive_day: @arrive_day,
+        depart_day: @depart_day,
         discount: 0,
       )
     end
@@ -120,8 +120,8 @@ describe "Block" do
 
     it "creates reservations that have the same start and end day as the block" do
       first_res = @block.reservations.first
-      expect(first_res.arrive_day).must_equal @block.first_day
-      expect(first_res.depart_day).must_equal @block.last_day
+      expect(first_res.arrive_day).must_equal @block.arrive_day
+      expect(first_res.depart_day).must_equal @block.depart_day
     end
   end
   describe "find_available_reservations" do
@@ -166,9 +166,9 @@ describe "Block" do
   describe "Book Block Reservation" do
     before do
       @number_of_rooms = 3
-      @first_day = Date.parse("2019-04-27")
-      @last_day = Date.parse("2019-05-08")
-      @block = create_block(@number_of_rooms, @first_day, @last_day, 0.2)
+      @arrive_day = Date.parse("2019-04-27")
+      @depart_day = Date.parse("2019-05-08")
+      @block = create_block(@number_of_rooms, @arrive_day, @depart_day, 0.2)
       @block.create_block_reservations
       @reservations = @block.find_available_reservations
     end
@@ -187,7 +187,7 @@ describe "Block" do
     end
 
     it "Will raise an ArgumentError if its passed a regular Reservations" do
-      reservation = create_reservation(create_room(4), @first_day, @last_day)
+      reservation = create_reservation(create_room(4), @arrive_day, @depart_day)
       expect {
         @block.book_block_reservation(reservation)
       }.must_raise ArgumentError

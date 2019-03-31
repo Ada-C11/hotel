@@ -9,8 +9,8 @@ describe "BlockReservation" do
     @discount = 0.2
     @new_block = HotelSystem::Block.new(
       rooms: [@room, @room_two],
-      first_day: @arrive_day,
-      last_day: @depart_day,
+      arrive_day: @arrive_day,
+      depart_day: @depart_day,
       discount: @discount,
     )
   end

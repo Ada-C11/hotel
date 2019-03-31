@@ -20,5 +20,9 @@ module HotelSystem
       @total_cost = nights_stayed * price_per_night
       return total_cost
     end
+
+    def include?(date_object)
+      return date_range.include?(date_object)
+    end
   end
 end

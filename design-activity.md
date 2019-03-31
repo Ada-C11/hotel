@@ -44,7 +44,17 @@ Implementation B adheres to the single responsibility principle, class order is 
 
 **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**
 
-Implementation B is more loosely coupled because Order knows way less about the other 2 classes. It only knows how to call the price method, and knows nothing about CartEntry of anything about the instance variables in ShoppingCart. Attr_accessors are never used.
+Implementation B is more loosely coupled because Order knows way less about the other 2 classes. It only knows how to call the price method, and knows nothing about CartEntry of anything about the instance variables in ShoppingCart. attr_accessors are never used.
+
+
+
+### Hotel Changes
+
+* Added include? method to reservation that takes a date object and returns true if its date range includes the date given. This will prevent the Hotel reservations_by_date method needing to access the date range instance variable in reservation.
+
+* Standardized arrive_day and first_day/ depart_day and last_day variable names throughout classes. All instances are now arrive_day/depart_day. this increases clarity, readability and usability. This reduces future dependancies because the user wont have to look up which keywords are used.
+
+* 
 
 
 
