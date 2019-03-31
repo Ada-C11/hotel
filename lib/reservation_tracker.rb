@@ -16,25 +16,12 @@ class ReservationTracker
 
   def reservations_by_date(date)
     res_date = Date.parse(date)
-    reservations_at_date = @reservations.select { |reservation| reservation.start_date == res_date }
+    reservations_at_date = @reservations.select { |reservation| reservation.contain_date?(res_date) }
     return reservations_at_date
-  end
-
-  def is_overlap?(start_date, end_date, reservation)
-    return reservation.end_date > start_date && reservation.start_date < end_date
   end
 
   def same_daterange?(start_date, end_date, reservation)
     return reservation.start_date == start_date && reservation.end_date == end_date
-  end
-
-  def is_date_range_available?(start_date, end_date, reservations)
-    reservations.each do |reservation|
-      if is_overlap?(start_date, end_date, reservation)
-        return false
-      end
-    end
-    return true
   end
 
   def list_avail_room(start_date, end_date)
@@ -42,7 +29,9 @@ class ReservationTracker
     end_date = Date.parse(end_date)
     available_room = []
     @total_room.each do |room_id|
-      if (@reservations_per_room[room_id] == nil || is_date_range_available?(start_date, end_date, @reservations_per_room[room_id])) && (@block_reservations[room_id] == nil || is_date_range_available?(start_date, end_date, @block_reservations[room_id]))
+      is_room_available = (@reservations_per_room[room_id] == nil || is_date_range_available?(start_date, end_date, @reservations_per_room[room_id]))
+      is_block_available = (@block_reservations[room_id] == nil || is_date_range_available?(start_date, end_date, @block_reservations[room_id]))
+      if is_room_available && is_block_available
         available_room << room_id
       end
     end
@@ -65,30 +54,13 @@ class ReservationTracker
     add_reservation_with_parsed_date(name, room_id, parsed_start_date, parsed_end_date)
   end
 
-  def add_reservation_with_parsed_date(name, room_id, parsed_start_date, parsed_end_date)
-    reservations_by_room = @reservations_per_room[room_id]
-
-    if (reservations_by_room == nil || is_date_range_available?(parsed_start_date, parsed_end_date, reservations_by_room)) && (@block_reservations[room_id] == nil || is_date_range_available?(parsed_start_date, parsed_end_date, @block_reservations[room_id]))
-      @new_reservation = Reservation.new(name: name, room_id: room_id, start_date: parsed_start_date, end_date: parsed_end_date)
-      @reservations << @new_reservation
-
-      if @reservations_per_room[room_id] == nil
-        @reservations_per_room[room_id] = []
-      end
-
-      @reservations_per_room[room_id] << @new_reservation
-    else
-      raise ArgumentError, "The room is not available"
-    end
-  end
-
-  def add_reservation_for_block(new_block, name, room_id)
+  def add_reservation_for_block(block, name, room_id)
     (0..@block_reservations[room_id].length - 1).each do |i|
-      if same_daterange?(@block_reservations[room_id][i].start_date, @block_reservations[room_id][i].end_date, new_block)
+      if same_daterange?(@block_reservations[room_id][i].start_date, @block_reservations[room_id][i].end_date, block)
         @block_reservations[room_id].delete_at(i)
       end
     end
-    add_reservation_with_parsed_date(name, room_id, new_block.start_date, new_block.end_date)
+    add_reservation_with_parsed_date(name, room_id, block.start_date, block.end_date)
   end
 
   def add_hotelblock(start_date, end_date, rooms, discounted_rate)
@@ -110,6 +82,34 @@ class ReservationTracker
       @block_reservations[room_id] << new_block
     end
     return new_block
+  end
+
+  private
+
+  def is_date_range_available?(start_date, end_date, reservations)
+    reservations.each do |reservation|
+      if reservation.is_overlap?(start_date, end_date)
+        return false
+      end
+    end
+    return true
+  end
+
+  def add_reservation_with_parsed_date(name, room_id, parsed_start_date, parsed_end_date)
+    reservations_by_room = @reservations_per_room[room_id]
+
+    if (reservations_by_room == nil || is_date_range_available?(parsed_start_date, parsed_end_date, reservations_by_room)) && (@block_reservations[room_id] == nil || is_date_range_available?(parsed_start_date, parsed_end_date, @block_reservations[room_id]))
+      @new_reservation = Reservation.new(name: name, room_id: room_id, start_date: parsed_start_date, end_date: parsed_end_date)
+      @reservations << @new_reservation
+
+      if @reservations_per_room[room_id] == nil
+        @reservations_per_room[room_id] = []
+      end
+
+      @reservations_per_room[room_id] << @new_reservation
+    else
+      raise ArgumentError, "The room is not available"
+    end
   end
 end
 

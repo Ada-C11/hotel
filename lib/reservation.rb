@@ -30,6 +30,14 @@ class Reservation
     total_cost = date_range.to_i * ROOM_RATE
     return total_cost
   end
+
+  def is_overlap?(start_date, end_date)
+    return @end_date > start_date && @start_date < end_date
+  end
+
+  def contain_date?(date)
+    return @end_date > date && @start_date <= date
+  end
 end
 
 # binding.pry

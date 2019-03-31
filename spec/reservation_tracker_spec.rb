@@ -1,4 +1,4 @@
-require "spec_helper"
+require_relative "spec_helper"
 describe "ReservationTracker" do
   def build_reservation_tracker
     return ReservationTracker.new
