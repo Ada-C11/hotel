@@ -1,13 +1,23 @@
 require_relative "spec_helper"
 
 describe Hotel do
+  it "includes room 1 and 20" do
+    hotel = Hotel.new
+
+    expect(hotel.rooms).must_include 1
+    expect(hotel.rooms).must_include 10
+    expect(hotel.rooms).must_include 20
+  end
+
   it "list rooms" do
     hotel = Hotel.new
+
     expect(hotel.list_rooms).must_equal (1..20).to_a
   end
 
   it "list specific room" do
     hotel = Hotel.new
+
     expect(hotel.list_rooms).must_include 20
   end
 

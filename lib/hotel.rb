@@ -42,8 +42,7 @@ class Hotel
     start_range = Date.parse(start_range)
     end_range = Date.parse(end_range)
 
-    available_rooms = @rooms
-    reserved_rooms = []
+    available_rooms = (1..20).to_a
 
     @reservations.each do |reservation|
       if (start_range >= reservation.start_date && start_range < reservation.end_date) ||
