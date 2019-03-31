@@ -2,7 +2,7 @@
 class RandBTemplate
   attr_reader :activity
 
-  def activity(activity)
+  def activity(activity) ## purpose
     @activity = activity
     puts @activity
   end
@@ -13,7 +13,7 @@ class RandBTemplate
   end
 
   def validate_date_range(start_date, end_date)
-    if start_date > end_date
+    if start_date >= end_date
       raise ArgumentError, "Invalid date range"
     else
       @start_date = start_date
@@ -25,7 +25,7 @@ class RandBTemplate
     begin
       rooms_available = find_available_rooms(start_date, end_date)
     rescue ArgumentError
-      if rooms.include?(room_selected)
+      if rooms.include?(room_selected) #Why does this if statement rescue the ArgumentError?
         room = room_selected
         return room
       else
@@ -74,18 +74,6 @@ class RandBTemplate
       else
         return found
       end
-    end
-  end
-
-  def find_by_id(id)
-    index = 0
-    if id.class == Integer
-      @activity.find do |reservation|
-        if reservation.id == id
-          return reservation
-        end
-      end
-      raise ArgumentError, "Invalid reservation id"
     end
   end
 end
