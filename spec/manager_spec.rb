@@ -185,6 +185,20 @@ describe "Manager Spec" do
       this_manager.make_res_for_room(check_in, check_out, room)
     }
 
+    let (:res15_no_room_21) {
+      check_in = Date.new(2019, 5, 12)
+      check_out = Date.new(2019, 5, 29)
+      room = 21
+      this_manager.make_res_for_room(check_in, check_out, room)
+    }
+
+    let (:res16_no_room_1) {
+      check_in = Date.new(2019, 7, 2)
+      check_out = Date.new(2019, 7, 3)
+      room = 0
+      this_manager.make_res_for_room(check_in, check_out, room)
+    }
+
     it "Display a list of rooms not reserved on a given date range" do
 
       # ARRANGE
@@ -247,6 +261,20 @@ describe "Manager Spec" do
       expect(this_manager.rooms_reservations_hash[9][1].ckin_date.to_s).must_equal "2019-05-29"
       expect(this_manager.rooms_reservations_hash[9][2].ckin_date.to_s).must_equal "2019-06-02"
       expect(this_manager.rooms_reservations_hash[9][3].ckin_date.to_s).must_equal "2019-06-12"
+    end
+
+    it "Won't add a new reservation to a room that doesn't exist" do
+      this_manager
+
+      #   binding.pry
+
+      expect {
+        res15_no_room_21
+      }.must_raise Exception
+
+      expect {
+        res16_no_room_1
+      }.must_raise Exception
     end
   end
 end

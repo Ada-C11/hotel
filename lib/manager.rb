@@ -42,7 +42,10 @@ module Hotel
     def ck_avail(ckin, ckout, room_num)
       # check if specific room is available for this date range
       # return true/false
+      raise ArgumentError, "This room number does not exist." if @rooms_reservations_hash.has_key?(room_num) == false
+
       res_array_to_check = @rooms_reservations_hash[room_num]
+
       res_0 = res_array_to_check[0]
       res_last = res_array_to_check.last
 
