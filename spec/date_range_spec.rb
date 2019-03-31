@@ -1,59 +1,120 @@
 require_relative "spec_helper"
 
 describe "DateRange" do
-  let(:dates) {
-    DateRange.new(check_in: "March 21, 2022", check_out: "March 23rd, 2022")
-  }
-  let(:bogus) {
-    "March 88th, 2020"
-  }
-  let(:past) {
-    "March 1st, 2019"
-  }
+  describe "initialize" do 
+    it "is an instance of DateRange" do
+      check_in = Date.new(2019, 04, 01)
+      check_out = check_in + 3
+      dates = DateRange.new(check_in, check_out)
 
-  it "is an instance of DateRange" do
-    expect(dates).must_be_kind_of DateRange
+      expect(dates).must_be_kind_of DateRange
+      expect(dates.check_in).must_equal check_in
+      expect(dates.check_out).must_equal check_out
+    end
+
+    it "raises exception for invalid date order" do
+      check_in = Date.new(2019, 04, 01)
+      check_out = check_in - 3
+      expect{
+        DateRange.new(check_in, check_out).must_raise DateRange::InvalidDateError
+      }
+    end
+
+    it "raises an exception for 0 length date range" do
+      check_in = Date.new(2019, 04, 01)
+      check_out = check_in
+
+      expect {
+        DateRange.new(check_in, check_out)
+      }.must_raise DateRange::InvalidDateError
+    end
   end
 
-  it "raises exception for blank dates" do
-    expect {
-      DateRange.new(check_in: "", check_out: "")
-    }.must_raise ArgumentError
+  describe "overlaps" do 
+    before do 
+      check_in = Date.new(2019, 04, 01)
+      check_out = check_in + 5
+      @dates = DateRange.new(check_in, check_out)
+    end
 
-    expect {
-      DateRange.new(check_in: "", check_out: "July 3rd 2019")
-    }.must_raise ArgumentError
+    it "returns false for dates that do not overlap" do 
+      check_in = Date.new(2019, 03, 25)
+      check_out = check_in + 2
+      test_range = DateRange.new(check_in, check_out)
 
-    expect {
-      DateRange.new(check_in: "July 3rd 2019", check_out: "")
-    }.must_raise ArgumentError
+      expect(@dates.overlaps(test_range)).must_equal false
+    end
+
+    it "returns false for a date range starting on the same day another ends" do 
+      check_in = @dates.check_out
+      check_out = check_in + 2
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal false
+    end
+
+    it "returns false for a date range ending on the same day another starts" do
+      check_in = @dates.check_in - 4
+      check_out = check_in + 2
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal false
+    end
+
+    it "returns true for dates that overlap exactly" do 
+      check_in = @dates.check_in
+      check_out = @dates.check_out
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal true
+    end
+
+    it "returns true for a reservation contained inside another" do 
+      check_in = @dates.check_in + 1
+      check_out = check_in + 2
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal true
+    end
+
+    it "returns true for a range that starts before and ends during another range" do 
+      check_in = @dates.check_in - 3
+      check_out = @dates.check_out - 2
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal true
+    end
+
+    it "returns true for a range that starts during and ends after another range" do 
+      check_in = @dates.check_in + 2
+      check_out = @dates.check_out + 2
+      test_range = DateRange.new(check_in, check_out)
+
+      expect(@dates.overlaps(test_range)).must_equal true
+    end
   end
 
-  it "creates date objects from strings" do
-    expect(dates.check_in).must_be_kind_of Date
-    expect(dates.check_out).must_be_kind_of Date
-  end
+  describe "contains" do 
+    before do 
+      check_in = Date.new(2019, 10, 01)
+      check_out = check_in + 5
 
-  it "must accurately record check-in date" do
-    expect(dates.check_in).must_equal Date.parse("2022-03-21")
-    expect(dates.check_out).must_equal Date.parse("2022-03-23")
-  end
+      @dates = DateRange.new(check_in, check_out)
+    end
+    let(:within) { Date.new(2019, 10, 03) }
+    let(:outside) { Date.new(2019, 10, 10) }
+    let(:last_day) { Date.new(2019, 10, 06) }
 
-  it "can validate that a check-in date occurs before check-out" do
-    expect {
-      DateRange.new(check_in: "September 15th 2023", check_out: "September 8th 2023")
-    }.must_raise ArgumentError
-  end
+    it "returns false when the date isn't within the range" do 
+      @dates.contains(outside).must_equal false
+    end
 
-  it "raises an exception for an invalid check-in day" do
-    expect {
-      dates.valid_date?(bogus)
-    }.must_raise ArgumentError
-  end
+    it " returns true for a date contained within another range" do 
+      @dates.contains(within).must_equal true
+    end
 
-  it "raises an exception for past dates" do
-    expect {
-      dates.valid_date?(past)
-    }.must_raise ArgumentError
+    it "returns false for a check out date" do 
+      @dates.contains(last_day).must_equal false
+    end
   end
 end

@@ -1,3 +1,5 @@
+#### Design Activity
+
 Question | Answer
 ---     | ---
 What classes does each implementation include? Are the lists the same? | The classes are three classes in each implementation: CartEntry, ShoppingCart, Order. 
@@ -9,3 +11,6 @@ Consider the `Order#total_price` method | In the first implementation it is dire
 If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify? | It would mean that the price would change, and is easier to implement in the second one because we could add a method to CartEntry that accounts for bulk pricing. One change vs multiple needed changes to the first implementation. 
 Which implementation better adheres to the single responsibility principle? | The second one. 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled? | The second one!
+
+#### Hotel Revisited Activity
+I could see now (was much harder for me to see at the time of designing) that my code was loosely coupled. What I now know was challenging for me to decipher was what behavior a class should have/what is it's responsibility. So I had classes with single responsibility but with duplicated behavior (methods). Primarily, I had a room which was handling dates (rooms aren't dates) and reservations that relied on the RoomBooker to handle dates - I didn't see the clear relationship between Reservation being a kind of DateRange - even though I had those two classes there. My room class was repeated behavior that wasn't clear why it was doing so, why were Rooms checking their date overlaps when I could do that from within a reservation... I missed the WHAT is my class doing and I will take this learning with me. Thank you for the feedback and for the example of how to do this project in a very streamlined way. 

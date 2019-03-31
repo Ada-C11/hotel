@@ -1,30 +1,16 @@
-require "date"
-require_relative "room"
+require_relative "date_range"
 require "awesome_print"
 
-class Reservation
-  ROOM_RATE = 200.00
+class Reservation < DateRange
+  attr_reader :room_booked, :rate
 
-  attr_reader :id, :room_booked, :total_cost, :dates_booked
-
-  def initialize(id: nil, room_booked: nil, dates_booked:)
-    valid_id(id)
-
-    @id = id
+  def initialize(room_booked, check_in, check_out, rate)
     @room_booked = room_booked
-    @dates_booked = dates_booked
-    @total_cost = total_cost
+    @rate = rate
+    super(check_in, check_out)
   end
 
   def total_cost
-    total = (dates_booked.count - 1) * ROOM_RATE
-    return total
-  end
-
-  def valid_id(id)
-    unless id.instance_of?(Integer)
-      raise ArgumentError, "ID must be a positive number, given #{id}..."
-    end
-    return true
+    return nights * @rate
   end
 end

@@ -1,5 +1,4 @@
 require_relative "spec_helper"
-require "awesome_print"
 
 describe "BlockParty" do
   describe "initialize" do

@@ -6,74 +6,51 @@ require_relative "reserve"
 require_relative "date_range"
 require_relative "blocks"
 
-class RoomBooker < Date
-  attr_reader :reservations, :rooms, :get_available_rooms
+class RoomBooker
+  class NotReservableError < StandardError; end
+  ROOM_PRICE = 200
+  BLOCK_DISCOUNT = 150
+
+  attr_reader :reservations, :rooms, :list_reservations
 
   def initialize(rooms:)
-    @rooms = rooms
+    @rooms = (1..20).to_a
     @reservations = []
     @blocked_reservations = []
   end
 
-  def book_reservation(check_in:, check_out:)
-    date_request = DateRange.new(check_in: check_in, check_out: check_out)
-    res_dates = date_request.dates_booked
-    find_room = find_available_room(check_in: check_in, check_out: check_out)
-
-    if find_room == nil
-      raise ArgumentError, "No rooms are available for these dates"
+  def book_reservation(room, check_in, check_out)
+    unless @rooms.include?(room)
+      raise ArgumentError, "#{room} does not exist"
     end
 
-    reservation_request = make_reservation(id: (@reservations.length + 1), dates_booked: res_dates, room_booked: find_room)
+    unless find_available_room(check_in, check_out).include? room
+      raise NotReservableError, "#{room} is already booked for the given dates"
+    end
 
-    find_room.booked_on(check_in: check_in, check_out: check_out)
-    @reservations.push(reservation_request)
+    reservation_request = Reservation.new(room, check_in, check_out, rate)
+    @reservations << reservation_request
     return reservation_request
   end
 
-  def make_reservation(id:, dates_booked:, room_booked:)
-    reservation = Reservation.new(id: id, dates_booked: dates_booked, room_booked: room_booked)
-    return reservation
+  def list_reservations(date)
+    @reservations.select { |res| res.contains(date)}
   end
 
-  def find_room_id(id:)
-    return rooms.find { |room| room.id == id }
-  end
+  def find_available_room(check_in, check_out)
+    dates = DateRange.new(check_in, check_out)
+    available_rooms = @rooms
 
-  def find_available_room(check_in:, check_out:)
-    found_room = rooms.select { |room| room.room_available?(check_in: check_in, check_out: check_out) }
-    return found_room[0]
-  end
+    overlaping_reservations = @reservations.select { |res| res.overlaps(dates) }
+    reserved_rooms = overlaping_reservations.map { |res| res.room }
 
-  def date_query(date:)
-    find_dates = Date.parse(date)
-    find_by_dates = reservations.select { |reserved| reserved.dates_booked.include?(find_dates) == true }
-    return find_by_dates
-  end
-
-  def find_cost(id:)
-    @reservations.each do |res|
-      if res.id == id
-        return "#{res.total_cost}"
-      end
-    end
-    return nil
-  end
-
-  def get_available_rooms(check_in:, check_out:)
-    open_rooms = []
-    @rooms.each do |room|
-      room.room_available?(check_in: check_in, check_out: check_out) ? open_rooms << room : next
-    end
-    if open_rooms.length == 0
-      raise ArgumentError, "No rooms are available for the provided date range."
-    end
-    return open_rooms
+    available_rooms -= reserved_rooms
+    return available_rooms
   end
 
   # working on blocked rooms
 
-  def reserve_block(check_in:, check_out:, rooms_needed:)
+  def reserve_block(check_in, check_out, rooms_needed)
     raise ArgumentError if rooms_needed > 5
     block_of_rooms = []
 
