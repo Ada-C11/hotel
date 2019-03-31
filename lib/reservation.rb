@@ -20,10 +20,41 @@ module Hotel
       cost = num_nights_of_stay * Room::COST_PER_NIGHT
     end
 
-    def does_not_conflict_with_date_range(ckin, ckout)
-      #return true if this instance does not conflict with the given date range
-      return (ckout <= @ckin_date) || (@ckout_date <= ckin)
+    #----------
+    def self.ck_date_conflicts(res_array_to_check, ckin, ckout)
+      res_first = res_array_to_check[0]
+      res_last = res_array_to_check[-1]
+
+      if res_array_to_check.length == 0
+        return true
+      elsif res_array_to_check.length == 1
+        (res_first.ckout_date <= ckin) || (ckout <= res_first.ckin_date) ? true : false
+      else # there is more than one reservation in the array
+        # check left and right ends of the reservation array
+        return true if (ckout <= res_first.ckin_date)
+        return true if (res_last.ckout_date <= ckin)
+        # check date gaps between reservations
+        i = 0
+        while i <= res_array_to_check.length - 2
+          res_a = res_array_to_check[i]
+          res_b = res_array_to_check[i + 1]
+
+          if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
+            return true
+          end
+
+          i += 1
+        end
+        return false
+      end
     end
+
+    #--------------
+
+    # def does_not_conflict_with_date_range(ckin, ckout)
+    #   #return true if this instance does not conflict with the given date range
+    #   return (ckout <= @ckin_date) || (@ckout_date <= ckin)
+    # end
   end
 
   # def self.calculate_length_of_stay

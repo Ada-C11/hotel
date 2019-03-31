@@ -46,33 +46,7 @@ module Hotel
 
       res_array_to_check = @rooms_reservations_hash[room_num]
 
-      res_0 = res_array_to_check[0]
-      res_last = res_array_to_check.last
-
-      if res_array_to_check.length == 0
-        return true
-      elsif res_array_to_check.length == 1
-        #(res_0.ckout_date <= ckin) || (ckout <= res_0.ckin_date)
-        return res_0.does_not_conflict_with_date_range(ckin, ckout)
-      else # there is more than one reservation in the array
-        # check left and right ends of the reservation array
-        return true if (ckout <= res_0.ckin_date)
-        return true if (res_last.ckout_date <= ckin)
-
-        # check date gaps between reservations
-        i = 0
-        while i <= res_array_to_check.length - 2
-          res_a = res_array_to_check[i]
-          res_b = res_array_to_check[i + 1]
-
-          if (res_a.ckout_date <= ckin) && (ckout <= res_b.ckin_date)
-            return true
-          end
-
-          i += 1
-        end
-        return false
-      end
+      Reservation.ck_date_conflicts(res_array_to_check, ckin, ckout)
     end
 
     def find_avail_rooms_for_dates(ckin, ckout)
