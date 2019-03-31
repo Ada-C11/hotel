@@ -79,3 +79,6 @@ You might recall writing a file called refactor.txt. Take a look at the refactor
     1. Yes
 3. Do you still agree with your previous assessment, or could your refactor be further improved?
     1. I agree with them, but now I see larger changes (adding a HotelBlock class). The changes I suggested were smaller changes within the exiting classes (naming conventions and some logic changes)
+
+----------------------
+Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
