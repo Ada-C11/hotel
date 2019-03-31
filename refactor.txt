@@ -1,0 +1,8 @@
+Future changes
+1. Make sure each class has a id parameter(possibly randomly created for reservations so that they each have a unique id)
+2. standardize arrive_day and first_day/ depart_day and last_day variable names throughout classes, so naming is consistent 
+3. refactor tests so that all dates are held in variables, so that there are no random dates in the tests. this should give more clarity
+4. Add test cases where dates are entered in different formats, Raise argument error if they are in improper formats
+find a way to further minimize dependancies, not sure what yet.
+5. Add more test cases to hotel create block
+6. 
