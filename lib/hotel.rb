@@ -1,15 +1,15 @@
 require "date"
 
 class Hotel
-  attr_reader :reservations
+  attr_reader :reservations, :rooms
 
   def initialize
-    @room = (1..20).to_a
+    @rooms = (1..20).to_a
     @reservations = []
   end
 
   def list_rooms
-    return @room
+    return @rooms
   end
 
   def add_reservation(new_reservation)
@@ -24,7 +24,11 @@ class Hotel
   end
 
   def list_reservations_by_date_range(start_range, end_range)
+    start_range = Date.parse(start_range)
+    end_range = Date.parse(end_range)
+
     reservation_by_date = []
+
     @reservations.each do |reservation|
       if (start_range >= reservation.start_date && start_range < reservation.end_date) ||
          (end_range >= reservation.start_date && end_range <= reservation.end_date)
@@ -32,5 +36,21 @@ class Hotel
       end
     end
     return reservation_by_date
+  end
+
+  def list_available_rooms(start_range, end_range)
+    start_range = Date.parse(start_range)
+    end_range = Date.parse(end_range)
+
+    available_rooms = @rooms
+    reserved_rooms = []
+
+    @reservations.each do |reservation|
+      if (start_range >= reservation.start_date && start_range < reservation.end_date) ||
+         (end_range >= reservation.start_date && end_range <= reservation.end_date)
+        available_rooms.delete(reservation.room_number)
+      end
+    end
+    return available_rooms
   end
 end

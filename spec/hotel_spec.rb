@@ -22,19 +22,19 @@ describe Hotel do
     hotel = Hotel.new
     reservation = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
     hotel.add_reservation(reservation)
-    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-05"))).must_include reservation
+    expect(hotel.list_reservations_by_date_range("2019-05-04", "2019-05-05")).must_include reservation
   end
 
   it "list reservations for date with no reservations" do
     hotel = Hotel.new
     reservation = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
     hotel.add_reservation(reservation)
-    expect(hotel.list_reservations_by_date_range(Date.parse("2019-06-04"), Date.parse("2019-06-05"))).wont_include reservation
+    expect(hotel.list_reservations_by_date_range("2019-06-04", "2019-06-05")).wont_include reservation
   end
 
   it "list reservations when no reservations have been made" do
     hotel = Hotel.new
-    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-05"))).must_equal []
+    expect(hotel.list_reservations_by_date_range("2019-05-04", "2019-05-05")).must_equal []
   end
 
   it "raises argument error when new reservation is in conflict with existing reservations" do
@@ -80,6 +80,16 @@ describe Hotel do
     reservation2 = Reservation.new(start_date: "2019-05-05", end_date: "2019-05-07", room_number: 5)
     hotel.add_reservation(reservation2)
 
-    expect(hotel.list_reservations_by_date_range(Date.parse("2019-05-04"), Date.parse("2019-05-06"))).must_include reservation2
+    expect(hotel.list_reservations_by_date_range("2019-05-04", "2019-05-06")).must_include reservation2
+  end
+
+  it "lists available rooms" do
+    hotel = Hotel.new
+    reservation1 = Reservation.new(start_date: "2019-05-03", end_date: "2019-05-05", room_number: 5)
+    hotel.add_reservation(reservation1)
+
+    expect(hotel.list_available_rooms("2019-05-03", "2019-05-05")).wont_include 5
+    expect(hotel.list_available_rooms("2019-05-03", "2019-05-05")).must_include 20
+    expect(hotel.list_available_rooms("2019-05-03", "2019-05-05")).must_include 1
   end
 end
