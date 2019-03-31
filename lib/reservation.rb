@@ -10,7 +10,7 @@ class Reservation
     @rate = rate
     @total_cost = calculate_cost
 
-    raise ArgumentError if @start_date > @end_date
+    raise ArgumentError if @start_date >= @end_date
   end
 
   def calculate_cost
