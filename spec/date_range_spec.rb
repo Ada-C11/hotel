@@ -44,9 +44,9 @@ describe "DateRange class" do
 
   describe 'daterange check method' do
     it 'returns true if checked date is within daterange (false if not)' do
-      expect(@test_daterange.daterange_check(Date.new(2019,3,12),Date.new(2019,3,14))).must_equal(true)
-      expect(@test_daterange.daterange_check(Date.new(2019,3,15),Date.new(2019,3,16))).must_equal(false)
-      expect(@test_daterange.daterange_check(Date.new(2019,2,25),Date.new(2019,3,10))).must_equal(false)
+      expect(@test_daterange.dates_overlap?(Date.new(2019,3,12),Date.new(2019,3,14))).must_equal(true)
+      expect(@test_daterange.dates_overlap?(Date.new(2019,3,15),Date.new(2019,3,16))).must_equal(false)
+      expect(@test_daterange.dates_overlap?(Date.new(2019,2,25),Date.new(2019,3,10))).must_equal(false)
     end
   end
 

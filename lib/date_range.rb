@@ -28,7 +28,7 @@ module Hotel
       return valid_date
     end
     
-    def daterange_check(check_in, check_out)
+    def dates_overlap?(check_in, check_out)
       valid_daterange =  date_check(check_in) || date_check(check_out) ||
       (check_in < @check_in && check_out > @check_out)
       return valid_daterange

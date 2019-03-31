@@ -16,59 +16,62 @@ module Hotel
 
     #  basic reservation methods
     def book_reservation(room, date_range)
-      # raising the error but test says nothing was raised
-      # unless room_availability(date_range.check_in, date_range.check_out).include?(room)
-      #   raise ArgumentError, "The room you've selected is not available for these dates."
-      # end
+      unless room_availability(date_range.check_in, date_range.check_out).include?(room)
+        raise ArgumentError, "The room you've selected is not available for these dates."
+      end
       reservation = Hotel::Reservation.new(room, date_range)
       @reservations << reservation
       return reservation
+    end
+
+    # checks each reservation by date and adds it to the reservations list
+    def res_by_date(date)
+      booked_reservations = @reservations.find_all do |reservation|
+        reservation.date_range.date_check(date)
+      end
+        if booked_reservations.empty?
+          return []
+        else
+          return booked_reservations
+        end
     end
 
     # check if a date range has been taken and store it in booked rooms array
     def room_availability(check_in, check_out)
       booked_rooms = []
       @reservations.each do |reservation|
-        if reservation.date_range.daterange_check(check_in, check_out)
+        if reservation.date_range.dates_overlap?(check_in, check_out)
           booked_rooms << reservation.room
         end
       end
+    # check date overlaps for blocks
+      @block_reservations.each do |block|
+        if block.date_range.dates_overlap?(check_in, check_out)
+          booked_rooms << block.room
+        end
+      end
+      # available frooms minus already booked rooms
       return hotel_rooms - booked_rooms
     end
 
-    # checks each reservation by date and adds it to the reservations list
-    def res_by_date(date)
-      res_list = []
-      @reservations.each do |reservation|
-        if date == reservation.date_range.date_check(date)
-          res_list << reservation
-        end
-      end
-      return res_list.empty? ? [] : res_list
+    # block reservation methods
+    def make_block_res(rooms, date_range, cost = 100)
+      hotel_block = Hotel::HotelBlock.new(rooms, date_range, cost)
+      @block_reservations << hotel_block
+      return hotel_block
     end
 
+    def find_block_by_date(date_range)
+      block_match = @block_reservations.find do |hotel_block|
+        hotel_block.block_date_check(date_range)
+      end
+      return block_match
+    end
 
+    def reserve_block(room, date_range)
+      hotel_block = find_block_by_date(date_range)
+      hotel_block.book_block_reservation(room, date_range)
+    end 
 
-    # def room_availability(check_in, check_out)
-    #   booked_rooms  = []
-    #   # daterange class did not have this repition
-    #   @reservations.each do |reservation|
-    #     # checking valid dates and date ranges 
-    #     if (check_in <= reservation.check_in && check_out >= reservation.check_in) || 
-    #       (check_in >= reservation.check_in && check_out <= reservation.check_out) ||
-    #       (check_in <= reservation.check_out && check_out >= reservation.check_out) 
-    #       booked_rooms << reservation.room_number
-    #     end
-
-    #   end
-
-    # # available rooms equals all rooms array minus rooms that are booked
-    #   @available_rooms = total_rooms - booked_rooms.uniq
-    #   if @available_rooms.length == 0
-    #     raise ArgumentError, "There are no available rooms for that date"
-    #   end
-    #     return @available_rooms         
-    # end
- 
   end
 end 

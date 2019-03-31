@@ -4,9 +4,8 @@ module Hotel
 
     def initialize(rooms, date_range, cost = 100)
       if rooms.length > 5
-        raise ArgumentError, "Blocks cannot be more than 5 rooms."
+        raise ArgumentError, "You cannot book more than 5 rooms."
       end
-
 
       @rooms = rooms
       @date_range = date_range
@@ -15,10 +14,6 @@ module Hotel
     end
 
     def book_block_reservation(room, date_range)
-      if rooms.length > 5
-        raise ArgumentError, "You cannot book more than 5 rooms."
-      end
-
       unless rooms_available.include?(room)
         raise ArgumentError, "Sorry, this room is not available for block reservations" 
       end
@@ -34,8 +29,8 @@ module Hotel
       return available_rooms
     end
 
-    def block_date_check(check_in, check_out)
-      return check_in == @check_in && check_out == @check_out
+    def block_date_check(date_range)
+      return date_range.check_in == @date_range.check_in && date_range.check_out == @date_range.check_out
     end
 
   end

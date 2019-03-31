@@ -80,13 +80,17 @@ describe "Reservation Manager" do
         Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,9)))
       @frontdesk.book_reservation(1,
         Hotel::DateRange.new(Date.new(2019,4,11), Date.new(2019,4,12)))
-      @frontdesk.book_reservation(5,
-        Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,8)))
-      @res_list = @frontdesk.res_by_date(Date.new(2019,3,7))
+      @frontdesk.book_reservation(3,
+        Hotel::DateRange.new(Date.new(2019,2,5), Date.new(2019,3,8)))
+      @res_list = @frontdesk.res_by_date(Date.new(2019,3,5))
+    end
+
+    it "returns the right number of reservations" do
+      expect(@res_list.length).must_equal(2)
     end
 
     it 'returns an empty array if there are no reservations during selected date' do
-      expect(@frontdesk.res_by_date(Date.new(2002,3,15)) ).must_be_instance_of(Array)
+      expect(@frontdesk.res_by_date(Date.new(2002,3,15))).must_be_instance_of(Array)
     end
 
     it "returns array of all booked reservations" do
@@ -95,68 +99,30 @@ describe "Reservation Manager" do
         expect(reservation).must_be_instance_of(Hotel::Reservation)
       end
     end
- end  
+  end 
+  
+  describe "make block reservation" do
+    it "creates a block reservation" do
+      block_res = @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
 
+      expect(block_res).must_be_instance_of(Hotel::HotelBlock)
+    end
 
-#   describe "room availability method" do
-#     before do
-#       @frontdesk = Hotel::ReservationManager.new(3)
-#       @check_in = Date.new(2019,3,15)
-#       @check_out = Date.new(2019,3,18)
-#       @reservation1 = @frontdesk.book_reservation(1, @check_in, @check_out)
+    it "adds a block reservation to blocks array" do 
+      booked_blocks = @frontdesk.block_reservations.length
+      @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
 
-#       @check_in2 = Date.new(2019,3,15)
-#       @check_out2 = Date.new(2019,3,18)
-#       @reservation2 = @frontdesk.book_reservation(2, @check_in2, @check_out2)
-#     end
+      new_block_res = @frontdesk.block_reservations.length - booked_blocks
 
-#     it "returns a list of rooms that are available" do
-#       availability = @frontdesk.room_availability(@check_in, @check_out)
-#       expect(availability).must_be_kind_of(Array)
-#     end  
+      expect(new_block_res).must_equal(1)
+    end
+  end
 
-#     it "checks if booked room number is included in array available rooms " do 
-#       availability = @frontdesk.room_availability(@check_in, @check_out)
-#       expect(availability.length).must_equal 1
-#       expect(availability).wont_include 2
-#     end
+  describe "book block reservation" do 
+    it "returns a hotel block object" do
+      @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
+    end
 
-#     it "cannot book a room twice" do
-#       expect(@reservation1.room_number).wont_equal @reservation2.room_number
-#     end
+  end
 
-#     it "a reservation is allowed to start the same day another ends" do
-#       @check_in5 = Date.new(2019,3,18)
-#       @check_out5 = Date.new(2019,3,20)
-#       @reservation5 = @frontdesk.book_reservation(@check_in5, @check_out5)
-      
-#       expect(@reservation5).must_be_kind_of(Hotel::Reservation)
-#     end
-
-#     it "raises an exception when there are no rooms for the given date" do
-#       @check_in3 = Date.new(2019,3,15)
-#       @check_out3 = Date.new(2019,3,18)
-#       @reservation3 = @frontdesk.book_reservation(@check_in3, @check_out3)
-#       @check_in4 = Date.new(2019,3,15)
-#       @check_out4 = Date.new(2019,3,18)
-
-#       expect{@frontdesk.room_availability(@check_in4, @check_out4)}.must_raise ArgumentError
-#     end
- 
-   
-#   end
-
-# end
-
-
-#   describe "find available block rooms method" do
-#     before do
-#       @frontdesk = Hotel::ReservationManager.new
-#       @booked_range = Hotel::DateRange.new(Date.new(2019,3,15), (Date.new(2019,3,18)))
-#       @block_res = @frontdesk.make_block([*1..5], @booked_range, @rate_type = "Discount")
-#     end
-
-#     it "returns available block rooms" do
-#     end
-#   end
 end
