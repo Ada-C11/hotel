@@ -15,4 +15,8 @@ class HotelBlock
     end
     @discounted_rate = discounted_rate
   end
+
+  def is_overlap?(start_date, end_date)
+    return @end_date > start_date && @start_date < end_date
+  end
 end

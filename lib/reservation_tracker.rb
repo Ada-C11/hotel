@@ -73,6 +73,9 @@ class ReservationTracker
       if reservations_by_room != nil && !is_date_range_available?(parsed_start_date, parsed_end_date, reservations_by_room)
         raise ArgumentError, "One or more room in the Hotel Block is not available"
       end
+      if @block_reservations[room_id] != nil && !is_date_range_available?(start_date, end_date, @block_reservations[room_id])
+        raise ArgumentError, "One or more room in the Hotel Block is not available"
+      end
     end
     new_block = HotelBlock.new(start_date: start_date, end_date: end_date, rooms: rooms, discounted_rate: discounted_rate)
     rooms.each do |room_id|

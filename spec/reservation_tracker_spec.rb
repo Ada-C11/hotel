@@ -58,6 +58,11 @@ describe "ReservationTracker" do
     it "raises an exception when user attempts to create a Hotel Block in which at least one of the rooms is unavailable for the given date range" do
       expect { @tracker.add_hotelblock("2019-4-11", "2019-4-15", [1, 5, 6, 7], 170) }.must_raise ArgumentError
     end
+
+    it "raises an exception when user attempts to crate a Hotel Block with a room that is alreay in another block" do
+      new_block_1 = @tracker.add_hotelblock("2019-4-11", "2019-4-15", [6, 7], 170)
+      expect { @tracker.add_hotelblock("2019-4-11", "2019-4-15", [6, 7], 170) }.must_raise ArgumentError
+    end
   end
 
   describe "ReservationTracker#available_block_room" do
