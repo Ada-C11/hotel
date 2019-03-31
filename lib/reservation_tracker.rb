@@ -20,10 +20,6 @@ class ReservationTracker
     return reservations_at_date
   end
 
-  def same_daterange?(start_date, end_date, reservation)
-    return reservation.start_date == start_date && reservation.end_date == end_date
-  end
-
   def list_avail_room(start_date, end_date)
     start_date = Date.parse(start_date)
     end_date = Date.parse(end_date)
@@ -41,7 +37,7 @@ class ReservationTracker
   def avail_block_room(new_block)
     reserved_rooms = []
     @reservations.each do |reservation|
-      if same_daterange?(new_block.start_date, new_block.end_date, reservation)
+      if reservation.same_daterange?(new_block.start_date, new_block.end_date)
         reserved_rooms << reservation.room_id
       end
     end
@@ -56,7 +52,7 @@ class ReservationTracker
 
   def add_reservation_for_block(block, name, room_id)
     (0..@block_reservations[room_id].length - 1).each do |i|
-      if same_daterange?(@block_reservations[room_id][i].start_date, @block_reservations[room_id][i].end_date, block)
+      if block.same_daterange?(@block_reservations[room_id][i].start_date, @block_reservations[room_id][i].end_date)
         @block_reservations[room_id].delete_at(i)
       end
     end

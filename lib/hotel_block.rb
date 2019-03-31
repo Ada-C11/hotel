@@ -19,4 +19,8 @@ class HotelBlock
   def is_overlap?(start_date, end_date)
     return @end_date > start_date && @start_date < end_date
   end
+
+  def same_daterange?(start_date, end_date)
+    return @start_date == start_date && @end_date == end_date
+  end
 end

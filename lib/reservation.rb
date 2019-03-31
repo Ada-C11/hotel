@@ -38,6 +38,10 @@ class Reservation
   def contain_date?(date)
     return @end_date > date && @start_date <= date
   end
+
+  def same_daterange?(start_date, end_date)
+    return @start_date == start_date && @end_date == end_date
+  end
 end
 
 # binding.pry
