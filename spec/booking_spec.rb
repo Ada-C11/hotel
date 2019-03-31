@@ -78,10 +78,11 @@ describe "Booking" do
       @booking.create_block("April 10, 2020", "April 15, 2020", 3, 175)
       expect(@booking.blocks.length).must_equal 1
       expect(@booking.blocks.first).must_be_kind_of Hotel::Block
+      expect(@booking.blocks.first.rooms.length).must_equal 3
     end
 
     it "Raises an error if at least one of the rooms is unavailable during the date range" do
-      20.times do
+      19.times do
         @booking.request_reservation("April 1, 2020", "April 5, 2020")
       end
       expect {
@@ -158,6 +159,23 @@ describe "Booking" do
       expect {
         @booking.request_reservation("April 11, 2020", "April 13, 2020")
       }.must_raise Hotel::Booking::UnavailableRoomError
+    end
+  end
+
+  describe "reservations involving blocks" do
+    it "Raises an error if trying to make a standard reservation for a room that is part of a block" do
+      @booking.create_block("April 10, 2020", "April 15, 2020", 3, 175)
+      expect {
+        @booking.request_reservation("April 11, 2020", "April 13, 2020", 1)
+      }.must_raise Hotel::Booking::UnavailableRoomError
+    end
+
+    it "Allows a reservation to be made if the room is not part of a block or already reserved" do
+      @booking.create_block("April 10, 2020", "April 15, 2020", 3, 175)
+      # No reservations
+      expect(@booking.reservations).must_equal []
+      reservation = @booking.request_reservation("April 11, 2020", "April 13, 2020", 5)
+      expect(@booking.reservations.length).must_equal 1
     end
   end
 end

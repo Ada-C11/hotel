@@ -19,6 +19,31 @@ describe "Room" do
     end
   end
 
+  describe "add_block" do
+    it "Adds the block to @block" do
+      expect(@room.blocks).must_equal []
+      block = Hotel::Block.new("April 10, 2020", "April 15, 2020", 3, 175)
+      @room.add_block(block)
+      expect(@room.blocks.length).must_equal 1
+    end
+  end
+
+  describe "is_available?" do
+    it "Returns true if the room is available during the given date range" do
+      # No reservations made yet for this room
+      expect(@room.reservations).must_equal []
+      check = @room.is_available?("May 10, 2020", "May 15, 2020")
+      expect(check).must_equal true
+    end
+
+    it "Returns false if the room is not available during the given date range" do
+      reservation = Hotel::Reservation.new(checkin: "April 10, 2020", checkout: "April 15, 2020", room: @room)
+      @room.add_reservation(reservation)
+      check = @room.is_available?("April 11, 2020", "April 13, 2020")
+      expect(check).must_equal false
+    end
+  end
+
   describe "list_rooms" do
     before do
       @rooms = Hotel::Room.list_rooms(100, 20, 150)
