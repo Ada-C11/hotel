@@ -3,7 +3,7 @@ module Hotel
   class Reservation
     attr_reader :start_date, :end_date, :room, :block_id, :discount
     attr_accessor :reservation_id, :status
-    # add discount to initialize as an optional
+
     def initialize(start_date, end_date, room, status: nil, reservation_id: nil, block_id: nil, discount: nil)
       @start_date = start_date
       @end_date = end_date
