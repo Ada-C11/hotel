@@ -214,7 +214,7 @@ describe "RESERVATION MANAGER TESTS" do
         block_id += 1
       end
 
-      expect { test_manager.make_reservation("2019-4-9", "2019-4-11") }.must_raise ArgumentError
+      expect { test_manager.make_reservation("2019-4-9", "2019-4-11") }.must_raise Reservation_Manager::FullHotelError
     end
 
     it "will raise argument error if not enough rooms for hotel block" do
@@ -230,7 +230,7 @@ describe "RESERVATION MANAGER TESTS" do
         block_id += 1
       end
 
-      expect { test_manager.make_hotel_block("2019-4-9", "2019-4-11") }.must_raise ArgumentError
+      expect { test_manager.make_hotel_block(3, "2019-4-9", "2019-4-11", 3) }.must_raise Reservation_Manager::FullHotelError
     end
   end
 
@@ -247,7 +247,7 @@ describe "RESERVATION MANAGER TESTS" do
         block_id += 1
       end
 
-      expect { test_manager.make_reservation(check_in, check_out) }.must_raise ArgumentError
+      expect { test_manager.make_reservation(check_in, check_out) }.must_raise Reservation_Manager::FullHotelError
     end
 
     it "can make a reservation for hotel blocked room if part of block" do

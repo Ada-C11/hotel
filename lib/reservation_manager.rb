@@ -5,6 +5,8 @@ class Reservation_Manager
   attr_reader :rooms, :all_reservations, :available_rooms
   attr_accessor :all_block_reservations
 
+  class FullHotelError < StandardError; end
+
   def initialize
     @all_reservations = all_reservations || []
     @all_block_reservations = all_block_reservations || []
@@ -36,7 +38,7 @@ class Reservation_Manager
       if available_rooms.length > 0
         reservation.room = available_rooms[0]
       else
-        raise ArgumentError, "There are no available rooms at the moment. Please try again later!"
+        raise FullHotelError, "There are no available rooms at the moment. Please try again later!"
       end
     end
 
@@ -58,7 +60,7 @@ class Reservation_Manager
         all_block_reservations << new_block_room
       end
     else
-      raise ArgumentError, "Sorry, we don't have enough rooms available for your rooms in a block."
+      raise FullHotelError, "Sorry, we don't have enough rooms available for your rooms in a block."
     end
 
     return block_rooms
