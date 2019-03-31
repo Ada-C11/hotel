@@ -69,7 +69,7 @@ class Reservation_Manager
     date1 = Date.parse(finding_check_in)
     date2 = Date.parse(finding_check_out)
     if date1 == date2
-      given_date_range = (date1..date2).to_a
+      given_date_range = [date1]
     else
       given_date_range = (date1...date2).to_a
     end
