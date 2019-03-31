@@ -43,6 +43,11 @@ describe "ReservationTracker" do
       expect(available_rooms.length).must_equal 20
     end
 
+    it "excludes unavailable room(s)" do
+      available_rooms = @tracker.list_avail_room("2019-4-11", "2019-4-12")
+      expect(available_rooms).wont_include 2
+    end
+
     it "return the correct number of available room(s)" do
       available_rooms = @tracker.list_avail_room("2019-4-11", "2019-4-15")
       expect(available_rooms.length).must_equal 18
