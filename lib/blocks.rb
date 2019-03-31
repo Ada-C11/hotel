@@ -1,21 +1,18 @@
-require "date"
+require_relative "date_range"
 
-class BlockParty
+class BlockParty < DateRange
   attr_reader :blocked_rooms, :total_cost
   ROOM_BLOCK = 5
 
-  def initialize(check_in:, check_out:, blocked_rooms:, discount:)
-    # unless id.instance_of?(Integer) && id > 0 && id <= 20
-    #   raise ArgumentError, "ID must be a positive number, given #{id}..."
-    # end
+  def initialize(rooms, check_in, check_out, rate)
+    if rooms.empty?
+      raise ArgumentError, "Cannot create an empty block reservation..."
+    end
 
-    @check_in = Date.parse(check_in)
-    @check_out = Date.parse(check_out)
-    @blocked_rooms = blocked_rooms
-    @discount = discount
-  end
-
-  def total_cost
-    @discount * (@check_in...@check_out).count
+    super(check_in, check_out)
+    @rooms = rooms
+    @available_rooms = rooms.dup
+    @rate = rate
+    @blocked_rooms = []
   end
 end
