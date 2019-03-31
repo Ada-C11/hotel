@@ -6,8 +6,8 @@ class Reservation
 
   def initialize(reservation_id, check_in: nil, check_out: nil, room: nil, is_hotel_blocker: false)
     @reservation_id = reservation_id
-    check_in == nil ? @check_in = nil : @check_in = Date.parse(check_in)
-    check_out == nil ? @check_out = nil : @check_out = Date.parse(check_out)
+    @check_in = check_in == nil ? nil : Date.parse(check_in)
+    @check_out = check_out == nil ? nil : Date.parse(check_out)
     @room = all_rooms.sample
     @is_hotel_blocker = is_hotel_blocker
   end
