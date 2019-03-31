@@ -16,7 +16,7 @@ class Reservation
     if self.check_in != nil && self.check_out != nil
       duration = (check_out - check_in).to_i
 
-      if duration <= 0
+      if check_in >= check_out
         raise ArgumentError, "Check out time is not after check in time. Inputted check in date was #{check_in} and check out date was #{check_out}"
       end
     else
