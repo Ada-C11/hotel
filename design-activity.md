@@ -130,9 +130,13 @@ ________________________HOTEL________________________
 
 Changes that will need to be made to improve the design.
 
-Integrate BlockManager and ReservationsManager in one class.
+- Integrate BlockManager and ReservationsManager in one class.
 
-Determine the methods that belong to the Block class and take them out of the manager.
+    * I ended up with two classes (plus the template class that I will get rid of because all the functionality belongs to reservation manager and I don't need inheritance).
+
+    * I need to revisit the final design. The final reservation manager class will contain so many methods. It might be better if some functionality gets redistributed to another class.
+
+
 
 
 
@@ -197,6 +201,7 @@ Does this class take on any responsibility that should be delegated to "lower le
     
 
 Is there code in other classes that directly manipulates this class's instance variables?
+
 
     - BlockManager
 
