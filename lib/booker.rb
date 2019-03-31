@@ -40,10 +40,18 @@ class RoomBooker
     dates = DateRange.new(check_in, check_out)
     available_rooms = @rooms
 
+    
+
     overlaping_reservations = @reservations.select { |res| res.overlaps(dates) }
     reserved_rooms = overlaping_reservations.map { |res| res.room_booked }
 
     available_rooms -= reserved_rooms
     return available_rooms
+  end
+
+  def block_reservation(rooms_needed, check_in, check_out)
+    available_rooms = find_available_room(check_in, check_out)
+
+
   end
 end
