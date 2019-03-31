@@ -31,14 +31,14 @@ describe "Booking" do
 
   describe "check_availability" do
     it "Returns an instance of room if one is available" do
-      request = @booking.check_availability(["2020-04-01", "2020-04-02", "2020-04-03", "2020-04-04"])
+      request = @booking.check_availability("April 1, 2020", "April 5, 2020")
       expect(request.first).must_be_kind_of Hotel::Room
     end
 
     it "Returns the first room that is available" do
       # this reservation should take room 1
       @booking.request_reservation("April 1, 2020", "April 5, 2020")
-      request = @booking.check_availability(["2020-04-01", "2020-04-02", "2020-04-03", "2020-04-04"])
+      request = @booking.check_availability("April 1, 2020", "April 5, 2020")
       expect(request.first.id).must_equal 2
     end
 
@@ -47,7 +47,7 @@ describe "Booking" do
         @booking.request_reservation("April 1, 2020", "April 5, 2020")
       end
       expect {
-        @booking.check_availability(["2020-04-01", "2020-04-02", "2020-04-03", "2020-04-04"])
+        @booking.check_availability("April 1, 2020", "April 5, 2020")
       }.must_raise Hotel::Booking::UnavailableRoomError
     end
   end
@@ -69,6 +69,24 @@ describe "Booking" do
       @booking.request_reservation("June 3, 2020", "June 5, 2020")
       res_date = @booking.find_reservation("May 3, 2020")
       expect(res_date.length).must_equal 2
+    end
+  end
+
+  describe "create_block" do
+    it "adds a block to @blocks" do
+      expect(@booking.blocks).must_equal []
+      @booking.create_block("April 10, 2020", "April 15, 2020", 3, 175)
+      expect(@booking.blocks.length).must_equal 1
+      expect(@booking.blocks.first).must_be_kind_of Hotel::Block
+    end
+
+    it "Raises an error if at least one of the rooms is unavailable during the date range" do
+      20.times do
+        @booking.request_reservation("April 1, 2020", "April 5, 2020")
+      end
+      expect {
+        @booking.create_block("April 1, 2020", "April 5, 2020", 2, 150)
+      }.must_raise Hotel::Booking::UnavailableRoomError
     end
   end
 
