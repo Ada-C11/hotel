@@ -65,7 +65,7 @@ class Reservation_Manager
   end
 
   def find_available_rooms(finding_check_in, finding_check_out)
-    available_rooms = (1..20).map { |i| i }
+    available_rooms = (1..20).to_a
     date1 = Date.parse(finding_check_in)
     date2 = Date.parse(finding_check_out)
     if date1 == date2
