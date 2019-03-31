@@ -1,0 +1,4 @@
+Potential changes to hotel:
+1. Review the methods that use parsed date and consolidate methods if possible
+2. Consider renaming variables with reservations to res for short
+3. Consider a different data structure for block_reservations
