@@ -1,7 +1,6 @@
 require "time"
 require "date"
 
-require_relative "room"
 require_relative "reserve"
 require_relative "date_range"
 require_relative "blocks"

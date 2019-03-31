@@ -1,5 +1,4 @@
 require_relative "date_range"
-require "awesome_print"
 
 class Reservation < DateRange
   attr_reader :room_booked, :rate

@@ -48,3 +48,6 @@ build-iPhoneSimulator/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+lib/room.rb
+spec/room_spec.rb
+spec/room_spec.rb
