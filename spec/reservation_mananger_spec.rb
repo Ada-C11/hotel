@@ -324,7 +324,7 @@ describe "RESERVATION MANAGER TESTS" do
       new_out_date = "2019-4-8"
       block_test_reserve1 = test_manager.make_reservation(new_in_date, new_out_date, is_hotel_blocker: true, block_id: block_id)
       block_test_reserve2 = test_manager.make_reservation(new_in_date, new_out_date, is_hotel_blocker: true, block_id: block_id)
-      block_test_reserve3 = test_manager.make_reservation(new_in_date, new_out_date, is_hotel_blocker: true, block_id: block_id)
+      test_manager.make_reservation(new_in_date, new_out_date, is_hotel_blocker: true, block_id: block_id)
 
       expect(block_test_reserve1.room).wont_equal block_test_reserve2.room
       expect(room_options).must_include block_test_reserve1.room
