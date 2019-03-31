@@ -3,18 +3,10 @@ require_relative "spec_helper"
 describe "RESERVATION TESTS" do
   describe "Reservation class initialization" do
     it "will return an instance of reservation" do
-      reservation = Reservation.new(1)
+      check_in = "2019-4-5"
+      check_out = "2019-4-10"
+      reservation = Reservation.new(1, check_in: check_in, check_out: check_out)
       expect(reservation).must_be_kind_of Reservation
-    end
-
-    it "check in date is nil unless values are given" do
-      test_reserve = Reservation.new(1)
-      expect(test_reserve.check_in).must_be_kind_of NilClass
-    end
-
-    it "check out date is nil unless values are given" do
-      test_reserve = Reservation.new(1)
-      expect(test_reserve.check_out).must_be_kind_of NilClass
     end
   end
 
@@ -26,9 +18,10 @@ describe "RESERVATION TESTS" do
     end
 
     it "throws an Argument Error if check out time is = or before check in time" do
-      Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-15")
+      test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-15")
       other_test_reserve = Reservation.new(1, check_in: "2019-3-20", check_out: "2019-3-20")
 
+      expect { test_reserve.duration }.must_raise ArgumentError
       expect { other_test_reserve.duration }.must_raise ArgumentError
     end
   end

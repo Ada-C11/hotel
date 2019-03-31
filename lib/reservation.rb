@@ -4,10 +4,11 @@ require "pry"
 class Reservation
   attr_accessor :reservation_id, :check_in, :check_out, :room, :is_hotel_blocker
 
-  def initialize(reservation_id, check_in: nil, check_out: nil, room: nil, is_hotel_blocker: false)
+  # def initialize(reservation_id, check_in: nil, check_out: nil, room: nil, is_hotel_blocker: false)
+  def initialize(reservation_id, check_in:, check_out:, is_hotel_blocker: false)
     @reservation_id = reservation_id
-    @check_in = check_in == nil ? nil : Date.parse(check_in)
-    @check_out = check_out == nil ? nil : Date.parse(check_out)
+    @check_in = Date.parse(check_in)
+    @check_out = Date.parse(check_out)
     @room = all_rooms.sample
     @is_hotel_blocker = is_hotel_blocker
   end

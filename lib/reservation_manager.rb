@@ -17,7 +17,7 @@ class Reservation_Manager
     fixed_check_out = Date.parse(check_out)
 
     if is_hotel_blocker == true
-      reservation = Reservation.new(block_id, is_hotel_blocker: true)
+      reservation = Reservation.new(block_id, check_in: check_in, check_out: check_out, is_hotel_blocker: true)
 
       all_block_reservations.each do |block_reservation|
         if block_id == block_reservation.reservation_id
@@ -30,9 +30,9 @@ class Reservation_Manager
       reservation.room = rooms_for_block[0]
       all_block_reservations.shift
     else
-      reservation = Reservation.new(1)
-      reservation.check_in = fixed_check_in
-      reservation.check_out = fixed_check_out
+      reservation = Reservation.new(1, check_in: check_in, check_out: check_out)
+      # reservation.check_in = fixed_check_in
+      # reservation.check_out = fixed_check_out
 
       available_rooms = find_available_rooms(check_in, check_out)
       if available_rooms.length > 0
