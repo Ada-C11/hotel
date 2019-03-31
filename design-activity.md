@@ -39,3 +39,6 @@ A has 1 method total_price in class Order. This method uses the unity price and 
 - If items are cheaper if bought in bulk, we need to change the price of the item to a discount price and implementation B is easier to modify since we can just add logic to the price method (i.e, if quantity meets the bulk requirement then use discount price)
 10. Which implementation better adheres to the single responsibility principle? Implementation B
 11. Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled? Implementation B
+
+Activity:
+In my hotel application, the ReservationTracker class is doing the bulk of the work. Some of the behaviors such as checking if reservation/block dates are overlap or checking if reservation has the same dates as a block should be part of the Reservation class or HotelBlock class instead of the ReservationTracker class. To make this update, I moved the is_overlap? and same_daterange? methods from ReservationTracker class to Reservation class and HotelBlock class.
