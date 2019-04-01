@@ -1,0 +1,6 @@
+Possible Improvements:
+  1. Add more test cases.  Although 100% of the code is covered according to SimpleCov, the code could be improved by explicitly testing more edge cases.
+  2. There is currently repeated code in reservation.rb and hotel_manager.rb.  This can probably be DRYed up so that the code is not repeated.
+  3. Currently, the way that the total cost for a reservation is calculated does not take into consideration any discount for blocks.  This should be fixed.  One way to update this would be to update the cost of the room, but would this cause the room to be permanently reduced in price?  If so, we would want to find a different way to figure this out.
+  4. Currently, date methods are handled by hotel_manager.rb (and reservation.rb, but I think this will eventually be removed).  Is there enough there for dates to be separated out into its own class?
+  5. I'm not really sold on the name "create_hash_of_rooms_with_status".  This could likely be improved.  On this point, is there a better way to figure out which rooms in a block are available/unavailable?
