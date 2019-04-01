@@ -37,3 +37,15 @@ B
 **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**
 
 B
+
+**Hotel Redesign Activity**
+
+In my Hotel class, Hotel#reserve_block_room calls on instance variables of both Room and HotelBlock and also modifies them. To improve this design, I need to do several things:
+
+* Wrap the "block.available_rooms.include?(room)" in the conditional (line 170) in a method within HotelBlock.
+
+* Utilize Room#add_reservation instead of writing "room.reservations << block_res" on line 174 (I must have just forgotten about that method when writing the code).
+
+* Write a wrapper method to replace "block.available_rooms.delete" on line 175. The helper method should be a HotelBlock method that can just do the deletion without stepping through the available_rooms instance variable first.
+
+These changes would make this method less susceptible to changes, because if the names of the instance variables in Room or HotelBlock were to change, there should be no reason that the code in this method should break because those instance variables would no longer be referred to directly here.

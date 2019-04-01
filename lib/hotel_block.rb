@@ -10,7 +10,15 @@ module HotelSystem
       @rooms = rooms
       @room_rate = room_rate
       @available_rooms = rooms
-    end 
+    end
+
+    def room_available?(room)
+      return available_rooms.include?(room)
+    end
+
+    def make_unavailable(room)
+      @available_rooms.delete(room)
+    end
   
   end
 end

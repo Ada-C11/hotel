@@ -80,7 +80,6 @@ module HotelSystem
     def reserve_room(start_year:, start_month:, start_day:, num_nights:)
       valid_date_entry?(start_year, start_month, start_day)
       res_dates = create_date_range(start_year: start_year, start_month: start_month, start_day: start_day, num_nights: num_nights)
-      # res_dates_range = res_dates.date_list
       res_room = find_available_room(start_year: start_year, start_month: start_month, start_day: start_day)
       id = create_reservation_id
       res = HotelSystem::Reservation.new(id: id, room: res_room, date_range: res_dates)
@@ -168,12 +167,12 @@ module HotelSystem
     def reserve_block_room(room_num:, block_id:)
       room = find_room(room_num)
       block = find_block(block_id)
-      if block.available_rooms.include?(room)
+      if block.room_available?(room)
         res_id = create_reservation_id
         block_res = HotelSystem::Reservation.new(id: res_id, room: room, room_number: room_num, date_range: block.date_range, nightly_rate: block.room_rate)
         @reservations << block_res
-        room.reservations << block_res
-        block.available_rooms.delete(room)
+        room.add_reservation(block_res)
+        block.make_unavailable(room)
       else
         raise NotImplementedError, "Sorry, that room is not available or is not a part of that block."
       end
