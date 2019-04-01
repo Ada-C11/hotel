@@ -5,7 +5,7 @@ module Hotel
   class Reservation
     attr_reader :start_date, :end_date, :room, :cost, :block_name
 
-    def initialize(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "no name")
+    def initialize(start_date, end_date, room: "0", cost: 200, block_name: nil)
       @start_date = start_date
       @end_date = end_date
       @room = room

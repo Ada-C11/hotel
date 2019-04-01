@@ -1,3 +1,4 @@
+
 require_relative "reservation"
 require "pry"
 
@@ -9,17 +10,16 @@ module Hotel
       @booked_rooms = []
       @available_rooms = []
       @reservation_array = []
-      @blocked_rooms_array = []
       @blocked_reservation_array = []
       @rooms = ("1".."20").to_a
     end
 
-    def make_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "no name")
-      new_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: room, cost: cost, block_name: block_name)
-      check_res = view_available_rooms(start_date: new_reservation.start_date, end_date: new_reservation.end_date)
+    def make_reservation(start_date, end_date, room: "0", cost: 200, block_name: nil)
+      new_reservation = Reservation.new(start_date, end_date, room: room, cost: cost, block_name: block_name)
+      check_res = view_available_rooms(new_reservation.start_date, new_reservation.end_date)
       if !check_res.include?(new_reservation.room)
         raise ArgumentError, "That room is not available, choose another room"
-      elsif new_reservation.block_name != "no name"
+      elsif new_reservation.block_name != nil
         raise ArgumentError, "Use the make_block_reservation method to reserve a room from a block"
       else
         @reservation_array << new_reservation
@@ -27,8 +27,8 @@ module Hotel
       return new_reservation
     end
 
-    def make_block_reservation(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, room: "0", cost: 200, block_name: "no name")
-      new_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: room, cost: cost, block_name: block_name)
+    def make_block_reservation(start_date, end_date, room: "0", cost: 200, block_name: nil)
+      new_reservation = Reservation.new(start_date, end_date, room: room, cost: cost, block_name: block_name)
 
       @blocked_reservation_array.each do |blocked_res|
         if blocked_res.reservation_dates != new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
@@ -38,20 +38,16 @@ module Hotel
 
       @reservation_array << new_reservation
 
-      res_to_remove = []
       @blocked_reservation_array.each do |blocked_res|
         if blocked_res.room == new_reservation.room
-          res_to_remove << blocked_res
+          @blocked_reservation_array.delete(blocked_res)
         end
       end
-
-      @blocked_reservation_array.delete(res_to_remove[0])
-      @blocked_rooms_array.delete(res_to_remove[0].room)
 
       return new_reservation
     end
 
-    def hotel_block(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s, cost: 100, rooms_array: ["0"], block_name: "block name")
+    def hotel_block(start_date, end_date, rooms_array: ["0"], cost: 100, block_name: "block name")
       start_date = start_date
       end_date = end_date
       cost = cost
@@ -78,13 +74,12 @@ module Hotel
       end
 
       rooms_array.each do |block_room|
-        block_reservation = Reservation.new(start_date: start_date, end_date: end_date, room: block_room, cost: cost, block_name: block_name)
-        @blocked_rooms_array << block_reservation.room
+        block_reservation = Reservation.new(start_date, end_date, room: block_room, cost: cost, block_name: block_name)
+
         @blocked_reservation_array << block_reservation
-        # binding.pry
       end
 
-      return @blocked_rooms_array
+      return blocked_reservation_array
     end
 
     def view_block_availability(block_name_input)
@@ -92,7 +87,6 @@ module Hotel
 
       @blocked_reservation_array.each do |blocked_res|
         if blocked_res.block_name == block_name_input && !@reservation_array.include?(blocked_res)
-          # binding.pry
           specific_block_array << blocked_res
         end
       end
@@ -114,7 +108,7 @@ module Hotel
       return reservations_matching_date
     end
 
-    def view_available_rooms(start_date: Date.today.to_s, end_date: (Date.today + 1).to_s)
+    def view_available_rooms(start_date, end_date)
       start_date = Date.parse(start_date)
       end_date = Date.parse(end_date)
       date_range = (start_date..end_date).to_a
