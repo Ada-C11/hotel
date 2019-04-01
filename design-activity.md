@@ -141,13 +141,15 @@ Describe in design-activity.md what changes you would need to
 make to improve this design, and how the resulting design   
 would be an improvement.
 
-The following methods in Booker should be modified to delegate logic to lower level classes:
-1)  get_cost_of_booking(reservation:) 
-2)  calculate_cost_of_booking(reservation:, room:, percent_discount: 0)
+The following methods in Booker should be modified to delegate logic to lower level classes:  
+1)  get\_cost\_of\_booking(reservation:)   
+2)  calculate\_cost\_of\_booking(reservation:, room:, percent_discount: 0)
 
-get_cost_of_booking(reservation:) should be removed as it is just calling reservation.price 
+get\_cost\_of\_booking(reservation:) should be removed as it is just calling reservation.price 
 
-calculate_cost_of_booking(reservation:, room:, percent_discount: 0) is a little more tricky. This reservation price should be set in reservation not in Booker, so I will modify the method signature to adapt it.
+calculate\_cost\_of\_booking(reservation:, room:, percent_discount: 0) is a   
+little more tricky. This reservation price should be set in reservation not in Booker,   
+so I will modify the method signature to adapt it.
 
 
   
