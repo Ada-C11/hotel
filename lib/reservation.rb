@@ -10,7 +10,7 @@ module Hotel
 
     private
 
-    #Override
+    # Override
     def generate_confirmation_id(prefix: "R")
       return prefix + self.class.confirmation_number_generator.to_s
     end

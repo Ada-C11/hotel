@@ -18,7 +18,7 @@ module Hotel
     end
 
     def add_room_to_rooms(cost_per_night:)
-      rooms << RoomWrapper::room(cost: cost_per_night, room_number: rooms.length + 1)
+      rooms << RoomWrapper.room(cost: cost_per_night, room_number: rooms.length + 1)
     end
 
     def list_rooms(rooms_to_list: rooms)
