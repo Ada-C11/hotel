@@ -66,3 +66,6 @@ Implementation A better adheres to the single responsibility principle because i
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled
 
 Implementation B is more loosely coupled.
+
+Improvements for Hotel:
+I want to create a new class, Reservation, that the HotelLedger would use to create new reservations.  I want to also be able to use this to create reservation blocks.
