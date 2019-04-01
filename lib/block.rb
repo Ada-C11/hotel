@@ -1,6 +1,6 @@
 require_relative 'date_range'
 require_relative 'room'
-require_relative 'hotel_dispatcher'
+require_relative 'hotel_manager'
 
 module Hotel
   class Block

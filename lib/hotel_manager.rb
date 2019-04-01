@@ -6,7 +6,7 @@ require_relative 'block'
 require_relative 'date_range'
 
 module Hotel
-  class HotelDispatcher
+  class HotelManager
     attr_accessor :rooms, :reservations, :blocks
     def initialize
       @rooms = Hotel::Room.list_all_rooms
@@ -16,7 +16,7 @@ module Hotel
 
     def reserve(start_date, end_date)
       available_rooms = find_available_room(start_date, end_date)
-      raise ArgumentError.new("Room is not available") if available_rooms.empty?
+      raise ArgumentError.new("No rooms are available from #{start_date} to #{end_date}") if available_rooms.empty?
       new_room = available_rooms.take(1)[0]
       
       new_reservation = Hotel::Reservation.new(

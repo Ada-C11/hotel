@@ -1,22 +1,22 @@
 require_relative 'spec_helper'
 
-describe "HotelDispatcher class" do
-  describe "HotelDispatcher instantiation" do
+describe "HotelManager class" do
+  describe "HotelManager instantiation" do
     it "is an instance of Reservation" do
-      expect(Hotel::HotelDispatcher.new).must_be_kind_of Hotel::HotelDispatcher
+      expect(Hotel::HotelManager.new).must_be_kind_of Hotel::HotelManager
     end
     it "returns array of all the rooms" do
-      hotel = Hotel::HotelDispatcher.new
+      hotel = Hotel::HotelManager.new
       expect(hotel.rooms).must_be_kind_of Array
     end
     it "reserves a room" do
-      hotel = Hotel::HotelDispatcher.new
+      hotel = Hotel::HotelManager.new
       expect(hotel.reserve("2019-2-23", "2019-2-25")).must_be_kind_of Hotel::Reservation
     end
   end
   describe "Room reservation" do
     before do
-      @hotel = Hotel::HotelDispatcher.new
+      @hotel = Hotel::HotelManager.new
       @hotel.reserve("2019-2-21", "2019-2-26")
       @hotel.reserve("2019-2-20", "2019-2-24")
     end
@@ -35,7 +35,7 @@ describe "HotelDispatcher class" do
     end
 
     it "returns ArgumentError if there are no available rooms" do
-      hotel = Hotel::HotelDispatcher.new
+      hotel = Hotel::HotelManager.new
       20.times do
       hotel.reserve("2019-2-21", "2019-2-26")
       end 
@@ -47,7 +47,7 @@ describe "HotelDispatcher class" do
 
   describe "testing blocks" do
     before do
-      @hotel = Hotel::HotelDispatcher.new
+      @hotel = Hotel::HotelManager.new
       @room_nums = [1,2,4,5]
     end
 
@@ -86,7 +86,7 @@ describe "HotelDispatcher class" do
 
   describe "reserving from a block" do
     before do
-      @hotel = Hotel::HotelDispatcher.new
+      @hotel = Hotel::HotelManager.new
       @room_nums = [1,2,4,5]
       @hotel.add_block("2019-6-20", "2019-6-24", @room_nums, 150, "DevinWedding")
     end
