@@ -15,6 +15,14 @@ module Hotel
       return total_cost
     end
 
+    def overlap?(start_date, end_date)
+      return self.start_date >= start_date && self.end_date <= end_date
+    end
+
+    def includes?(date)
+      return date >= self.start_date && date < self.end_date
+    end
+
     private
 
     def parse_dates(start_date, end_date)

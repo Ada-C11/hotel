@@ -24,6 +24,10 @@ module Hotel
       @rooms_and_status[room] = "UNAVAILBLE"
     end
 
+    def overlap?(start_date, end_date)
+      return self.start_date >= start_date && self.end_date <= end_date
+    end
+
     private
 
     def create_hash_of_rooms_with_status(rooms)

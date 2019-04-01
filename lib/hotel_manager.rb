@@ -26,12 +26,7 @@ module Hotel
 
     def list_reservations_by_date(date)
       date = Date.parse(date)
-      found_reservations = []
-      @reservations.each do |reservation|
-        if date >= reservation.start_date && date < reservation.end_date
-          found_reservations.push(reservation)
-        end
-      end
+      found_reservations = @reservations.select { |reservation| reservation.includes?(date) }
       return found_reservations
     end
 
@@ -58,12 +53,12 @@ module Hotel
       start_date, end_date = parse_dates(start_date, end_date)
       available_rooms = @rooms
       reservations.each do |reservation|
-        if reservation.start_date >= start_date && reservation.end_date <= end_date
+        if reservation.overlap?(start_date, end_date)
           available_rooms.delete(reservation.room)
         end
       end
       blocks.each do |block|
-        if block.start_date >= start_date && block.end_date <= end_date
+        if block.overlap?(start_date, end_date)
           block.rooms.each do |room|
             available_rooms.delete(room)
           end
