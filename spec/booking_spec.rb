@@ -199,6 +199,13 @@ describe "Booking" do
       reservation = @booking.request_reservation("April 11, 2020", "April 13, 2020", 5)
       expect(@booking.reservations.length).must_equal 1
     end
+
+    it "Will be included with reservations returned from find_reservation" do
+      block = @booking.create_block("April 10, 2020", "April 15, 2020", @rooms, 175)
+      reservation = @booking.reserve_from_block(block, 1)
+      res_list = @booking.find_reservation("April 10, 2020")
+      expect(res_list.first).must_equal reservation
+    end
   end
 
   describe "reserve_from_block" do
