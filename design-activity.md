@@ -48,37 +48,8 @@
     1. Implementation B is more loosely couples because it doesn't directly manipulate an instance variable from a lower level, instead it calls on a method from the other classes.
 
 -------------------------
-Revisiting Hotel prompts: Now that we've got you thinking about design, spend some time to revisit the code you wrote for the Hotel project. For each class in your program, ask yourself the following questions:
+Revisiting Hotel - changes to make: 
 
-Reservation class: 
-1. What is this class's responsibility? (You should be able to describe it in a single sentence)
-    1. Responsibility is to hold all the instance variables for reservation and  calculates the total cost of the trip. 
-2. Is this class responsible for exactly one thing?
-    1. Yes. 
-3. Does this class take on any responsibility that should be delegated to "lower level" classes?
-    1. No 
-4. Is there code in other classes that directly manipulates this class's instance variables?
-    1. Yes, ReservationManager creates an instance of Reservation, which requires all of the class' instance variables. The HotelBlock method in ReservationManager also directly uses all the instance variables from Reservation. 
+For the design activity I originally tried moving the hotel_block method into its own class, HotelBlock. 
 
-ReservationManager class:
-1. What is this class's responsibility? (You should be able to describe it in a single sentence.)
-    1. It manages all instances of Reservation and HotelBlock reservations
-2. Is this class responsible for exactly one thing?
-    1. No
-3. Does this class take on any responsibility that should be delegated to "lower level" classes?
-    1. Yes, it creates a HotelBlock which could be a lower level class (I would need to create a new HotelBlock class)
-4. Is there code in other classes that directly manipulates this class's instance variables?
-    1. No.
-
--------------------------------
-You might recall writing a file called refactor.txt. Take a look at the refactor plans that you wrote, and consider the following:
-
-1. How easy is it to follow your own instructions?
-    1. Easy to follow 
-2. Do these refactors improve the clarity of your code?
-    1. Yes
-3. Do you still agree with your previous assessment, or could your refactor be further improved?
-    1. I agree with them, but now I see larger changes (adding a HotelBlock class). The changes I suggested were smaller changes within the exiting classes (naming conventions and some logic changes)
-
-----------------------
-Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+I found that this caused my code to become more tightly coupled than it was before refactoring since it needed to know about information from the ReservationManager class to be able to create a block like if any of the rooms in the block were already booked from a traditional reservation. I decided not to keep those changes. Instead, I refactored my code using the instructor feedback and notes I had made in the refactor.txt file. 

@@ -18,26 +18,26 @@ describe "ReservationManager class" do
     end
     it "Adds a reservation to an array of reservations" do
       my_reservation = reservation_manager.make_reservation("1st Mar 2020", "2nd Mar 2020", room: "1")
-      expect(reservation_manager.reservation_array.include?(my_reservation)).must_equal true
+      expect(reservation_manager.all_reservations.include?(my_reservation)).must_equal true
     end
     it "Allows the user to reserve a room for a given date range" do
       reservation_manager.make_reservation("1st Jan 2019", "3rd Jan 2019", room: "1")
-      expect(reservation_manager.reservation_array[0].room).must_equal "1"
+      expect(reservation_manager.all_reservations[0].room).must_equal "1"
     end
     it "Allows user to reserve an available room for a given date range" do
       reservation_manager.make_reservation("1st Jan 2019", "3rd Jan 2019", room: "1")
       reservation_manager.make_reservation("1st Jan 2019", "3rd Jan 2019", room: "2")
-      expect(reservation_manager.reservation_array[1].room).must_equal "2"
+      expect(reservation_manager.all_reservations[1].room).must_equal "2"
     end
     it "Allows user to reserve an available room for a given date range (starts on the checkout date)" do
       reservation_manager.make_reservation("1st Jan 2019", "3rd Jan 2019", room: "1")
       reservation_manager.make_reservation("3rd Jan 2019", "5th Jan 2019", room: "1")
-      expect(reservation_manager.reservation_array[1].room).must_equal "1"
+      expect(reservation_manager.all_reservations[1].room).must_equal "1"
     end
     it "Allows user to reserve an available room for a given date range (ends on the checkin date)" do
       reservation_manager.make_reservation("5th Jan 2019", "6th Jan 2019", room: "1")
       reservation_manager.make_reservation("3rd Jan 2019", "5th Jan 2019", room: "1")
-      expect(reservation_manager.reservation_array[1].room).must_equal "1"
+      expect(reservation_manager.all_reservations[1].room).must_equal "1"
     end
     it "Raises an ArgumentError if the user tries to book a room that is part of a hotel block using the make_reservation method instead of the make_block_reservation method" do
       reservation_manager.hotel_block("2nd Jan 2019", "5th Jan 2019", rooms_array: ["18", "19", "20"], cost: 100, block_name: "kitten con")
@@ -73,12 +73,12 @@ describe "ReservationManager class" do
     it "Adds reservations for blocked rooms to reservations_array" do
       reservation_manager.hotel_block("2nd Jan 2020", "5th Jan 2020", rooms_array: ["18", "19", "20"], cost: 100, block_name: "animal convention")
       cat_block_reservation = reservation_manager.make_block_reservation("2nd Jan 2020", "5th Jan 2020", room: "18", cost: 100, block_name: "animal convention")
-      expect (reservation_manager.reservation_array.length).must_equal 1
+      expect (reservation_manager.all_reservations.length).must_equal 1
     end
-    it "Removes rooms from @blocked_reservation_array when a blocked room is booked" do
+    it "Removes rooms from @blocked_reservations when a blocked room is booked" do
       reservation_manager.hotel_block("2nd Jan 2020", "5th Jan 2020", rooms_array: ["18", "19", "20"], cost: 100, block_name: "animal convention")
       cat_block_reservation = reservation_manager.make_block_reservation("2nd Jan 2020", "5th Jan 2020", room: "20", cost: 100, block_name: "animal convention")
-      expect (reservation_manager.blocked_reservation_array.length).must_equal 2
+      expect (reservation_manager.blocked_reservations.length).must_equal 2
     end
   end
 

@@ -4,13 +4,13 @@ require "pry"
 
 module Hotel
   class ReservationManager
-    attr_reader :reservation_array, :rooms, :blocked_reservation_array
+    attr_reader :all_reservations, :rooms, :blocked_reservations
 
     def initialize
       @booked_rooms = []
       @available_rooms = []
-      @reservation_array = []
-      @blocked_reservation_array = []
+      @all_reservations = []
+      @blocked_reservations = []
       @rooms = ("1".."20").to_a
     end
 
@@ -22,28 +22,8 @@ module Hotel
       elsif new_reservation.block_name != nil
         raise ArgumentError, "Use the make_block_reservation method to reserve a room from a block"
       else
-        @reservation_array << new_reservation
+        @all_reservations << new_reservation
       end
-      return new_reservation
-    end
-
-    def make_block_reservation(start_date, end_date, room: "0", cost: 200, block_name: nil)
-      new_reservation = Reservation.new(start_date, end_date, room: room, cost: cost, block_name: block_name)
-
-      @blocked_reservation_array.each do |blocked_res|
-        if blocked_res.reservation_dates != new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
-          raise ArgumentError, "You must reserve a blocked hotel room for its entire duration"
-        end
-      end
-
-      @reservation_array << new_reservation
-
-      @blocked_reservation_array.each do |blocked_res|
-        if blocked_res.room == new_reservation.room
-          @blocked_reservation_array.delete(blocked_res)
-        end
-      end
-
       return new_reservation
     end
 
@@ -56,7 +36,7 @@ module Hotel
       duration = (Date.parse(start_date)..Date.parse(end_date)).to_a
 
       rooms_array.each do |room|
-        @reservation_array.each do |reservation|
+        @all_reservations.each do |reservation|
           reservation.reservation_dates[0..-2].each do |date|
             if duration[0..-2].include?(date) && reservation.room.include?(room)
               raise ArgumentError, "A room in your desired block is booked during that time period"
@@ -64,7 +44,7 @@ module Hotel
           end
         end
 
-        @blocked_reservation_array.each do |blocked_reservation|
+        @blocked_reservations.each do |blocked_reservation|
           blocked_reservation.reservation_dates[0..-2].each do |date|
             if duration[0..-2].include?(date) && blocked_reservation.room.include?(room)
               raise ArgumentError, "There is already a block on that date or room during your block duration."
@@ -76,17 +56,37 @@ module Hotel
       rooms_array.each do |block_room|
         block_reservation = Reservation.new(start_date, end_date, room: block_room, cost: cost, block_name: block_name)
 
-        @blocked_reservation_array << block_reservation
+        @blocked_reservations << block_reservation
       end
 
-      return blocked_reservation_array
+      return blocked_reservations
+    end
+
+    def make_block_reservation(start_date, end_date, room: "0", cost: 200, block_name: nil)
+      new_reservation = Reservation.new(start_date, end_date, room: room, cost: cost, block_name: block_name)
+
+      @blocked_reservations.each do |blocked_res|
+        if blocked_res.reservation_dates != new_reservation.reservation_dates && blocked_res.block_name == new_reservation.block_name
+          raise ArgumentError, "You must reserve a blocked hotel room for its entire duration"
+        end
+      end
+
+      @all_reservations << new_reservation
+
+      @blocked_reservations.each do |blocked_res|
+        if blocked_res.room == new_reservation.room
+          @blocked_reservations.delete(blocked_res)
+        end
+      end
+
+      return new_reservation
     end
 
     def view_block_availability(block_name_input)
       specific_block_array = []
 
-      @blocked_reservation_array.each do |blocked_res|
-        if blocked_res.block_name == block_name_input && !@reservation_array.include?(blocked_res)
+      @blocked_reservations.each do |blocked_res|
+        if blocked_res.block_name == block_name_input && !@all_reservations.include?(blocked_res)
           specific_block_array << blocked_res
         end
       end
@@ -100,7 +100,7 @@ module Hotel
     def access_reservations_by_date(date)
       parsed_date = Date.parse(date)
       reservations_matching_date = []
-      @reservation_array.each do |reservation|
+      @all_reservations.each do |reservation|
         if reservation.reservation_dates.include?(parsed_date)
           reservations_matching_date << reservation
         end
@@ -114,7 +114,7 @@ module Hotel
       date_range = (start_date..end_date).to_a
 
       date_range[0..-2].each do |date|
-        @reservation_array.each do |reservation|
+        @all_reservations.each do |reservation|
           if reservation.reservation_dates[0..-2].include?(date)
             @booked_rooms << reservation.room
           end
