@@ -106,10 +106,9 @@ describe 'Reservations Manager class' do
     it 'checks for multiple rooms reserved on provided dates' do
       front_desk.make_reservation(1, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
       front_desk.make_reservation(2, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
-      front_desk.make_reservation(3, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
 
       front_desk.list_of_reservations(Date.parse('2019-03-10'), Date.parse('2019-03-13')).must_be_instance_of Array
-      front_desk.list_of_reservations(Date.parse('2019-03-10'), Date.parse('2019-03-13')).count.must_equal 3
+      front_desk.list_of_reservations(Date.parse('2019-03-10'), Date.parse('2019-03-13')).count.must_equal 2
     end
   end
 
@@ -117,10 +116,10 @@ describe 'Reservations Manager class' do
     it 'can return a list of rooms available for given dates' do
       front_desk.make_reservation(1, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
       front_desk.make_reservation(2, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
-      front_desk.make_reservation(3, Date.parse('2019-03-10'), Date.parse('2019-03-13'))
+
 
       front_desk.list_of_available_rooms(Date.parse('2019-03-10'), Date.parse('2019-03-13')).must_be_instance_of Array
-      front_desk.list_of_available_rooms(Date.parse('2019-03-10'), Date.parse('2019-03-13')).count.must_equal 17
+      front_desk.list_of_available_rooms(Date.parse('2019-03-10'), Date.parse('2019-03-13')).count.must_equal 18
     end
 
     it 'returns all rooms when nothing is reserved' do
@@ -128,12 +127,13 @@ describe 'Reservations Manager class' do
       all_reserved.count.must_equal 20
       all_reserved.map(&:room_number).must_equal (1..20).to_a
     end
-  end
 
   it 'returns empty when all rooms are reserved' do
     20.times do |number|
-      front_desk.make_reservation(number + 1, Date.parse('2019-04-10'), Date.parse('2019-04-15'))
+      front_desk.make_reservation(number + 1 , Date.parse('2019-05-10'), Date.parse('2019-05-15'))
     end
-    front_desk.list_of_available_rooms(Date.parse('2019-04-10'), Date.parse('2019-04-15')).must_be_empty
+    front_desk.list_of_available_rooms(Date.parse('2019-05-10'), Date.parse('2019-05-15')).must_be_empty
   end
 end
+end
+

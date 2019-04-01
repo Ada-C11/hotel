@@ -1,4 +1,8 @@
-require 'date'
+ Practice to keep track of thoughts 
+ - First I wanted to do a date-management kind of class, then thoughts
+ changed (it seemed more complicated while writing the code)
+ - From feedback going to implement few changes, maybe room class
+ is not longer needed 
+ - to resolve the blocking could create another class
+ - could also do StandardError inheritance 
  
-module Hotel 
-class Reservations 

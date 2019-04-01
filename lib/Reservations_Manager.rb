@@ -2,7 +2,7 @@ require 'date'
 require 'pry'
 require_relative 'rooms_manager'
 require_relative 'reservations_child'
-require_relative 'booking_manager'
+#require_relative 'booking_manager'
 
 module Hotel
   class ReservationsManager
@@ -11,14 +11,14 @@ module Hotel
     def initialize
       @rooms = load_rooms
       @reservations = {}
-      @reservation_id = (1..300).to_a
+      @reservation_id = [1..500]
       @occupied = {}
     end
 
     def load_rooms
       rooms = {}
-      (1..20).each do |room_number, price_per_night|
-        rooms[room_number] = Hotel::Room.new(room_number, price_per_night)
+      (1..20).each do |room_number|
+        rooms[room_number] = Hotel::Room.new(room_number, 200)
       end
       rooms
     end
