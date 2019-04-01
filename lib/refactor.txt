@@ -1,0 +1,10 @@
+1. need to add a reservation class that will take responsibility over making reservations
+- want to keep hotel_ledger tracking all reservations (date conflicts, availability)
+- will need to add reservation block method to this class
+
+2. need to figure out reservation blocks, maybe with user name? to access these blocks.
+- be able to reserve from these blocks
+- validate dates, calculate total
+
+3. add a room class?
+- for future if room prices change depending on room number or room numbers increase to greater than 20
