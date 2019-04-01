@@ -10,6 +10,9 @@ module Hotel
       @checkin = checkin
       @checkout = checkout
       @dates = Hotel::Reservation.reservation_dates(checkin, checkout)
+      if rooms.length > 5
+        raise BlockBookingError, 'Blocks cannot have more than 5 rooms'
+      end
       rooms.each do |room|
         unless room.available_for_block?(checkin, checkout)
           raise BlockBookingError, 'Cannot reserve block, one or more rooms are unavailable'
