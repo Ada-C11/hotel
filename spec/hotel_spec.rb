@@ -23,10 +23,12 @@ describe Hotel do
     before do
       start_date1 = Date.new(2018, 3, 5)
       end_date1 = start_date1 + 3
-      @reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      room = 3
+      @reservation1 = @hotel.make_reservation(room,start_date1, end_date1)
       start_date2 = Date.new(2018, 3, 5)
       end_date2 = start_date2 + 3
-      @reservation2 = @hotel.make_reservation(start_date2, end_date2)
+      room = 4
+      @reservation2 = @hotel.make_reservation(room, start_date2, end_date2)
     end
     it "can make a new reservation for given dates" do
       expect(@reservation1).must_be_instance_of Reservation
@@ -34,25 +36,22 @@ describe Hotel do
     it "adds the reservation to the array of reservatios in hotel" do
       expect(@hotel.reservations.length).must_equal 2
     end
-    it "adds the reservation to the array of reservation for the room" do
-      room = @reservation1.room
-      expect(room.reservations.length).must_equal 1
-      expect(room.reservations[0]).must_be_instance_of Reservation
-      expect(room.reservations[0].id).must_be_kind_of Integer
-      expect(room.reservations[0].room.price).must_equal 200
-    end
+
   end
   describe "load_reservation" do
     before do
       start_date1 = Date.new(2018, 3, 5)
       end_date1 = start_date1 + 3
-      @hotel.make_reservation(start_date1, end_date1)
+      room = 5
+      @hotel.make_reservation(room, start_date1, end_date1)
       start_date2 = Date.new(2018, 3, 4)
       end_date2 = start_date2 + 4
-      @hotel.make_reservation(start_date2, end_date2)
+      room = 4 
+      @hotel.make_reservation(room, start_date2, end_date2)
       start_date3 = Date.new(2018, 3, 5)
       end_date3 = start_date3 + 1
-      @hotel.make_reservation(start_date3, end_date3)
+      room = 6
+      @hotel.make_reservation(room, start_date3, end_date3)
     end
     it "return an array of reservationd that have that date" do
       reservations = @hotel.load_reservation(Date.new(2018, 3, 4))
@@ -71,13 +70,15 @@ describe Hotel do
     it "load all the rooms that have no reservations" do
       start_date1 = Date.new(2018, 3, 5)
       end_date1 = start_date1 + 3
-      reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      room = 4
+      reservation1 = @hotel.make_reservation(room, start_date1, end_date1)
       expect(@hotel.free_rooms).must_be_kind_of Array
       expect(@hotel.free_rooms.length).must_equal 19
 
       start_date2 = Date.new(2018, 3, 5)
       end_date2 = start_date2 + 3
-      reservation2 = @hotel.make_reservation(start_date2, end_date2)
+      room = 5
+      reservation2 = @hotel.make_reservation(room, start_date2, end_date2)
       expect(@hotel.free_rooms.length).must_equal 18
     end
   end
@@ -86,13 +87,16 @@ describe Hotel do
     before do
       start_date1 = Date.new(2018, 3, 5)
       end_date1 = start_date1 + 3
-      @reservation1 = @hotel.make_reservation(start_date1, end_date1)
+      room = 3
+      @reservation1 = @hotel.make_reservation(room, start_date1, end_date1)
       start_date2 = Date.new(2018, 3, 5)
       end_date2 = start_date2 + 3
-      @reservation2 = @hotel.make_reservation(start_date2, end_date2)
+      room = 4
+      @reservation2 = @hotel.make_reservation(room, start_date2, end_date2)
       start_date3 = Date.new(2018, 3, 5)
       end_date3 = start_date3 + 3
-      @reservation3 = @hotel.make_reservation(start_date3, end_date3)
+      room = 5
+      @reservation3 = @hotel.make_reservation(room, start_date3, end_date3)
     end
     it "return an array of all the available rooms" do
       start_date = Date.new(2018, 3, 7)
@@ -129,22 +133,22 @@ describe Hotel do
     end
   end
 
-  describe "make block" do
-    before do
-      start_date1 = Date.new(2018, 3, 5)
-      end_date1 = start_date1 + 3
-      rooms = [1, 2, 3, 4, 5]
+  # describe "make block" do
+  #   before do
+  #     start_date1 = Date.new(2018, 3, 5)
+  #     end_date1 = start_date1 + 3
+  #     rooms = [1, 2, 3, 4, 5]
 
-      @block1 = @hotel.make_block(rooms, start_date1, end_date1)
-    end
-    it "makes a new block with the given dates and the date range" do
-      expect(@block1).must_be_instance_of Block
-    end
-    it "adds the block to the blocks array of the hotel" do
-      expect(@hotel.blocks).must_be_kind_of Array
-      expect(@hotel.blocks.length).must_equal 1
-      expect(@hotel.blocks[0].rooms.length).must_equal 5
-      expect(@hotel.blocks[1]).must_equal nil
-    end
-  end
+  #     @block1 = @hotel.make_block(rooms, start_date1, end_date1)
+  #   end
+  #   it "makes a new block with the given dates and the date range" do
+  #     expect(@block1).must_be_instance_of Block
+  #   end
+  #   it "adds the block to the blocks array of the hotel" do
+  #     expect(@hotel.blocks).must_be_kind_of Array
+  #     expect(@hotel.blocks.length).must_equal 1
+  #     expect(@hotel.blocks[0].rooms.length).must_equal 5
+  #     expect(@hotel.blocks[1]).must_equal nil
+  #   end
+  # end
 end

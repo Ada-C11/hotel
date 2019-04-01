@@ -4,9 +4,9 @@ describe "Reservation class" do
   before do
     start_date = Date.new(2018, 3, 5)
     end_date = start_date + 3
-    id = 8
     room = 10
-    @reservation = Reservation.new(id, room, start_date, end_date)
+    rate = 200
+    @reservation = Reservation.new(room, start_date, end_date, rate)
   end
   describe "initialize" do
     it "is an instance of reservation" do
@@ -15,11 +15,11 @@ describe "Reservation class" do
     it "raise an ArgumentError if end_date is before start_date" do
       start_date = Date.new(2018, 5, 20)
       end_date = start_date - 3
-      id = 8
       room = 10
+      rate = 200
       expect {
-        Reservation.new(id, room, start_date, end_date)
-      }.must_raise ArgumentError
+        Reservation.new(room, start_date, end_date, rate)
+      }.must_raise InvelidDateRange
     end
   end
   it "has an array of dates that include in that reservation" do
@@ -29,6 +29,6 @@ describe "Reservation class" do
     expect(@reservation.dates.length).must_equal 3
   end
   it "calculate the cost of reservation" do
-    expect(@reservation.cost).must_equal 400
+    expect(@reservation.price).must_equal 400
   end
 end

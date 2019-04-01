@@ -3,30 +3,28 @@ require_relative "room"
 require_relative "hotel_block"
 
 class Hotel
-  attr_reader :name, :rooms, :reservations, :blocks
+  class AlreadyReservedError < StandardError; end
+
+  attr_reader :rooms, :reservations, :room_rate
 
   def initialize
     @name = name
     @reservations = []
     @blocks = []
-    @rooms = []
-    id = 1
-    20.times do
-      room = Room.new(id)
-      @rooms << room
-      id += 1
-    end
+    @rooms = (1..20).to_a
+    @room_rate = 200
+ 
   end
 
-  def make_reservation(start_date, end_date)
-    id = @reservations.length + 1
-    if load_availables(start_date, end_date).length == 0
-      raise ArgumentError, "all the rooms are booked for this date range"
+  def make_reservation(room,start_date, end_date)
+    unless @rooms.include? room
+      raise ArgumentError, "No such room #{room}"
     end
-    room = load_availables(start_date, end_date).sample
-    reservation = Reservation.new(id, room, start_date, end_date)
+    unless load_availables(start_date, end_date).include? room
+      raise ArgumentError, "Room #{room} is not available during this time"
+    end
+    reservation = Reservation.new(room, start_date, end_date, @room_rate)
     @reservations.push(reservation)
-    room.reservations.push(reservation)
     return reservation
   end
 
@@ -45,29 +43,40 @@ class Hotel
     return @rooms - reserved.uniq
   end
 
-  def load_availables(start_date, end_date)
-    available_rooms = []
-    all_available = []
-    @reservations.each do |reservation|
-      if start_date >= reservation.dates.last || end_date <= reservation.dates.first
-        available_rooms << reservation.room
-      end
-    end
-    all_available = (available_rooms + free_rooms).uniq
-    return all_available
-  end
-
-  def self.load_rooms
-    return @rooms
-  end
+  # def load_availables(start_date, end_date)
+  #   available_rooms = []
+  #   all_available = []
+  #   @reservations.each do |reservation|
+  #     if start_date >= reservation.dates.last || end_date <= reservation.dates.first
+  #       available_rooms << reservation.room
+  #     end
+  #   end
+  #   all_available = (available_rooms + free_rooms).uniq
+  #   return all_available
+  # end
 
   def load_reservation(date)
-    all_reservations = []
-    @reservations.each do |reservation|
-      if reservation.dates.include?(date)
-        all_reservations.push(reservation)
-      end
-    end
-    return all_reservations
+  @reservations.select { |res| res.contains(date) }
   end
+  def build_block(num_rooms, start_date, end_date, rate)
+    rooms = available_rooms(start_date, end_date)
+    if rooms.length < num_rooms
+      raise AlreadyReservedError("Not enough rooms available")
+    end
+
+    block = Block.new(rooms.first(num_rooms), start_date, end_date, rate)
+    @blocks << block
+    return block
+  end
+  def reserve_from_block(block)
+    room = block.reserve_room
+    reservation = Reservation.new(room, block.start_date, block.end_date, block.room_rate)
+    return reservation
+  end
+
+
+
+
+
+
 end

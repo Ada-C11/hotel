@@ -3,18 +3,20 @@ require_relative "room"
 require "date"
 
 class Reservation
-  attr_reader :id, :room, :start_date, :end_date, :dates, :cost
+  class InvalidDateRange < StandardError ; end
 
-  def initialize(id, room, start_date, end_date)
-    @id = id
+  attr_reader :room, :rate, :start_date, :end_date, :dates
+
+  def initialize(room, start_date, end_date, rate)
     @start_date = start_date
     @end_date = end_date
     @room = room
-    if @start_date > @end_date
-      raise ArgumentError, "start_date must be before end_date"
-    end
     @dates = date_range
-    @cost = ((@dates.length) - 1) * 200
+    unless end_date > start_date
+      raise InvalidDateRange.new("Invalid dates #{@start_date} to #{@end_date}")
+    end
+
+    @rate = rate
   end
 
   def date_range
@@ -27,5 +29,8 @@ class Reservation
       i += 1
     end
     return dates
+  end
+  def price
+    return (date_range.length - 1) * @rate
   end
 end
