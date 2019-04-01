@@ -30,7 +30,7 @@ module Hotel
         reservations.each do |res|
           if Reservation.res_include_date(res, date)
             this_rooms_reservations = [room]
-            this_rooms_reservations << Reservation.date_range_as_strings(res)
+            this_rooms_reservations << Reservation.date_range_string(res)
           end
           res_on_date << this_rooms_reservations unless this_rooms_reservations == nil
         end

@@ -29,7 +29,7 @@ module Hotel
     def self.res_include_date(res, date)
       res.date_range_string_array.include? (date.to_s)
     end
-    def self.date_range_as_strings(res)
+    def self.date_range_string(res)
       (res.date_range_string_array.first + " through " + res.date_range_string_array.last)
     end
 
