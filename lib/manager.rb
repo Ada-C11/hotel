@@ -28,9 +28,9 @@ module Hotel
       res_on_date = []
       @rooms_reservations_hash.each do |room, reservations|
         reservations.each do |res|
-          if res.date_range_string_array.include? (date.to_s)
+          if Reservation.res_include_date(res, date)
             this_rooms_reservations = [room]
-            this_rooms_reservations << (res.date_range_string_array.first + " through " + res.date_range_string_array.last)
+            this_rooms_reservations << Reservation.date_range_as_strings(res)
           end
           res_on_date << this_rooms_reservations unless this_rooms_reservations == nil
         end
@@ -46,7 +46,7 @@ module Hotel
 
       res_array_to_check = @rooms_reservations_hash[room_num]
 
-      Reservation.ck_date_conflicts(res_array_to_check, ckin, ckout)
+      Reservation.ck_dates_are_available(res_array_to_check, ckin, ckout)
     end
 
     def find_avail_rooms_for_dates(ckin, ckout)

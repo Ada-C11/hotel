@@ -77,7 +77,7 @@ describe "Manager Spec" do
       check_in = Date.new(2019, 6, 12)
       check_out = Date.new(2019, 6, 18)
       room = 1
-      res = this_manager.make_res_for_room(check_in, check_out, room)
+      this_manager.make_res_for_room(check_in, check_out, room)
       expect(this_manager.rooms_reservations_hash[1][0].base_cost).must_equal 1200
       #   p this_manager.rooms_reservations_hash
       #   binding.pry
