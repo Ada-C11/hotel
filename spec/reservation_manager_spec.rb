@@ -35,7 +35,6 @@ describe "manager" do
 
   describe "make_reservation method" do
     it "can make a new reservation" do
-      reservation1
       expect(reservation1.length).must_equal 1
       expect(reservation1[0].status).must_equal "reserved"
     end
@@ -51,6 +50,7 @@ describe "manager" do
 
   describe "reservations_by_date method" do
     it "can list all the reservations for a specified date range" do
+      #clarify dee's comments about writing these reservations out or using a helper method
       reservation1
       reservation2
       start_date = "march 14, 2019"
