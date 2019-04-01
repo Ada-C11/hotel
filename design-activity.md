@@ -28,3 +28,6 @@ Implementation B better adheres to the single responsibility principle as its cl
 
 -Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 Implementation B is more loosely coupled. 
+
+Hotel Activity
+My block class modifies the room_rate attribute of the room class. Thinking about my class data and methods further, I have realized that having a Room class is not necessary. Only method my Room class has is to list itself. In addition having a room class instance in my HotelManager class makes the methods more complicated. By removing the Room class, I can simplify my HotelManager class methods. I would also need to move some block and reservation methods to its respective classes so a class consists of both behavior and state. 
