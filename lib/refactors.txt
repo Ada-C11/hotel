@@ -1,0 +1,7 @@
+In that file, make a short list of the changes that you could make, such as naming conventions, etc.
+These notes will be used by you in a few weeks, so make sure that they are detailed enough that someone else could understand your thinking and follow your directions
+Commit and push this file to your project repo
+
+I would refactor and dry my code.
+I would make a clearer relationship between classes (especially Reservations and Block)
+I would better the function of my Block class.
