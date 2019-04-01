@@ -45,24 +45,6 @@ describe "Booker" do
     end
   end
 
-  describe "Booker#calculate_cost_of_booking" do
-    it "returns a float" do
-      expect(booker.calculate_cost_of_booking(reservation: @pend_reservation, room: @room)).must_be_instance_of Float
-    end
-
-    it "calculates the cost of booking correctly" do
-      expect(booker.calculate_cost_of_booking(reservation: @pend_reservation, room: @room)).must_equal 1600.0
-      pend_reservation = Hotel::Reservation.new(check_in: Time.new.to_date, check_out: Time.new.to_date + 2)
-      expect(booker.calculate_cost_of_booking(reservation: pend_reservation, room: @room)).must_equal 400.0
-    end
-  end
-
-  describe "Booker#get_cost_of_booking" do
-    it "returns cost of booking from reservation object" do
-      expect(booker.get_cost_of_booking(reservation: @reservation)).must_equal 1600.0
-    end
-  end
-
   let(:valid_block) {
     Hotel::Block.new(check_in: Date.parse("March 20, 2020"), check_out: Date.parse("March 27, 2020"), percent_discount: 15)
   }

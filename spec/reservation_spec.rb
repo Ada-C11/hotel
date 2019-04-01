@@ -23,8 +23,7 @@ describe "Reservation class" do
 
     it "instance variable cost is correct" do
       expect(valid_reservation).must_respond_to :cost
-      valid_reservation.cost = 100.0
-      expect(valid_reservation.cost).must_equal 100.0
+      expect(valid_reservation.cost).must_equal 1400
     end
 
     it "will raise exception if invalid date range used" do
