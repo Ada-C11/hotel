@@ -1,4 +1,5 @@
 require 'date'
+require 'pry'
 
 module Hotel
   class ReservationManager
@@ -47,23 +48,24 @@ module Hotel
     # check date overlaps for blocks
       @block_reservations.each do |block|
         if block.date_range.dates_overlap?(check_in, check_out)
-          booked_rooms << block.room
+          booked_rooms << reservation.room
         end
       end
-      # available frooms minus already booked rooms
+      # available rooms minus already booked rooms
       return hotel_rooms - booked_rooms
     end
 
     # block reservation methods
+  
     def make_block_res(rooms, date_range, cost = 100)
       hotel_block = Hotel::HotelBlock.new(rooms, date_range, cost)
       @block_reservations << hotel_block
       return hotel_block
     end
-
+    
     def find_block_by_date(date_range)
-      block_match = @block_reservations.find do |hotel_block|
-        hotel_block.block_date_check(date_range)
+      block_match = @block_reservations.find do |block|
+        block.block_date_check(date_range)
       end
       return block_match
     end

@@ -112,17 +112,21 @@ describe "Reservation Manager" do
       booked_blocks = @frontdesk.block_reservations.length
       @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
 
+      @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
       new_block_res = @frontdesk.block_reservations.length - booked_blocks
 
-      expect(new_block_res).must_equal(1)
+      expect(new_block_res).must_equal(2)
     end
   end
 
   describe "book block reservation" do 
-    it "returns a hotel block object" do
-      @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,11), Date.new(2019,3,18)))
-    end
+    it "returns an instance of a reservation"  do
+      @frontdesk.make_block_res([*1..5], Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,19)))
 
+      block_reservation = @frontdesk.reserve_block(5, Hotel::DateRange.new(Date.new(2019,3,5), Date.new(2019,3,10)))
+
+      expect(block_reservation).must_be_instance_of(Hotel::Reservation)
+    end
   end
 
 end

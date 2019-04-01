@@ -36,7 +36,7 @@ Does total_price directly manipulate the instance variables of other classes?
     - In implementation A logic to determine price is retained in Order. In implementation B that logic is delegated to ShoppingCart. Implementation A's total_price method manipulates the @entries array that holds instances of entry.
 
 If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
-    -
+    - The code already accounts for unit price and quantity,so all that would need to change is the unit price fro bulk items. Implementation A would be easier to change.
 
 
 Which implementation better adheres to the single responsibility principle?
