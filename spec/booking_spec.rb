@@ -200,4 +200,13 @@ describe "Booking" do
       expect(@booking.reservations.length).must_equal 1
     end
   end
+
+  describe "reserve_from_block" do
+    it "makes a reservation for a specific room set aside in a block" do
+      @rooms = @booking.get_rooms("April 10, 2020", "April 15, 2020", 3)
+      block = @booking.create_block("April 10, 2020", "April 15, 2020", @rooms, 175)
+      reservation = @booking.reserve_from_block(block, 1)
+      expect(@booking.reservations.first).must_equal reservation
+    end
+  end
 end

@@ -72,6 +72,17 @@ module Hotel
       rooms.each do |room|
         room.add_block(new_block)
       end
+      return new_block
+    end
+
+    def reserve_from_block(block, room_num)
+      room = find_room(room_num)
+      if block.rooms_available.include? room
+        reservation = Hotel::Reservation.new(checkin: block.checkin, checkout: block.checkout, room: room)
+        @reservations << reservation
+        room.add_reservation(reservation)
+        return reservation
+      end
     end
   end
 end
