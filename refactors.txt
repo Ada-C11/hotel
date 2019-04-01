@@ -1,0 +1,5 @@
+Having list_all_rooms method in the Room class might restrict hotel instances with different number of rooms. 
+Need to create a helper class for hotel_dispatcher helper methods such as list_reserved_rooms, list_block_rooms, and list_block_reserved_rooms. 
+Replace each methods with map and other enumerable methods, so the code looks cleaner. 
+Rename some variables and method names to make it easier to understand. 
+Use let in spec files to DRY the test. 
