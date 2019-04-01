@@ -29,3 +29,29 @@ A. Implemenation B better adheres to the single responsibility principle.
 Q. Which implementation is more loosely coupled?
 A.  Implemenation B is more loosely coupled.  It asks "what" rather than "how."
 
+Revisiting Hotel
+Q. What is this class's responsibility?
+A. Room is in charge of knowing room number and cost per night; it is able to create a set of rooms.  Reservation keeps track of individual reservations; it can calculate the cost for a specific date and it can parse_dates and validate_dates.  Block keeps track of variables related to a block and can check if a block has available rooms and book a room from the block.  HotelManager keeps track of the rooms, reservations, and blocks within a specific hotel.
+
+Q. Is this class responsible for exactly one thing?
+A. I think for the most part, my classes are responsible for one thing.  The exception is that this is room for improvement in making sure that my HotelManager class is not doing too much, particularly in reference to Reservation and block.
+
+Q. Does this class take on any responsibility that should be delegated to "lower level" classes?
+A. I can update the list_reservations_by_date and list_available_rooms methods in HotelManager so that HotelManager is not using Reservation/Block details.
+
+Q. Is there code in other classes that directly manipulates this class's instance variables?
+A. As above.
+
+Refactor.txt
+Q. How easy is it to follow your own instructions?
+A. I think that my instructions are clear enough that I understand what I meant by them.
+
+Q. Do these refactors improve the clarity of your code?
+A. I think that some of these changes would improve the clarity of my code.  Some of my changes, however, deal more with completeness than clarity.
+
+Q. Do you still agree with your previous assessment, or could your refactor be further improved?
+A. I think my suggestions were good ones.  However, after completing this exercise, I think that my refactors.txt missed some important changes that would improve my code by making it follow SRP better.  For example, I think that updating HotelManager is an important change that I did not initially think of.
+
+Activity
+Q. Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+A. I think as described above, I can update HotelManager so that it does not access Reservation and Block start_date and end_date in the ist_reservations_by_date and list_available_rooms methods.  I think by instead having methods in reservation and block that can check if a particular date is overlapping the given date, I can move from asking how to what.
