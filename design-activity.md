@@ -30,3 +30,9 @@
 
     Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
     A) implementationB
+
+    Activity
+
+    Q) Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+
+    A) i don't see where my code has classes that either take on multiple roles or directly modifies the attributes of another class. I could try and make a class for date ranges to work on my date system but I don't think that would provide much benefit in this case.
