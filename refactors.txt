@@ -1,7 +1,10 @@
 Refactor hotel.rb
     1) Create custom exception for invalid reservations.
+        HotelError added
     2) Consider using .map instead of .each for the "list_reservations_by_date_range" method.
-    3) Use module as a namespace for standardError 
+        Didn't use .map, but used .select instead
+    3) Use module as a namespace 
+        Added namespace 
 
 
 Refactor hotel_spec.rb
@@ -10,6 +13,8 @@ Refactor hotel_spec.rb
 
 Refactor reservation.rb
     1) Find a way to remove "nights = nights.to_i" line.
+        Removed
     2) Find a way to remove "total_cost = nights * @rate" line.
+        This is not needed
 
 
