@@ -1,0 +1,13 @@
+1. naming conventions in method signatures:
+  not consistent between keyword and positional 
+
+2. Lots of method references to other methods, method chaining?
+  not sure how to fix it while maintaining dry code? 
+
+3. Better variables names in testing files.
+  improve layout, refactor so that less code is repeating.
+
+4. Consider pulling out a date_validation module from Unavailable class. 
+
+
+
