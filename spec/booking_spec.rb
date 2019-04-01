@@ -101,6 +101,13 @@ describe "Booking" do
       expect(@booking.blocks.first).must_be_kind_of Hotel::Block
       expect(@booking.blocks.first.rooms.length).must_equal 3
     end
+
+    it "Raises an error when creating a block if at least one of the rooms is already in a block during the date range" do
+      @booking.create_block("April 10, 2020", "April 15, 2020", @rooms, 150)
+      expect {
+        @booking.create_block("April 10, 2020", "April 15, 2020", @rooms, 150)
+      }.must_raise Hotel::Block::BlockBookingError
+    end
   end
 
   describe "further availability checks" do

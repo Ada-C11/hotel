@@ -18,13 +18,18 @@ module Hotel
       @blocks << block
     end
 
-    def is_available?(checkin, checkout)
+    def available_for_res?(checkin, checkout)
       dates = Hotel::Reservation.reservation_dates(checkin, checkout)
       @reservations.each do |res|
         dates.each do |date|
           return false if res.includes_date?(date)
         end
       end
+      return true
+    end
+
+    def available_for_block?(checkin, checkout)
+      dates = Hotel::Reservation.reservation_dates(checkin, checkout)
       @blocks.each do |block|
         dates.each do |date|
           return false if block.includes_date?(date)

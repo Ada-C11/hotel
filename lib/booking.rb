@@ -34,7 +34,7 @@ module Hotel
     def check_availability(checkin, checkout, room = nil)
       unless room == nil
         room_obj = find_room(room)
-        if room_obj.is_available?(checkin, checkout)
+        if room_obj.available_for_res?(checkin, checkout) && room_obj.available_for_block?(checkin, checkout)
           return room_obj
         else
           raise UnavailableRoomError, 'That room is not available for those dates'
@@ -43,7 +43,7 @@ module Hotel
       
       avail_rooms = []
       @rooms.each do |room|
-        if room.is_available?(checkin, checkout)
+        if room.available_for_res?(checkin, checkout) && room.available_for_block?(checkin, checkout)
           avail_rooms << room
         end
       end

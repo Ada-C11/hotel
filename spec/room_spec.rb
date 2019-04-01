@@ -31,18 +31,18 @@ describe "Room" do
     end
   end
 
-  describe "is_available?" do
+  describe "available_for_res?" do
     it "Returns true if the room is available during the given date range" do
       # No reservations made yet for this room
       expect(@room.reservations).must_equal []
-      check = @room.is_available?("May 10, 2020", "May 15, 2020")
+      check = @room.available_for_res?("May 10, 2020", "May 15, 2020")
       expect(check).must_equal true
     end
 
     it "Returns false if the room is not available during the given date range" do
       reservation = Hotel::Reservation.new(checkin: "April 10, 2020", checkout: "April 15, 2020", room: @room)
       @room.add_reservation(reservation)
-      check = @room.is_available?("April 11, 2020", "April 13, 2020")
+      check = @room.available_for_res?("April 11, 2020", "April 13, 2020")
       expect(check).must_equal false
     end
   end
