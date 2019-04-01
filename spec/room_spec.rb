@@ -21,8 +21,11 @@ describe "Room" do
 
   describe "add_block" do
     it "Adds the block to @block" do
+      booking = Hotel::Booking.new
+      booking.rooms = Hotel::Room.list_rooms(1, 20, 200)
+      rooms = booking.get_rooms("April 10, 2020", "April 15, 2020", 3)
       expect(@room.blocks).must_equal []
-      block = Hotel::Block.new("April 10, 2020", "April 15, 2020", 3, 175)
+      block = Hotel::Block.new("April 10, 2020", "April 15, 2020", rooms, 175)
       @room.add_block(block)
       expect(@room.blocks.length).must_equal 1
     end

@@ -58,15 +58,18 @@ module Hotel
       return @reservations.select { |res| res.includes_date?(date) }
     end
 
-    def create_block(checkin, checkout, num_rooms, discounted_rate)
+    def get_rooms(checkin, checkout, num_rooms)
       rooms = check_availability(checkin, checkout)
-      block_rooms = rooms[0...num_rooms]
       if rooms.length < num_rooms
         raise UnavailableRoomError, 'There are not enough rooms available for those dates'
       end
-      new_block = Hotel::Block.new(checkin, checkout, block_rooms, discounted_rate)
+      return rooms[0...num_rooms]
+    end
+
+    def create_block(checkin, checkout, rooms, discounted_rate)
+      new_block = Hotel::Block.new(checkin, checkout, rooms, discounted_rate)
       @blocks << new_block
-      block_rooms.each do |room|
+      rooms.each do |room|
         room.add_block(new_block)
       end
     end
