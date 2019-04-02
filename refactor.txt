@@ -1,0 +1,4 @@
+1. Clearer and less repetitive variable names - ex. reservation1, reservation2 for tests
+2. Classes are tightly coupled, causing difficulty when one thing changes, everything collapses. Ex. available_on_these_dates? issues
+3. More edge cases for tests
+4. DRY code in general
