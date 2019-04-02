@@ -31,8 +31,8 @@ module Hotel
         end
 
        end
-      
-    end 
+       
+    end  
        
   
 end      
