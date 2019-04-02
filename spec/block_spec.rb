@@ -3,7 +3,7 @@ require_relative "spec_helper"
 describe "Block class" do
   describe "initialize method" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, start_date: "01 Feb 2020",
@@ -38,7 +38,7 @@ describe "Block class" do
       expect(@block.date_range).must_be_instance_of HotelSystem::DateRange
     end
     it "will apply the discount to reservations made from it" do
-      new_res = @hotel.reserve_from_block(@block.id, 1)
+      new_res = @hotel.reserve_from_block(block_id: @block.id, room_id: 1)
       expect(new_res.rate).must_equal @block.discount_rate
     end
     it "will add the block to each room's collection of blocks" do
@@ -49,7 +49,7 @@ describe "Block class" do
     it "can check whether it has any rooms available" do
       expect(@block.has_available_rooms?).must_equal true
       (1..3).each do |id|
-        @hotel.reserve_from_block(@block.id, id)
+        @hotel.reserve_from_block(block_id: @block.id, room_id: id)
       end
       expect(@block.has_available_rooms?).must_equal false
     end
@@ -59,7 +59,7 @@ describe "Block class" do
         expect(room).must_be_instance_of HotelSystem::Room
       end
       (1..3).each do |id|
-        @hotel.reserve_from_block(@block.id, id)
+        @hotel.reserve_from_block(block_id: @block.id, room_id: id)
       end
       expect(@block.list_available_rooms.length).must_equal 0
     end
@@ -67,7 +67,7 @@ describe "Block class" do
       expect(@block.all_reservations.length).must_equal 0
 
       (1..3).each do |id|
-        @hotel.reserve_from_block(@block.id, id)
+        @hotel.reserve_from_block(block_id: @block.id, room_id: id)
       end
       expect(@block.all_reservations.length).must_equal 3
       @block.all_reservations.each do |res|

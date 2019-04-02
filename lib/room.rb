@@ -11,7 +11,7 @@ module HotelSystem
     end
 
     # Make collection
-    def self.make_set(amount, rate)
+    def self.make_set(amount:, rate:)
       set = []
       (1..amount).each do |num|
         set << new(id: num, rate: rate)

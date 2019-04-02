@@ -100,7 +100,7 @@ module HotelSystem
       return new_block
     end
 
-    def reserve_from_block(block_id, room_id)
+    def reserve_from_block(block_id:, room_id:)
       room = find_room_by_id(room_id)
       block = find_block_by_id(block_id)
       dates = block.date_range
@@ -141,7 +141,7 @@ module HotelSystem
       return available_rooms
     end
 
-    def set_room_price(room_id, new_rate)
+    def set_room_price(room_id:, new_rate:)
       room = find_room_by_id(room_id)
       room.rate = new_rate
     end
@@ -152,7 +152,7 @@ module HotelSystem
 
     def generate_id
       id = Faker::Alphanumeric.unique.alphanumeric 10
-      return id.upcase
+      return id
     end
 
     def check_room(room:, date_range:, ignore_blocked: false)

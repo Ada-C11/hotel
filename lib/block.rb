@@ -5,8 +5,8 @@ module HotelSystem
     attr_reader :rooms, :date_range, :discount_rate, :reservations, :id
 
     def initialize(rooms:, date_range:, discount_rate:, id:)
-      if rooms.length > 5 || rooms.length < 1
-        raise BlockError, "A block must contain 1 to 5 rooms"
+      if rooms.length > 5 || rooms.length < 2
+        raise BlockError, "A block must contain 2 to 5 rooms"
       end
 
       @id = id

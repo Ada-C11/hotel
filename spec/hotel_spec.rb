@@ -3,7 +3,7 @@ require_relative "spec_helper"
 describe "Hotel class" do
   describe "initialize" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
     end
     it "initializes a Hotel object" do
@@ -27,7 +27,7 @@ describe "Hotel class" do
   end
   describe "find room" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
     end
     it "will find a room when given a number between 1 and 20" do
@@ -39,7 +39,7 @@ describe "Hotel class" do
   end
   describe "make reservation" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
       @start = "01 Feb 2020"
       @end = "08 Feb 2020"
@@ -101,7 +101,7 @@ describe "Hotel class" do
 
   describe "list reservations by date" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_res = @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
       @date = Date.parse("04 Feb 2020")
@@ -122,7 +122,7 @@ describe "Hotel class" do
   end
   describe "list available rooms" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @new_hotel = HotelSystem::Hotel.new(@rooms)
       @new_hotel.make_reservation(room_id: 1, start_date: "01 Feb 2020", end_date: "08 Feb 2020")
       @avail_rooms = @new_hotel.list_available_rooms(date: "04 Feb 2020")
@@ -193,14 +193,14 @@ describe "Hotel class" do
   end
   describe "reserve from block" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
                                                 end_date: "10 Feb 2020",
                                                 discount_rate: 180)
       @room = @block.rooms[0]
-      @block_reservation = @hotel.reserve_from_block(@block.id, 1)
+      @block_reservation = @hotel.reserve_from_block(block_id: @block.id, room_id: 1)
     end
     it "will return a new reservation for a room within the block" do
       expect(@block_reservation).must_be_instance_of HotelSystem::Reservation
@@ -225,19 +225,19 @@ describe "Hotel class" do
 
     it "will raise an exception if reserving a room that is not within the block" do
       expect {
-        @hotel.reserve_from_block(@block.id, 7)
+        @hotel.reserve_from_block(block_id: @block.id, room_id: 7)
       }.must_raise BlockError
     end
 
     it "will raise an exception if reserving a room that is reserved for the date" do
       expect {
-        @hotel.reserve_from_block(@block.id, 1)
+        @hotel.reserve_from_block(block_id: @block.id, room_id: 1)
       }.must_raise ReservationError
     end
   end
   describe "make block" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @hotel = HotelSystem::Hotel.new(@rooms)
       @date_range = HotelSystem::DateRange.new("01 Feb 2020", "10 Feb 2020")
       @new_block = @hotel.make_block(1, 2, 3, 4, 5, start_date: "01 Feb 2020",
@@ -282,11 +282,11 @@ describe "Hotel class" do
 
   describe "set_room_price" do
     before do
-      @rooms = HotelSystem::Room.make_set(20, 200)
+      @rooms = HotelSystem::Room.make_set(amount: 20, rate: 200)
       @hotel = HotelSystem::Hotel.new(@rooms)
     end
     it "will change the price of a room" do
-      @hotel.set_room_price(1, 150)
+      @hotel.set_room_price(room_id: 1, new_rate: 150)
       expect(@rooms.first.rate).must_equal 150
     end
   end
