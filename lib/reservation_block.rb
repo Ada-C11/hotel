@@ -1,11 +1,11 @@
 module Hotel
   class ReservationBlock
-    def initialize(room_numbers:, in_date:, out_date:, discounted_percentage:, all_reservations:)
+    def initialize(room_numbers:, in_date:, out_date:, discounted_percentage:, room_reservations:)
       @room_numbers = room_numbers
       @in_date = in_date
       @out_date = out_date
       @discounted_percentage = discounted_percentage
-      @all_reservations = all_reservations
+      @room_reservations = room_reservations
       is_valid?
     end
 
@@ -26,7 +26,7 @@ module Hotel
     end
 
     def is_valid?
-      @all_reservations.each do |reservation|
+      @room_reservations.each do |reservation|
         next unless block_of_rooms.include?(reservation[:room_number])
         next unless overlaps?(reservation[:in_date], reservation[:out_date])
         raise ArgumentError, "Invalid reservation block"

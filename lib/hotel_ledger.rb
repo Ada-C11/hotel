@@ -1,13 +1,18 @@
 module Hotel
   class HotelLedger
-    attr_reader :all_reservations
+    attr_reader :room_reservations, :block_reservations
 
     def initialize
-      @all_reservations = []
+      @room_reservations = []
+      @block_reservations = []
     end
 
-    def reservations
-      @all_reservations
+    def all_room_reservations
+      @room_reservations
+    end
+
+    def all_block_reservations
+      @block_reservations
     end
 
     def rooms
@@ -15,7 +20,7 @@ module Hotel
     end
 
     def reservations_on(in_date, out_date = nil)
-      reservations.select do |reservation|
+      all_room_reservations.select do |reservation|
         reservation_range = (reservation[:in_date]...reservation[:out_date])
         if !out_date
           reservation_range.include?(in_date)
@@ -33,18 +38,29 @@ module Hotel
       available_rooms = (rooms - reserved_rooms)
     end
 
-    def make_reservation(room_number, in_date, out_date)
+    def make_room_reservation(room_number, in_date, out_date)
       raise ArgumentError, "Check out date is before check in date" if out_date <= in_date
       raise ArgumentError, "Room is unavailable" if reservations_on(in_date, out_date).map do |reservation|
         reservation[:room_number]
       end.include?(room_number)
 
-      reservation = {
+      room_reservation = {
         room_number: room_number,
         in_date: in_date,
         out_date: out_date,
       }
-      @all_reservations << reservation
+      @room_reservations << room_reservation
+    end
+
+    def make_block_reservation(room_numbers, in_date, out_date, discounted_percentage, room_reservations)
+      block_reservation = ReservationBlock.new(
+        room_numbers: room_numbers,
+        in_date: in_date,
+        out_date: out_date,
+        discounted_percentage: discounted_percentage,
+        room_reservations: @room_reservations,
+      )
+      @block_reservations << block_reservation
     end
 
     COST = 200

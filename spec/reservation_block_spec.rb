@@ -14,12 +14,12 @@ describe "Reservation class" do
       in_date: Date.new(2019, 3, 15),
       out_date: Date.new(2019, 3, 17),
       discounted_percentage: 0.20,
-      all_reservations: [{
+      room_reservations: [{
         room_number: 5,
         in_date: Date.new(2019, 4, 15),
         out_date: Date.new(2019, 4, 17),
       },
-                         {
+                          {
         room_number: 6,
         in_date: Date.new(2019, 4, 15),
         out_date: Date.new(2019, 4, 17),

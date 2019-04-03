@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "HotelLedger class" do
   it "must list all the reservations" do
-    reservations = Hotel::HotelLedger.new.reservations
+    reservations = Hotel::HotelLedger.new.all_room_reservations
     expect(reservations).must_equal []
   end
 
@@ -15,14 +15,14 @@ describe "HotelLedger class" do
     dates = [Date.new(2019, 3, 13), Date.new(2019, 3, 15)]
     dates2 = [Date.new(2019, 3, 15), Date.new(2019, 3, 17)]
     ledger = Hotel::HotelLedger.new
-    expect(ledger.reservations.length).must_equal 0
+    expect(ledger.all_room_reservations.length).must_equal 0
 
-    ledger.make_reservation(ledger.rooms.first, *dates)
-    ledger.make_reservation(ledger.rooms.first, *dates2)
-    expect(ledger.reservations.length).must_equal 2
+    ledger.make_room_reservation(ledger.rooms.first, *dates)
+    ledger.make_room_reservation(ledger.rooms.first, *dates2)
+    expect(ledger.all_room_reservations.length).must_equal 2
 
-    expect(ledger.reservations.first[:in_date]).must_equal dates[0]
-    expect(ledger.reservations.first[:out_date]).must_equal dates[1]
+    expect(ledger.all_room_reservations.first[:in_date]).must_equal dates[0]
+    expect(ledger.all_room_reservations.first[:out_date]).must_equal dates[1]
   end
 
   it "list of reservations for a specific date" do
@@ -34,7 +34,7 @@ describe "HotelLedger class" do
     ])
     ledger = Hotel::HotelLedger.new
     dates.each_with_index do |date, i|
-      ledger.make_reservation(i + 1, *date)
+      ledger.make_room_reservation(i + 1, *date)
     end
     date = Date.new(2019, 3, 13)
 
@@ -48,8 +48,8 @@ describe "HotelLedger class" do
   it "must give a total cost for the reservation" do
     date = [Date.new(2019, 3, 13), Date.new(2019, 3, 15)]
     ledger = Hotel::HotelLedger.new
-    ledger.make_reservation(1, *date)
-    first_reservation = ledger.reservations.first
+    ledger.make_room_reservation(1, *date)
+    first_reservation = ledger.all_room_reservations.first
     expect(ledger.total_cost(first_reservation)).must_equal 400
   end
 
@@ -58,28 +58,30 @@ describe "HotelLedger class" do
     ledger = Hotel::HotelLedger.new
 
     expect {
-      ledger.make_reservation(1, *dates)
+      ledger.make_room_reservation(1, *dates)
     }.must_raise ArgumentError
   end
 
   it "raises an exception for an unavailable room for a date range" do
     dates = [Date.new(2019, 3, 13), Date.new(2019, 3, 15)]
     ledger = Hotel::HotelLedger.new
-    ledger.make_reservation(1, *dates)
+    ledger.make_room_reservation(1, *dates)
 
     expect {
-      ledger.make_reservation(1, *dates)
+      ledger.make_room_reservation(1, *dates)
     }.must_raise ArgumentError
   end
 
   it "raises an exception for an unavailable room for a date range" do
     dates = [Date.new(2019, 3, 13), Date.new(2019, 3, 15)]
     ledger = Hotel::HotelLedger.new
-    ledger.make_reservation(1, *dates)
+    ledger.make_room_reservation(1, *dates)
     dates = [Date.new(2019, 3, 15), Date.new(2019, 3, 17)]
-    ledger.make_reservation(1, *dates)
-    expect(ledger.reservations.last[:in_date]).must_equal dates[0]
-    expect(ledger.reservations.last[:out_date]).must_equal dates[1]
+    ledger.make_room_reservation(1, *dates)
+
+    expect(ledger.all_room_reservations.last[:in_date]).must_equal dates[0]
+    expect(ledger.all_room_reservations.last[:out_date]).must_equal dates[1]
+  end
 
   it "can return all available rooms for a date range" do
     dates = ([
@@ -90,11 +92,11 @@ describe "HotelLedger class" do
     ])
     ledger = Hotel::HotelLedger.new
     dates.each_with_index do |date, i|
-      ledger.make_reservation(i + 1, *date)
+      ledger.make_room_reservation(i + 1, *date)
     end
 
     dates = [Date.new(2019, 3, 14), Date.new(2019, 4, 20)]
-    
+
     expect(ledger.all_available_rooms_on(*dates)).must_equal [*4..20]
   end
 
