@@ -1,4 +1,3 @@
-
 module Hotel
   class HotelLedger
     attr_reader :all_reservations
@@ -34,7 +33,6 @@ module Hotel
       available_rooms = (rooms - reserved_rooms)
     end
 
-    # check if reservation block exists, if it does, then needs user name to be able to book blocks
     def make_reservation(room_number, in_date, out_date)
       raise ArgumentError, "Check out date is before check in date" if out_date <= in_date
       raise ArgumentError, "Room is unavailable" if reservations_on(in_date, out_date).map do |reservation|
@@ -51,7 +49,6 @@ module Hotel
 
     COST = 200
 
-    # discount = 1 or discount_block
     def total_cost(room_number:, in_date:, out_date:)
       reservation_date_range = (in_date...out_date).to_a
       (COST * reservation_date_range.length).round(2)

@@ -1,5 +1,4 @@
 require_relative "spec_helper"
-require "date"
 
 describe "HotelLedger class" do
   it "must list all the reservations" do
@@ -12,13 +11,15 @@ describe "HotelLedger class" do
     expect(rooms).must_equal [*(1..20)]
   end
 
-  it "can reserve a room for a given date range" do
+  it "can reserve a room for a given date range and can book the same day as checkout date" do
     dates = [Date.new(2019, 3, 13), Date.new(2019, 3, 15)]
+    dates2 = [Date.new(2019, 3, 15), Date.new(2019, 3, 17)]
     ledger = Hotel::HotelLedger.new
     expect(ledger.reservations.length).must_equal 0
 
     ledger.make_reservation(ledger.rooms.first, *dates)
-    expect(ledger.reservations.length).must_equal 1
+    ledger.make_reservation(ledger.rooms.first, *dates2)
+    expect(ledger.reservations.length).must_equal 2
 
     expect(ledger.reservations.first[:in_date]).must_equal dates[0]
     expect(ledger.reservations.first[:out_date]).must_equal dates[1]
@@ -79,12 +80,6 @@ describe "HotelLedger class" do
     ledger.make_reservation(1, *dates)
     expect(ledger.reservations.last[:in_date]).must_equal dates[0]
     expect(ledger.reservations.last[:out_date]).must_equal dates[1]
-  end
-
-  # given rooms
-  # and some rooms are reserved on a date range
-  # when i search for the date range
-  # then i can find available rooms
 
   it "can return all available rooms for a date range" do
     dates = ([
@@ -99,7 +94,7 @@ describe "HotelLedger class" do
     end
 
     dates = [Date.new(2019, 3, 14), Date.new(2019, 4, 20)]
-    # binding.pry
+    
     expect(ledger.all_available_rooms_on(*dates)).must_equal [*4..20]
   end
 
