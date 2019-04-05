@@ -1,0 +1,12 @@
+1. Determine if everything in Hotel belongs there
+  a. Is Hotel a class with a single responsibility?
+2. DRY up tests
+3. More coverage (currently at 95%)
+4. Add more edge case tests?
+5. Further flush out the block class
+  a. add more tests?
+6. Rework how block holds are done and the block id system
+  a. currently, if a room is held in a block and then a non 
+     conflicting block also holds that same room, the id associated 
+     with the first block is overwritten and so that room block association
+     is lost
